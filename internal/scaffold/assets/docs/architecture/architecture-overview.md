@@ -72,6 +72,8 @@ Jobs / Workers      ← async operations
 
 **Key insight:** Active Record intentionally couples business logic to the database layer. This is a Rails design decision, not a violation. Do not fight it with unnecessary abstraction layers.
 
+**Reference:** [rails-native.md](rails-native.md)
+
 ---
 
 ### 3. N-Tier / Layered
@@ -92,6 +94,8 @@ Repository / Data     ← data access (DB queries, external API calls)
 **G2 rule:** Handler may only call Service. Service may only call Repository. Repository may not call Service. No layer skips a level.
 
 **G7 rule:** No DB queries in Handlers. No business logic in Repositories. No HTTP/request concepts in Services.
+
+**Reference:** [n-tier.md](n-tier.md)
 
 ---
 
@@ -116,6 +120,8 @@ Autoloads   ← global services (event bus, save manager, audio manager)
 **G7 rule:** No game logic in visual/scene nodes (e.g., Godot's Node2D subclasses). Visuals react to component state; they do not modify it.
 
 **Key insight:** In Godot, `Node` scripts attached to scene nodes are the "presentation layer". Game logic belongs in Systems or Autoloads. Scene nodes read component state and render; they don't own logic.
+
+**Reference:** [ecs.md](ecs.md)
 
 ---
 
@@ -142,6 +148,8 @@ modules/
 **G2 rule:** Module A may only import from `modules/B/public/`. Importing from `modules/B/internal/` from outside module B is forbidden. `shared/` may be imported by anyone but must contain no business logic.
 
 **G7 rule:** Each module's `public/` API is intentionally minimal — expose only what other modules need, hide the rest.
+
+**Reference:** [modular.md](modular.md)
 
 ---
 
