@@ -1,0 +1,11 @@
+# Built binaries
+centinela
+centinela-*
+
+# Go test and benchmark artifacts
+*.exe
+*.test
+*.out
+
+# Dependency vendor directory (we use go modules)
+vendor/
