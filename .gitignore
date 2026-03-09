@@ -1,6 +1,6 @@
-# Built binaries
-centinela
-centinela-*
+# Built binaries (leading slash = root only, not cmd/centinela/ directory)
+/centinela
+/centinela-*
 
 # Go test and benchmark artifacts
 *.exe
