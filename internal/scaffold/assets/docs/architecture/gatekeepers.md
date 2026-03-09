@@ -147,10 +147,48 @@ The step definitions for a game don't use a browser or HTTP client — they set 
 - **Fail action:** New feature broke existing behaviour. Fix before merge.
 
 ### G11: i18n Complete *(only if project uses i18n)*
-- **Rule:** No hardcoded user-facing strings. All keys present in all locale files listed in PROJECT.md → Locales.
-- **Applies to:** Web apps and any project with `i18n` in PROJECT.md → Tech Stack. **Skip this gate entirely** for games, CLI tools, libraries, and any project with no locale files.
-- **Check:** `scripts/check-i18n.sh`
-- **Fail action:** Add missing translations.
+- **Rule:** No hardcoded user-facing strings. Every locale listed in PROJECT.md → Locales is complete — no missing keys or entries.
+- **Applies to:** Any project with locales defined in PROJECT.md → Locales. **Skip this gate entirely** if PROJECT.md → Locales is empty or absent.
+- **Check:** `scripts/check-i18n.sh` — a project-specific script you write. The rule is universal; the check adapts to your translation format (see table below).
+- **Fail action:** Add the missing translations in the appropriate format for your stack.
+
+**Translation formats by stack — what `scripts/check-i18n.sh` validates:**
+
+| Stack / Engine | Format | What to check |
+|---------------|--------|---------------|
+| Web (next-intl, i18next, vue-i18n) | JSON key-value files (`en.json`, `es.json`) | All keys present in every locale file; no key exists in one locale but not another |
+| Godot | Gettext `.po` / `.pot` files | All `msgid` entries translated in every `.po` file; no untranslated (`msgstr ""`) entries |
+| Unity | Localization Tables (CSV or JSON asset) | Every entry ID has a non-empty value in every configured locale column |
+| Android | `res/values-<locale>/strings.xml` | All `<string name="">` entries present in every locale's XML file |
+| iOS / macOS | `<locale>.lproj/Localizable.strings` | All keys present in every `.lproj` directory |
+| Game (custom CSV) | String table CSV with one column per locale | No empty cells in any locale column |
+
+The script only needs to exit `0` (complete) or non-zero (missing translations). How it does that depends on your format.
+
+**Example for Godot `.po` files:**
+```bash
+#!/usr/bin/env bash
+# scripts/check-i18n.sh
+missing=$(grep -r 'msgstr ""' i18n/*.po | wc -l)
+if [ "$missing" -gt 0 ]; then
+  echo "FAIL: $missing untranslated strings found"
+  grep -r 'msgstr ""' i18n/*.po
+  exit 1
+fi
+echo "PASS: all strings translated"
+```
+
+**Example for JSON locale files:**
+```bash
+#!/usr/bin/env bash
+# scripts/check-i18n.sh
+node -e "
+  const en = require('./src/i18n/en.json');
+  const es = require('./src/i18n/es.json');
+  const missing = Object.keys(en).filter(k => !(k in es));
+  if (missing.length) { console.error('Missing in es:', missing); process.exit(1); }
+"
+```
 
 ---
 
