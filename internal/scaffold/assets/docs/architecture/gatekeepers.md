@@ -1,86 +1,164 @@
 # Gate Keepers
 
-Automated and manual checks that MUST pass before any code is merged.
+Automated and manual checks that MUST pass before any feature ships.
 
-> Tool names below are examples. Use the equivalent tools for your project's language and stack (PROJECT.md → Tech Stack). Gate rules G2 and G7 vary by architecture archetype (PROJECT.md → Architecture Choice). See [architecture-overview.md](architecture-overview.md) for the rules per archetype.
+> Gate rules G2 and G7 are archetype-specific. See [architecture-overview.md](architecture-overview.md) for the exact rules per archetype. All other gates are universal.
 
-## Pre-Commit Gates (automated via lint/scripts)
+---
+
+## Pre-Commit Gates
 
 ### G1: File Size Limit
-- **Rule**: No file exceeds 100 lines.
-- **Check**: `scripts/check-file-size.sh`
-- **Fail action**: Block commit. Split the file.
+- **Rule:** No file exceeds 100 lines.
+- **Check:** `scripts/check-file-size.sh` (or equivalent for your language).
+- **Fail action:** Block commit. Split the file.
 
 ### G2: Layer Dependency Violations
-- **Rule**: No imports cross forbidden layer boundaries. What is "forbidden" depends on the archetype in PROJECT.md → Architecture Choice → G2 rule. See [architecture-overview.md](architecture-overview.md) for the rules per archetype.
-- **Check**: Static analysis tool with import boundary rules configured for the project's archetype and language (e.g., dependency-cruiser, ESLint import plugin, RuboCop custom cops, custom linter).
-- **Fail action**: Block commit. Fix the import direction.
+- **Rule:** No imports cross forbidden layer boundaries. The forbidden boundaries are defined per archetype in PROJECT.md → Architecture Choice → G2 rule.
+- **Check:** Static analysis configured for the archetype (dependency-cruiser, ESLint import plugin, RuboCop, custom linter).
+- **Fail action:** Block commit. Fix the import direction.
 
 ### G3: Type Safety / Static Analysis
-- **Rule**: No dynamic typing shortcuts. Strictest mode enabled for the project's language.
-- **Check**: Project's type checker or static analyzer (e.g., `tsc --noEmit`, `bundle exec srb tc`, `mypy`).
-- **Fail action**: Block commit. Add proper types.
+- **Rule:** Strictest static analysis mode enabled for the project language. No dynamic typing shortcuts.
+- **Check:** Language type checker (`tsc --noEmit`, `mypy --strict`, `cargo check`, `srb tc`).
+- **Fail action:** Block commit. Add proper types.
 
-### G4: Test Coverage
-- **Rule**: All use cases have unit tests. All adapters have integration tests.
-  All `.feature` files have step definitions. All acceptance tests pass.
-- **Check**: `scripts/validate.sh`
-- **Fail action**: Block commit. Write missing tests.
+### G4: Tests Present and Passing
+- **Rule:** Every logical unit has a unit test. Every external boundary has an integration test. Every `.feature` file has passing step definitions.
+- **What "logical unit" means per archetype:**
 
-## Pre-Feature Gates (manual checklist)
+  | Archetype | Unit tests cover | Integration tests cover |
+  |-----------|-----------------|------------------------|
+  | Hexagonal | Domain entities, value objects, use cases | Infrastructure adapters (API clients, repositories) |
+  | Rails-native | Models, service objects | Controller + DB roundtrip |
+  | N-Tier | Service layer | Repository layer (real DB or test container) |
+  | ECS | Systems in isolation | System + real component data |
+  | Modular | Each module's internal services | Module public API contracts |
 
-### G5: Spec First
-- **Rule**: Every feature has a `.feature` file in `specs/` BEFORE implementation.
-- **Check**: Manual review — does the feature file exist and cover acceptance criteria?
-- **Fail action**: Do not start coding. Write the spec first.
+- **Check:** `scripts/validate.sh`
+- **Fail action:** Block commit. Write the missing tests.
 
-### G5.1: Gatekeeper Conflict Review (Subagent)
-- **Rule**: Before implementing, the Gatekeeper subagent reviews the new spec
-  against ALL existing specs for conflicts.
-- **Check**: Invoke Gatekeeper subagent (see CLAUDE.md for prompt template).
-- **Output**: SAFE / WARNING / BLOCKING report.
-- **Fail action**:
-  - SAFE → proceed to implementation
-  - WARNING → document acknowledged risks in plan, proceed with caution
-  - BLOCKING → resolve conflicts before writing any code
+---
+
+## Pre-Feature Gates
+
+### G5: Spec First — Gherkin `.feature` File
+- **Rule:** Every feature has a `.feature` file in `specs/` BEFORE any implementation starts.
+- **Check:** Manual review — does the feature file exist and describe acceptance criteria in Given/When/Then form?
+- **Fail action:** Do not write code. Write the spec first.
+
+#### Gherkin applies to every project type
+
+Gherkin describes **observable behaviour**, not HTTP endpoints. The form is the same regardless of stack:
+
+```
+Given  [some initial state / precondition]
+When   [an action is taken]
+Then   [the observable outcome]
+```
+
+**Web application:**
+```gherkin
+Scenario: User places an order
+  Given a user has 3 items in their cart
+  When they confirm the order
+  Then an order record is created
+  And a confirmation email is queued
+```
+
+**Game (ECS):**
+```gherkin
+Scenario: Player takes damage
+  Given a player entity with 100 health
+  When the DamageSystem processes a collision with a 25-damage enemy
+  Then the player health component value is 75
+
+Scenario: Player dies when health reaches zero
+  Given a player entity with 10 health
+  When the DamageSystem applies 15 damage
+  Then the player health is 0
+  And a PlayerDied event is emitted
+```
+
+**CLI tool:**
+```gherkin
+Scenario: Generate report from config file
+  Given a config file with two data sources
+  When the CLI runs with the --report flag
+  Then a report file is written to the output directory
+  And the exit code is 0
+```
+
+**Library / SDK:**
+```gherkin
+Scenario: Parse malformed input
+  Given the parser is initialised
+  When it receives input with a missing required field
+  Then it returns a ParseError with code MISSING_FIELD
+```
+
+The step definitions for a game don't use a browser or HTTP client — they set up component data, call systems directly, and assert on component state. The Gherkin layer stays the same; only the driver changes.
+
+### G5.1: Gatekeeper Conflict Review
+- **Rule:** Before implementing, invoke the Gatekeeper subagent to review the new spec against all existing specs for conflicts.
+- **Check:** Run the Gatekeeper subagent (prompt in [gatekeeper-prompt.md](gatekeeper-prompt.md)).
+- **Output:** `SAFE` / `WARNING` / `BLOCKING` report saved to `.workflow/<feature>-gatekeeper.md`.
+- **Fail action:**
+  - `SAFE` → proceed
+  - `WARNING` → document acknowledged risks in the plan, proceed with caution
+  - `BLOCKING` → resolve conflicts before writing any code
 
 ### G6: Plan Documented
-- **Rule**: Every feature has a plan in `docs/plans/`.
-- **Check**: Manual review.
-- **Fail action**: Do not start coding. Write the plan first.
+- **Rule:** Every feature has a written plan in `docs/plans/` before implementation starts.
+- **Check:** Manual review.
+- **Fail action:** Write the plan first.
 
 ### G7: No Business Logic in the Outer Layer
-- **Rule**: The outer layer must contain no business or game logic. What the "outer layer" is depends on the archetype: UI components (Hexagonal/N-Tier), views/templates (Rails), Components (ECS), or the equivalent in your custom pattern. See PROJECT.md → Architecture Choice → G7 rule.
-- **Check**: Code review — no conditionals based on business rules, no data transformations, no direct data access in the outer layer.
-- **Fail action**: Move logic to the appropriate inner layer per the archetype.
+- **Rule:** The outer layer contains no business or game logic. What counts as the "outer layer" is archetype-specific:
+
+  | Archetype | Outer layer | What is forbidden there |
+  |-----------|-------------|------------------------|
+  | Hexagonal | UI components, infrastructure adapters | Conditionals based on domain rules, data transformation |
+  | Rails-native | Views, templates, route handlers | DB queries, business conditionals |
+  | N-Tier | HTTP handlers / controllers | DB queries, business rules |
+  | ECS | Scene nodes, visual nodes (Node2D, MonoBehaviour) | Game logic, state mutation |
+  | Modular | A module's `public/` API | Implementation logic (it must be a thin facade) |
+
+- **Check:** Code review.
+- **Fail action:** Move logic to the appropriate inner layer.
 
 ### G8: Single Responsibility
-- **Rule**: Each file exports one thing and does one thing.
-- **Check**: Code review.
-- **Fail action**: Split the file.
+- **Rule:** Each file exports one thing and does one thing.
+- **Check:** Code review.
+- **Fail action:** Split the file.
+
+---
 
 ## Post-Feature Gates
 
-### G9: All Tests Pass
-- **Rule**: Full test suite exits with 0 (unit + integration + acceptance).
-- **Check**: CI pipeline running `scripts/validate.sh`.
-- **Fail action**: Fix failing tests before merge.
+### G9: Full Test Suite Passes
+- **Rule:** All tests exit with 0 — unit, integration, and acceptance.
+- **Check:** CI pipeline running `scripts/validate.sh`.
+- **Fail action:** Fix failing tests before merge.
 
 ### G10: Acceptance Regression
-- **Rule**: All existing Gherkin scenarios still pass after new feature.
-- **Check**: Run acceptance tests only (subset of `scripts/validate.sh`).
-- **Fail action**: New feature broke existing behavior. Fix before merge.
+- **Rule:** All existing Gherkin scenarios still pass after the new feature.
+- **Check:** Run acceptance tests only (subset of `scripts/validate.sh`).
+- **Fail action:** New feature broke existing behaviour. Fix before merge.
 
-### G11: i18n Complete
-- **Rule**: No hardcoded user-facing strings. All keys present in all locale files listed in PROJECT.md → Locales.
-- **Check**: `scripts/check-i18n.sh`
-- **Fail action**: Add missing translations.
+### G11: i18n Complete *(only if project uses i18n)*
+- **Rule:** No hardcoded user-facing strings. All keys present in all locale files listed in PROJECT.md → Locales.
+- **Applies to:** Web apps and any project with `i18n` in PROJECT.md → Tech Stack. **Skip this gate entirely** for games, CLI tools, libraries, and any project with no locale files.
+- **Check:** `scripts/check-i18n.sh`
+- **Fail action:** Add missing translations.
+
+---
 
 ## Gate Enforcement
 
-These gates are enforced at three levels:
+Gates are enforced at four levels:
 
-1. **CLAUDE.md** — AI agents read this and follow the rules.
-2. **Static analysis config** — Automated type checking and import boundary rules.
-3. **Scripts in `scripts/`** — Custom checks run via the project's gate runner.
-4. **CI pipeline** — All gates run on push (when CI is set up).
+1. **CLAUDE.md** — the AI agent reads and follows all gates as hard rules.
+2. **`centinela hook prewrite`** — blocks file writes in the wrong workflow step.
+3. **`scripts/validate.sh`** — project-specific: lint + type check + full test suite.
+4. **CI pipeline** — all gates run on every push (once CI is configured).
