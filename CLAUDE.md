@@ -5,7 +5,7 @@
 
 ## Hard Rules (NEVER VIOLATE)
 
-1. **Workflow enforcer is mandatory.** Run `centinela start <feature>` before ANY work. Hooks enforce this automatically.
+1. **Workflow enforcer is mandatory.** Run `scripts/centinela-workflow.sh start <feature>` before ANY work. Hooks enforce this automatically.
 2. **Separation of concerns.** Follow the layer dependency rules for your architecture archetype (PROJECT.md → Architecture Choice → Archetype). See [architecture-overview.md](docs/architecture/architecture-overview.md) for the rules per archetype. No business logic in the outer layer.
 3. **Max 100 lines per file.** No exceptions. Split if exceeded.
 4. **Strictest type safety available for the project's language.** No dynamic typing shortcuts (e.g., `any` in TypeScript, untyped variables in Ruby). Use the project's static analysis tooling.
@@ -16,10 +16,9 @@
 ## Development Workflow (ENFORCED BY HOOKS)
 
 ```bash
-centinela start <feature>     # Start — required before writing code
-centinela complete <feature>  # Advance to next step
-centinela status <feature>    # Show progress
-centinela validate            # Run gate checks + validate commands
+scripts/centinela-workflow.sh start <feature>     # Start — required before writing code
+scripts/centinela-workflow.sh complete <feature>  # Advance to next step
+scripts/centinela-workflow.sh status <feature>    # Show progress
 ```
 
 ### 4 Steps:
@@ -36,7 +35,7 @@ centinela validate            # Run gate checks + validate commands
 | plan | Plan file in `docs/plans/` + `.feature` spec in `specs/` |
 | code | Nothing — architecture rules govern this |
 | tests | Test suite files in `tests/unit/` or `tests/integration/` + acceptance step definitions in `tests/acceptance/` |
-| validate | Gatekeeper report at `.workflow/<feature>-gatekeeper.md` + `centinela validate` passes |
+| validate | Gatekeeper report at `.workflow/<feature>-gatekeeper.md` + full test suite passes |
 
 **Hooks auto-inject** `[workflow: <feature> | step: <step> | X/4]` after every file write.
 
@@ -53,7 +52,7 @@ Save report to `.workflow/<feature>-gatekeeper.md`. Required before completing `
 
 - [ ] All files under 100 lines
 - [ ] No cross-layer import violations (per archetype rules in PROJECT.md)
-- [ ] `centinela validate` passes (lint + type check + full test suite)
+- [ ] `scripts/validate.sh` passes (lint + type check + full test suite)
 - [ ] No business logic in the outer layer (definition per archetype)
 - [ ] i18n keys present in all locales from PROJECT.md → Locales
 - [ ] Gatekeeper report: SAFE or WARNING

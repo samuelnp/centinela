@@ -251,14 +251,16 @@ export function createOrder(overrides: Partial<OrderProps> = {}): Order {
 
 ## Running Tests
 
-Define these targets in `scripts/validate.sh` for your stack:
+Configure your test commands in `centinela.toml`:
 
-```bash
-# Example structure — adapt commands to your tool (npm, pytest, go test, cargo test)
-scripts/validate.sh          # all tests: unit + integration + acceptance
-scripts/run-unit.sh          # unit only
-scripts/run-integration.sh   # integration only
-scripts/run-acceptance.sh    # Gherkin acceptance only
+```toml
+[validate]
+commands = [
+  "npx tsc --noEmit",     # type check
+  "npx vitest run",       # unit + integration
+  "npx cucumber-js",      # acceptance (Gherkin)
+]
 ```
 
-`centinela complete <feature>` calls `scripts/validate.sh` as part of the `validate` step. All three layers must pass before a workflow can complete.
+Adapt to your stack (pytest, go test, cargo test, bundle exec rspec, etc.).
+`centinela validate` and `centinela complete <feature>` (at the validate step) run all commands in sequence. All three test layers must pass before a workflow can complete.

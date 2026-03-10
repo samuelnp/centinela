@@ -7,9 +7,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var Version = "dev"
+
 var rootCmd = &cobra.Command{
-	Use:   "centinela",
-	Short: "Centinela — development workflow enforcer for Claude Code projects",
+	Use:     "centinela",
+	Short:   "Centinela — development workflow enforcer for Claude Code projects",
+	Version: Version,
 }
 
 var hookCmd = &cobra.Command{

@@ -35,6 +35,13 @@ func runComplete(_ *cobra.Command, args []string) error {
 
 	current := wf.CurrentStep
 
+	// Validate step requires all gates to pass before advancing.
+	if current == "validate" {
+		if err := executeValidation(); err != nil {
+			return err
+		}
+	}
+
 	if err := wf.Complete(); err != nil {
 		return err
 	}

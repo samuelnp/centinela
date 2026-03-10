@@ -35,7 +35,7 @@ Automated and manual checks that MUST pass before any feature ships.
   | ECS | Systems in isolation | System + real component data |
   | Modular | Each module's internal services | Module public API contracts |
 
-- **Check:** `scripts/validate.sh`
+- **Check:** `centinela validate` (runs all commands in `centinela.toml`)
 - **Fail action:** Block commit. Write the missing tests.
 
 ---
@@ -138,56 +138,51 @@ The step definitions for a game don't use a browser or HTTP client — they set 
 
 ### G9: Full Test Suite Passes
 - **Rule:** All tests exit with 0 — unit, integration, and acceptance.
-- **Check:** CI pipeline running `scripts/validate.sh`.
+- **Check:** `centinela validate` (runs all commands in `centinela.toml`). Also run in CI pipeline.
 - **Fail action:** Fix failing tests before merge.
 
 ### G10: Acceptance Regression
 - **Rule:** All existing Gherkin scenarios still pass after the new feature.
-- **Check:** Run acceptance tests only (subset of `scripts/validate.sh`).
+- **Check:** Run your acceptance test command (configured in `centinela.toml → [validate] commands`).
 - **Fail action:** New feature broke existing behaviour. Fix before merge.
 
 ### G11: i18n Complete *(only if project uses i18n)*
 - **Rule:** No hardcoded user-facing strings. Every locale listed in PROJECT.md → Locales is complete — no missing keys or entries.
 - **Applies to:** Any project with locales defined in PROJECT.md → Locales. **Skip this gate entirely** if PROJECT.md → Locales is empty or absent.
-- **Check:** `scripts/check-i18n.sh` — a project-specific script you write. The rule is universal; the check adapts to your translation format (see table below).
+- **Check:** Configure `centinela.toml → [gates] i18n = true` and set `[i18n]` section. For formats not natively supported, add a custom command to `[validate] commands`.
 - **Fail action:** Add the missing translations in the appropriate format for your stack.
 
-**Translation formats by stack — what `scripts/check-i18n.sh` validates:**
+**Translation formats — `centinela.toml` configuration:**
 
-| Stack / Engine | Format | What to check |
-|---------------|--------|---------------|
-| Web (next-intl, i18next, vue-i18n) | JSON key-value files (`en.json`, `es.json`) | All keys present in every locale file; no key exists in one locale but not another |
-| Godot | Gettext `.po` / `.pot` files | All `msgid` entries translated in every `.po` file; no untranslated (`msgstr ""`) entries |
-| Unity | Localization Tables (CSV or JSON asset) | Every entry ID has a non-empty value in every configured locale column |
-| Android | `res/values-<locale>/strings.xml` | All `<string name="">` entries present in every locale's XML file |
-| iOS / macOS | `<locale>.lproj/Localizable.strings` | All keys present in every `.lproj` directory |
-| Game (custom CSV) | String table CSV with one column per locale | No empty cells in any locale column |
+| Stack / Engine | Format | `centinela.toml` setting |
+|---------------|--------|--------------------------|
+| Web (next-intl, i18next, vue-i18n) | JSON locale files (`en.json`, `es.json`) | `format = "json"` — built-in key parity check |
+| Godot | Gettext `.po` / `.pot` files | `format = "gettext"` — built-in untranslated entry check |
+| Unity | Localization Tables (CSV or JSON asset) | `format = "none"` + custom command in `[validate] commands` |
+| Android | `res/values-<locale>/strings.xml` | `format = "none"` + custom command |
+| iOS / macOS | `<locale>.lproj/Localizable.strings` | `format = "none"` + custom command |
+| Game (custom CSV) | String table CSV | `format = "none"` + custom command |
 
-The script only needs to exit `0` (complete) or non-zero (missing translations). How it does that depends on your format.
+**Example `centinela.toml` for a JSON web project:**
+```toml
+[gates]
+i18n = true
 
-**Example for Godot `.po` files:**
-```bash
-#!/usr/bin/env bash
-# scripts/check-i18n.sh
-missing=$(grep -r 'msgstr ""' i18n/*.po | wc -l)
-if [ "$missing" -gt 0 ]; then
-  echo "FAIL: $missing untranslated strings found"
-  grep -r 'msgstr ""' i18n/*.po
-  exit 1
-fi
-echo "PASS: all strings translated"
+[i18n]
+format  = "json"
+dir     = "src/i18n/messages"
+locales = ["en", "es"]
 ```
 
-**Example for JSON locale files:**
-```bash
-#!/usr/bin/env bash
-# scripts/check-i18n.sh
-node -e "
-  const en = require('./src/i18n/en.json');
-  const es = require('./src/i18n/es.json');
-  const missing = Object.keys(en).filter(k => !(k in es));
-  if (missing.length) { console.error('Missing in es:', missing); process.exit(1); }
-"
+**Example `centinela.toml` for Godot (gettext):**
+```toml
+[gates]
+i18n = true
+
+[i18n]
+format  = "gettext"
+dir     = "i18n"
+locales = ["en", "es"]
 ```
 
 ---
@@ -197,6 +192,6 @@ node -e "
 Gates are enforced at four levels:
 
 1. **CLAUDE.md** — the AI agent reads and follows all gates as hard rules.
-2. **`centinela hook prewrite`** — blocks file writes in the wrong workflow step.
-3. **`scripts/validate.sh`** — project-specific: lint + type check + full test suite.
+2. **`centinela hook prewrite`** — blocks file writes in the wrong workflow step (via Claude Code hooks).
+3. **`centinela validate`** — runs built-in gates (G1, G11) + all user commands from `centinela.toml`.
 4. **CI pipeline** — all gates run on every push (once CI is configured).

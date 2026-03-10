@@ -1,0 +1,46 @@
+# centinela.toml — Project validation configuration
+# Run `centinela validate` (or `centinela complete <feature>` at the validate step)
+# to execute all checks below.
+
+# ---------------------------------------------------------------------------
+# Validate commands
+# Cross-platform commands centinela runs in sequence during the validate step.
+# Use the native tool for your stack — no shell scripts required on Windows.
+#
+# Examples by stack:
+#   TypeScript/Node:  "npx tsc --noEmit", "npx vitest run"
+#   Python:           "mypy --strict src", "pytest"
+#   Go:               "go vet ./...", "go test ./..."
+#   Ruby:             "bundle exec rubocop", "bundle exec rspec"
+#   Rust:             "cargo check", "cargo test"
+# ---------------------------------------------------------------------------
+[validate]
+commands = [
+  # "npx tsc --noEmit",
+  # "npx vitest run",
+]
+
+# ---------------------------------------------------------------------------
+# Built-in gate configuration
+# ---------------------------------------------------------------------------
+[gates]
+# G1: Block commits when any source file exceeds 100 lines.
+file_size = true
+
+# G11: Check i18n completeness. Requires [i18n] section below.
+i18n = false
+
+# ---------------------------------------------------------------------------
+# i18n gate (only used when gates.i18n = true)
+#
+# format options:
+#   "json"     — JSON locale files (next-intl, i18next, vue-i18n, etc.)
+#                Expects <dir>/<locale>.json. Checks key parity across locales.
+#   "gettext"  — GNU gettext .po files (Godot, Qt, etc.)
+#                Expects <dir>/<locale>.po. Fails on msgstr "" entries.
+#   "none"     — skip the built-in check (use a custom validate command instead)
+# ---------------------------------------------------------------------------
+[i18n]
+format  = "json"
+dir     = "src/i18n/messages"
+locales = ["en"]

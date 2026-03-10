@@ -37,28 +37,26 @@ Rules:
 - A step is "done" only when its required artifact exists on disk.
 - The workflow file is the source of truth for current progress.
 
-### Layer 2: Required Artifacts Per Step (ENFORCED by `workflow.sh complete`)
+### Layer 2: Required Artifacts Per Step (ENFORCED by `centinela complete`)
 
 The `complete` command validates artifacts exist on disk BEFORE advancing.
-If validation fails, the step stays in-progress and the script exits with error.
+If validation fails, the step stays in-progress and the command exits with an error.
 
 | Step | Validation | What it checks |
 |------|-----------|----------------|
-| plan | File search | A plan file in `docs/plans/` mentions the feature name + a `.feature` file exists in `specs/` |
+| plan | File search | A plan file in `docs/plans/` + a `.feature` file exists in `specs/` |
 | code | None | Architecture rules govern this step |
-| tests | File search | Test suite files exist in `tests/unit/` or `tests/integration/` + acceptance step definitions exist in `tests/acceptance/` |
-| validate | Test run | Project's full test suite exits with code 0 |
+| tests | File search | Test suite files in `tests/unit/` or `tests/integration/` + acceptance step definitions in `tests/acceptance/` |
+| validate | Gate checks + commands | All built-in gates pass + all `centinela.toml` validate commands exit 0 |
 
 > Note: The exact file extensions and paths checked are project-specific. See PROJECT.md → Folder Structure for the authoritative paths.
 
-### Layer 3: Enforcement Script
+### Layer 3: The `centinela` Binary
 
-`scripts/centinela-workflow.sh` — TWO enforcement mechanisms:
+The `centinela` CLI enforces the workflow with two mechanisms:
 
-1. **`check`**: Prevents writing to a layer before its step is active.
-   Returns exit code 1 if blocked.
-2. **`complete`**: Prevents advancing past a step without its artifact.
-   Returns exit code 1 if artifact missing.
+1. **Pre-write hook**: Blocks file writes in the wrong workflow step. Runs automatically via Claude Code hooks.
+2. **`centinela complete`**: Prevents advancing past a step without its required artifact or passing gates.
 
 ## Workflow Commands
 
@@ -66,26 +64,26 @@ The AI agent must use these commands to manage workflow:
 
 ```bash
 # Start a new feature workflow
-scripts/centinela-workflow.sh start <feature-name>
+centinela start <feature-name>
 
-# Mark current step as done (validates artifact exists)
-scripts/centinela-workflow.sh complete <feature-name>
-
-# Check if a write to a layer is allowed
-scripts/centinela-workflow.sh check <feature-name> <layer>
+# Mark current step as done (validates artifact exists, runs gates on validate step)
+centinela complete <feature-name>
 
 # Show current status
-scripts/centinela-workflow.sh status <feature-name>
+centinela status <feature-name>
 
 # Show status of all active features
-scripts/centinela-workflow.sh status-all
+centinela status-all
+
+# Run gate checks and validate commands manually
+centinela validate
 ```
 
 ## How the AI Agent Must Behave
 
 BEFORE starting any feature:
-1. Run `scripts/centinela-workflow.sh start <feature-name>`
-2. This creates the .workflow JSON and sets step to "plan"
+1. Run `centinela start <feature-name>`
+2. This creates the `.workflow` JSON and sets step to "plan"
 
 BEFORE writing any code file:
 1. Check current step in workflow
@@ -93,14 +91,29 @@ BEFORE writing any code file:
 3. Complete the current step first, then advance
 
 AFTER each step:
-1. Run `scripts/centinela-workflow.sh complete <feature-name>`
+1. Run `centinela complete <feature-name>`
 2. This validates the artifact exists and advances to next step
 3. Output the current workflow status to the user
 
+## Validate Step
+
+When completing the `validate` step, centinela automatically runs:
+1. **Built-in gates** — G1 (file size), G11 (i18n if configured in `centinela.toml`)
+2. **User commands** — all entries in `centinela.toml → [validate] commands`
+
+Configure your stack's lint/type-check/test commands in `centinela.toml`:
+
+```toml
+[validate]
+commands = [
+  "npx tsc --noEmit",
+  "npx vitest run",
+]
+```
+
+Commands run natively via the OS — no shell scripts required. This works on Windows, macOS, and Linux.
+
 ## Skip Rules
 
-Some features may not need all steps (e.g., a backend-only feature
-doesn't need a UI layer). In that case:
-- Mark skipped steps explicitly: `scripts/centinela-workflow.sh skip <feature> <step>`
-- Skipping requires a reason logged in the workflow JSON
-- Domain/core logic, tests, and validate can NEVER be skipped
+All four steps are mandatory. No step can be skipped — this is enforced by the binary.
+Domain/core logic, tests, and validate are especially non-negotiable.

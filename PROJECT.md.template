@@ -1,0 +1,144 @@
+# <Project Name> — Project Definition
+
+> This file is the single source of truth for everything project-specific.
+> CLAUDE.md defines how to build. This file defines what to build.
+
+## Elevator Pitch
+
+<!-- One sentence. What does this project do and for whom? -->
+<!-- Example: "Sauron is a sprint visibility dashboard that surfaces blockers for engineering teams." -->
+
+## Problem Statement
+
+<!-- Who uses it: describe the user/team -->
+<!-- Pain it solves: what manual work or missing visibility does this eliminate? -->
+
+**Who uses it:**
+
+**Pain it solves:**
+
+## Architecture Choice
+
+<!-- Choose one archetype from architecture-overview.md: -->
+<!--   hexagonal | rails-native | n-tier | ecs | modular | custom -->
+<!-- This choice drives G2 (layer boundary rules), G7 (outer layer definition), -->
+<!-- gatekeeper paths, folder structure, and naming conventions. -->
+
+**Archetype:** <!-- e.g. hexagonal -->
+
+**Pattern:** <!-- e.g. Hexagonal Architecture (Ports and Adapters) -->
+
+**Why:** <!-- Why this archetype fits this project specifically — not just "it's good practice" -->
+
+**Reference:** <!-- Link to the relevant doc in docs/architecture/ -->
+
+**G2 rule (layer boundaries):** <!-- What cross-layer imports are forbidden for this archetype -->
+
+**G7 rule (outer layer):** <!-- What the "outer layer" is and what "no business logic there" means -->
+
+## Tech Stack
+
+<!-- Fill in the technology for each concern. Add or remove rows as needed. -->
+
+| Concern | Technology |
+|---------|------------|
+| Framework | |
+| Language | |
+| Styling | |
+| Persistence | |
+| Unit/Integration Tests | |
+| Acceptance Tests | |
+| i18n | |
+| External APIs | |
+
+## Folder Structure
+
+<!-- Paste the actual directory tree for this project. -->
+<!-- Include short comments describing what each folder contains. -->
+
+```
+src/
+  ...
+```
+
+## Domain Language
+
+<!-- List 5-10 core "nouns" in this domain. -->
+<!-- These are the concepts that will become entities, value objects, or aggregates. -->
+
+| Entity | What it represents |
+|--------|--------------------|
+| | |
+
+## Layer Mapping
+
+<!-- Map abstract layer names to concrete folder paths in this project. -->
+<!-- Adjust layer names to match the architecture pattern chosen above. -->
+
+| Abstract Layer | Concrete Path |
+|---------------|---------------|
+| Domain | |
+| Application | |
+| Infrastructure | |
+| UI logic | |
+| Presentation | |
+| App / Routing | |
+
+## Integration Points
+
+<!-- List every external service this project communicates with. -->
+<!-- Include the purpose and authentication method. -->
+
+| Service | Purpose | Protocol / Auth |
+|---------|---------|-----------------|
+| | | |
+
+## Project-Specific Rules
+
+<!-- Overrides or additions to the hard rules in CLAUDE.md. -->
+<!-- Only add rules that are specific to this project's constraints. -->
+
+1.
+
+## Naming Conventions
+
+<!-- Add project-specific naming patterns. -->
+<!-- The framework defaults (PascalCase entities, camelCase hooks, etc.) still apply. -->
+
+| Layer | Pattern | Example |
+|-------|---------|---------|
+| Entity | PascalCase noun | `Order.ts` |
+| Value Object | PascalCase descriptive | `OrderStatus.ts` |
+| Port (interface) | PascalCase with suffix | `OrderRepository.ts` |
+| Use Case | PascalCase verb phrase | `GetOrders.ts` |
+| DTO | PascalCase + Dto | `OrderSummaryDto.ts` |
+| Infrastructure | PascalCase + adapter prefix | `StripePaymentRepository.ts` |
+| Hook | camelCase + use prefix | `useOrders.ts` |
+| UI Component | PascalCase | `OrderCard.tsx` |
+| Test | same name + `.test.ts` | `GetOrders.test.ts` |
+| Spec | kebab-case + `.feature` | `order-checkout.feature` |
+
+## Locales
+
+<!-- List all supported i18n locale codes. -->
+<!-- The gatekeeper validates that all keys exist in every locale listed here. -->
+
+| Code | Language |
+|------|----------|
+| `en` | English (default) |
+
+<!-- i18n message files path: -->
+
+## Gatekeeper Paths
+
+<!-- List the exact paths the gatekeeper subagent should scan for conflict analysis. -->
+<!-- Adjust to match the Folder Structure above. -->
+
+| What | Path |
+|------|------|
+| Feature specs | `specs/` |
+| Domain entities | |
+| Domain ports | |
+| Use cases | |
+| DTOs | |
+| Infrastructure adapters | |

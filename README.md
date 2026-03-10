@@ -1,75 +1,294 @@
 # Centinela
 
-Development workflow enforcer for Claude Code projects.
+A development workflow enforcer for [Claude Code](https://claude.ai/code) projects. Centinela turns the "plan → code → tests → validate" discipline from a suggestion into a mechanical constraint — enforced by hooks that run automatically inside every Claude session.
 
-Centinela keeps Claude inside a strict 4-step workflow — plan → code → tests → validate — and blocks writes that happen in the wrong step. It ships as a single Go binary with no runtime dependencies.
+---
+
+## Why Centinela
+
+AI coding agents are fast but undisciplined. Left to their own devices they skip planning, write tests as an afterthought, and ship without validation. Centinela fixes this by:
+
+- **Blocking file writes** in the wrong workflow step via Claude Code pre-write hooks
+- **Requiring artifacts** before a step can advance — no plan file means no code, no tests means no validate
+- **Running gate checks** automatically at the validate step (file size limits, i18n completeness, your test suite)
+- **Injecting context** into every Claude session so the agent always knows which feature is active and which step it is on
+
+The result: every feature ships with a written plan, a Gherkin spec, three test layers, and a passing gate suite — regardless of whether a human or an AI agent wrote it.
 
 ---
 
 ## Install
 
+**Prerequisites:** Go 1.21+
+
 ```bash
 go install github.com/samuelnp/centinela@latest
 ```
 
-Or download a pre-built binary from [Releases](https://github.com/samuelnp/centinela/releases) and move it to `/usr/local/bin/`.
+Or download a pre-built binary from [Releases](https://github.com/samuelnp/centinela/releases).
+
+Verify:
+
+```bash
+centinela --help
+```
+
+> **macOS/Linux:** `go install` places the binary in `~/go/bin`. Ensure that directory is on your PATH:
+> ```bash
+> export PATH="$HOME/go/bin:$PATH"  # add to ~/.zshrc or ~/.bashrc
+> ```
 
 ---
 
-## Bootstrap a project
+## Quick Start
 
-Run once in any new project directory:
+### 1. Initialize a project
+
+Run once in your project root:
 
 ```bash
 centinela init
 ```
 
-Creates:
-- `CLAUDE.md` — framework rules Claude must follow
-- `PROJECT.md.template` — fill this in to define your project
-- `docs/architecture/` — all architecture reference docs
-- `specs/` `docs/plans/` `tests/` — required directory scaffolding
-- `.claude/settings.json` — hooks wired automatically
+This creates:
+
+| File / Directory | Purpose |
+|-----------------|---------|
+| `CLAUDE.md` | Framework rules — auto-loaded into every Claude session |
+| `PROJECT.md.template` | Fill in and rename to `PROJECT.md` |
+| `centinela.toml` | Configure validate commands and gate checks |
+| `docs/architecture/` | 14 architecture reference documents |
+| `docs/plans/` `specs/` `tests/` | Required empty directories |
+| `.claude/settings.json` | Hooks wired automatically |
 
 Safe to re-run — existing files are never overwritten.
 
----
-
-## Workflow commands
+Use `--local` to write hooks to `.claude/settings.local.json` (useful for personal overrides without committing to the repo):
 
 ```bash
-centinela start <feature>     # begin a new feature (creates .workflow/<feature>.json)
-centinela status <feature>    # interactive status view
-centinela status-all          # all active workflows
-centinela complete <feature>  # validate current step and advance to next
+centinela init --local
 ```
 
-### The 4 steps
+### 2. Fill in PROJECT.md
 
-| Step | What Claude may write | Required before advancing |
-|------|-----------------------|--------------------------|
-| `plan` | `docs/plans/` and `specs/` only | Plan file + `.feature` spec |
-| `code` | `src/` `app/` and plan files | — |
-| `tests` | `tests/` and source | Unit + acceptance test files |
-| `validate` | anything (small fixes) | Gatekeeper report + `scripts/validate.sh` passes |
+Rename `PROJECT.md.template` to `PROJECT.md` and complete every section. This file tells both you and Claude what the project is, which architecture pattern it follows, and where everything lives.
+
+### 3. Configure centinela.toml
+
+Add your stack's lint and test commands:
+
+```toml
+[validate]
+commands = [
+  "npx tsc --noEmit",
+  "npx vitest run",
+  "npx cucumber-js",
+]
+```
+
+Commands run natively via the OS. No shell scripts, no bash dependency — works on Windows, macOS, and Linux.
+
+### 4. Start building
+
+```bash
+centinela start my-feature
+```
+
+The hooks take it from here.
 
 ---
 
-## Hooks
+## The Four-Step Workflow
 
-Three Claude Code hooks enforce the workflow automatically:
+Every feature follows the same four steps in order. No step can be skipped.
 
-| Event | Hook | Effect |
-|-------|------|--------|
-| `PreToolUse` (Write/Edit) | `centinela hook prewrite` | Blocks writes in the wrong step |
-| `PostToolUse` (Write/Edit) | `centinela hook postwrite` | Injects workflow tag after every write |
-| `UserPromptSubmit` | `centinela hook context` | Shows active workflow on every prompt |
+```
+plan → code → tests → validate
+```
 
-`centinela init` wires these into `.claude/settings.json` automatically.
+| Step | What you produce | What centinela checks before advancing |
+|------|-----------------|---------------------------------------|
+| **plan** | Plan doc in `docs/plans/` + Gherkin spec in `specs/` | Both files exist on disk |
+| **code** | Implementation | Nothing — architecture rules govern this step |
+| **tests** | Unit, integration, and acceptance tests | Test files exist in the right directories |
+| **validate** | Gatekeeper conflict report | All gate checks pass + all `centinela.toml` commands exit 0 |
+
+### Workflow commands
+
+```bash
+centinela start <feature>       # Start a feature (required before any file writes)
+centinela status <feature>      # Show current step and artifact status
+centinela status-all            # Show all active features
+centinela complete <feature>    # Mark step done and advance
+centinela validate              # Run gate checks manually
+```
 
 ---
 
-## Build from source
+## How the Hooks Work
+
+`centinela init` registers three Claude Code hooks that run automatically:
+
+### PreToolUse — Write / Edit
+
+Before Claude writes or edits any file, centinela checks whether that file belongs to the current workflow step. If you are in the `plan` step and Claude tries to write a source file, the hook blocks it and explains why.
+
+### PostToolUse — Write / Edit
+
+After every file write, centinela appends a compact status tag to the session:
+
+```
+↳ my-feature · code · 2/4
+```
+
+### UserPromptSubmit
+
+At the start of every message, centinela injects a context block showing all active workflows and their current step — so Claude always has accurate state without reading any files.
+
+---
+
+## Gate Checks
+
+Gates are quality checks that must pass before a feature can ship. They run during `centinela validate` and automatically when completing the `validate` step.
+
+### Built-in gates
+
+| Gate | Rule | Config |
+|------|------|--------|
+| **G1: File Size** | No source file exceeds 100 lines | `[gates] file_size = true` |
+| **G11: i18n** | All locale files have identical keys (no missing translations) | `[gates] i18n = true` |
+
+G11 supports two formats natively:
+
+```toml
+# JSON locale files (next-intl, i18next, vue-i18n)
+[i18n]
+format  = "json"
+dir     = "src/i18n/messages"
+locales = ["en", "es", "fr"]
+
+# GNU gettext .po files (Godot, Qt)
+[i18n]
+format  = "gettext"
+dir     = "i18n"
+locales = ["en", "es"]
+```
+
+For other formats (Unity CSV, Android XML, iOS `.lproj`), set `format = "none"` and add a custom command to `[validate] commands`.
+
+### Manual gates (code review)
+
+| Gate | Rule |
+|------|------|
+| **G2: Layer Dependencies** | No imports cross forbidden layer boundaries (archetype-specific) |
+| **G3: Type Safety** | Strictest static analysis — no `any`, no untyped variables |
+| **G5: Spec First** | Every feature has a `.feature` file before implementation starts |
+| **G6: Plan First** | Every feature has a plan document before implementation starts |
+| **G7: No Business Logic in Outer Layer** | UI components and adapters contain no domain logic |
+| **G8: Single Responsibility** | Each file exports one thing and does one thing |
+
+Full gate documentation: [`docs/architecture/gatekeepers.md`](internal/scaffold/assets/docs/architecture/gatekeepers.md)
+
+---
+
+## Architecture Archetypes
+
+Centinela supports five architecture patterns. You choose one when filling in `PROJECT.md`. The choice determines which layer rules, forbidden imports, and test expectations apply.
+
+| Archetype | Best for |
+|-----------|---------|
+| **Hexagonal** | Multiple external integrations (APIs, databases), domain logic that must be testable without infrastructure |
+| **Rails-native** | Framework-opinionated stacks (Rails, Django, Laravel) — follow the framework conventions |
+| **N-Tier** | Classic layered apps: HTTP handlers → services → repositories |
+| **ECS** | Games — entities, components, and systems |
+| **Modular** | Monorepo-style projects with clear public API contracts between modules |
+
+Each archetype has its own layer dependency rules (G2), outer-layer definition (G7), and test coverage expectations (G4).
+
+See [`docs/architecture/architecture-overview.md`](internal/scaffold/assets/docs/architecture/architecture-overview.md) for the full comparison.
+
+---
+
+## centinela.toml Reference
+
+```toml
+# Commands centinela runs during the validate step.
+# Executed natively — no shell scripts required.
+[validate]
+commands = [
+  # TypeScript:  "npx tsc --noEmit", "npx vitest run"
+  # Python:      "mypy --strict src", "pytest"
+  # Go:          "go vet ./...", "go test ./..."
+  # Ruby:        "bundle exec rubocop", "bundle exec rspec"
+  # Rust:        "cargo check", "cargo test"
+]
+
+# Built-in gate toggles
+[gates]
+file_size = true   # G1: fail if any source file exceeds 100 lines
+i18n      = false  # G11: check translation key completeness
+
+# i18n config (required when gates.i18n = true)
+[i18n]
+format  = "json"              # "json" | "gettext" | "none"
+dir     = "src/i18n/messages"
+locales = ["en"]
+```
+
+---
+
+## Generated Project Structure
+
+After `centinela init` and filling in `PROJECT.md`:
+
+```
+your-project/
+  CLAUDE.md                      ← framework rules (auto-loaded by Claude)
+  PROJECT.md                     ← project definition
+  centinela.toml                 ← validate commands + gate config
+  .claude/
+    settings.json                ← centinela hooks
+  .workflow/
+    <feature>.json               ← workflow state per feature
+    <feature>-gatekeeper.md      ← gatekeeper conflict report
+  docs/
+    architecture/                ← 14 reference documents
+    plans/                       ← one plan doc per feature
+  specs/
+    <feature>.feature            ← Gherkin acceptance criteria
+  tests/
+    unit/
+    integration/
+    acceptance/
+      <feature>.steps.*          ← Gherkin step definitions
+```
+
+---
+
+## Included Architecture Documentation
+
+`centinela init` copies 14 reference documents into `docs/architecture/`:
+
+| Document | Contents |
+|----------|---------|
+| `architecture-overview.md` | All five archetypes compared — when to use each |
+| `hexagonal.md` | Ports-and-adapters layers, dependency rules, forbidden imports |
+| `rails-native.md` | MVC conventions, what belongs in models vs services vs views |
+| `n-tier.md` | Controller → Service → Repository layer rules |
+| `ecs.md` | Entity-Component-System patterns for games |
+| `modular.md` | Module boundaries and public API contracts |
+| `dependency-injection.md` | DI container patterns across archetypes |
+| `testing-strategy.md` | Unit, integration, and acceptance test structure for all archetypes |
+| `gatekeepers.md` | Full gate reference (G1–G11) with per-archetype rules |
+| `gatekeeper-prompt.md` | Prompt for the Gatekeeper AI subagent conflict review |
+| `workflow-enforcement.md` | How the three enforcement layers work |
+| `i18n-strategy.md` | Translation key conventions by format |
+| `example-feature-walkthrough.md` | End-to-end example of the four-step workflow |
+| `new-project-guide.md` | Step-by-step setup for new projects |
+
+---
+
+## Build from Source
 
 ```bash
 git clone https://github.com/samuelnp/centinela
@@ -77,9 +296,31 @@ cd centinela
 go build -o centinela ./cmd/centinela/
 ```
 
-Cross-compile:
+Cross-compile for other platforms:
 
 ```bash
-GOOS=linux  GOARCH=amd64 go build -o centinela-linux  ./cmd/centinela/
-GOOS=darwin GOARCH=arm64 go build -o centinela-darwin ./cmd/centinela/
+GOOS=linux   GOARCH=amd64 go build -o centinela-linux-amd64  ./cmd/centinela/
+GOOS=darwin  GOARCH=arm64 go build -o centinela-darwin-arm64 ./cmd/centinela/
+GOOS=windows GOARCH=amd64 go build -o centinela-windows.exe  ./cmd/centinela/
 ```
+
+---
+
+## Contributing
+
+Centinela uses its own workflow to develop itself.
+
+```bash
+centinela start <feature-name>
+# plan → code → tests → validate
+centinela complete <feature-name>
+```
+
+Conventional commits: `feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`.
+One feature per branch. Never push failing tests.
+
+---
+
+## License
+
+MIT
