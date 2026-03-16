@@ -3,15 +3,17 @@ package workflow
 import (
 	"fmt"
 	"time"
+
+	"github.com/samuelnp/centinela/internal/config"
 )
 
 // Complete marks the current step done and advances to the next one.
-func (wf *Workflow) Complete() error {
+func (wf *Workflow) Complete(cfg *config.Config) error {
 	current := wf.CurrentStep
 	if current == "done" {
 		return fmt.Errorf("workflow already complete")
 	}
-	if err := ValidateArtifacts(wf.Feature, current); err != nil {
+	if err := ValidateArtifacts(wf.Feature, current, cfg); err != nil {
 		return err
 	}
 

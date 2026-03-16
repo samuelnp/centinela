@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -22,6 +24,7 @@ func init() {
 }
 
 func runHookPostwrite(_ *cobra.Command, _ []string) error {
+	io.ReadAll(os.Stdin) //nolint:errcheck // drain stdin to avoid SIGPIPE
 	entries, _ := filepath.Glob(filepath.Join(workflow.WorkflowDir, "*.json"))
 	for _, path := range entries {
 		wf, err := workflow.Load(strings.TrimSuffix(filepath.Base(path), ".json"))

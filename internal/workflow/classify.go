@@ -1,6 +1,10 @@
 package workflow
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/samuelnp/centinela/internal/config"
+)
 
 // FileType categorises a file path by which workflow step governs it.
 type FileType string
@@ -12,12 +16,28 @@ const (
 	TypeOther FileType = "other"
 )
 
+// defaultCodeDirs covers common source roots across popular stacks.
+// Go: cmd/, internal/, pkg/
+// Ruby: lib/
+// Generic: src/, app/, backend/, frontend/
+var defaultCodeDirs = []string{
+	"/src/", "/app/",
+	"/cmd/", "/internal/", "/pkg/",
+	"/lib/",
+	"/backend/", "/frontend/",
+}
+
 // ClassifyFile maps a file path to the workflow step that owns it.
-func ClassifyFile(path string) FileType {
+// codeDirs from cfg override the default set when non-empty.
+func ClassifyFile(path string, cfg *config.Config) FileType {
+	dirs := cfg.Workflow.CodeDirs
+	if len(dirs) == 0 {
+		dirs = defaultCodeDirs
+	}
 	switch {
 	case containsAny(path, "/docs/plans/", "/specs/"):
 		return TypePlan
-	case containsAny(path, "/src/", "/app/"):
+	case containsAny(path, dirs...):
 		return TypeCode
 	case strings.Contains(path, "/tests/"):
 		return TypeTests

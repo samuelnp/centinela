@@ -1,7 +1,7 @@
-VERSION := 0.1.0
+VERSION := 0.1.5
 
 build:
 	go build -ldflags "-X main.Version=$(VERSION)" -o centinela ./cmd/centinela
 
 install:
-	go install -ldflags "-X main.Version=$(VERSION)" ./cmd/centinela
+	go build -ldflags "-X main.Version=$(VERSION)" -o $(HOME)/.local/bin/centinela ./cmd/centinela

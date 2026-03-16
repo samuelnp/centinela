@@ -59,5 +59,6 @@ func runInit(_ *cobra.Command, _ []string) error {
 	fmt.Println(ui.StyleMuted.Render("  PreToolUse  (Write, Edit)  →  centinela hook prewrite"))
 	fmt.Println(ui.StyleMuted.Render("  PostToolUse (Write, Edit)  →  centinela hook postwrite"))
 	fmt.Println(ui.StyleMuted.Render("  UserPromptSubmit            →  centinela hook context"))
+	fmt.Println(ui.StyleMuted.Render("  UserPromptSubmit            →  centinela hook setup"))
 	return nil
 }

@@ -71,7 +71,7 @@ centinela init --local
 
 ### 2. Fill in PROJECT.md
 
-Rename `PROJECT.md.template` to `PROJECT.md` and complete every section. This file tells both you and Claude what the project is, which architecture pattern it follows, and where everything lives.
+Open a Claude session in your project — the setup hook will detect that `PROJECT.md` is missing and automatically prompt Claude to interview you and write it. Alternatively, rename `PROJECT.md.template` to `PROJECT.md` and complete every section manually. This file tells both you and Claude what the project is, which architecture pattern it follows, and where everything lives.
 
 ### 3. Configure centinela.toml
 
@@ -127,7 +127,7 @@ centinela validate              # Run gate checks manually
 
 ## How the Hooks Work
 
-`centinela init` registers three Claude Code hooks that run automatically:
+`centinela init` registers four Claude Code hooks that run automatically:
 
 ### PreToolUse — Write / Edit
 
@@ -143,7 +143,11 @@ After every file write, centinela appends a compact status tag to the session:
 
 ### UserPromptSubmit
 
-At the start of every message, centinela injects a context block showing all active workflows and their current step — so Claude always has accurate state without reading any files.
+Two hooks run at the start of every message:
+
+**Project setup** — if `PROJECT.md` is missing but `PROJECT.md.template` exists, centinela injects a prompt instructing Claude to interview the user and write `PROJECT.md`. The prompt disappears automatically once the file is created.
+
+**Workflow context** — injects a context block showing all active workflows and their current step, so Claude always has accurate state without reading any files.
 
 ---
 

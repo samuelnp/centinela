@@ -11,9 +11,23 @@ const Filename = "centinela.toml"
 
 // Config is the centinela.toml structure.
 type Config struct {
+	Workflow WorkflowConfig `toml:"workflow"`
 	Validate ValidateConfig `toml:"validate"`
 	Gates    GatesConfig    `toml:"gates"`
 	I18n     I18nConfig     `toml:"i18n"`
+}
+
+// WorkflowConfig controls language-specific step validation behaviour.
+type WorkflowConfig struct {
+	// TestSuffixes lists file suffixes that count as unit/integration tests.
+	// If empty, any file in tests/unit or tests/integration is accepted.
+	TestSuffixes []string `toml:"test_suffixes"`
+	// AcceptanceSuffix is the file suffix for acceptance step definitions.
+	// If empty, any file in tests/acceptance is accepted.
+	AcceptanceSuffix string `toml:"acceptance_suffix"`
+	// CodeDirs lists path segments that classify a file as "code".
+	// If empty, a built-in set of common directories is used.
+	CodeDirs []string `toml:"code_dirs"`
 }
 
 // ValidateConfig holds user-defined commands that centinela runs during validate.
@@ -23,8 +37,9 @@ type ValidateConfig struct {
 
 // GatesConfig controls which built-in gates are active.
 type GatesConfig struct {
-	FileSizeEnabled bool `toml:"file_size"`
-	I18nEnabled     bool `toml:"i18n"`
+	FileSizeEnabled            bool `toml:"file_size"`
+	I18nEnabled                bool `toml:"i18n"`
+	ProductionReadinessEnabled bool `toml:"production_readiness"`
 }
 
 // I18nConfig describes how to check translations for G11.

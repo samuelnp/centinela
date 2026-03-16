@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
@@ -22,6 +23,11 @@ func init() {
 
 func runComplete(_ *cobra.Command, args []string) error {
 	feature := args[0]
+
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
 
 	wf, err := workflow.Load(feature)
 	if err != nil {
@@ -42,7 +48,7 @@ func runComplete(_ *cobra.Command, args []string) error {
 		}
 	}
 
-	if err := wf.Complete(); err != nil {
+	if err := wf.Complete(cfg); err != nil {
 		return err
 	}
 	if err := workflow.Save(wf); err != nil {
@@ -54,6 +60,9 @@ func runComplete(_ *cobra.Command, args []string) error {
 		fmt.Println(ui.StyleGreen.Bold(true).Render(fmt.Sprintf("Workflow complete for %q!", feature)))
 	} else {
 		fmt.Println(ui.RenderStep("Next step", wf.CurrentStep))
+	}
+	if warn := workflow.ProductionReadinessWarning(feature, cfg); warn != "" {
+		fmt.Println(ui.RenderProductionReadinessWarning(feature))
 	}
 	return nil
 }

@@ -3,6 +3,27 @@
 # to execute all checks below.
 
 # ---------------------------------------------------------------------------
+# Workflow step validation
+# Controls which file suffixes count as "tests" and which paths are "code".
+#
+# test_suffixes: file extensions for unit/integration tests.
+#   Leave empty to accept any file in tests/unit or tests/integration.
+#   Examples: [".test.ts"] | ["_test.go"] | ["_spec.rb"] | [".test.js"]
+#
+# acceptance_suffix: file extension for acceptance step definitions.
+#   Leave empty to accept any file in tests/acceptance.
+#   Examples: ".steps.ts" | "_steps.rb" | "_steps.py"
+#
+# code_dirs: path segments that classify a file as "code" (step enforcement).
+#   Leave empty to use the built-in defaults:
+#   /src/, /app/, /cmd/, /internal/, /pkg/, /lib/, /backend/, /frontend/
+# ---------------------------------------------------------------------------
+[workflow]
+# test_suffixes      = ["_test.go"]
+# acceptance_suffix  = "_steps_test.go"
+# code_dirs          = ["/cmd/", "/internal/", "/pkg/"]
+
+# ---------------------------------------------------------------------------
 # Validate commands
 # Cross-platform commands centinela runs in sequence during the validate step.
 # Use the native tool for your stack — no shell scripts required on Windows.
@@ -29,6 +50,10 @@ file_size = true
 
 # G11: Check i18n completeness. Requires [i18n] section below.
 i18n = false
+
+# G12: Production readiness (opt-in). Requires subagent report at validate step.
+# BLOCKING status blocks centinela complete. WARNING allows but surfaces issues.
+# production_readiness = false
 
 # ---------------------------------------------------------------------------
 # i18n gate (only used when gates.i18n = true)

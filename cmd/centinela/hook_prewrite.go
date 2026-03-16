@@ -10,6 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
@@ -48,7 +49,19 @@ func runHookPrewrite(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 
-	fileType := workflow.ClassifyFile(filePath)
+	cwd, err := os.Getwd()
+	if err == nil {
+		rel, relErr := filepath.Rel(cwd, filePath)
+		if relErr != nil || strings.HasPrefix(rel, "..") {
+			return nil
+		}
+	}
+
+	cfg, _ := config.Load()
+	if cfg == nil {
+		cfg = &config.Config{}
+	}
+	fileType := workflow.ClassifyFile(filePath, cfg)
 	if fileType == workflow.TypeOther {
 		return nil
 	}

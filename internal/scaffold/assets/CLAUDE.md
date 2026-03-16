@@ -13,6 +13,8 @@
 6. **No business logic in the outer layer.** What the "outer layer" is depends on the archetype (views in Rails, Components in ECS, UI components in Hexagonal). See PROJECT.md → Architecture Choice.
 7. **No hardcoded strings.** All user-facing text through i18n (all locales in PROJECT.md → Locales).
 
+8. **Never auto-advance steps.** After writing step artifacts, STOP. Present what was created and ask: "Step [X] complete — shall I advance to [next step]?" Only run `centinela complete <feature>` after explicit user confirmation ("yes", "continue", "proceed", etc.).
+
 ## Development Workflow (ENFORCED BY HOOKS)
 
 ```bash
@@ -57,8 +59,11 @@ Save report to `.workflow/<feature>-gatekeeper.md`. Required before completing `
 - [ ] No business logic in the outer layer (definition per archetype)
 - [ ] i18n keys present in all locales from PROJECT.md → Locales
 - [ ] Gatekeeper report: SAFE or WARNING
+- [ ] Production readiness: PASS or WARNING (if `gates.production_readiness = true`)
 
-Full details: [gatekeepers.md](docs/architecture/gatekeepers.md)
+## Production Readiness Subagent
+Invoke via Agent tool: [production-readiness-prompt.md](docs/architecture/production-readiness-prompt.md).
+Save to `.workflow/<feature>-production-readiness.md`. Required when gate is enabled.
 
 ## Naming Conventions
 
@@ -91,6 +96,5 @@ Full details: [gatekeepers.md](docs/architecture/gatekeepers.md)
 | New project setup | [new-project-guide.md](docs/architecture/new-project-guide.md) |
 
 ## Git
-
 Conventional commits: `feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`.
 One feature per branch. Never push failing tests.

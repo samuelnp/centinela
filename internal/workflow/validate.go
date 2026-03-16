@@ -5,17 +5,22 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/samuelnp/centinela/internal/config"
 )
 
 // ValidateArtifacts checks that the required artifacts exist before completing a step.
-func ValidateArtifacts(feature, step string) error {
+func ValidateArtifacts(feature, step string, cfg *config.Config) error {
 	switch step {
 	case "plan":
 		return validatePlan(feature)
 	case "tests":
-		return validateTests()
+		return validateTests(cfg)
 	case "validate":
-		return validateGatekeeper(feature)
+		if err := validateGatekeeper(feature); err != nil {
+			return err
+		}
+		return validateProductionReadiness(feature, cfg)
 	}
 	return nil
 }
@@ -40,14 +45,42 @@ func validatePlan(feature string) error {
 	return nil
 }
 
-func validateTests() error {
-	if !hasFileSuffix("tests/unit", ".test.ts") && !hasFileSuffix("tests/integration", ".test.ts") {
-		return fmt.Errorf("no unit/integration tests found in tests/")
+func validateProductionReadiness(feature string, cfg *config.Config) error {
+	if !cfg.Gates.ProductionReadinessEnabled {
+		return nil
 	}
-	if !hasFileSuffix("tests/acceptance", ".steps.ts") {
-		return fmt.Errorf("no acceptance step definitions found in tests/acceptance/")
+	report := fmt.Sprintf(".workflow/%s-production-readiness.md", feature)
+	data, err := os.ReadFile(report)
+	if err != nil {
+		return fmt.Errorf("production readiness report not found: %s\nRun the subagent first", report)
+	}
+	return checkPRStatus(string(data), feature)
+}
+
+func checkPRStatus(content, feature string) error {
+	if strings.Contains(content, "**Status:** BLOCKING") {
+		return fmt.Errorf(
+			"production readiness: BLOCKING\nFix CRITICAL issues in %q, then re-run the subagent.\nOr: centinela start %s-hardening",
+			feature, feature,
+		)
 	}
 	return nil
+}
+
+// ProductionReadinessWarning returns feature if report status is WARNING, else "".
+func ProductionReadinessWarning(feature string, cfg *config.Config) string {
+	if !cfg.Gates.ProductionReadinessEnabled {
+		return ""
+	}
+	report := fmt.Sprintf(".workflow/%s-production-readiness.md", feature)
+	data, err := os.ReadFile(report)
+	if err != nil {
+		return ""
+	}
+	if strings.Contains(string(data), "**Status:** WARNING") {
+		return feature
+	}
+	return ""
 }
 
 func validateGatekeeper(feature string) error {
@@ -56,19 +89,4 @@ func validateGatekeeper(feature string) error {
 		return fmt.Errorf("gatekeeper report not found: %s", report)
 	}
 	return nil
-}
-
-func hasFileSuffix(dir, suffix string) bool {
-	found := false
-	filepath.WalkDir(dir, func(path string, d os.DirEntry, err error) error {
-		if err != nil || found {
-			return nil
-		}
-		if !d.IsDir() && strings.HasSuffix(path, suffix) {
-			found = true
-			return filepath.SkipAll
-		}
-		return nil
-	})
-	return found
 }

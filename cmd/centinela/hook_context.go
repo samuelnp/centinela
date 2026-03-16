@@ -2,11 +2,15 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
 
+	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/roadmap"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
@@ -22,7 +26,11 @@ func init() {
 }
 
 func runHookContext(_ *cobra.Command, _ []string) error {
+	io.ReadAll(os.Stdin) //nolint:errcheck // drain stdin to avoid SIGPIPE on large prompts
 	entries, _ := filepath.Glob(filepath.Join(workflow.WorkflowDir, "*.json"))
+	if r, err := roadmap.Load(); err == nil {
+		fmt.Println(ui.RenderRoadmapSummary(r))
+	}
 	if len(entries) == 0 {
 		fmt.Println(ui.StyleMuted.Render("No active workflows."))
 		return nil
@@ -35,6 +43,24 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 		}
 		wfs = append(wfs, wf)
 	}
+	cfg, _ := config.Load()
+	if cfg == nil {
+		cfg = &config.Config{}
+	}
 	fmt.Println(ui.RenderContext(wfs))
+	for _, wf := range wfs {
+		if wf.CurrentStep != "done" && workflow.ValidateArtifacts(wf.Feature, wf.CurrentStep, cfg) == nil {
+			fmt.Println(ui.RenderReviewReady(wf.Feature, wf.CurrentStep, nextStep(wf.CurrentStep)))
+		}
+	}
 	return nil
+}
+
+func nextStep(current string) string {
+	for i, s := range workflow.StepOrder {
+		if s == current && i+1 < len(workflow.StepOrder) {
+			return workflow.StepOrder[i+1]
+		}
+	}
+	return "done"
 }

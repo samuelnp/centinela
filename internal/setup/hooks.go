@@ -4,6 +4,7 @@ const (
 	cmdPrewrite  = "centinela hook prewrite"
 	cmdPostwrite = "centinela hook postwrite"
 	cmdContext   = "centinela hook context"
+	cmdSetup     = "centinela hook setup"
 )
 
 func mergeHooks(pre, post, prompt *[]HookGroup) bool {
@@ -12,6 +13,7 @@ func mergeHooks(pre, post, prompt *[]HookGroup) bool {
 	c = ensureGroup(post, "Write", cmdPostwrite, "") || c
 	c = ensureGroup(post, "Edit", cmdPostwrite, "") || c
 	c = ensurePrompt(prompt, cmdContext, "Checking workflow status...") || c
+	c = ensurePrompt(prompt, cmdSetup, "Checking project setup...") || c
 	return c
 }
 

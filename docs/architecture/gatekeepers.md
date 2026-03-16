@@ -76,6 +76,15 @@ Automated and manual checks that MUST pass before any code is merged.
 - **Check**: `scripts/check-i18n.sh`
 - **Fail action**: Add missing translations.
 
+### G12: Production Readiness (Subagent, opt-in)
+
+- **Enabled by**: `gates.production_readiness = true` in `centinela.toml`.
+- **Check**: Invoke subagent (see CLAUDE.md → Production Readiness Subagent).
+- **Output**: PASS / WARNING / BLOCKING in `.workflow/<feature>-production-readiness.md`.
+- **BLOCKING** → fix CRITICAL issues, re-run subagent, then `centinela complete`
+- **WARNING** → complete proceeds; centinela suggests a follow-up hardening feature
+- **PASS** → complete proceeds normally
+
 ## Gate Enforcement
 
 These gates are enforced at three levels:
