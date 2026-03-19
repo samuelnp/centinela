@@ -1,7 +1,7 @@
 {
   "feature": "docs-consistency-pass",
   "startedAt": "2026-03-19T22:14:09.166954Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -12,11 +12,11 @@
       "completedAt": "2026-03-19T22:18:48Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-19T22:20:46Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   }
