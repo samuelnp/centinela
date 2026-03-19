@@ -1,6 +1,6 @@
 # Centinela
 
-A development workflow enforcer for [Claude Code](https://claude.ai/code) projects. Centinela turns the "plan → code → tests → validate" discipline from a suggestion into a mechanical constraint — enforced by hooks that run automatically inside every Claude session.
+A development workflow enforcer for Claude Code and OpenCode projects. Centinela turns the "plan → code → tests → validate" discipline from a suggestion into a mechanical constraint — enforced by agent integrations that run automatically in coding sessions.
 
 ---
 
@@ -8,10 +8,10 @@ A development workflow enforcer for [Claude Code](https://claude.ai/code) projec
 
 AI coding agents are fast but undisciplined. Left to their own devices they skip planning, write tests as an afterthought, and ship without validation. Centinela fixes this by:
 
-- **Blocking file writes** in the wrong workflow step via Claude Code pre-write hooks
+- **Blocking file writes** in the wrong workflow step via agent integrations
 - **Requiring artifacts** before a step can advance — no plan file means no code, no tests means no validate
 - **Running gate checks** automatically at the validate step (file size limits, i18n completeness, your test suite)
-- **Injecting context** into every Claude session so the agent always knows which feature is active and which step it is on
+- **Injecting context** into every agent session so the model always knows which feature is active and which step it is on
 
 The result: every feature ships with a written plan, a Gherkin spec, three test layers, and a passing gate suite — regardless of whether a human or an AI agent wrote it.
 
@@ -54,19 +54,28 @@ This creates:
 
 | File / Directory | Purpose |
 |-----------------|---------|
-| `CLAUDE.md` | Framework rules — auto-loaded into every Claude session |
+| `CLAUDE.md` | Framework rules — used by Claude, and by OpenCode via compatibility mode |
 | `PROJECT.md.template` | Fill in and rename to `PROJECT.md` |
 | `centinela.toml` | Configure validate commands and gate checks |
 | `docs/architecture/` | 14 architecture reference documents |
 | `docs/plans/` `specs/` `tests/` | Required empty directories |
-| `.claude/settings.json` | Hooks wired automatically |
+| `.claude/settings.json` | Claude hooks wired automatically |
+| `opencode.json` + `.opencode/plugins/centinela.js` | OpenCode integration wiring |
 
 Safe to re-run — existing files are never overwritten.
 
-Use `--local` to write hooks to `.claude/settings.local.json` (useful for personal overrides without committing to the repo):
+Use `--local` to write Claude hooks to `.claude/settings.local.json` (useful for personal overrides without committing to the repo):
 
 ```bash
 centinela init --local
+```
+
+Choose integration target explicitly when needed:
+
+```bash
+centinela init --agent claude
+centinela init --agent opencode
+centinela init --agent both   # default
 ```
 
 ### 2. Fill in PROJECT.md

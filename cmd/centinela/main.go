@@ -11,13 +11,13 @@ var Version = "dev"
 
 var rootCmd = &cobra.Command{
 	Use:     "centinela",
-	Short:   "Centinela — development workflow enforcer for Claude Code projects",
+	Short:   "Centinela — development workflow enforcer for Claude/OpenCode projects",
 	Version: Version,
 }
 
 var hookCmd = &cobra.Command{
 	Use:   "hook",
-	Short: "Claude Code hook integrations (prewrite / postwrite / context)",
+	Short: "Hook integrations (prewrite / postwrite / context / setup)",
 }
 
 func init() {

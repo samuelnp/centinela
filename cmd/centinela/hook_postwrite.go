@@ -15,7 +15,7 @@ import (
 
 var hookPostwriteCmd = &cobra.Command{
 	Use:   "postwrite",
-	Short: "PostToolUse hook: inject workflow tag after every file write",
+	Short: "Hook: inject workflow tag after every file write",
 	RunE:  runHookPostwrite,
 }
 

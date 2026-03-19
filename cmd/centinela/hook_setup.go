@@ -12,7 +12,7 @@ import (
 
 var hookSetupCmd = &cobra.Command{
 	Use:   "setup",
-	Short: "UserPromptSubmit hook: prompt Claude to fill in PROJECT.md if missing",
+	Short: "Hook: prompt setup flow when project artifacts are missing",
 	RunE:  runHookSetup,
 }
 

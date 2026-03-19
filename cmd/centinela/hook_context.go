@@ -17,7 +17,7 @@ import (
 
 var hookContextCmd = &cobra.Command{
 	Use:   "context",
-	Short: "UserPromptSubmit hook: show active workflow status on every prompt",
+	Short: "Hook: show active workflow status on every prompt",
 	RunE:  runHookContext,
 }
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -12,22 +13,30 @@ import (
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "Scaffold docs and wire centinela hooks into .claude/settings.json",
+	Short: "Scaffold docs and wire centinela for Claude/OpenCode",
 	Long: "Creates CLAUDE.md, PROJECT.md.template, and docs/architecture/ from\n" +
-		"embedded templates, then merges centinela hooks into the Claude settings\n" +
-		"file. Safe to run multiple times — existing files are never overwritten.",
+		"embedded templates, then configures selected agent integrations.\n" +
+		"Safe to run multiple times — existing files are never overwritten.",
 	RunE: runInit,
 }
 
 var localFlag bool
+var agentFlag string
 
 func init() {
 	rootCmd.AddCommand(initCmd)
 	initCmd.Flags().BoolVar(&localFlag, "local", false,
 		"Write hooks to .claude/settings.local.json instead of settings.json")
+	initCmd.Flags().StringVar(&agentFlag, "agent", "both",
+		"Target integrations: claude, opencode, or both")
 }
 
 func runInit(_ *cobra.Command, _ []string) error {
+	agent := strings.ToLower(agentFlag)
+	if !isValidAgent(agent) {
+		return fmt.Errorf("invalid --agent %q (use: claude|opencode|both)", agentFlag)
+	}
+
 	result, err := scaffold.Extract(".")
 	if err != nil {
 		return fmt.Errorf("scaffold failed: %w", err)
@@ -41,7 +50,18 @@ func runInit(_ *cobra.Command, _ []string) error {
 	if len(result.Created) > 0 {
 		fmt.Println()
 	}
+	if usesOpenCode(agent) {
+		if err := setupOpenCode(); err != nil {
+			return err
+		}
+	}
+	if usesClaude(agent) {
+		return setupClaude()
+	}
+	return nil
+}
 
+func setupClaude() error {
 	settingsPath := ".claude/settings.json"
 	if localFlag {
 		settingsPath = ".claude/settings.local.json"

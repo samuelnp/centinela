@@ -17,7 +17,7 @@ import (
 
 var hookPrewriteCmd = &cobra.Command{
 	Use:   "prewrite",
-	Short: "PreToolUse hook: block writes in the wrong workflow step",
+	Short: "Hook: block writes in the wrong workflow step",
 	RunE:  runHookPrewrite,
 }
 
