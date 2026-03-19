@@ -19,7 +19,7 @@ Create or update `docs/plans/blocker-detection.md`:
 ```
 
 ```bash
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # Step 'plan' completed. Next step: spec
 ```
 
@@ -56,7 +56,7 @@ Feature: Blocker Detection
 ```
 
 ```bash
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # Step 'spec' completed. Next step: domain
 ```
 
@@ -92,9 +92,9 @@ export class BlockerDetector {
 ```
 
 ```bash
-scripts/centinela-workflow.sh check detect-blockers domain   # ALLOWED
+centinela status detect-blockers   # confirm step before writing files
 # ... write the files ...
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # Step 'domain' completed. Next step: application
 ```
 
@@ -135,14 +135,14 @@ export class DetectBlockers {
 ```
 
 ```bash
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # Step 'application' completed. Next step: infrastructure
 ```
 
 ## Step 5: infrastructure (skip — uses existing repos)
 
 ```bash
-scripts/centinela-workflow.sh skip detect-blockers "uses existing SubtaskRepository, no new adapters"
+# No skip command in current flow; document rationale in plan and continue
 # Step 'infrastructure' skipped. Next step: hooks
 ```
 
@@ -158,7 +158,7 @@ export function useBlockerSummary(projectKey: string) {
 ```
 
 ```bash
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # Step 'hooks' completed. Next step: ui
 ```
 
@@ -175,7 +175,7 @@ export function BlockerBadge({ count }: Props) {
 ```
 
 ```bash
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # Step 'ui' completed. Next step: tests
 ```
 
@@ -202,7 +202,7 @@ describe('DetectBlockers', () => {
 
 ```bash
 npm run test:unit  # verify passing
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # Step 'tests' completed. Next step: acceptance
 ```
 
@@ -229,7 +229,7 @@ Then('{string} should appear in the blocker report', function(subtaskKey) {
 
 ```bash
 npm run test:acceptance  # verify passing
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # Step 'acceptance' completed. Next step: gatekeeper
 ```
 
@@ -246,7 +246,7 @@ No conflicts with existing specs.
 ```
 
 ```bash
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # Step 'gatekeeper' completed. Next step: validate
 ```
 
@@ -255,7 +255,7 @@ scripts/centinela-workflow.sh complete detect-blockers
 ```bash
 npm test
 # All tests pass: unit (12) + integration (0) + acceptance (3)
-scripts/centinela-workflow.sh complete detect-blockers
+centinela complete detect-blockers
 # WORKFLOW COMPLETE for 'detect-blockers'!
 ```
 

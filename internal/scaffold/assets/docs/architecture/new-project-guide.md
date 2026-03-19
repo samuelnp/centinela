@@ -26,7 +26,7 @@ Run once in the project root:
 centinela init
 ```
 
-This creates all required files and wires the Claude Code hooks into `.claude/settings.json` automatically.
+This creates required files and wires Claude/OpenCode integrations automatically.
 
 Use `--local` if you prefer not to commit the hooks to a shared settings file:
 

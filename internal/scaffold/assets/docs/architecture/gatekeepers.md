@@ -192,6 +192,6 @@ locales = ["en", "es"]
 Gates are enforced at four levels:
 
 1. **CLAUDE.md** — the AI agent reads and follows all gates as hard rules.
-2. **`centinela hook prewrite`** — blocks file writes in the wrong workflow step (via Claude Code hooks).
+2. **`centinela hook prewrite`** — blocks file writes in the wrong workflow step (via agent integrations).
 3. **`centinela validate`** — runs built-in gates (G1, G11) + all user commands from `centinela.toml`.
 4. **CI pipeline** — all gates run on every push (once CI is configured).

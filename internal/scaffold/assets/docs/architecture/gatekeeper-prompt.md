@@ -75,6 +75,6 @@ Save output to: `.workflow/<feature-name>-gatekeeper.md`
 
 | Status | Next Action |
 |--------|-------------|
-| SAFE | Proceed. Run `workflow.sh complete` |
-| WARNING | Document warnings in plan file. Proceed with caution. Run `workflow.sh complete` |
-| BLOCKING | STOP. Resolve conflicts first. Do NOT run `workflow.sh complete` |
+| SAFE | Proceed. Run `centinela complete <feature>` |
+| WARNING | Document warnings in plan file. Proceed with caution. Run `centinela complete <feature>` |
+| BLOCKING | STOP. Resolve conflicts first. Do NOT run `centinela complete <feature>` |

@@ -24,7 +24,7 @@ Automated and manual checks that MUST pass before any code is merged.
 ### G4: Test Coverage
 - **Rule**: All use cases have unit tests. All adapters have integration tests.
   All `.feature` files have step definitions. All acceptance tests pass.
-- **Check**: `scripts/validate.sh`
+- **Check**: `centinela validate`
 - **Fail action**: Block commit. Write missing tests.
 
 ## Pre-Feature Gates (manual checklist)
@@ -63,12 +63,12 @@ Automated and manual checks that MUST pass before any code is merged.
 
 ### G9: All Tests Pass
 - **Rule**: Full test suite exits with 0 (unit + integration + acceptance).
-- **Check**: CI pipeline running `scripts/validate.sh`.
+- **Check**: CI pipeline running `centinela validate`.
 - **Fail action**: Fix failing tests before merge.
 
 ### G10: Acceptance Regression
 - **Rule**: All existing Gherkin scenarios still pass after new feature.
-- **Check**: Run acceptance tests only (subset of `scripts/validate.sh`).
+- **Check**: Run acceptance tests only (subset of your `centinela validate` commands).
 - **Fail action**: New feature broke existing behavior. Fix before merge.
 
 ### G11: i18n Complete
@@ -87,9 +87,9 @@ Automated and manual checks that MUST pass before any code is merged.
 
 ## Gate Enforcement
 
-These gates are enforced at three levels:
+These gates are enforced at four levels:
 
 1. **CLAUDE.md** — AI agents read this and follow the rules.
 2. **Static analysis config** — Automated type checking and import boundary rules.
-3. **Scripts in `scripts/`** — Custom checks run via the project's gate runner.
-4. **CI pipeline** — All gates run on push (when CI is set up).
+3. **`centinela validate`** — Runs built-in gates plus project validate commands.
+4. **CI pipeline** — Run `centinela validate` on push/PR.

@@ -55,7 +55,7 @@ If validation fails, the step stays in-progress and the command exits with an er
 
 The `centinela` CLI enforces the workflow with two mechanisms:
 
-1. **Pre-write hook**: Blocks file writes in the wrong workflow step. Runs automatically via Claude Code hooks.
+1. **Pre-write hook**: Blocks file writes in the wrong workflow step. Runs automatically via agent integrations.
 2. **`centinela complete`**: Prevents advancing past a step without its required artifact or passing gates.
 
 ## Workflow Commands

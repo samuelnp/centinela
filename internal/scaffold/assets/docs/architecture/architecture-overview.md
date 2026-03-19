@@ -188,5 +188,5 @@ Regardless of archetype:
 - **Spec-first** — Gherkin before implementation
 - **Tests mandatory** — unit + acceptance cannot be skipped
 - **Gatekeeper AI** — conflict check before every implementation
-- **`scripts/validate.sh`** — full validation before shipping
+- **`centinela validate`** — full validation before shipping
 - **Max 100 lines per file** — no exceptions
