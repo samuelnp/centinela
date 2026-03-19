@@ -1,0 +1,23 @@
+{
+  "feature": "refactor-hook-policy-core",
+  "startedAt": "2026-03-19T22:01:12.251078Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-19T22:09:21Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  }
+}
