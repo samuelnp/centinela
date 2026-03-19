@@ -1,18 +1,18 @@
 {
   "feature": "raise-test-coverage-90",
   "startedAt": "2026-03-19T22:22:46.335025Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-19T22:29:29Z"
     },
     "plan": {
       "status": "done",
       "completedAt": "2026-03-19T22:25:43Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {
