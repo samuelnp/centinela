@@ -20,7 +20,8 @@ func RenderSetupNeeded() string {
 		StyleMuted.Render("2. Ask the user: project name, domain, tech stack,"),
 		StyleMuted.Render("   architecture choice, locales, and folder layout"),
 		StyleMuted.Render("3. Write PROJECT.md once you have all answers"),
-		StyleMuted.Render("4. Suggest: centinela start <first-feature>"),
+		StyleMuted.Render("4. Tell the user: \"PROJECT.md is ready — next, let's define your roadmap.\""),
+		StyleMuted.Render("   Then immediately start the roadmap conversation (phases, features, briefs)."),
 		"",
 		StyleRed.Render("Do not discuss anything else until PROJECT.md is written."),
 	)

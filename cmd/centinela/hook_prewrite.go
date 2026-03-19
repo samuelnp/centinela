@@ -62,7 +62,7 @@ func runHookPrewrite(_ *cobra.Command, _ []string) error {
 		cfg = &config.Config{}
 	}
 	fileType := workflow.ClassifyFile(filePath, cfg)
-	if fileType == workflow.TypeOther {
+	if fileType == workflow.TypeOther || fileType == workflow.TypeRoadmap {
 		return nil
 	}
 

@@ -1,0 +1,23 @@
+{
+  "feature": "fix-validate-plan-by-name",
+  "startedAt": "2026-03-17T22:23:03.547728Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-03-17T22:24:09Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-17T22:23:37Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-03-17T22:25:16Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-03-17T22:26:12Z"
+    }
+  }
+}

@@ -34,7 +34,7 @@ scripts/centinela-workflow.sh status <feature>    # Show progress
 ### What each step validates before advancing:
 | Step | Required artifacts |
 |------|--------------------|
-| plan | Plan file in `docs/plans/` + `.feature` spec in `specs/` |
+| plan | Feature brief in `docs/features/` + plan file in `docs/plans/` + `.feature` spec in `specs/` |
 | code | Nothing — architecture rules govern this |
 | tests | Test suite files in `tests/unit/` or `tests/integration/` + acceptance step definitions in `tests/acceptance/` |
 | validate | Gatekeeper report at `.workflow/<feature>-gatekeeper.md` + full test suite passes |

@@ -37,6 +37,11 @@ func (wf *Workflow) Complete(cfg *config.Config) error {
 	return nil
 }
 
+// StepNumber returns the 1-based position of a step (1=plan … 4=validate).
+func StepNumber(step string) int {
+	return stepIndex(step) + 1
+}
+
 // StepIndex returns the zero-based index of a step name, or -1 if not found.
 func stepIndex(step string) int {
 	for i, s := range StepOrder {

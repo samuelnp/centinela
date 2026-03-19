@@ -26,17 +26,9 @@ func ValidateArtifacts(feature, step string, cfg *config.Config) error {
 }
 
 func validatePlan(feature string) error {
-	matches, _ := filepath.Glob("docs/plans/*.md")
-	found := false
-	for _, m := range matches {
-		data, _ := os.ReadFile(m)
-		if strings.Contains(string(data), feature) {
-			found = true
-			break
-		}
-	}
-	if !found {
-		return fmt.Errorf("no plan in docs/plans/ mentions %q", feature)
+	planFile := fmt.Sprintf("docs/plans/%s.md", feature)
+	if _, err := os.Stat(planFile); err != nil {
+		return fmt.Errorf("plan file not found: %s", planFile)
 	}
 	specs, _ := filepath.Glob("specs/*.feature")
 	if len(specs) == 0 {

@@ -10,10 +10,11 @@ import (
 type FileType string
 
 const (
-	TypePlan  FileType = "plan"
-	TypeCode  FileType = "code"
-	TypeTests FileType = "tests"
-	TypeOther FileType = "other"
+	TypeRoadmap FileType = "roadmap"
+	TypePlan    FileType = "plan"
+	TypeCode    FileType = "code"
+	TypeTests   FileType = "tests"
+	TypeOther   FileType = "other"
 )
 
 // defaultCodeDirs covers common source roots across popular stacks.
@@ -35,6 +36,8 @@ func ClassifyFile(path string, cfg *config.Config) FileType {
 		dirs = defaultCodeDirs
 	}
 	switch {
+	case isRoadmapArtifact(path):
+		return TypeRoadmap
 	case containsAny(path, "/docs/plans/", "/specs/"):
 		return TypePlan
 	case containsAny(path, dirs...):
@@ -46,13 +49,20 @@ func ClassifyFile(path string, cfg *config.Config) FileType {
 	}
 }
 
+// isRoadmapArtifact returns true for files belonging to the roadmap phase.
+func isRoadmapArtifact(path string) bool {
+	return strings.Contains(path, "/docs/features/") ||
+		strings.HasSuffix(path, "ROADMAP.md") ||
+		strings.HasSuffix(path, "roadmap.json")
+}
+
 // IsAllowedInStep returns true if a file type may be written during the given step.
 func IsAllowedInStep(fileType FileType, step string) bool {
 	switch step {
 	case "plan":
-		return fileType == TypePlan
+		return fileType == TypePlan || fileType == TypeRoadmap
 	case "code":
-		return fileType == TypeCode || fileType == TypePlan
+		return fileType == TypeCode || fileType == TypePlan || fileType == TypeRoadmap
 	case "tests":
 		return fileType == TypeTests || fileType == TypeCode
 	case "validate":

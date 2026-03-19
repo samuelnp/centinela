@@ -35,7 +35,7 @@ centinela validate            # Run gate checks + validate commands
 ### What each step validates before advancing:
 | Step | Required artifacts |
 |------|--------------------|
-| plan | Plan file in `docs/plans/` + `.feature` spec in `specs/` |
+| plan | Feature brief in `docs/features/` + plan file in `docs/plans/` + `.feature` spec in `specs/` |
 | code | Nothing — architecture rules govern this |
 | tests | Test suite files in `tests/unit/` or `tests/integration/` + acceptance step definitions in `tests/acceptance/` |
 | validate | Gatekeeper report at `.workflow/<feature>-gatekeeper.md` + `centinela validate` passes |

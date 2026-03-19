@@ -55,6 +55,10 @@ func runComplete(_ *cobra.Command, args []string) error {
 		return fmt.Errorf("cannot save workflow: %w", err)
 	}
 
+	if !cfg.Workflow.DisableAutoCommit {
+		commitStep(feature, current, workflow.StepNumber(current))
+	}
+
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Step %q completed for %q.", current, feature)))
 	if wf.CurrentStep == "done" {
 		fmt.Println(ui.StyleGreen.Bold(true).Render(fmt.Sprintf("Workflow complete for %q!", feature)))

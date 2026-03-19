@@ -28,6 +28,8 @@ type WorkflowConfig struct {
 	// CodeDirs lists path segments that classify a file as "code".
 	// If empty, a built-in set of common directories is used.
 	CodeDirs []string `toml:"code_dirs"`
+	// DisableAutoCommit prevents centinela from committing on step completion.
+	DisableAutoCommit bool `toml:"disable_auto_commit"`
 }
 
 // ValidateConfig holds user-defined commands that centinela runs during validate.

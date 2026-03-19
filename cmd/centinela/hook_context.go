@@ -53,6 +53,13 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 			fmt.Println(ui.RenderReviewReady(wf.Feature, wf.CurrentStep, nextStep(wf.CurrentStep)))
 		}
 	}
+	for _, wf := range wfs {
+		if wf.CurrentStep == "plan" && workflow.ValidateArtifacts(wf.Feature, "plan", cfg) != nil {
+			if _, err := os.Stat(fmt.Sprintf("docs/features/%s.md", wf.Feature)); os.IsNotExist(err) {
+				fmt.Println(ui.RenderFeatureBriefNeeded(wf.Feature))
+			}
+		}
+	}
 	return nil
 }
 
