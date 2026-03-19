@@ -1,7 +1,7 @@
 {
   "feature": "opencode-hook-parity",
   "startedAt": "2026-03-19T21:49:35.733271Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -12,11 +12,11 @@
       "completedAt": "2026-03-19T21:55:30Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-19T22:00:12Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   }
