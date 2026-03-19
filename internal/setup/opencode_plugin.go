@@ -10,18 +10,35 @@ const pluginContent = `export const CentinelaPlugin = async () => {
       if (!isWriteTool(input.tool)) return
       const filePath = getFilePath(input.args)
       if (!filePath) return
-
       const payload = JSON.stringify({ tool_input: { filePath } })
-      const proc = Bun.spawnSync({
-        cmd: ["centinela", "hook", "prewrite"],
-        stdin: payload,
-        stderr: "pipe",
-      })
-      if (proc.exitCode === 0) return
-      const msg = new TextDecoder().decode(proc.stderr).trim()
-      throw new Error(msg || "centinela blocked this write")
+      runHook("prewrite", payload, true)
+    },
+
+    "tool.execute.after": async (input) => {
+      if (!isWriteTool(input.tool)) return
+      runHook("postwrite", "", false)
+    },
+
+    "tui.prompt.append": async (_input, output) => {
+      appendContext(output, runHook("setup", "", false))
+      appendContext(output, runHook("context", "", false))
     },
   }
+}
+
+function runHook(name, payload, blocking) {
+  const proc = Bun.spawnSync({
+    cmd: ["centinela", "hook", name],
+    stdin: payload,
+    stdout: "pipe",
+    stderr: "pipe",
+  })
+  const out = new TextDecoder().decode(proc.stdout).trim()
+  const err = new TextDecoder().decode(proc.stderr).trim()
+  if (blocking && proc.exitCode !== 0) {
+    throw new Error(err || out || "centinela blocked this write")
+  }
+  return out
 }
 
 function isWriteTool(tool) {
@@ -31,6 +48,17 @@ function isWriteTool(tool) {
 function getFilePath(args) {
   if (!args || typeof args !== "object") return ""
   return args.filePath || args.file_path || ""
+}
+
+function appendContext(output, text) {
+  if (!text || !output || typeof output !== "object") return
+  if (typeof output.prompt === "string") {
+    output.prompt += "\n\n" + text
+    return
+  }
+  if (Array.isArray(output.context)) {
+    output.context.push(text)
+  }
 }
 `
 

@@ -1,0 +1,23 @@
+{
+  "feature": "opencode-hook-parity",
+  "startedAt": "2026-03-19T21:49:35.733271Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-19T21:55:30Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  }
+}

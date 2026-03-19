@@ -1,0 +1,53 @@
+package unit_test
+
+import (
+	"os"
+	"strings"
+	"testing"
+
+	"github.com/samuelnp/centinela/internal/setup"
+)
+
+func TestEnsureOpenCodePlugin_IncludesParityHooks(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	defer os.Chdir(origDir) //nolint:errcheck
+	os.Chdir(dir)           //nolint:errcheck
+
+	changed, err := setup.EnsureOpenCodePlugin()
+	if err != nil {
+		t.Fatalf("EnsureOpenCodePlugin error: %v", err)
+	}
+	if !changed {
+		t.Fatal("expected plugin to be created")
+	}
+
+	data, _ := os.ReadFile(".opencode/plugins/centinela.js") //nolint:errcheck
+	s := string(data)
+	wants := []string{
+		`"tool.execute.before"`,
+		`"tool.execute.after"`,
+		`"tui.prompt.append"`,
+		`runHook("prewrite"`,
+		`runHook("postwrite"`,
+		`runHook("setup"`,
+		`runHook("context"`,
+	}
+	for _, w := range wants {
+		if !strings.Contains(s, w) {
+			t.Fatalf("plugin missing %q", w)
+		}
+	}
+}
+
+func TestEnsureOpenCodePlugin_IsIdempotent(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	defer os.Chdir(origDir) //nolint:errcheck
+	os.Chdir(dir)           //nolint:errcheck
+
+	setup.EnsureOpenCodePlugin() //nolint:errcheck
+	if changed, _ := setup.EnsureOpenCodePlugin(); changed {
+		t.Fatal("expected second call to be no-op")
+	}
+}
