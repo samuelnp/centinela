@@ -1,0 +1,23 @@
+{
+  "feature": "adapt-opencode-support",
+  "startedAt": "2026-03-19T21:24:35.84493Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-19T21:26:29Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  }
+}
