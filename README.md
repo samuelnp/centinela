@@ -89,10 +89,14 @@ Add your stack's lint and test commands:
 ```toml
 [validate]
 commands = [
-  "npx tsc --noEmit",
-  "npx vitest run",
-  "npx cucumber-js",
+  "./scripts/check-coverage.sh",
 ]
+```
+
+Default coverage threshold is `95.0%`. Override temporarily with:
+
+```bash
+MIN_COVERAGE=96.5 ./scripts/check-coverage.sh
 ```
 
 Commands run natively via the OS. No shell scripts, no bash dependency — works on Windows, macOS, and Linux.

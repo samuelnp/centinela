@@ -1,0 +1,7 @@
+[validate]
+commands = [
+  "./scripts/check-coverage.sh"
+]
+
+[gates]
+file_size = true
