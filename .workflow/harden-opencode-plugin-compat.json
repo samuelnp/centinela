@@ -1,18 +1,18 @@
 {
   "feature": "harden-opencode-plugin-compat",
   "startedAt": "2026-03-23T21:37:56.032432Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-23T21:39:39Z"
     },
     "plan": {
       "status": "done",
       "completedAt": "2026-03-23T21:38:45Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {

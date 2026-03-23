@@ -7,15 +7,15 @@ const pluginFile = ".opencode/plugins/centinela.js"
 const pluginContent = `export const CentinelaPlugin = async () => {
   return {
     "tool.execute.before": async (input) => {
-      if (!isWriteTool(input.tool)) return
-      const filePath = getFilePath(input.args)
+      if (!isWriteTool(normalizeTool(input))) return
+      const filePath = getFilePath(input)
       if (!filePath) return
       const payload = JSON.stringify({ tool_input: { filePath } })
       runHook("prewrite", payload, true)
     },
 
     "tool.execute.after": async (input) => {
-      if (!isWriteTool(input.tool)) return
+      if (!isWriteTool(normalizeTool(input))) return
       runHook("postwrite", "", false)
     },
 
@@ -42,12 +42,30 @@ function runHook(name, payload, blocking) {
 }
 
 function isWriteTool(tool) {
+  tool = String(tool || "").toLowerCase()
   return tool === "write" || tool === "edit" || tool === "patch"
 }
 
-function getFilePath(args) {
-  if (!args || typeof args !== "object") return ""
-  return args.filePath || args.file_path || ""
+function normalizeTool(input) {
+  if (!input || typeof input !== "object") return ""
+  return input.tool || input.toolName || input.name || ""
+}
+
+function getFilePath(input) {
+  if (!input || typeof input !== "object") return ""
+  const args = input.args && typeof input.args === "object" ? input.args : {}
+  const nested = args.input && typeof args.input === "object" ? args.input : {}
+  return (
+    args.filePath ||
+    args.file_path ||
+    args.path ||
+    args.filename ||
+    args.file ||
+    nested.filePath ||
+    nested.file_path ||
+    nested.path ||
+    ""
+  )
 }
 
 function appendContext(output, text) {
