@@ -53,3 +53,38 @@ func TestProductionReadinessBranches(t *testing.T) {
 		t.Fatal("expected blocking status error")
 	}
 }
+
+func TestValidatePlanAndWarningBranches(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o) //nolint:errcheck
+	os.Chdir(d)       //nolint:errcheck
+
+	os.MkdirAll("docs/plans", 0755)                    //nolint:errcheck
+	os.WriteFile("docs/plans/f.md", []byte("x"), 0644) //nolint:errcheck
+	if err := validatePlan("f"); err == nil {
+		t.Fatal("expected missing specs error")
+	}
+	os.Remove("docs/plans/f.md") //nolint:errcheck
+	if err := validatePlan("f"); err == nil {
+		t.Fatal("expected missing plan file error")
+	}
+	os.WriteFile("docs/plans/f.md", []byte("x"), 0644)          //nolint:errcheck
+	os.MkdirAll("specs", 0755)                                  //nolint:errcheck
+	os.WriteFile("specs/f.feature", []byte("Feature: x"), 0644) //nolint:errcheck
+	if err := validatePlan("f"); err != nil {
+		t.Fatalf("expected validatePlan success, got %v", err)
+	}
+	if w := ProductionReadinessWarning("f", &config.Config{}); w != "" {
+		t.Fatal("warning should be empty when gate disabled")
+	}
+	cfg := &config.Config{Gates: config.GatesConfig{ProductionReadinessEnabled: true}}
+	if w := ProductionReadinessWarning("f", cfg); w != "" {
+		t.Fatal("warning should be empty when report missing")
+	}
+	os.MkdirAll(".workflow", 0755)                                            //nolint:errcheck
+	os.WriteFile(".workflow/f-production-readiness.md", []byte("SAFE"), 0644) //nolint:errcheck
+	if w := ProductionReadinessWarning("f", cfg); w != "" {
+		t.Fatal("warning should be empty for SAFE report")
+	}
+}

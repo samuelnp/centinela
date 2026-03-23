@@ -26,3 +26,12 @@ func TestExtractCreatesAndSkips(t *testing.T) {
 		t.Fatal("expected skipped files on second run")
 	}
 }
+
+func TestExtractErrorOnInvalidTarget(t *testing.T) {
+	d := t.TempDir()
+	bad := filepath.Join(d, "bad")
+	os.WriteFile(bad, []byte("x"), 0644) //nolint:errcheck
+	if _, err := Extract(filepath.Join(bad, "nested")); err == nil {
+		t.Fatal("expected extract error for invalid target path")
+	}
+}

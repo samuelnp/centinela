@@ -30,6 +30,9 @@ type prewriteInput struct {
 	} `json:"tool_input"`
 }
 
+var exitPrewrite = os.Exit
+var evalPrewrite = hookpolicy.EvaluatePrewrite
+
 func runHookPrewrite(_ *cobra.Command, _ []string) error {
 	raw, err := io.ReadAll(os.Stdin)
 	if err != nil || len(raw) == 0 {
@@ -53,16 +56,16 @@ func runHookPrewrite(_ *cobra.Command, _ []string) error {
 	}
 	wfs := loadActiveWorkflows()
 	cwd, _ := os.Getwd()
-	d := hookpolicy.EvaluatePrewrite(filePath, cwd, cfg, wfs)
+	d := evalPrewrite(filePath, cwd, cfg, wfs)
 	if d.Allow {
 		return nil
 	}
 	if d.NeedInit {
 		fmt.Fprintln(os.Stderr, ui.RenderBlocked(string(d.FileType), "", "—", filePath))
 		fmt.Fprintln(os.Stderr, ui.StyleMuted.Render("Run: centinela start <feature>"))
-		os.Exit(2)
+		exitPrewrite(2)
 	}
 	fmt.Fprintln(os.Stderr, ui.RenderBlocked(string(d.FileType), d.Step, d.Feature, filePath))
-	os.Exit(2)
+	exitPrewrite(2)
 	return nil
 }

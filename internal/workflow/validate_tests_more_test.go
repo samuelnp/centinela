@@ -19,4 +19,7 @@ func TestHasAcceptanceTestsSuffixAndAny(t *testing.T) {
 	if !hasAcceptanceTests("") {
 		t.Fatal("expected acceptance any-file match")
 	}
+	if hasAnyFile("tests/missing") {
+		t.Fatal("missing dir should report no files")
+	}
 }

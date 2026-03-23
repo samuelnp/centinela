@@ -13,7 +13,8 @@ func TestRunStatusAllWithEntriesReturns(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(d)       //nolint:errcheck
 
-	os.MkdirAll(workflow.WorkflowDir, 0755) //nolint:errcheck
-	workflow.Save(workflow.New("f"))        //nolint:errcheck
+	os.MkdirAll(workflow.WorkflowDir, 0755)                  //nolint:errcheck
+	workflow.Save(workflow.New("f"))                         //nolint:errcheck
+	os.WriteFile(".workflow/bad.json", []byte("{bad"), 0644) //nolint:errcheck
 	_ = runStatusAll(nil, nil)
 }

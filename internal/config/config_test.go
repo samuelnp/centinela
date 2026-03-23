@@ -36,6 +36,22 @@ func TestLoad_ParseAndDefaults(t *testing.T) {
 	}
 }
 
+func TestApplyDefaultsKeepsConfiguredFileSize(t *testing.T) {
+	cfg := &Config{Gates: GatesConfig{FileSizeEnabled: true, I18nEnabled: false}}
+	applyDefaults(cfg)
+	if !cfg.Gates.FileSizeEnabled {
+		t.Fatal("file size gate should remain enabled")
+	}
+}
+
+func TestApplyDefaultsEnablesFileSizeWhenBothDisabled(t *testing.T) {
+	cfg := &Config{Gates: GatesConfig{FileSizeEnabled: false, I18nEnabled: false}}
+	applyDefaults(cfg)
+	if !cfg.Gates.FileSizeEnabled {
+		t.Fatal("file size gate should default to enabled")
+	}
+}
+
 func TestLoad_ParseError(t *testing.T) {
 	dir := t.TempDir()
 	orig, _ := os.Getwd()
@@ -45,5 +61,17 @@ func TestLoad_ParseError(t *testing.T) {
 	os.WriteFile(Filename, []byte("[gates\n"), 0644) //nolint:errcheck
 	if _, err := Load(); err == nil {
 		t.Fatal("expected parse error")
+	}
+}
+
+func TestLoad_ReadError(t *testing.T) {
+	dir := t.TempDir()
+	orig, _ := os.Getwd()
+	defer os.Chdir(orig) //nolint:errcheck
+	os.Chdir(dir)        //nolint:errcheck
+
+	os.Mkdir(Filename, 0755) //nolint:errcheck
+	if _, err := Load(); err == nil {
+		t.Fatal("expected read error for directory config path")
 	}
 }

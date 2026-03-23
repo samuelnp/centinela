@@ -68,10 +68,12 @@ func executeValidation() error {
 	return fmt.Errorf("validation failed — fix the issues above before completing the validate step")
 }
 
+var runtimeOS = runtime.GOOS
+
 // runCommand executes a shell command and returns (passed, combined output).
 func runCommand(cmdStr string) (bool, string) {
 	var cmd *exec.Cmd
-	if runtime.GOOS == "windows" {
+	if runtimeOS == "windows" {
 		cmd = exec.Command("cmd", "/C", cmdStr)
 	} else {
 		cmd = exec.Command("sh", "-c", cmdStr)

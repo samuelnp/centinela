@@ -38,3 +38,26 @@ func TestLoadMissingWorkflow(t *testing.T) {
 		t.Fatal("expected missing workflow error")
 	}
 }
+
+func TestSaveErrorWhenWorkflowDirConflicts(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o)                            //nolint:errcheck
+	os.Chdir(d)                                  //nolint:errcheck
+	os.WriteFile(WorkflowDir, []byte("x"), 0644) //nolint:errcheck
+	if err := Save(New("f")); err == nil {
+		t.Fatal("expected save error with conflicting workflow dir file")
+	}
+}
+
+func TestLoadParseError(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o)                                   //nolint:errcheck
+	os.Chdir(d)                                         //nolint:errcheck
+	os.MkdirAll(WorkflowDir, 0755)                      //nolint:errcheck
+	os.WriteFile(FilePath("bad"), []byte("{bad"), 0644) //nolint:errcheck
+	if _, err := Load("bad"); err == nil {
+		t.Fatal("expected parse error for invalid workflow json")
+	}
+}

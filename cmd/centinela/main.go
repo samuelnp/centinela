@@ -2,12 +2,16 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/spf13/cobra"
 )
 
 var Version = "dev"
+var stderrWriter io.Writer = os.Stderr
+var executeRoot = func() error { return rootCmd.Execute() }
+var exitMain = os.Exit
 
 var rootCmd = &cobra.Command{
 	Use:     "centinela",
@@ -25,8 +29,8 @@ func init() {
 }
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+	if err := executeRoot(); err != nil {
+		fmt.Fprintln(stderrWriter, err)
+		exitMain(1)
 	}
 }

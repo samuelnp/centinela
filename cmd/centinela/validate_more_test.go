@@ -16,3 +16,13 @@ func TestRunValidateWrapper(t *testing.T) {
 		t.Fatalf("runValidate should pass: %v", err)
 	}
 }
+
+func TestRunCommandWindowsBranch(t *testing.T) {
+	old := runtimeOS
+	defer func() { runtimeOS = old }()
+	runtimeOS = "windows"
+	ok, _ := runCommand("echo hi")
+	if ok {
+		t.Fatal("expected windows branch command to fail on non-windows host")
+	}
+}

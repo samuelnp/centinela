@@ -21,4 +21,8 @@ func TestStatusModelMethods(t *testing.T) {
 	if cmd == nil {
 		t.Fatal("Update should return quit cmd on key")
 	}
+	_, cmd2 := m.Update(struct{}{})
+	if cmd2 != nil {
+		t.Fatal("Update should return nil cmd on non-key msg")
+	}
 }

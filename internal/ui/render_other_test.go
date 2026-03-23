@@ -23,15 +23,23 @@ func TestRenderGatesAndStatusHelpers(t *testing.T) {
 	if stepStatusLine(wf, "plan", workflow.StepState{Status: "pending"}) == "" {
 		t.Fatal("stepStatusLine should render pending")
 	}
+	wfDone := &workflow.Workflow{Feature: "f", CurrentStep: "done", Steps: map[string]workflow.StepState{"plan": {Status: "done"}}}
+	if stepStatusLine(wfDone, "plan", workflow.StepState{Status: "done"}) == "" {
+		t.Fatal("stepStatusLine should render done")
+	}
 }
 
 func TestRenderRoadmapAndReview(t *testing.T) {
 	r := &roadmap.Roadmap{Phases: []roadmap.Phase{{Name: "P1", Features: []roadmap.Feature{{Name: "new"}}}}}
+	r2 := &roadmap.Roadmap{Phases: nil}
 	if !strings.Contains(RenderRoadmapNeeded(), "ROADMAP.md") {
 		t.Fatal("roadmap needed output missing marker")
 	}
 	if !strings.Contains(RenderRoadmapSummary(r), "Roadmap") {
 		t.Fatal("roadmap summary output missing label")
+	}
+	if !strings.Contains(RenderRoadmapSummary(r2), "Roadmap") {
+		t.Fatal("empty roadmap summary should still render")
 	}
 	if !strings.Contains(RenderRoadmap(r), "P1") || roadmapIcon("done") == "" {
 		t.Fatal("roadmap render should include phase and icon")

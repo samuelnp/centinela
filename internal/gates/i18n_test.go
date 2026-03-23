@@ -31,9 +31,22 @@ func TestCheckI18nJSONAndGettext(t *testing.T) {
 	if r := checkI18nJSON(config.I18nConfig{Dir: "i18n", Locales: []string{"en", "es"}}); r.Status != Pass {
 		t.Fatalf("json check should pass, got %v", r.Status)
 	}
+	os.WriteFile("i18n/es.json", []byte(`{"z":`), 0644) //nolint:errcheck
+	if r := checkI18nJSON(config.I18nConfig{Dir: "i18n", Locales: []string{"en", "es"}}); r.Status != Fail {
+		t.Fatalf("json parse error should fail, got %v", r.Status)
+	}
+	os.Remove("i18n/es.json") //nolint:errcheck
+	if r := checkI18nJSON(config.I18nConfig{Dir: "i18n", Locales: []string{"en", "es"}}); r.Status != Fail {
+		t.Fatalf("missing locale file should fail, got %v", r.Status)
+	}
+	os.WriteFile("i18n/es.json", []byte(`{"a":{"b":"y"}}`), 0644)            //nolint:errcheck
 	os.WriteFile("i18n/en.po", []byte("msgid \"x\"\nmsgstr \"ok\"\n"), 0644) //nolint:errcheck
 	os.WriteFile("i18n/es.po", []byte("msgid \"x\"\nmsgstr \"\"\n"), 0644)   //nolint:errcheck
 	if r := checkI18nGettext(config.I18nConfig{Dir: "i18n", Locales: []string{"en", "es"}}); r.Status != Fail {
 		t.Fatalf("gettext should fail on untranslated entry, got %v", r.Status)
+	}
+	os.WriteFile("i18n/es.po", []byte("msgid \"x\"\nmsgstr \"ok\"\n"), 0644) //nolint:errcheck
+	if r := checkI18nGettext(config.I18nConfig{Dir: "i18n", Locales: []string{"en", "es"}}); r.Status != Pass {
+		t.Fatalf("gettext should pass with translations, got %v", r.Status)
 	}
 }

@@ -17,6 +17,8 @@ var completeCmd = &cobra.Command{
 	RunE:  runComplete,
 }
 
+var saveWorkflow = workflow.Save
+
 func init() {
 	rootCmd.AddCommand(completeCmd)
 }
@@ -51,7 +53,7 @@ func runComplete(_ *cobra.Command, args []string) error {
 	if err := wf.Complete(cfg); err != nil {
 		return err
 	}
-	if err := workflow.Save(wf); err != nil {
+	if err := saveWorkflow(wf); err != nil {
 		return fmt.Errorf("cannot save workflow: %w", err)
 	}
 

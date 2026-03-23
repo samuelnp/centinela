@@ -23,6 +23,8 @@ var statusAllCmd = &cobra.Command{
 	RunE:  runStatusAll,
 }
 
+var statusRunner = runStatusModel
+
 func init() {
 	rootCmd.AddCommand(statusCmd)
 	rootCmd.AddCommand(statusAllCmd)
@@ -33,7 +35,7 @@ func runStatus(_ *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	return runStatusModel([]*workflow.Workflow{wf})
+	return statusRunner([]*workflow.Workflow{wf})
 }
 
 func runStatusAll(_ *cobra.Command, _ []string) error {
@@ -50,5 +52,5 @@ func runStatusAll(_ *cobra.Command, _ []string) error {
 		}
 		wfs = append(wfs, wf)
 	}
-	return runStatusModel(wfs)
+	return statusRunner(wfs)
 }

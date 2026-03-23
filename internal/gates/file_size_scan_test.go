@@ -30,4 +30,7 @@ func TestCountLinesAndFormat(t *testing.T) {
 	if v == "" || !strings.Contains(v, "(3 lines)") {
 		t.Fatalf("bad violation format: %q", v)
 	}
+	if n := countLines(filepath.Join(d, "missing.go")); n != 0 {
+		t.Fatalf("missing file line count should be zero, got %d", n)
+	}
 }

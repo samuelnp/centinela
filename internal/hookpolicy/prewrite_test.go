@@ -30,4 +30,7 @@ func TestIsInsideWorkspace(t *testing.T) {
 	if !isInsideWorkspace("/a/b", "") {
 		t.Fatal("empty cwd should allow")
 	}
+	if isInsideWorkspace("rel/path", "/abs") {
+		t.Fatal("mixed abs/rel should not be inside workspace")
+	}
 }
