@@ -28,10 +28,16 @@ func TestEnsureOpenCodePlugin_IncludesParityHooks(t *testing.T) {
 		`"tool.execute.before"`,
 		`"tool.execute.after"`,
 		`"tui.prompt.append"`,
+		`normalizeTool(input)`,
 		`runHook("prewrite"`,
 		`runHook("postwrite"`,
 		`runHook("setup"`,
 		`runHook("context"`,
+		`args.filePath ||`,
+		`args.file_path ||`,
+		`args.path ||`,
+		`args.filename ||`,
+		`nested.filePath ||`,
 	}
 	for _, w := range wants {
 		if !strings.Contains(s, w) {

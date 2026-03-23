@@ -33,4 +33,7 @@ func TestOpenCodePlugin_GeneratesPromptAndPostwriteHooks(t *testing.T) {
 	if !strings.Contains(plugin, `appendContext(output, runHook("context"`) {
 		t.Fatal("expected context hook output appended to prompt context")
 	}
+	if !strings.Contains(plugin, `input.tool || input.toolName || input.name`) {
+		t.Fatal("expected normalized tool fallback keys")
+	}
 }
