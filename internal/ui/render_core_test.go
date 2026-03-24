@@ -15,7 +15,7 @@ func sampleWorkflow(step string) *workflow.Workflow {
 
 func TestRenderBlockedTagContext(t *testing.T) {
 	b := RenderBlocked("code", "plan", "f", "/tmp/a.go")
-	if !strings.Contains(b, "BLOCKED") || !strings.Contains(b, "a.go") {
+	if !strings.Contains(b, "BLOCKED") || !strings.Contains(b, "a.go") || !strings.Contains(b, "Next action") {
 		t.Fatalf("unexpected blocked output: %q", b)
 	}
 	tg := RenderTag(sampleWorkflow("code"))

@@ -1,7 +1,7 @@
 {
   "feature": "improve-centinela-render-ui",
   "startedAt": "2026-03-24T21:27:56.140847Z",
-  "currentStep": "validate",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
@@ -16,8 +16,8 @@
       "completedAt": "2026-03-24T21:31:37Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-24T21:35:55Z"
     }
   }
 }

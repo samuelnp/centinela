@@ -22,7 +22,7 @@ func TestRenderOutputsAreExplicitlySystemBranded(t *testing.T) {
 	if !strings.Contains(ctx, "ACTIVE WORKFLOWS") || !strings.Contains(ctx, "CENTINELA") {
 		t.Fatal("context output should be explicitly branded")
 	}
-	if !strings.Contains(blocked, "BLOCKED WRITE") || !strings.Contains(blocked, "CENTINELA") {
+	if !strings.Contains(blocked, "BLOCKED WRITE") || !strings.Contains(blocked, "CENTINELA") || !strings.Contains(blocked, "Next action") {
 		t.Fatal("blocked output should show explicit system header")
 	}
 }

@@ -23,4 +23,12 @@ func TestHookOutputsUseCompactExplicitBrandedUI(t *testing.T) {
 			t.Fatalf("expected branded renderer usage in %s", path)
 		}
 	}
+	renderPath := filepath.Join("..", "..", "internal", "ui", "render.go")
+	renderData, err := os.ReadFile(renderPath)
+	if err != nil {
+		t.Fatalf("read %s: %v", renderPath, err)
+	}
+	if !strings.Contains(string(renderData), "Next action") {
+		t.Fatal("blocked output should include action hint text")
+	}
 }

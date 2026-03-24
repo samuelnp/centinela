@@ -18,6 +18,8 @@ func RenderBlocked(fileType, step, feature, filePath string) string {
 		"",
 		StyleMuted.Render("Feature  ")+feature,
 		StyleMuted.Render("File     ")+filePath,
+		"",
+		StyleYellow.Render("Next action: "+blockedAction(step, feature)),
 	)
 	return renderSystemPanel("HOOK", "BLOCKED WRITE", toneError, body)
 }
@@ -78,4 +80,11 @@ func stepIcon(wf *workflow.Workflow, step string) string {
 	default:
 		return IconPending
 	}
+}
+
+func blockedAction(step, feature string) string {
+	if step == "" || feature == "" || feature == "—" {
+		return "run `centinela start <feature>` to create a workflow"
+	}
+	return "finish current step and run `centinela complete " + feature + "`"
 }
