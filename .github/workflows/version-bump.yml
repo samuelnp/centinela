@@ -1,0 +1,54 @@
+name: Version Bump
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    if: github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip ci]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute next semver
+        id: semver
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAST_TAG=$(git tag --list 'v*' --sort=-version:refname | head -n1 || true)
+          if [ -z "$LAST_TAG" ]; then LAST_TAG="v0.0.0"; fi
+          RANGE="$LAST_TAG..HEAD"
+          LOG=$(git log --format='%s%n%b' $RANGE || true)
+          if [ -z "$LOG" ]; then echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          BUMP=patch
+          if echo "$LOG" | grep -Eq 'BREAKING CHANGE|^[a-z]+(\([^)]+\))?!:'; then BUMP=major
+          elif echo "$LOG" | grep -Eq '^feat(\([^)]+\))?:'; then BUMP=minor; fi
+          CUR=$(awk -F':= ' '/^VERSION :=/{print $2}' Makefile)
+          IFS='.' read -r MA MI PA <<< "$CUR"
+          case "$BUMP" in
+            major) MA=$((MA+1)); MI=0; PA=0 ;;
+            minor) MI=$((MI+1)); PA=0 ;;
+            patch) PA=$((PA+1)) ;;
+          esac
+          NEXT="$MA.$MI.$PA"
+          echo "version=$NEXT" >> "$GITHUB_OUTPUT"
+
+      - name: Update Makefile, commit, tag
+        if: steps.semver.outputs.skip != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          VER="${{ steps.semver.outputs.version }}"
+          sed -i "s/^VERSION := .*/VERSION := $VER/" Makefile
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Makefile
+          git commit -m "chore(release): bump version to $VER [skip ci]"
+          git tag "v$VER"
+          git push origin HEAD:main --tags
