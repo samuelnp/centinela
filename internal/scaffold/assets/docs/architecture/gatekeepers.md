@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/gatekeepers.md -->
 # Gate Keepers
 
 Automated and manual checks that MUST pass before any feature ships.

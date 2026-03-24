@@ -1,0 +1,12 @@
+{
+  "phases": [
+    {
+      "name": "Phase 0: Bootstrap",
+      "features": [
+        {
+          "name": "docs-migration-managed-docs"
+        }
+      ]
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=CLAUDE.md -->
 # Centinela — Project Rules
 
 > **Centinela** is the development framework governing this project.

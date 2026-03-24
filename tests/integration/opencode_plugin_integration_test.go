@@ -30,6 +30,9 @@ func TestOpenCodePlugin_GeneratesPromptAndPostwriteHooks(t *testing.T) {
 	if !strings.Contains(plugin, `appendContext(output, runHook("setup"`) {
 		t.Fatal("expected setup hook output appended to prompt context")
 	}
+	if !strings.Contains(plugin, `appendContext(output, runHook("migrate"`) {
+		t.Fatal("expected migrate hook output appended to prompt context")
+	}
 	if !strings.Contains(plugin, `appendContext(output, runHook("context"`) {
 		t.Fatal("expected context hook output appended to prompt context")
 	}

@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/dependency-injection.md -->
 # Dependency Injection Strategy
 
 > Examples in this document are Sauron-specific. Adapt types and names to your project per PROJECT.md → Domain Language and Layer Mapping.

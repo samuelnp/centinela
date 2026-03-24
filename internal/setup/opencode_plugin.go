@@ -21,6 +21,7 @@ const pluginContent = `export const CentinelaPlugin = async () => {
 
     "tui.prompt.append": async (_input, output) => {
       appendContext(output, runHook("setup", "", false))
+      appendContext(output, runHook("migrate", "", false))
       appendContext(output, runHook("context", "", false))
     },
   }

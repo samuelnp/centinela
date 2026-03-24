@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/new-project-guide.md -->
 # New Project Setup Guide
 
 This guide explains how to bring Centinela into a new project from scratch.

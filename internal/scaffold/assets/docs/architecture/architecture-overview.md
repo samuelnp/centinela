@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/architecture-overview.md -->
 # Architecture Overview
 
 **Centinela** enforces **how you build** (workflow, testing, separation of concerns).

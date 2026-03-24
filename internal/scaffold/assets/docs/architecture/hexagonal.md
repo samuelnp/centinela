@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/hexagonal.md -->
 # Hexagonal Architecture Guide
 
 > This document describes the **hexagonal archetype**. It is one of five supported architecture archetypes in Centinela. See [architecture-overview.md](architecture-overview.md) to confirm this is the right pattern for your project before reading further. Adapt all file paths to your project per PROJECT.md → Folder Structure.

@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/testing-strategy.md -->
 # Testing Strategy
 
 > This document is archetype-agnostic. Tool names are examples — use the equivalent for your language and stack (PROJECT.md → Tech Stack). The structure and rules apply regardless of framework.

@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/ecs.md -->
 # ECS (Entity-Component-System) Architecture Guide
 
 > This document describes the **ECS archetype**. It is one of five supported architecture archetypes in Centinela. See [architecture-overview.md](architecture-overview.md) to confirm this is the right pattern for your project before reading further. Examples use GDScript (Godot) and C# (Unity) where engine-specific syntax matters.

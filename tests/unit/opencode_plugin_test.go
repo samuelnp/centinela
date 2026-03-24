@@ -32,6 +32,7 @@ func TestEnsureOpenCodePlugin_IncludesParityHooks(t *testing.T) {
 		`runHook("prewrite"`,
 		`runHook("postwrite"`,
 		`runHook("setup"`,
+		`runHook("migrate"`,
 		`runHook("context"`,
 		`args.filePath ||`,
 		`args.file_path ||`,

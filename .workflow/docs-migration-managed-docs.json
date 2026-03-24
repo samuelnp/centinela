@@ -1,0 +1,24 @@
+{
+  "feature": "docs-migration-managed-docs",
+  "startedAt": "2026-03-24T21:45:26.034678Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-24T21:52:27Z"
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "validate"
+  ]
+}

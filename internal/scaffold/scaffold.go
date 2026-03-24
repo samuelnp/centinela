@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 //go:embed all:assets
@@ -46,4 +47,25 @@ func Extract(dir string) (Result, error) {
 		return nil
 	})
 	return result, err
+}
+
+// ReadAsset reads a scaffold asset by project-relative path.
+func ReadAsset(path string) ([]byte, error) {
+	return assets.ReadFile(filepath.Join("assets", path))
+}
+
+// ListAssetFiles returns scaffold asset file paths matching prefix/suffix.
+func ListAssetFiles(prefix, suffix string) ([]string, error) {
+	var out []string
+	err := fs.WalkDir(assets, "assets", func(path string, d fs.DirEntry, err error) error {
+		if err != nil || d.IsDir() {
+			return err
+		}
+		rel := strings.TrimPrefix(path, "assets/")
+		if strings.HasPrefix(rel, prefix) && strings.HasSuffix(rel, suffix) {
+			out = append(out, rel)
+		}
+		return nil
+	})
+	return out, err
 }

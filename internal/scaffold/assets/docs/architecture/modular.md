@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/modular.md -->
 # Modular Monolith Architecture Guide
 
 > This document describes the **Modular Monolith archetype**. It is one of five supported architecture archetypes in Centinela. See [architecture-overview.md](architecture-overview.md) to confirm this is the right pattern for your project before reading further. Examples use TypeScript, but the conventions apply to any language with module/package support.

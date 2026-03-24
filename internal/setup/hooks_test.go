@@ -7,7 +7,7 @@ func TestMergeHooksAndIdempotency(t *testing.T) {
 	if !mergeHooks(&pre, &post, &prompt) {
 		t.Fatal("expected first merge to change")
 	}
-	if len(pre) != 2 || len(post) != 2 || len(prompt) != 2 {
+	if len(pre) != 2 || len(post) != 2 || len(prompt) != 3 {
 		t.Fatalf("unexpected group sizes: %d %d %d", len(pre), len(post), len(prompt))
 	}
 	if mergeHooks(&pre, &post, &prompt) {

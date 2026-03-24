@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/workflow-enforcement.md -->
 # Workflow Enforcement System
 
 ## Problem

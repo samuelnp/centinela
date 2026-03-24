@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/n-tier.md -->
 # N-Tier / Layered Architecture Guide
 
 > This document describes the **N-Tier (Layered) archetype**. It is one of five supported architecture archetypes in Centinela. See [architecture-overview.md](architecture-overview.md) to confirm this is the right pattern for your project before reading further. Examples use Express.js (TypeScript), FastAPI (Python), and Go's `net/http` to show how the pattern applies across languages.

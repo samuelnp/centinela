@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/i18n-strategy.md -->
 # i18n Strategy
 
 > This document describes Sauron's i18n setup (next-intl + Next.js). Adapt the library, file paths, and routing strategy to your project per PROJECT.md → Tech Stack and Locales.
