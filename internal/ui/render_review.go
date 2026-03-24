@@ -15,3 +15,15 @@ func RenderReviewReady(feature, step, next string) string {
 	)
 	return boxStyle.Render(body)
 }
+
+// RenderEdgeCaseReportNeeded reminds the agent to write edge-case analysis.
+func RenderEdgeCaseReportNeeded(feature string) string {
+	body := lipgloss.JoinVertical(lipgloss.Left,
+		StyleYellow.Render("⚠  Edge-case report missing: "+feature),
+		"",
+		"Tests phase requires hard-path analysis before completion.",
+		StyleMuted.Render("Run edge-case subagent using docs/architecture/edge-case-tester-prompt.md"),
+		StyleMuted.Render("Then write: .workflow/"+feature+"-edge-cases.md"),
+	)
+	return boxStyle.Render(body)
+}

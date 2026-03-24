@@ -33,6 +33,7 @@ func TestCompleteTransitionsToDone(t *testing.T) {
 	os.WriteFile("tests/unit/x_test.go", []byte("package unit"), 0644)      //nolint:errcheck
 	os.WriteFile("tests/acceptance/x_test.go", []byte("package acc"), 0644) //nolint:errcheck
 	os.MkdirAll(".workflow", 0755)                                          //nolint:errcheck
+	os.WriteFile(".workflow/f-edge-cases.md", []byte("ok"), 0644)           //nolint:errcheck
 	os.WriteFile(".workflow/f-gatekeeper.md", []byte("SAFE"), 0644)         //nolint:errcheck
 
 	wf := New("f")

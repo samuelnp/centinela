@@ -6,6 +6,17 @@
 
 ## The Three Layers (universal)
 
+## Mandatory Hard-Path Review (tests step)
+
+Before completing `tests`, run edge-case analysis and save:
+
+```
+.workflow/<feature>-edge-cases.md
+```
+
+Use `docs/architecture/edge-case-tester-prompt.md` and include risk matrix,
+missing scenarios, proposed tests, and residual risks.
+
 Every Centinela project requires all three, regardless of archetype or language:
 
 | Layer | What it tests | Runs against |

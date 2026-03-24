@@ -60,6 +60,15 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 			}
 		}
 	}
+	for _, wf := range wfs {
+		if wf.CurrentStep != "tests" {
+			continue
+		}
+		path := fmt.Sprintf(".workflow/%s-edge-cases.md", wf.Feature)
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			fmt.Println(ui.RenderEdgeCaseReportNeeded(wf.Feature))
+		}
+	}
 	return nil
 }
 

@@ -13,14 +13,16 @@ func TestValidateTests_DefaultAndSuffixes(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(d)       //nolint:errcheck
 
-	os.MkdirAll("tests/unit", 0755)                          //nolint:errcheck
-	os.MkdirAll("tests/acceptance", 0755)                    //nolint:errcheck
-	os.WriteFile("tests/unit/a.go", []byte("x"), 0644)       //nolint:errcheck
-	os.WriteFile("tests/acceptance/a.go", []byte("x"), 0644) //nolint:errcheck
-	if err := validateTests(&config.Config{}); err != nil {
+	os.MkdirAll("tests/unit", 0755)                               //nolint:errcheck
+	os.MkdirAll("tests/acceptance", 0755)                         //nolint:errcheck
+	os.MkdirAll(".workflow", 0755)                                //nolint:errcheck
+	os.WriteFile("tests/unit/a.go", []byte("x"), 0644)            //nolint:errcheck
+	os.WriteFile("tests/acceptance/a.go", []byte("x"), 0644)      //nolint:errcheck
+	os.WriteFile(".workflow/f-edge-cases.md", []byte("ok"), 0644) //nolint:errcheck
+	if err := validateTests("f", &config.Config{}); err != nil {
 		t.Fatalf("default validateTests failed: %v", err)
 	}
-	if err := validateTests(&config.Config{Workflow: config.WorkflowConfig{TestSuffixes: []string{"_test.go"}, AcceptanceSuffix: ".steps.ts"}}); err == nil {
+	if err := validateTests("f", &config.Config{Workflow: config.WorkflowConfig{TestSuffixes: []string{"_test.go"}, AcceptanceSuffix: ".steps.ts"}}); err == nil {
 		t.Fatal("expected failure for missing suffix-matching files")
 	}
 }

@@ -15,7 +15,7 @@ func ValidateArtifacts(feature, step string, cfg *config.Config) error {
 	case "plan":
 		return validatePlan(feature)
 	case "tests":
-		return validateTests(cfg)
+		return validateTests(feature, cfg)
 	case "validate":
 		if err := validateGatekeeper(feature); err != nil {
 			return err

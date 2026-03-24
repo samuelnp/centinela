@@ -9,7 +9,7 @@ import (
 	"github.com/samuelnp/centinela/internal/config"
 )
 
-func validateTests(cfg *config.Config) error {
+func validateTests(feature string, cfg *config.Config) error {
 	suffixes := cfg.Workflow.TestSuffixes
 	acceptance := cfg.Workflow.AcceptanceSuffix
 
@@ -19,7 +19,19 @@ func validateTests(cfg *config.Config) error {
 	if !hasAcceptanceTests(acceptance) {
 		return fmt.Errorf("no acceptance step definitions found in tests/acceptance/")
 	}
+	if !hasEdgeCaseReport(feature) {
+		return fmt.Errorf("edge-case report missing: .workflow/%s-edge-cases.md", feature)
+	}
 	return nil
+}
+
+func hasEdgeCaseReport(feature string) bool {
+	if feature == "" {
+		return false
+	}
+	path := fmt.Sprintf(".workflow/%s-edge-cases.md", feature)
+	_, err := os.Stat(path)
+	return err == nil
 }
 
 func hasUnitOrIntegrationTests(suffixes []string) bool {

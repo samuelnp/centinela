@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"os"
 	"testing"
 
@@ -19,6 +20,24 @@ func withStdin(t *testing.T, content string, fn func()) {
 	os.Stdin = f
 	defer func() { os.Stdin = old }()
 	fn()
+}
+
+func captureStdout(t *testing.T, fn func()) string {
+	t.Helper()
+	old := os.Stdout
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	os.Stdout = w
+	defer func() { os.Stdout = old }()
+
+	fn()
+	w.Close() //nolint:errcheck
+
+	var buf bytes.Buffer
+	buf.ReadFrom(r) //nolint:errcheck
+	return buf.String()
 }
 
 func TestHookContextAndSetupNoWorkflows(t *testing.T) {

@@ -20,7 +20,7 @@ Before advancing, Centinela validates required artifacts:
 |------|--------------------|
 | plan | `docs/features/<feature>.md`, `docs/plans/<feature>.md`, and at least one `specs/*.feature` |
 | code | none (architecture rules apply during implementation) |
-| tests | test files in `tests/unit` or `tests/integration` and acceptance files in `tests/acceptance` |
+| tests | test files in `tests/unit` or `tests/integration`, acceptance files in `tests/acceptance`, and `.workflow/<feature>-edge-cases.md` |
 | validate | gatekeeper report at `.workflow/<feature>-gatekeeper.md` and `centinela validate` pass |
 
 If validation fails, the step remains in progress.

@@ -57,7 +57,7 @@ This creates:
 | `CLAUDE.md` | Framework rules — used by Claude, and by OpenCode via compatibility mode |
 | `PROJECT.md.template` | Fill in and rename to `PROJECT.md` |
 | `centinela.toml` | Configure validate commands and gate checks |
-| `docs/architecture/` | 14 architecture reference documents |
+| `docs/architecture/` | architecture reference documents + edge-case tester prompt |
 | `docs/plans/` `specs/` `tests/` | Required empty directories |
 | `.claude/settings.json` | Claude hooks wired automatically |
 | `opencode.json` + `.opencode/plugins/centinela.js` | OpenCode integration wiring |
@@ -123,7 +123,7 @@ plan → code → tests → validate
 |------|-----------------|---------------------------------------|
 | **plan** | Plan doc in `docs/plans/` + Gherkin spec in `specs/` | Both files exist on disk |
 | **code** | Implementation | Nothing — architecture rules govern this step |
-| **tests** | Unit, integration, and acceptance tests | Test files exist in the right directories |
+| **tests** | Unit, integration, acceptance + edge-case analysis | Test files exist + `.workflow/<feature>-edge-cases.md` exists |
 | **validate** | Gatekeeper conflict report | All gate checks pass + all `centinela.toml` commands exit 0 |
 
 ### Workflow commands

@@ -37,7 +37,7 @@ centinela validate            # Run built-in gates + validate commands
 |------|--------------------|
 | plan | Feature brief in `docs/features/` + plan file in `docs/plans/` + `.feature` spec in `specs/` |
 | code | Nothing — architecture rules govern this |
-| tests | Test suite files in `tests/unit/` or `tests/integration/` + acceptance step definitions in `tests/acceptance/` |
+| tests | Test suite files in `tests/unit/` or `tests/integration/` + acceptance step definitions in `tests/acceptance/` + `.workflow/<feature>-edge-cases.md` |
 | validate | Gatekeeper report at `.workflow/<feature>-gatekeeper.md` + `centinela validate` passes |
 
 **Hooks auto-inject** `[workflow: <feature> | step: <step> | X/4]` after every file write.

@@ -70,6 +70,20 @@ tests/
 
 ## What to Test per Layer
 
+## Mandatory Hard-Path Review (tests step)
+
+Before completing the tests step, run edge-case analysis and save:
+
+```
+.workflow/<feature>-edge-cases.md
+```
+
+Use `docs/architecture/edge-case-tester-prompt.md` and include:
+- Risk matrix (impact x likelihood)
+- Missing or weak scenarios
+- Added/proposed tests (unit/integration/acceptance)
+- Residual risks and mitigations
+
 ### Domain (unit)
 - Entity creation and validation
 - Value object immutability and equality
