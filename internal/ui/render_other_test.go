@@ -47,4 +47,7 @@ func TestRenderRoadmapAndReview(t *testing.T) {
 	if !strings.Contains(RenderReviewReady("f", "plan", "code"), "shall I advance") {
 		t.Fatal("review reminder missing expected prompt")
 	}
+	if !strings.Contains(RenderEdgeCaseReportNeeded("f"), "edge-case") {
+		t.Fatal("edge-case reminder should render")
+	}
 }

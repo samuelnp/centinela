@@ -38,3 +38,12 @@ func TestRunStartCreatesWorkflow(t *testing.T) {
 		t.Fatalf("workflow not created: %v", err)
 	}
 }
+
+func TestStepArrow(t *testing.T) {
+	if stepArrow([]string{"plan", "code", "validate"}) != "plan → code → validate" {
+		t.Fatal("expected three-step arrow")
+	}
+	if stepArrow([]string{"plan", "code", "tests", "validate"}) != "plan → code → tests → validate" {
+		t.Fatal("expected four-step arrow")
+	}
+}

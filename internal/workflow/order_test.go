@@ -18,3 +18,13 @@ func TestStepIndexCompatibility(t *testing.T) {
 		t.Fatal("compatibility step index should use default order")
 	}
 }
+
+func TestOrderedStepsFallbackAndStepNumberForNil(t *testing.T) {
+	wf := &Workflow{}
+	if len(wf.OrderedSteps()) != 4 {
+		t.Fatal("empty workflow should fallback to default step order")
+	}
+	if StepNumberFor(nil, "tests") != 3 {
+		t.Fatal("nil workflow should fallback to default step numbering")
+	}
+}

@@ -50,3 +50,35 @@ func TestWorkflowOrderForFeatureGreenfieldBootstrapUsesThreeSteps(t *testing.T) 
 		t.Fatal("validate should be step 3 for bootstrap workflow")
 	}
 }
+
+func TestWorkflowOrderForFeatureGreenfieldRequiresRoadmapAndBootstrapPhase(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o)                                                       //nolint:errcheck
+	os.Chdir(d)                                                             //nolint:errcheck
+	os.WriteFile("PROJECT.md", []byte("Project Stage: greenfield\n"), 0644) //nolint:errcheck
+	if _, err := workflowOrderForFeature("x"); err == nil {
+		t.Fatal("expected error when roadmap is missing")
+	}
+	r := &roadmap.Roadmap{Phases: []roadmap.Phase{{Name: "Phase 1", Features: []roadmap.Feature{{Name: "x"}}}}}
+	roadmap.Save(r) //nolint:errcheck
+	if _, err := workflowOrderForFeature("x"); err == nil {
+		t.Fatal("expected error when bootstrap phase is missing")
+	}
+}
+
+func TestWorkflowOrderForFeatureGreenfieldAllowsAfterBootstrapComplete(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o)                                                       //nolint:errcheck
+	os.Chdir(d)                                                             //nolint:errcheck
+	os.WriteFile("PROJECT.md", []byte("Project Stage: greenfield\n"), 0644) //nolint:errcheck
+	r := &roadmap.Roadmap{Phases: []roadmap.Phase{{Name: "Phase 0: Bootstrap", Features: []roadmap.Feature{{Name: "setup"}}}, {Name: "Phase 1", Features: []roadmap.Feature{{Name: "feature-x"}}}}}
+	roadmap.Save(r)                                                                                                  //nolint:errcheck
+	os.MkdirAll(workflow.WorkflowDir, 0755)                                                                          //nolint:errcheck
+	workflow.Save(&workflow.Workflow{Feature: "setup", CurrentStep: "done", Steps: map[string]workflow.StepState{}}) //nolint:errcheck
+	order, err := workflowOrderForFeature("feature-x")
+	if err != nil || len(order) != 4 || order[2] != "tests" {
+		t.Fatalf("expected default order after bootstrap complete: %v %v", order, err)
+	}
+}
