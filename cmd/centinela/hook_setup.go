@@ -23,20 +23,30 @@ func init() {
 func runHookSetup(_ *cobra.Command, _ []string) error {
 	io.ReadAll(os.Stdin) //nolint:errcheck // drain stdin to avoid SIGPIPE
 
-	if _, err := os.Stat("PROJECT.md.template"); err != nil {
-		return nil // not a centinela project
+	hasTemplate := exists("PROJECT.md.template")
+	hasProject := exists("PROJECT.md")
+	if !hasTemplate && !hasProject && !exists("centinela.toml") {
+		return nil
 	}
-	if _, err := os.Stat("PROJECT.md"); err != nil {
+	if !hasProject {
+		fmt.Println("CENTINELA DIRECTIVE: setup required. Ask setup questions and write PROJECT.md.")
 		fmt.Println(ui.RenderSetupNeeded())
 		return nil
 	}
-	if _, err := os.Stat("ROADMAP.md"); err != nil {
+	if !exists("ROADMAP.md") {
+		fmt.Println("CENTINELA DIRECTIVE: roadmap required. Define roadmap before feature work.")
 		fmt.Println(ui.RenderRoadmapNeeded())
 		return nil
 	}
-	if _, err := os.Stat("docs/architecture/production-readiness-prompt.md"); err != nil {
+	if !exists("docs/architecture/production-readiness-prompt.md") {
+		fmt.Println("CENTINELA DIRECTIVE: configure production-readiness prompt before continuing.")
 		fmt.Println(ui.RenderProductionReadinessSetupNeeded())
 		return nil
 	}
 	return nil
+}
+
+func exists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }

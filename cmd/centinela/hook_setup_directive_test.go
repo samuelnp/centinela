@@ -1,0 +1,43 @@
+package main
+
+import (
+	"os"
+	"strings"
+	"testing"
+)
+
+func TestRunHookSetupRoadmapWhenTemplateRenamed(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o)                             //nolint:errcheck
+	os.Chdir(d)                                   //nolint:errcheck
+	os.WriteFile("PROJECT.md", []byte("x"), 0644) //nolint:errcheck
+
+	withStdin(t, "{}", func() {
+		out := captureStdout(t, func() { _ = runHookSetup(nil, nil) })
+		if !strings.Contains(out, "CENTINELA DIRECTIVE: roadmap required") {
+			t.Fatalf("expected roadmap directive, got %q", out)
+		}
+		if !strings.Contains(out, "ROADMAP.md") {
+			t.Fatalf("expected roadmap panel content, got %q", out)
+		}
+	})
+}
+
+func TestRunHookSetupDirectiveBeforePanel(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o)                                 //nolint:errcheck
+	os.Chdir(d)                                       //nolint:errcheck
+	os.WriteFile("centinela.toml", []byte("x"), 0644) //nolint:errcheck
+
+	withStdin(t, "{}", func() {
+		out := captureStdout(t, func() { _ = runHookSetup(nil, nil) })
+		if !strings.HasPrefix(out, "CENTINELA DIRECTIVE: setup required") {
+			t.Fatalf("expected plain directive prefix, got %q", out)
+		}
+		if !strings.Contains(out, "PROJECT.md not found") {
+			t.Fatalf("expected setup panel content, got %q", out)
+		}
+	})
+}
