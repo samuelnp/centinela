@@ -1,7 +1,7 @@
 {
   "feature": "edge-case-subagent-tests-phase",
   "startedAt": "2026-03-24T12:41:24.34087Z",
-  "currentStep": "validate",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
@@ -16,8 +16,8 @@
       "completedAt": "2026-03-24T14:05:05Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-24T14:06:43Z"
     }
   }
 }
