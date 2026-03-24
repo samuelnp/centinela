@@ -12,7 +12,7 @@ import (
 // RenderRoadmapNeeded returns context to inject when ROADMAP.md is missing.
 func RenderRoadmapNeeded() string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
-		StyleYellow.Render("⚠  ROADMAP.md not found — roadmap required"),
+		StyleYellow.Render("⚠ ROADMAP.md not found — roadmap required"),
 		"",
 		"PROJECT.md is configured. Do not answer the user's message.",
 		"Instead, help them define the project roadmap:",
@@ -34,7 +34,7 @@ func RenderRoadmapNeeded() string {
 		"",
 		StyleRed.Render("Do not start any feature until the roadmap AND feature briefs are written."),
 	)
-	return boxStyle.Render(body)
+	return renderSystemPanel("SETUP", "ROADMAP REQUIRED", toneWarn, body)
 }
 
 // RenderRoadmapSummary returns a compact one-line roadmap progress indicator.
@@ -45,7 +45,7 @@ func RenderRoadmapSummary(r *roadmap.Roadmap) string {
 	if inProgress > 0 {
 		line += fmt.Sprintf(" · %d in-progress", inProgress)
 	}
-	return StyleMuted.Render(line)
+	return renderSystemLine("ROADMAP", line, toneInfo)
 }
 
 // RenderRoadmap returns a full styled roadmap with per-feature status.
@@ -61,7 +61,8 @@ func RenderRoadmap(r *roadmap.Roadmap) string {
 		}
 		sections = append(sections, strings.Join(lines, "\n"))
 	}
-	return boxStyle.Render(strings.Join(sections, "\n\n"))
+	body := strings.Join(sections, "\n\n")
+	return renderSystemPanel("ROADMAP", "PHASE OVERVIEW", toneInfo, body)
 }
 
 func roadmapIcon(status string) string {

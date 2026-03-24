@@ -9,7 +9,7 @@ import (
 // RenderFeatureBriefNeeded fires when a workflow is at "plan" but no feature brief exists yet.
 func RenderFeatureBriefNeeded(feature string) string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
-		StyleYellow.Render("⚠  Feature brief missing: "+feature),
+		StyleYellow.Render("⚠ Feature brief missing: "+feature),
 		"",
 		"Before writing the plan, document this feature deeply.",
 		"Ask the user the questions below, then write:",
@@ -26,5 +26,5 @@ func RenderFeatureBriefNeeded(feature string) string {
 		"",
 		StyleRed.Render(fmt.Sprintf("Write the brief first. The plan must reference it: docs/features/%s.md", feature)),
 	)
-	return boxStyle.Render(body)
+	return renderSystemPanel("HOOK", "FEATURE BRIEF REQUIRED", toneWarn, body)
 }

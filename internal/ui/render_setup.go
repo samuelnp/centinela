@@ -9,7 +9,7 @@ import (
 // RenderSetupNeeded returns context to inject when PROJECT.md is missing.
 func RenderSetupNeeded() string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
-		StyleYellow.Render("⚠  PROJECT.md not found — setup required"),
+		StyleYellow.Render("⚠ PROJECT.md not found — setup required"),
 		"",
 		"Do not answer the user's message. Instead, respond with:",
 		"  \"This project needs to be configured before we can start.",
@@ -25,13 +25,13 @@ func RenderSetupNeeded() string {
 		"",
 		StyleRed.Render("Do not discuss anything else until PROJECT.md is written."),
 	)
-	return boxStyle.Render(body)
+	return renderSystemPanel("SETUP", "PROJECT CONFIG REQUIRED", toneWarn, body)
 }
 
 // RenderProductionReadinessSetupNeeded returns context when the prompt file is missing.
 func RenderProductionReadinessSetupNeeded() string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
-		StyleYellow.Render("⚠  Production readiness prompt not configured"),
+		StyleYellow.Render("⚠ Production readiness prompt not configured"),
 		"",
 		"Do not answer the user's message. Instead:",
 		StyleMuted.Render("1. Read PROJECT.md and"),
@@ -42,18 +42,18 @@ func RenderProductionReadinessSetupNeeded() string {
 		"",
 		StyleRed.Render("Do not continue until production-readiness-prompt.md is written."),
 	)
-	return boxStyle.Render(body)
+	return renderSystemPanel("SETUP", "PRODUCTION READINESS REQUIRED", toneWarn, body)
 }
 
 // RenderProductionReadinessWarning returns a styled warning box for WARNING-status reports.
 func RenderProductionReadinessWarning(feature string) string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
-		StyleYellow.Render("⚠  Production readiness: WARNING"),
+		StyleYellow.Render("⚠ Production readiness: WARNING"),
 		"",
 		fmt.Sprintf("Non-critical issues found in %q.", feature),
 		"Step advanced — but warnings should be addressed.",
 		"",
 		StyleMuted.Render("Suggested: centinela start "+feature+"-hardening"),
 	)
-	return boxStyle.Render(body)
+	return renderSystemPanel("VALIDATE", "PRODUCTION READINESS WARNING", toneWarn, body)
 }

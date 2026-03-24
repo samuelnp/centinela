@@ -11,6 +11,8 @@ import (
 // RenderStatus returns a styled multi-line status view for a single workflow.
 func RenderStatus(wf *workflow.Workflow) string {
 	rows := []string{
+		renderSystemLine("STATUS", "WORKFLOW", toneInfo),
+		"",
 		StyleBold.Render("Feature") + "  " + wf.Feature,
 		StyleBold.Render("Started") + "  " + wf.StartedAt.Format("2006-01-02"),
 		"",
@@ -26,12 +28,12 @@ func RenderStatus(wf *workflow.Workflow) string {
 
 // RenderSuccess returns a green check-mark line for confirmation messages.
 func RenderSuccess(msg string) string {
-	return StyleGreen.Render("✓") + "  " + msg
+	return renderSystemLine("CLI", "OK  "+msg, toneSuccess)
 }
 
 // RenderStep returns the step progress hint used after start/complete.
 func RenderStep(label, step string) string {
-	return StyleMuted.Render(label+": ") + StyleYellow.Render(step)
+	return renderSystemLine("CLI", label+": "+step, toneInfo)
 }
 
 func stepStatusLine(wf *workflow.Workflow, step string, info workflow.StepState) string {

@@ -32,7 +32,7 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 		fmt.Println(ui.RenderRoadmapSummary(r))
 	}
 	if len(entries) == 0 {
-		fmt.Println(ui.StyleMuted.Render("No active workflows."))
+		fmt.Println(ui.RenderSuccess("No active workflows."))
 		return nil
 	}
 	var wfs []*workflow.Workflow

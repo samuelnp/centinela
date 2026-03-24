@@ -14,6 +14,7 @@ var (
 	StyleGreen  = lipgloss.NewStyle().Foreground(colorGreen)
 	StyleRed    = lipgloss.NewStyle().Bold(true).Foreground(colorRed)
 	StyleYellow = lipgloss.NewStyle().Foreground(colorYellow)
+	StyleBlue   = lipgloss.NewStyle().Foreground(colorBlue)
 
 	boxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).

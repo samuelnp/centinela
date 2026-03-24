@@ -12,23 +12,22 @@ import (
 // RenderBlocked returns a styled error box for the prewrite hook.
 func RenderBlocked(fileType, step, feature, filePath string) string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
-		StyleRed.Render("✗  BLOCKED"),
+		StyleRed.Render("✖ Write blocked by workflow policy"),
 		"",
 		fmt.Sprintf("Can't write %q files during %q step.", fileType, step),
 		"",
 		StyleMuted.Render("Feature  ")+feature,
 		StyleMuted.Render("File     ")+filePath,
 	)
-	return errorBoxStyle.Render(body)
+	return renderSystemPanel("HOOK", "BLOCKED WRITE", toneError, body)
 }
 
 // RenderTag returns a compact styled line for the postwrite hook.
 func RenderTag(wf *workflow.Workflow) string {
 	count := wfDoneCount(wf)
 	total := len(wf.OrderedSteps())
-	return StyleMuted.Render(
-		fmt.Sprintf("↳ %s · %s · %d/%d", wf.Feature, wf.CurrentStep, count, total),
-	)
+	line := fmt.Sprintf("feature=%s  step=%s  progress=%d/%d", wf.Feature, wf.CurrentStep, count, total)
+	return renderSystemLine("HOOK", "TAG  "+line, toneInfo)
 }
 
 // RenderContext returns a styled box summarising all active workflows,
@@ -42,7 +41,8 @@ func RenderContext(wfs []*workflow.Workflow) string {
 			StyleMuted.Render(fmt.Sprintf("%s %d/%d", wf.CurrentStep, count, total))
 		sections = append(sections, lipgloss.JoinVertical(lipgloss.Left, header, stepBar(wf)))
 	}
-	return boxStyle.Render(strings.Join(sections, "\n\n"))
+	body := strings.Join(sections, "\n\n")
+	return renderSystemPanel("HOOK", "ACTIVE WORKFLOWS", toneInfo, body)
 }
 
 func stepBar(wf *workflow.Workflow) string {
