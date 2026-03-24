@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   bump:
-    if: github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip ci]')
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,6 +49,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add Makefile
-          git commit -m "chore(release): bump version to $VER [skip ci]"
+          git commit -m "chore(release): bump version to $VER"
           git tag "v$VER"
           git push origin HEAD:main --tags

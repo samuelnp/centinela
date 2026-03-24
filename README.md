@@ -27,6 +27,12 @@ go install github.com/samuelnp/centinela@latest
 
 Or download a pre-built binary from [Releases](https://github.com/samuelnp/centinela/releases).
 
+For macOS/Linux, you can install the latest release binary directly:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/samuelnp/centinela/main/scripts/install.sh | sh
+```
+
 Verify:
 
 ```bash
