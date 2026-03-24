@@ -59,7 +59,7 @@ func hasFileSuffix(dir, suffix string) bool {
 		if err != nil || found {
 			return nil
 		}
-		if !d.IsDir() && strings.HasSuffix(path, suffix) {
+		if !d.IsDir() && strings.HasSuffix(path, suffix) && isRealTestArtifact(path) {
 			found = true
 			return filepath.SkipAll
 		}
@@ -74,11 +74,16 @@ func hasAnyFile(dir string) bool {
 		if err != nil || found {
 			return nil
 		}
-		if !d.IsDir() {
+		if !d.IsDir() && isRealTestArtifact(path) {
 			found = true
 			return filepath.SkipAll
 		}
 		return nil
 	})
 	return found
+}
+
+func isRealTestArtifact(path string) bool {
+	name := filepath.Base(path)
+	return name != ".gitkeep" && !strings.HasPrefix(name, ".")
 }

@@ -10,6 +10,7 @@ import (
 // Complete marks the current step done and advances to the next one.
 func (wf *Workflow) Complete(cfg *config.Config) error {
 	current := wf.CurrentStep
+	order := wf.OrderedSteps()
 	if current == "done" {
 		return fmt.Errorf("workflow already complete")
 	}
@@ -23,13 +24,13 @@ func (wf *Workflow) Complete(cfg *config.Config) error {
 	step.CompletedAt = &now
 	wf.Steps[current] = step
 
-	nextIdx := stepIndex(current) + 1
-	if nextIdx >= len(StepOrder) {
+	nextIdx := stepIndexIn(current, order) + 1
+	if nextIdx >= len(order) {
 		wf.CurrentStep = "done"
 		return nil
 	}
 
-	next := StepOrder[nextIdx]
+	next := order[nextIdx]
 	wf.CurrentStep = next
 	ns := wf.Steps[next]
 	ns.Status = "in-progress"
@@ -39,15 +40,30 @@ func (wf *Workflow) Complete(cfg *config.Config) error {
 
 // StepNumber returns the 1-based position of a step (1=plan … 4=validate).
 func StepNumber(step string) int {
-	return stepIndex(step) + 1
+	return StepNumberIn(DefaultStepOrder, step)
+}
+
+func StepNumberFor(wf *Workflow, step string) int {
+	if wf == nil {
+		return StepNumber(step)
+	}
+	return StepNumberIn(wf.OrderedSteps(), step)
+}
+
+func StepNumberIn(order []string, step string) int {
+	return stepIndexIn(step, order) + 1
 }
 
 // StepIndex returns the zero-based index of a step name, or -1 if not found.
-func stepIndex(step string) int {
-	for i, s := range StepOrder {
+func stepIndexIn(step string, order []string) int {
+	for i, s := range order {
 		if s == step {
 			return i
 		}
 	}
 	return -1
+}
+
+func stepIndex(step string) int {
+	return stepIndexIn(step, DefaultStepOrder)
 }

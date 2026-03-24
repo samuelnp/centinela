@@ -50,7 +50,7 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 	fmt.Println(ui.RenderContext(wfs))
 	for _, wf := range wfs {
 		if wf.CurrentStep != "done" && workflow.ValidateArtifacts(wf.Feature, wf.CurrentStep, cfg) == nil {
-			fmt.Println(ui.RenderReviewReady(wf.Feature, wf.CurrentStep, nextStep(wf.CurrentStep)))
+			fmt.Println(ui.RenderReviewReady(wf.Feature, wf.CurrentStep, nextStepFor(wf, wf.CurrentStep)))
 		}
 	}
 	for _, wf := range wfs {
@@ -73,9 +73,14 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 }
 
 func nextStep(current string) string {
-	for i, s := range workflow.StepOrder {
-		if s == current && i+1 < len(workflow.StepOrder) {
-			return workflow.StepOrder[i+1]
+	return nextStepFor(&workflow.Workflow{}, current)
+}
+
+func nextStepFor(wf *workflow.Workflow, current string) string {
+	steps := wf.OrderedSteps()
+	for i, s := range steps {
+		if s == current && i+1 < len(steps) {
+			return steps[i+1]
 		}
 	}
 	return "done"

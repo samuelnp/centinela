@@ -15,7 +15,7 @@ func RenderStatus(wf *workflow.Workflow) string {
 		StyleBold.Render("Started") + "  " + wf.StartedAt.Format("2006-01-02"),
 		"",
 	}
-	for _, step := range workflow.StepOrder {
+	for _, step := range wf.OrderedSteps() {
 		info := wf.Steps[step]
 		icon := stepIcon(wf, step)
 		status := stepStatusLine(wf, step, info)

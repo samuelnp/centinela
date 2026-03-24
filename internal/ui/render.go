@@ -25,8 +25,9 @@ func RenderBlocked(fileType, step, feature, filePath string) string {
 // RenderTag returns a compact styled line for the postwrite hook.
 func RenderTag(wf *workflow.Workflow) string {
 	count := wfDoneCount(wf)
+	total := len(wf.OrderedSteps())
 	return StyleMuted.Render(
-		fmt.Sprintf("↳ %s · %s · %d/4", wf.Feature, wf.CurrentStep, count),
+		fmt.Sprintf("↳ %s · %s · %d/%d", wf.Feature, wf.CurrentStep, count, total),
 	)
 }
 
@@ -36,16 +37,18 @@ func RenderContext(wfs []*workflow.Workflow) string {
 	var sections []string
 	for _, wf := range wfs {
 		count := wfDoneCount(wf)
+		total := len(wf.OrderedSteps())
 		header := StyleBold.Render(wf.Feature) + "  " +
-			StyleMuted.Render(fmt.Sprintf("%s %d/4", wf.CurrentStep, count))
+			StyleMuted.Render(fmt.Sprintf("%s %d/%d", wf.CurrentStep, count, total))
 		sections = append(sections, lipgloss.JoinVertical(lipgloss.Left, header, stepBar(wf)))
 	}
 	return boxStyle.Render(strings.Join(sections, "\n\n"))
 }
 
 func stepBar(wf *workflow.Workflow) string {
-	parts := make([]string, 0, len(workflow.StepOrder))
-	for _, step := range workflow.StepOrder {
+	steps := wf.OrderedSteps()
+	parts := make([]string, 0, len(steps))
+	for _, step := range steps {
 		icon := stepIcon(wf, step)
 		parts = append(parts, icon+" "+step)
 	}
@@ -53,10 +56,11 @@ func stepBar(wf *workflow.Workflow) string {
 }
 
 func wfDoneCount(wf *workflow.Workflow) int {
+	steps := wf.OrderedSteps()
 	if wf.CurrentStep == "done" {
-		return 4
+		return len(steps)
 	}
-	for i, step := range workflow.StepOrder {
+	for i, step := range steps {
 		if step == wf.CurrentStep {
 			return i
 		}

@@ -20,10 +20,8 @@ type Workflow struct {
 	StartedAt   time.Time            `json:"startedAt"`
 	CurrentStep string               `json:"currentStep"`
 	Steps       map[string]StepState `json:"steps"`
+	StepOrder   []string             `json:"stepOrder,omitempty"`
 }
-
-// StepOrder defines the canonical order of workflow steps.
-var StepOrder = []string{"plan", "code", "tests", "validate"}
 
 // WorkflowDir is the directory where workflow JSON files are stored.
 const WorkflowDir = ".workflow"
@@ -57,18 +55,5 @@ func Save(wf *Workflow) error {
 
 // New creates a fresh workflow starting at the "plan" step.
 func New(feature string) *Workflow {
-	steps := make(map[string]StepState, len(StepOrder))
-	for i, step := range StepOrder {
-		status := "pending"
-		if i == 0 {
-			status = "in-progress"
-		}
-		steps[step] = StepState{Status: status}
-	}
-	return &Workflow{
-		Feature:     feature,
-		StartedAt:   time.Now().UTC(),
-		CurrentStep: "plan",
-		Steps:       steps,
-	}
+	return NewWithOrder(feature, DefaultStepOrder)
 }
