@@ -1,0 +1,23 @@
+{
+  "feature": "bootstrap-phase-zero-workflow",
+  "startedAt": "2026-03-24T21:00:43.079995Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-24T21:02:02Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  }
+}
