@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: version-bump-main
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -22,14 +26,17 @@ jobs:
         run: |
           set -euo pipefail
           LAST_TAG=$(git tag --list 'v*' --sort=-version:refname | head -n1 || true)
-          if [ -z "$LAST_TAG" ]; then LAST_TAG="v0.0.0"; fi
-          RANGE="$LAST_TAG..HEAD"
-          LOG=$(git log --format='%s%n%b' $RANGE || true)
+          if [ -n "$LAST_TAG" ]; then
+            LOG=$(git log --format='%s%n%b' "$LAST_TAG..HEAD" || true)
+          else
+            LOG=$(git log --format='%s%n%b' HEAD || true)
+          fi
           if [ -z "$LOG" ]; then echo "skip=true" >> "$GITHUB_OUTPUT"; exit 0; fi
           BUMP=patch
           if echo "$LOG" | grep -Eq 'BREAKING CHANGE|^[a-z]+(\([^)]+\))?!:'; then BUMP=major
           elif echo "$LOG" | grep -Eq '^feat(\([^)]+\))?:'; then BUMP=minor; fi
           CUR=$(awk -F':= ' '/^VERSION :=/{print $2}' Makefile)
+          if [ -z "$CUR" ]; then echo "VERSION missing in Makefile" >&2; exit 1; fi
           IFS='.' read -r MA MI PA <<< "$CUR"
           case "$BUMP" in
             major) MA=$((MA+1)); MI=0; PA=0 ;;
@@ -46,9 +53,7 @@ jobs:
           set -euo pipefail
           VER="${{ steps.semver.outputs.version }}"
           sed -i "s/^VERSION := .*/VERSION := $VER/" Makefile
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add Makefile
-          git commit -m "chore(release): bump version to $VER"
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "chore(release): bump version to $VER"
           git tag "v$VER"
           git push origin HEAD:main --tags
