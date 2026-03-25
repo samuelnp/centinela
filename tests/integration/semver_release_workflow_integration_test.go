@@ -40,11 +40,14 @@ func TestReleaseWorkflowAndInstallerContainExpectedFlow(t *testing.T) {
 	}
 	releaseContent := string(releaseData)
 	releaseChecks := []string{
-		"- goos: linux",
-		"- goos: darwin",
-		"- goos: windows",
-		"goarch: amd64",
-		"goarch: arm64",
+		"workflow_run:",
+		"workflows: [\"Version Bump\"]",
+		"github.event.workflow_run.conclusion == 'success'",
+		"SHA=\"${{ github.event.workflow_run.head_sha }}\"",
+		"git tag --points-at \"$SHA\"",
+		"echo \"skip=true\" >> \"$GITHUB_OUTPUT\"",
+		"tag_name: ${{ needs.build-and-release.outputs.tag }}",
+		"matrix: {goos: [linux, darwin, windows], goarch: [amd64, arm64]}",
 		"SHA256SUMS",
 		"softprops/action-gh-release@v2",
 	}

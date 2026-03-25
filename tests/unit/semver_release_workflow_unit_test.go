@@ -28,8 +28,12 @@ func TestReleaseWorkflowAndInstallerExist(t *testing.T) {
 	if err != nil {
 		t.Fatalf("expected release workflow: %v", err)
 	}
-	if !strings.Contains(string(workflowData), "name: Release") {
-		t.Fatal("release workflow should declare Release name")
+	wf := string(workflowData)
+	checks := []string{"name: Release", "workflow_run:", "workflows: [\"Version Bump\"]"}
+	for _, c := range checks {
+		if !strings.Contains(wf, c) {
+			t.Fatalf("release workflow missing %q", c)
+		}
 	}
 	installerPath := filepath.Join("..", "..", "scripts", "install.sh")
 	installerData, err := os.ReadFile(installerPath)

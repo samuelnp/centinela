@@ -36,11 +36,11 @@ func TestTagPushReleasePublishesArtifactsAndChecksums(t *testing.T) {
 	}
 	content := string(data)
 	checks := []string{
-		"- goos: linux",
-		"- goos: darwin",
-		"- goos: windows",
-		"goarch: amd64",
-		"goarch: arm64",
+		"workflow_run:",
+		"workflows: [\"Version Bump\"]",
+		"if [ -z \"$TAG\" ]; then",
+		"echo \"skip=true\" >> \"$GITHUB_OUTPUT\"",
+		"matrix: {goos: [linux, darwin, windows], goarch: [amd64, arm64]}",
 		"SHA256SUMS",
 		"action-gh-release",
 		"dist/*",
