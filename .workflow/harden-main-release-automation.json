@@ -1,7 +1,7 @@
 {
   "feature": "harden-main-release-automation",
   "startedAt": "2026-03-25T09:53:38.951911Z",
-  "currentStep": "validate",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
@@ -16,8 +16,8 @@
       "completedAt": "2026-03-25T15:10:36Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-25T15:20:10Z"
     }
   },
   "stepOrder": [
