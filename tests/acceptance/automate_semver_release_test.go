@@ -38,6 +38,9 @@ func TestTagPushReleasePublishesArtifactsAndChecksums(t *testing.T) {
 	checks := []string{
 		"workflow_run:",
 		"workflows: [\"Version Bump\"]",
+		"git fetch --force --tags origin",
+		"git fetch origin main",
+		"git tag --merged origin/main --list 'v*' --sort=-version:refname",
 		"if [ -z \"$TAG\" ]; then",
 		"echo \"skip=true\" >> \"$GITHUB_OUTPUT\"",
 		"matrix: {goos: [linux, darwin, windows], goarch: [amd64, arm64]}",
