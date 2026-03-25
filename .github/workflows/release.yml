@@ -32,8 +32,9 @@ jobs:
           if [ "${{ github.event_name }}" = "push" ]; then
             TAG="${GITHUB_REF_NAME}"
           else
-            SHA="${{ github.event.workflow_run.head_sha }}"
-            TAG=$(git tag --points-at "$SHA" | grep -E '^v' | head -n1 || true)
+            git fetch --force --tags origin
+            git fetch origin main
+            TAG=$(git tag --merged origin/main --list 'v*' --sort=-version:refname | head -n1 || true)
           fi
           if [ -z "$TAG" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"

@@ -1,18 +1,18 @@
 {
   "feature": "fix-release-workflow-run-tag-resolution",
   "startedAt": "2026-03-25T16:16:08.432307Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-25T16:17:43Z"
     },
     "plan": {
       "status": "done",
       "completedAt": "2026-03-25T16:16:43Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {
