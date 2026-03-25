@@ -1,7 +1,7 @@
 {
   "feature": "auto-start-feature-intent",
   "startedAt": "2026-03-25T18:40:42.608659Z",
-  "currentStep": "validate",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
@@ -16,8 +16,8 @@
       "completedAt": "2026-03-25T18:47:56Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-25T18:50:29Z"
     }
   },
   "stepOrder": [
