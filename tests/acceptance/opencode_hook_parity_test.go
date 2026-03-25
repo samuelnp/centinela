@@ -45,6 +45,9 @@ func TestOpenCodePlugin_HasSetupAndContextPromptHooks(t *testing.T) {
 	if !strings.Contains(plugin, `runHook("autostart"`) {
 		t.Fatal("plugin must run autostart hook")
 	}
+	if !strings.Contains(plugin, `runHook("orchestration"`) {
+		t.Fatal("plugin must run orchestration hook")
+	}
 	if !strings.Contains(plugin, `runHook("context"`) {
 		t.Fatal("plugin must run context hook")
 	}

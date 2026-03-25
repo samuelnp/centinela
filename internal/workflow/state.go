@@ -16,11 +16,12 @@ type StepState struct {
 
 // Workflow represents the full state of a feature workflow.
 type Workflow struct {
-	Feature     string               `json:"feature"`
-	StartedAt   time.Time            `json:"startedAt"`
-	CurrentStep string               `json:"currentStep"`
-	Steps       map[string]StepState `json:"steps"`
-	StepOrder   []string             `json:"stepOrder,omitempty"`
+	Feature           string               `json:"feature"`
+	StartedAt         time.Time            `json:"startedAt"`
+	CurrentStep       string               `json:"currentStep"`
+	Steps             map[string]StepState `json:"steps"`
+	StepOrder         []string             `json:"stepOrder,omitempty"`
+	OrchestrationMode string               `json:"orchestrationMode,omitempty"`
 }
 
 // WorkflowDir is the directory where workflow JSON files are stored.

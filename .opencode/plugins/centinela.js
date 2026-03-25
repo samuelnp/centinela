@@ -18,6 +18,7 @@ export const CentinelaPlugin = async () => {
       appendContext(output, runHook("setup", "", false))
       appendContext(output, runHook("migrate", "", false))
       appendContext(output, runHook("autostart", promptPayload, false))
+      appendContext(output, runHook("orchestration", "", false))
       appendContext(output, runHook("context", "", false))
     },
   }

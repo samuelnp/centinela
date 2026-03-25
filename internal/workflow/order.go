@@ -6,6 +6,8 @@ var DefaultStepOrder = []string{"plan", "code", "tests", "validate"}
 
 var BootstrapStepOrder = []string{"plan", "code", "validate"}
 
+const StrictOrchestrationMode = "strict-subagents-v1"
+
 var StepOrder = DefaultStepOrder
 
 func NewWithOrder(feature string, order []string) *Workflow {
@@ -18,11 +20,12 @@ func NewWithOrder(feature string, order []string) *Workflow {
 		steps[step] = StepState{Status: status}
 	}
 	return &Workflow{
-		Feature:     feature,
-		StartedAt:   time.Now().UTC(),
-		CurrentStep: order[0],
-		Steps:       steps,
-		StepOrder:   cloneOrder(order),
+		Feature:           feature,
+		StartedAt:         time.Now().UTC(),
+		CurrentStep:       order[0],
+		Steps:             steps,
+		StepOrder:         cloneOrder(order),
+		OrchestrationMode: StrictOrchestrationMode,
 	}
 }
 

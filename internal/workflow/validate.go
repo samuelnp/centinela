@@ -11,18 +11,22 @@ import (
 
 // ValidateArtifacts checks that the required artifacts exist before completing a step.
 func ValidateArtifacts(feature, step string, cfg *config.Config) error {
+	var err error
 	switch step {
 	case "plan":
-		return validatePlan(feature)
+		err = validatePlan(feature)
 	case "tests":
-		return validateTests(feature, cfg)
+		err = validateTests(feature, cfg)
 	case "validate":
 		if err := validateGatekeeper(feature); err != nil {
 			return err
 		}
-		return validateProductionReadiness(feature, cfg)
+		err = validateProductionReadiness(feature, cfg)
 	}
-	return nil
+	if err != nil {
+		return err
+	}
+	return validateOrchestration(feature, step)
 }
 
 func validatePlan(feature string) error {

@@ -1,0 +1,29 @@
+{
+  "feature": "enforce-step-subagent-orchestration",
+  "startedAt": "2026-03-25T19:04:34.253219Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-25T19:09:58Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ]
+}

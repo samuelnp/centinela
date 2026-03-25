@@ -36,6 +36,9 @@ func TestOpenCodePlugin_GeneratesPromptAndPostwriteHooks(t *testing.T) {
 	if !strings.Contains(plugin, `appendContext(output, runHook("autostart"`) {
 		t.Fatal("expected autostart hook output appended to prompt context")
 	}
+	if !strings.Contains(plugin, `appendContext(output, runHook("orchestration"`) {
+		t.Fatal("expected orchestration hook output appended to prompt context")
+	}
 	if !strings.Contains(plugin, `appendContext(output, runHook("context"`) {
 		t.Fatal("expected context hook output appended to prompt context")
 	}
