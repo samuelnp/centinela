@@ -1,0 +1,29 @@
+{
+  "feature": "fix-release-trigger-after-bump",
+  "startedAt": "2026-03-25T15:25:16.182165Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-25T15:53:23Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ]
+}
