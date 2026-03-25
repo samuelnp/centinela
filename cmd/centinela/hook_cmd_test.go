@@ -46,10 +46,17 @@ func TestHookContextAndSetupNoWorkflows(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(d)       //nolint:errcheck
 
+	ctx := captureStdout(t, func() {
+		withStdin(t, "{}", func() {
+			if err := runHookContext(nil, nil); err != nil {
+				t.Fatalf("runHookContext: %v", err)
+			}
+		})
+	})
+	if !bytes.Contains([]byte(ctx), []byte("CENTINELA DIRECTIVE: no active workflow")) {
+		t.Fatalf("expected start directive, got: %s", ctx)
+	}
 	withStdin(t, "{}", func() {
-		if err := runHookContext(nil, nil); err != nil {
-			t.Fatalf("runHookContext: %v", err)
-		}
 		if err := runHookSetup(nil, nil); err != nil {
 			t.Fatalf("runHookSetup: %v", err)
 		}

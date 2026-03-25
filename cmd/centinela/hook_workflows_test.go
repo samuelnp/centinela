@@ -15,6 +15,9 @@ func TestLoadActiveWorkflows(t *testing.T) {
 
 	os.MkdirAll(workflow.WorkflowDir, 0755) //nolint:errcheck
 	workflow.Save(workflow.New("a"))        //nolint:errcheck
+	done := workflow.New("b")
+	done.CurrentStep = "done"
+	workflow.Save(done) //nolint:errcheck
 	if wfs := loadActiveWorkflows(); len(wfs) != 1 {
 		t.Fatalf("expected 1 workflow, got %d", len(wfs))
 	}

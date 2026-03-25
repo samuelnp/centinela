@@ -12,7 +12,7 @@ func loadActiveWorkflows() []*workflow.Workflow {
 	var out []*workflow.Workflow
 	for _, p := range entries {
 		wf, err := workflow.Load(strings.TrimSuffix(filepath.Base(p), ".json"))
-		if err == nil {
+		if err == nil && wf.CurrentStep != "done" {
 			out = append(out, wf)
 		}
 	}

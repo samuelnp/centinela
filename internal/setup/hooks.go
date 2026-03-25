@@ -3,6 +3,7 @@ package setup
 const (
 	cmdPrewrite  = "centinela hook prewrite"
 	cmdPostwrite = "centinela hook postwrite"
+	cmdAutostart = "centinela hook autostart"
 	cmdContext   = "centinela hook context"
 	cmdSetup     = "centinela hook setup"
 	cmdMigrate   = "centinela hook migrate"
@@ -13,6 +14,7 @@ func mergeHooks(pre, post, prompt *[]HookGroup) bool {
 	c = ensureGroup(pre, "Edit", cmdPrewrite, "Validating workflow step...") || c
 	c = ensureGroup(post, "Write", cmdPostwrite, "") || c
 	c = ensureGroup(post, "Edit", cmdPostwrite, "") || c
+	c = ensurePrompt(prompt, cmdAutostart, "Detecting new feature intent...") || c
 	c = ensurePrompt(prompt, cmdContext, "Checking workflow status...") || c
 	c = ensurePrompt(prompt, cmdSetup, "Checking project setup...") || c
 	c = ensurePrompt(prompt, cmdMigrate, "Checking managed docs...") || c

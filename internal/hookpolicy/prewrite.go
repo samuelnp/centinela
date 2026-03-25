@@ -29,13 +29,30 @@ func EvaluatePrewrite(path, cwd string, cfg *config.Config, wfs []*workflow.Work
 	if len(wfs) == 0 {
 		return PrewriteDecision{FileType: fileType, NeedInit: true}
 	}
+	active := 0
 	for _, wf := range wfs {
-		if wf.CurrentStep == "done" || workflow.IsAllowedInStep(fileType, wf.CurrentStep) {
+		if wf.CurrentStep == "done" {
+			continue
+		}
+		active++
+		if workflow.IsAllowedInStep(fileType, wf.CurrentStep) {
 			return PrewriteDecision{Allow: true, FileType: fileType}
 		}
 	}
-	wf := wfs[0]
+	if active == 0 {
+		return PrewriteDecision{FileType: fileType, NeedInit: true}
+	}
+	wf := firstActive(wfs)
 	return PrewriteDecision{FileType: fileType, Step: wf.CurrentStep, Feature: wf.Feature}
+}
+
+func firstActive(wfs []*workflow.Workflow) *workflow.Workflow {
+	for _, wf := range wfs {
+		if wf.CurrentStep != "done" {
+			return wf
+		}
+	}
+	return &workflow.Workflow{}
 }
 
 func isInsideWorkspace(path, cwd string) bool {

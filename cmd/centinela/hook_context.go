@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
-	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -27,21 +25,14 @@ func init() {
 
 func runHookContext(_ *cobra.Command, _ []string) error {
 	io.ReadAll(os.Stdin) //nolint:errcheck // drain stdin to avoid SIGPIPE on large prompts
-	entries, _ := filepath.Glob(filepath.Join(workflow.WorkflowDir, "*.json"))
+	wfs := loadActiveWorkflows()
 	if r, err := roadmap.Load(); err == nil {
 		fmt.Println(ui.RenderRoadmapSummary(r))
 	}
-	if len(entries) == 0 {
+	if len(wfs) == 0 {
+		fmt.Println("CENTINELA DIRECTIVE: no active workflow. Start a feature before implementation.")
 		fmt.Println(ui.RenderSuccess("No active workflows."))
 		return nil
-	}
-	var wfs []*workflow.Workflow
-	for _, path := range entries {
-		wf, err := workflow.Load(strings.TrimSuffix(filepath.Base(path), ".json"))
-		if err != nil {
-			continue
-		}
-		wfs = append(wfs, wf)
 	}
 	cfg, _ := config.Load()
 	if cfg == nil {

@@ -24,6 +24,10 @@ func TestEvaluatePrewriteBranches(t *testing.T) {
 	if d.Allow || d.Feature != "f" || d.Step != "plan" {
 		t.Fatalf("expected block with context, got %+v", d)
 	}
+	d2 := EvaluatePrewrite("/repo/internal/a.go", "/repo", cfg, []*workflow.Workflow{{Feature: "f", CurrentStep: "done"}})
+	if !d2.NeedInit || d2.Allow {
+		t.Fatalf("done workflow should require new start, got %+v", d2)
+	}
 }
 
 func TestIsInsideWorkspace(t *testing.T) {
