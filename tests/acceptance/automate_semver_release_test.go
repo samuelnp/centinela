@@ -16,6 +16,7 @@ func TestVersionBumpWorkflowCommitsAndTagsReleaseVersion(t *testing.T) {
 	}
 	content := string(data)
 	checks := []string{
+		"if: github.actor != 'github-actions[bot]'",
 		"chore(release): bump version to $VER",
 		"git tag \"v$VER\"",
 		"git push origin HEAD:main --tags",
@@ -34,7 +35,16 @@ func TestTagPushReleasePublishesArtifactsAndChecksums(t *testing.T) {
 		t.Fatalf("read release workflow file: %v", err)
 	}
 	content := string(data)
-	checks := []string{"push:", "tags:", "SHA256SUMS", "action-gh-release", "dist/*"}
+	checks := []string{
+		"- goos: linux",
+		"- goos: darwin",
+		"- goos: windows",
+		"goarch: amd64",
+		"goarch: arm64",
+		"SHA256SUMS",
+		"action-gh-release",
+		"dist/*",
+	}
 	for _, c := range checks {
 		if !strings.Contains(content, c) {
 			t.Fatalf("release workflow missing %q", c)

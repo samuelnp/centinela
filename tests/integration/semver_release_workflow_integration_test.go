@@ -16,10 +16,14 @@ func TestVersionBumpWorkflowUsesMainAndConventionalCommits(t *testing.T) {
 	content := string(data)
 	checks := []string{
 		"branches: [main]",
+		"github.actor != 'github-actions[bot]'",
+		"LAST_TAG=$(git tag --list 'v*' --sort=-version:refname | head -n1 || true)",
+		"if [ -n \"$LAST_TAG\" ]; then",
+		"LOG=$(git log --format='%s%n%b' HEAD || true)",
 		"BREAKING CHANGE",
 		"^feat(\\([^)]+\\))?:",
 		"VERSION :=",
-		"github.actor != 'github-actions[bot]'",
+		"git -c user.name=\"github-actions[bot]\" -c user.email=\"41898282+github-actions[bot]@users.noreply.github.com\" commit",
 	}
 	for _, c := range checks {
 		if !strings.Contains(content, c) {
@@ -35,7 +39,15 @@ func TestReleaseWorkflowAndInstallerContainExpectedFlow(t *testing.T) {
 		t.Fatalf("read release workflow file: %v", err)
 	}
 	releaseContent := string(releaseData)
-	releaseChecks := []string{"tags:", "- \"v*\"", "GOOS", "GOARCH", "SHA256SUMS", "softprops/action-gh-release@v2"}
+	releaseChecks := []string{
+		"- goos: linux",
+		"- goos: darwin",
+		"- goos: windows",
+		"goarch: amd64",
+		"goarch: arm64",
+		"SHA256SUMS",
+		"softprops/action-gh-release@v2",
+	}
 	for _, c := range releaseChecks {
 		if !strings.Contains(releaseContent, c) {
 			t.Fatalf("release workflow missing %q", c)

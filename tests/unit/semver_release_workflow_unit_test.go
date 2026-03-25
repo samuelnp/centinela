@@ -14,8 +14,11 @@ func TestVersionBumpWorkflowExists(t *testing.T) {
 		t.Fatalf("expected version bump workflow: %v", err)
 	}
 	content := string(data)
-	if !strings.Contains(content, "name: Version Bump") {
-		t.Fatal("workflow should declare Version Bump name")
+	checks := []string{"name: Version Bump", "branches: [main]", "concurrency:", "group: version-bump-main"}
+	for _, c := range checks {
+		if !strings.Contains(content, c) {
+			t.Fatalf("workflow missing %q", c)
+		}
 	}
 }
 
