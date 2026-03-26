@@ -1,0 +1,16 @@
+{
+  "feature": "docs-update-migrate-readme",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-03-26T00:00:00Z",
+  "inputs": [
+    "Planned README migration docs scope",
+    "Current command behavior for migrate and setup migration"
+  ],
+  "outputs": [
+    "README.md migration command and hook guidance updates"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}

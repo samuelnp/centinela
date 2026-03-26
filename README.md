@@ -70,6 +70,9 @@ This creates:
 
 Safe to re-run — existing files are never overwritten.
 
+`init` is the bootstrap command. For ongoing upgrades to managed docs and setup
+artifacts, use `migrate` (preview by default, apply only with `--apply`).
+
 Use `--local` to write Claude hooks to `.claude/settings.local.json` (useful for personal overrides without committing to the repo):
 
 ```bash
@@ -115,6 +118,28 @@ centinela start my-feature
 
 The hooks take it from here.
 
+### 5. Migrate managed assets
+
+Preview all managed upgrades (docs + setup):
+
+```bash
+centinela migrate
+```
+
+Apply full sync:
+
+```bash
+centinela migrate --apply
+```
+
+Scope setup migration to one integration when needed:
+
+```bash
+centinela migrate setup --agent claude
+centinela migrate setup --agent opencode
+centinela migrate setup --agent both --apply
+```
+
 ---
 
 ## The Four-Step Workflow
@@ -146,7 +171,7 @@ centinela validate              # Run gate checks manually
 
 ## How the Hooks Work
 
-`centinela init` registers four Claude Code hooks that run automatically:
+`centinela init` registers Claude Code hooks that run automatically:
 
 ### PreToolUse — Write / Edit
 
@@ -162,9 +187,13 @@ After every file write, centinela appends a compact status tag to the session:
 
 ### UserPromptSubmit
 
-Two hooks run at the start of every message:
+Multiple hooks run at the start of every message:
 
 **Project setup** — if `PROJECT.md` is missing but `PROJECT.md.template` exists, centinela injects a prompt instructing Claude to interview the user and write `PROJECT.md`. The prompt disappears automatically once the file is created.
+
+**Managed migration** — if managed docs or setup assets are outdated, centinela
+injects migration guidance and instructs the assistant to ask for approval before
+running apply commands.
 
 **Workflow context** — injects a context block showing all active workflows and their current step, so Claude always has accurate state without reading any files.
 

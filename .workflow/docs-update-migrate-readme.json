@@ -1,18 +1,18 @@
 {
   "feature": "docs-update-migrate-readme",
   "startedAt": "2026-03-26T15:23:26.211552Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-26T15:25:15Z"
     },
     "plan": {
       "status": "done",
       "completedAt": "2026-03-26T15:24:29Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {
