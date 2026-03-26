@@ -1,0 +1,20 @@
+{
+  "feature": "docs-update-migrate-readme",
+  "step": "plan",
+  "role": "feature-specialist",
+  "status": "done",
+  "generatedAt": "2026-03-26T00:00:00Z",
+  "inputs": [
+    "Big-thinker handoff",
+    "README sections requiring migration updates"
+  ],
+  "outputs": [
+    "docs/features/docs-update-migrate-readme.md",
+    "docs/plans/docs-update-migrate-readme.md",
+    "specs/docs-update-migrate-readme.feature"
+  ],
+  "edgeCases": [
+    "Avoid conflicting guidance with init bootstrap flow"
+  ],
+  "handoffTo": "senior-engineer"
+}

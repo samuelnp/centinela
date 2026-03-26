@@ -1,0 +1,30 @@
+{
+  "feature": "docs-update-migrate-readme",
+  "startedAt": "2026-03-26T15:23:26.211552Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-26T15:24:29Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}
