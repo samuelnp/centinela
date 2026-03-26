@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/edge-case-tester-prompt.md -->
 # Edge-Case Tester Subagent — Invocation Guide
 
 ## Purpose

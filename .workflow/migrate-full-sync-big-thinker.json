@@ -1,0 +1,17 @@
+{
+  "feature": "migrate-full-sync",
+  "step": "plan",
+  "role": "big-thinker",
+  "status": "done",
+  "generatedAt": "2026-03-26T00:00:00Z",
+  "inputs": [
+    "User request for setup+hook migration without rerunning init",
+    "Existing docs migration command behavior"
+  ],
+  "outputs": [
+    "Unified migration direction",
+    "Safety-first apply strategy"
+  ],
+  "edgeCases": [],
+  "handoffTo": "feature-specialist"
+}

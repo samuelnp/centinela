@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=CLAUDE.md -->
 # Centinela — Project Rules
 
 > **Centinela** is the development framework governing this project.
@@ -21,7 +22,7 @@
 centinela start <feature>     # Start — required before writing code
 centinela complete <feature>  # Advance to next step
 centinela status <feature>    # Show progress
-centinela validate            # Run built-in gates + validate commands
+centinela validate            # Run gate checks + validate commands
 ```
 
 ### 4 Steps:
@@ -55,7 +56,7 @@ Save report to `.workflow/<feature>-gatekeeper.md`. Required before completing `
 
 - [ ] All files under 100 lines
 - [ ] No cross-layer import violations (per archetype rules in PROJECT.md)
-- [ ] `centinela validate` passes (built-in gates + full test suite commands)
+- [ ] `centinela validate` passes (lint + type check + full test suite)
 - [ ] No business logic in the outer layer (definition per archetype)
 - [ ] i18n keys present in all locales from PROJECT.md → Locales
 - [ ] Gatekeeper report: SAFE or WARNING
@@ -96,6 +97,5 @@ Save to `.workflow/<feature>-production-readiness.md`. Required when gate is ena
 | New project setup | [new-project-guide.md](docs/architecture/new-project-guide.md) |
 
 ## Git
-
 Conventional commits: `feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`.
 One feature per branch. Never push failing tests.

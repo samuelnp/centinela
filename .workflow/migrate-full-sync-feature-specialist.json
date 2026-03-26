@@ -1,0 +1,21 @@
+{
+  "feature": "migrate-full-sync",
+  "step": "plan",
+  "role": "feature-specialist",
+  "status": "done",
+  "generatedAt": "2026-03-26T00:00:00Z",
+  "inputs": [
+    "Big-thinker orchestration output",
+    "Current migrate/docs/setup command structure"
+  ],
+  "outputs": [
+    "docs/features/migrate-full-sync.md",
+    "docs/plans/migrate-full-sync.md",
+    "specs/migrate-full-sync.feature"
+  ],
+  "edgeCases": [
+    "Missing setup files require create actions",
+    "Customized unmanaged files require manual-review"
+  ],
+  "handoffTo": "senior-engineer"
+}

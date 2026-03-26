@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/example-feature-walkthrough.md -->
 # Example: Adding "Detect Blockers" Feature
 
 > **Sauron-specific example.** Commands (`npm run`, `tsc`), file extensions (`.ts`, `.tsx`), paths (`src/kernel/`, `src/hooks/`), and tools (Vitest, Cucumber) are specific to Sauron's stack. Adapt to your project's language, framework, and folder structure.

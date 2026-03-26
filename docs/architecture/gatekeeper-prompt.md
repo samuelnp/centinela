@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/gatekeeper-prompt.md -->
 # Gatekeeper Subagent — Invocation Guide
 
 ## How to Invoke

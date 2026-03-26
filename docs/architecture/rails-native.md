@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/rails-native.md -->
 # Rails-native Architecture Guide
 
 > This document describes the **Rails-native archetype**. It is one of five supported architecture archetypes in Centinela. See [architecture-overview.md](architecture-overview.md) to confirm this is the right pattern for your project before reading further. Although the name says "Rails", this archetype applies equally to Django (Python) and Laravel (PHP) — the conventions map directly.
