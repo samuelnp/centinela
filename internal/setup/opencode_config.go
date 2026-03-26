@@ -10,27 +10,12 @@ const opencodeSchema = "https://opencode.ai/config.json"
 // InjectOpenCodeConfig merges Centinela defaults into opencode.json.
 // Existing unrelated keys are preserved.
 func InjectOpenCodeConfig(path string) (bool, error) {
-	raw := map[string]json.RawMessage{}
-	if data, err := os.ReadFile(path); err == nil {
-		_ = json.Unmarshal(data, &raw)
-	}
-
-	changed := false
-	if lookup(raw, "$schema") == "" {
-		raw["$schema"], _ = json.Marshal(opencodeSchema)
-		changed = true
-	}
-
-	if mergeInstructions(raw) {
-		changed = true
+	changed, data, err := buildOpenCodeConfig(path)
+	if err != nil {
+		return false, err
 	}
 	if !changed {
 		return false, nil
-	}
-
-	data, err := json.MarshalIndent(raw, "", "  ")
-	if err != nil {
-		return false, err
 	}
 	return true, os.WriteFile(path, data, 0644)
 }

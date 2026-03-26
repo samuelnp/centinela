@@ -19,7 +19,7 @@ func mergeHooks(pre, post, prompt *[]HookGroup) bool {
 	c = ensurePrompt(prompt, cmdOrch, "Enforcing subagent orchestration...") || c
 	c = ensurePrompt(prompt, cmdContext, "Checking workflow status...") || c
 	c = ensurePrompt(prompt, cmdSetup, "Checking project setup...") || c
-	c = ensurePrompt(prompt, cmdMigrate, "Checking managed docs...") || c
+	c = ensurePrompt(prompt, cmdMigrate, "Checking managed migrations...") || c
 	return c
 }
 

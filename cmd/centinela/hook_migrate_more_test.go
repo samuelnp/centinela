@@ -12,10 +12,10 @@ func TestRunHookMigrateNoChangesAfterApply(t *testing.T) {
 	os.Chdir(d)       //nolint:errcheck
 
 	os.WriteFile("PROJECT.md.template", []byte("x\n"), 0644) //nolint:errcheck
-	old := applyDocsMigration
-	defer func() { applyDocsMigration = old }()
-	applyDocsMigration = true
-	if err := runMigrateDocs(nil, nil); err != nil {
+	oldApply, oldAgent := applyFullMigration, fullAgent
+	defer func() { applyFullMigration, fullAgent = oldApply, oldAgent }()
+	applyFullMigration, fullAgent = true, "both"
+	if err := runMigrate(nil, nil); err != nil {
 		t.Fatal(err)
 	}
 	withStdin(t, "{}", func() {

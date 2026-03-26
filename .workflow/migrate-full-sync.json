@@ -1,18 +1,18 @@
 {
   "feature": "migrate-full-sync",
   "startedAt": "2026-03-26T14:34:14.577227Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-26T15:12:06Z"
     },
     "plan": {
       "status": "done",
       "completedAt": "2026-03-26T14:35:53Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {

@@ -21,7 +21,7 @@ func TestRunHookMigrateOutput(t *testing.T) {
 	os.WriteFile("PROJECT.md.template", []byte("legacy\n"), 0644) //nolint:errcheck
 	withStdin(t, "{}", func() {
 		out := captureStdout(t, func() { _ = runHookMigrate(nil, nil) })
-		if !strings.Contains(out, "DOC MIGRATION REQUIRED") {
+		if !strings.Contains(out, "MIGRATION REQUIRED") {
 			t.Fatalf("expected migration-needed output, got %q", out)
 		}
 	})

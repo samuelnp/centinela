@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/migration"
+	"github.com/samuelnp/centinela/internal/setup"
 	"github.com/samuelnp/centinela/internal/ui"
 )
 
@@ -23,13 +24,23 @@ func init() {
 
 func runHookMigrate(_ *cobra.Command, _ []string) error {
 	io.ReadAll(os.Stdin) //nolint:errcheck // drain stdin to avoid SIGPIPE
-	if _, err := os.Stat("PROJECT.md.template"); err != nil {
+	docsCount, setupCount := 0, 0
+	if !exists("PROJECT.md.template") && !exists("PROJECT.md") && !exists("centinela.toml") && !exists(".claude") && !exists("opencode.json") && !exists(".opencode") {
 		return nil
 	}
-	plan, err := migration.BuildPlan(".")
-	if err != nil || !plan.HasChanges() {
+	if _, err := os.Stat("PROJECT.md.template"); err == nil {
+		plan, err := migration.BuildPlan(".")
+		if err == nil {
+			docsCount = len(plan.Items)
+		}
+	}
+	sync, err := setup.BuildSyncPlan("both")
+	if err == nil {
+		setupCount = len(sync.Items)
+	}
+	if docsCount+setupCount == 0 {
 		return nil
 	}
-	fmt.Println(ui.RenderDocsMigrationNeeded(plan))
+	fmt.Println(ui.RenderMigrationNeeded(docsCount, setupCount))
 	return nil
 }
