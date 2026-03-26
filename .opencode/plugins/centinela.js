@@ -1,3 +1,4 @@
+// centinela:managed-version=1 template=.opencode/plugins/centinela.js
 export const CentinelaPlugin = async () => {
   return {
     "tool.execute.before": async (input) => {
@@ -13,7 +14,7 @@ export const CentinelaPlugin = async () => {
       runHook("postwrite", "", false)
     },
 
-  "tui.prompt.append": async (_input, output) => {
+    "tui.prompt.append": async (_input, output) => {
       const promptPayload = typeof _input === "string" ? _input : JSON.stringify(_input || {})
       appendContext(output, runHook("setup", "", false))
       appendContext(output, runHook("migrate", "", false))

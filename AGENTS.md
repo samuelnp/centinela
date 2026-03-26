@@ -1,3 +1,4 @@
+<!-- centinela:managed-version=1 template=AGENTS.md -->
 # Centinela Rules
 
 This project uses Centinela workflow enforcement.

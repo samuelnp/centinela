@@ -69,6 +69,24 @@
             "statusMessage": "Checking managed docs..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "centinela hook autostart",
+            "statusMessage": "Detecting new feature intent..."
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "centinela hook orchestration",
+            "statusMessage": "Enforcing subagent orchestration..."
+          }
+        ]
       }
     ]
   }
