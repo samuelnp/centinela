@@ -8,14 +8,22 @@ import (
 )
 
 // Acceptance: specs/generate-html-project-docs.feature
-func TestDocsGenerateIncludesMermaidAndValidationWiring(t *testing.T) {
+func TestDocsGenerateIncludesFeatureMermaidAndValidationWiring(t *testing.T) {
 	renderPath := filepath.Join("..", "..", "internal", "docgen", "render.go")
 	renderData, err := os.ReadFile(renderPath)
 	if err != nil {
 		t.Fatalf("read render file: %v", err)
 	}
-	if !strings.Contains(string(renderData), "Mermaid: Feature Dependencies") {
-		t.Fatal("expected mermaid section label")
+	if !strings.Contains(string(renderData), "renderFeatureGraphs") {
+		t.Fatal("expected feature graph section renderer")
+	}
+	graphsPath := filepath.Join("..", "..", "internal", "docgen", "render_graphs.go")
+	graphsData, err := os.ReadFile(graphsPath)
+	if err != nil {
+		t.Fatalf("read render graphs file: %v", err)
+	}
+	if strings.Contains(string(graphsData), "mermaidEvidence") {
+		t.Fatal("workflow-specific mermaid graph should not be present")
 	}
 	validatePath := filepath.Join("..", "..", "cmd", "centinela", "docs_validate.go")
 	validateData, err := os.ReadFile(validatePath)

@@ -1,0 +1,21 @@
+{
+  "feature": "improve-docs-llm-hybrid-ui",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Plan artifacts for improve-docs-llm-hybrid-ui",
+    "Current docgen renderer and prompt templates"
+  ],
+  "outputs": [
+    "internal/docgen/render*.go",
+    "docs/architecture/documentation-generator-prompt.md",
+    "internal/scaffold/assets/docs/architecture/documentation-generator-prompt.md",
+    "README.md"
+  ],
+  "edgeCases": [
+    "Feature graphs render even with no roadmap dependencies"
+  ],
+  "handoffTo": "qa-senior"
+}

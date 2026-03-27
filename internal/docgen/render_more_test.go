@@ -7,11 +7,11 @@ import (
 )
 
 func TestRenderHelpersAndGenerateErrors(t *testing.T) {
-	if !strings.Contains(mermaidRoadmap([]RoadmapNode{{Name: "a"}, {Name: "b", DependsOn: []string{"a"}}}), "a --> b") {
+	if !strings.Contains(mermaidRoadmap([]RoadmapNode{{Name: "a"}, {Name: "b", DependsOn: []string{"a"}}}), "-->") {
 		t.Fatal("roadmap mermaid missing edge")
 	}
-	if strings.Contains(mermaidEvidence([]EvidenceLink{{Role: "x", Handoff: ""}}), "-->") {
-		t.Fatal("empty handoff should skip edge")
+	if !strings.Contains(mermaidSpecs([]string{"specs/alpha.feature"}), "Project Specs") {
+		t.Fatal("spec map should include root")
 	}
 	tab := evidenceTable([]EvidenceLink{{Role: "r", Feature: "f", Step: "s", Outputs: []string{"a", "b"}}})
 	if !strings.Contains(tab, "<br>") {

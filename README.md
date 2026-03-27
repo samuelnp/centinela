@@ -390,7 +390,7 @@ your-project/
 | `testing-strategy.md` | Unit, integration, and acceptance test structure for all archetypes |
 | `gatekeepers.md` | Full gate reference (G1–G11) with per-archetype rules |
 | `gatekeeper-prompt.md` | Prompt for the Gatekeeper AI subagent conflict review |
-| `documentation-generator-prompt.md` | Prompt template for running docs HTML generation workflow |
+| `documentation-generator-prompt.md` | LLM-first prompt template for polished docs generation with CLI fallback |
 | `workflow-enforcement.md` | How the three enforcement layers work |
 | `i18n-strategy.md` | Translation key conventions by format |
 | `example-feature-walkthrough.md` | End-to-end example of the four-step workflow |

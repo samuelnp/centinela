@@ -1,4 +1,75 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Centinela Project Documentation</title><script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true});</script></head><body><h1>Centinela Project Documentation</h1><h2>How Project Works</h2><pre># Centinela — Project Definition
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Centinela Project Documentation</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:wght@500;600&display=swap" rel="stylesheet"><script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true,theme:'base',themeVariables:{primaryColor:'#CFE7D8',lineColor:'#245841',fontFamily:'IBM Plex Sans'}});</script><style>:root{--bg:#f6f3ea;--panel:#fffdf8;--text:#1e2a24;--muted:#5d6b63;--accent:#245841;--line:#d8d4c8;--note:#eef6f1}*{box-sizing:border-box}html,body{margin:0;padding:0;background:radial-gradient(circle at 0% 0%,#fdf7ee 0,#f6f3ea 42%,#f2efe6 100%);color:var(--text)}body{font-family:'IBM Plex Sans',sans-serif}h1,h2,h3{font-family:'Source Serif 4',serif;margin:0 0 .6rem}a{color:var(--accent);text-decoration:none}.page{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);padding:1.25rem;background:linear-gradient(180deg,#f2f7f2,#f8f5ee)}.brand{font-size:1.08rem;font-weight:700;margin-bottom:.5rem}.caption{color:var(--muted);font-size:.92rem;margin-bottom:1rem}.toc a{display:block;padding:.4rem 0;color:#2d4c3f}.content{padding:1.5rem;max-width:1060px}.hero{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1.1rem 1.2rem;margin-bottom:1rem}.meta{color:var(--muted);margin-top:.35rem}.cards{display:grid;gap:.75rem;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:1rem 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:.75rem}.k{font-size:.82rem;color:var(--muted)}.v{font-size:1.3rem;font-weight:700;margin-top:.1rem}section{margin:1rem 0;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1rem}pre{white-space:pre-wrap;word-break:break-word;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.75rem;overflow:auto;font-family:'IBM Plex Mono',monospace}table{border-collapse:collapse;width:100%}th,td{border:1px solid var(--line);padding:.45rem .5rem;text-align:left}th{background:#f4f7f5}.mermaid-wrap{background:var(--note);border:1px solid #d3e4da;border-radius:10px;padding:.6rem}.code-note{background:#f8f8f4;border-left:4px solid #c5d9cd;padding:.6rem .7rem;border-radius:8px}.pill{display:inline-block;background:#e2efe7;border:1px solid #c7dfd1;border-radius:999px;padding:.15rem .5rem;font-size:.82rem;margin-right:.4rem}.list li{margin:.32rem 0}.sample{margin:.7rem 0}.sample-title{font-weight:600;margin-bottom:.3rem}@media (max-width:920px){.page{display:block}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}.content{padding:1rem}}</style></head><body><div class="page"><aside class="sidebar"><div class="brand">Centinela Project Documentation</div><div class="caption">Hybrid docs report</div><nav class="toc"><a href="#overview">Overview</a><a href="#feature-graphs">Feature Graphs</a><a href="#roadmap">Roadmap</a><a href="#specs">Specs</a><a href="#workflow-state">Feature States</a><a href="#artifacts">Artifacts</a><a href="#examples">Examples</a><a href="#sources">Source Context</a></nav><p class="caption">31 specs · 89 scenarios</p></aside><main class="content"><header class="hero"><h1>Centinela Project Documentation</h1><p class="meta">LLM-first documentation with deterministic command fallback. Visuals focus on product features, not Centinela internals.</p><span class="pill">Mermaid: feature topology</span><span class="pill">Responsive layout</span><span class="pill">Examples included</span></header><section id="overview"><h2>Project Overview</h2><p>Documentation quality is improved with navigable sections, digestible summaries, and richer visual presentation.</p><div class="cards"><div class="card"><div class="k">Feature Docs</div><div class="v">31</div></div><div class="card"><div class="k">Plan Docs</div><div class="v">32</div></div><div class="card"><div class="k">Specs</div><div class="v">31</div></div><div class="card"><div class="k">Scenarios</div><div class="v">89</div></div><div class="card"><div class="k">Tracked Features</div><div class="v">1</div></div></div></section><section id="feature-graphs"><h2>Feature Topology</h2><p>These Mermaid diagrams explain project feature scope and specification surface.</p><h3>Roadmap Dependencies</h3><div class="mermaid-wrap"><pre class="mermaid">flowchart LR
+  f0["docs-migration-managed-docs"]
+</pre></div><h3>Spec Coverage Map</h3><div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  root["Project Specs"]
+  s0["adapt-opencode-support"]
+  root --> s0
+  s1["add-ci-validate-workflow"]
+  root --> s1
+  s2["auto-start-feature-intent"]
+  root --> s2
+  s3["automate-semver-release"]
+  root --> s3
+  s4["bootstrap-phase-zero-workflow"]
+  root --> s4
+  s5["claude-status-line"]
+  root --> s5
+  s6["docs-consistency-pass"]
+  root --> s6
+  s7["docs-migration-managed-docs"]
+  root --> s7
+  s8["docs-readme-bootstrap-tutorial"]
+  root --> s8
+  s9["docs-update-migrate-readme"]
+  root --> s9
+  s10["edge-case-subagent-tests-phase"]
+  root --> s10
+  s11["enforce-coverage-in-validate"]
+  root --> s11
+  s12["enforce-step-subagent-orchestration"]
+  root --> s12
+  s13["fix-release-trigger-after-bump"]
+  root --> s13
+  s14["fix-release-workflow-run-tag-resolution"]
+  root --> s14
+  s15["fix-roadmap-write-blocked"]
+  root --> s15
+  s16["fix-setup-hook-template-detection"]
+  root --> s16
+  s17["fix-setup-next-step"]
+  root --> s17
+  s18["fix-validate-plan-by-name"]
+  root --> s18
+  s19["generate-html-project-docs"]
+  root --> s19
+  s20["harden-main-release-automation"]
+  root --> s20
+  s21["harden-opencode-plugin-compat"]
+  root --> s21
+  s22["improve-centinela-render-ui"]
+  root --> s22
+  s23["improve-docs-llm-hybrid-ui"]
+  root --> s23
+  s24["migrate-full-sync"]
+  root --> s24
+  s25["opencode-hook-parity"]
+  root --> s25
+  s26["orchestration-smoke-sim"]
+  root --> s26
+  s27["raise-test-coverage-90"]
+  root --> s27
+  s28["reach-100-coverage"]
+  root --> s28
+  s29["refactor-hook-policy-core"]
+  root --> s29
+  s30["roadmap-senior-pm-analysis"]
+  root --> s30
+</pre></div></section><section id="roadmap"><h2>Roadmap Narrative</h2><p>Current roadmap intent, plus detected feature dependency context.</p><div class="code-note"><strong>Roadmap excerpt</strong><pre># Roadmap
+
+## Phase 0: Bootstrap
+
+- docs-migration-managed-docs
+</pre></div><ul class="list"><li><strong>docs-migration-managed-docs</strong> <span class="k">depends on: none</span></li></ul></section><section id="specs"><h2>Specification Inventory</h2><p>Files: 31 · Scenarios: 89</p><ul><li><code>specs/adapt-opencode-support.feature</code></li><li><code>specs/add-ci-validate-workflow.feature</code></li><li><code>specs/auto-start-feature-intent.feature</code></li><li><code>specs/automate-semver-release.feature</code></li><li><code>specs/bootstrap-phase-zero-workflow.feature</code></li><li><code>specs/claude-status-line.feature</code></li><li><code>specs/docs-consistency-pass.feature</code></li><li><code>specs/docs-migration-managed-docs.feature</code></li><li><code>specs/docs-readme-bootstrap-tutorial.feature</code></li><li><code>specs/docs-update-migrate-readme.feature</code></li><li><code>specs/edge-case-subagent-tests-phase.feature</code></li><li><code>specs/enforce-coverage-in-validate.feature</code></li><li><code>specs/enforce-step-subagent-orchestration.feature</code></li><li><code>specs/fix-release-trigger-after-bump.feature</code></li><li><code>specs/fix-release-workflow-run-tag-resolution.feature</code></li><li><code>specs/fix-roadmap-write-blocked.feature</code></li><li><code>specs/fix-setup-hook-template-detection.feature</code></li><li><code>specs/fix-setup-next-step.feature</code></li><li><code>specs/fix-validate-plan-by-name.feature</code></li><li><code>specs/generate-html-project-docs.feature</code></li><li><code>specs/harden-main-release-automation.feature</code></li><li><code>specs/harden-opencode-plugin-compat.feature</code></li><li><code>specs/improve-centinela-render-ui.feature</code></li><li><code>specs/improve-docs-llm-hybrid-ui.feature</code></li><li><code>specs/migrate-full-sync.feature</code></li><li><code>specs/opencode-hook-parity.feature</code></li><li><code>specs/orchestration-smoke-sim.feature</code></li><li><code>specs/raise-test-coverage-90.feature</code></li><li><code>specs/reach-100-coverage.feature</code></li><li><code>specs/refactor-hook-policy-core.feature</code></li><li><code>specs/roadmap-senior-pm-analysis.feature</code></li></ul></section><section id="workflow-state"><h2>Feature State Matrix</h2><p>Operational status table for tracked features.</p><table><tr><th>Feature</th><th>Current Step</th><th>Status</th></tr></table></section><section id="artifacts"><h2>Artifacts</h2><h3>Feature briefs</h3><ul><li><code>docs/features/adapt-opencode-support.md</code></li><li><code>docs/features/add-ci-validate-workflow.md</code></li><li><code>docs/features/auto-start-feature-intent.md</code></li><li><code>docs/features/automate-semver-release.md</code></li><li><code>docs/features/bootstrap-phase-zero-workflow.md</code></li><li><code>docs/features/claude-status-line.md</code></li><li><code>docs/features/docs-consistency-pass.md</code></li><li><code>docs/features/docs-migration-managed-docs.md</code></li><li><code>docs/features/docs-readme-bootstrap-tutorial.md</code></li><li><code>docs/features/docs-update-migrate-readme.md</code></li><li><code>docs/features/edge-case-subagent-tests-phase.md</code></li><li><code>docs/features/enforce-coverage-in-validate.md</code></li><li><code>docs/features/enforce-step-subagent-orchestration.md</code></li><li><code>docs/features/fix-release-trigger-after-bump.md</code></li><li><code>docs/features/fix-release-workflow-run-tag-resolution.md</code></li><li><code>docs/features/fix-roadmap-write-blocked.md</code></li><li><code>docs/features/fix-setup-hook-template-detection.md</code></li><li><code>docs/features/fix-setup-next-step.md</code></li><li><code>docs/features/fix-validate-plan-by-name.md</code></li><li><code>docs/features/generate-html-project-docs.md</code></li><li><code>docs/features/harden-main-release-automation.md</code></li><li><code>docs/features/harden-opencode-plugin-compat.md</code></li><li><code>docs/features/improve-centinela-render-ui.md</code></li><li><code>docs/features/improve-docs-llm-hybrid-ui.md</code></li><li><code>docs/features/migrate-full-sync.md</code></li><li><code>docs/features/opencode-hook-parity.md</code></li><li><code>docs/features/orchestration-smoke-sim.md</code></li><li><code>docs/features/raise-test-coverage-90.md</code></li><li><code>docs/features/reach-100-coverage.md</code></li><li><code>docs/features/refactor-hook-policy-core.md</code></li><li><code>docs/features/roadmap-senior-pm-analysis.md</code></li></ul><h3>Implementation plans</h3><ul><li><code>docs/plans/adapt-opencode-support.md</code></li><li><code>docs/plans/add-ci-validate-workflow.md</code></li><li><code>docs/plans/auto-start-feature-intent.md</code></li><li><code>docs/plans/automate-semver-release.md</code></li><li><code>docs/plans/bootstrap-phase-zero-workflow.md</code></li><li><code>docs/plans/claude-status-line.md</code></li><li><code>docs/plans/docs-consistency-pass.md</code></li><li><code>docs/plans/docs-migration-managed-docs.md</code></li><li><code>docs/plans/docs-readme-bootstrap-tutorial.md</code></li><li><code>docs/plans/docs-update-migrate-readme.md</code></li><li><code>docs/plans/edge-case-subagent-tests-phase.md</code></li><li><code>docs/plans/enforce-coverage-in-validate.md</code></li><li><code>docs/plans/enforce-step-subagent-orchestration.md</code></li><li><code>docs/plans/fix-release-trigger-after-bump.md</code></li><li><code>docs/plans/fix-release-workflow-run-tag-resolution.md</code></li><li><code>docs/plans/fix-roadmap-write-blocked.md</code></li><li><code>docs/plans/fix-setup-hook-template-detection.md</code></li><li><code>docs/plans/fix-setup-next-step.md</code></li><li><code>docs/plans/fix-validate-plan-by-name.md</code></li><li><code>docs/plans/generate-html-project-docs.md</code></li><li><code>docs/plans/harden-main-release-automation.md</code></li><li><code>docs/plans/harden-opencode-plugin-compat.md</code></li><li><code>docs/plans/improve-centinela-render-ui.md</code></li><li><code>docs/plans/improve-docs-llm-hybrid-ui.md</code></li><li><code>docs/plans/migrate-full-sync.md</code></li><li><code>docs/plans/opencode-hook-parity.md</code></li><li><code>docs/plans/orchestration-smoke-sim.md</code></li><li><code>docs/plans/raise-test-coverage-90-gaps.md</code></li><li><code>docs/plans/raise-test-coverage-90.md</code></li><li><code>docs/plans/reach-100-coverage.md</code></li><li><code>docs/plans/refactor-hook-policy-core.md</code></li><li><code>docs/plans/roadmap-senior-pm-analysis.md</code></li></ul><h3>Evidence to code references</h3><table><tr><th>Role</th><th>Feature</th><th>Step</th><th>Code refs</th></tr><tr><td>big-thinker</td><td><code>claude-status-line</code></td><td>plan</td><td><code>specs/claude-status-line.feature</code><br><code>plan alignment confirmed</code></td></tr><tr><td>feature-specialist</td><td><code>claude-status-line</code></td><td>plan</td><td><code>plan acceptance confirmed</code><br><code>implementation constraints captured</code></td></tr><tr><td>qa-senior</td><td><code>claude-status-line</code></td><td>tests</td><td><code>tests/unit/claude_statusline_unit_test.go</code><br><code>tests/integration/claude_statusline_integration_test.go</code><br><code>tests/acceptance/claude_statusline_acceptance_test.go</code><br><code>.workflow/claude-status-line-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>claude-status-line</code></td><td>code</td><td><code>cmd/centinela/hook_statusline.go</code><br><code>internal/setup/statusline.go</code><br><code>internal/ui/render_statusline.go</code></td></tr><tr><td>big-thinker</td><td><code>docs-readme-bootstrap-tutorial</code></td><td>plan</td><td><code>Tutorial information architecture</code><br><code>Intent phrase taxonomy for roadmap/start/continue</code></td></tr><tr><td>feature-specialist</td><td><code>docs-readme-bootstrap-tutorial</code></td><td>plan</td><td><code>docs/features/docs-readme-bootstrap-tutorial.md</code><br><code>docs/plans/docs-readme-bootstrap-tutorial.md</code><br><code>specs/docs-readme-bootstrap-tutorial.feature</code></td></tr><tr><td>qa-senior</td><td><code>docs-readme-bootstrap-tutorial</code></td><td>tests</td><td><code>README.md</code><br><code>.workflow/docs-readme-bootstrap-tutorial-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>docs-readme-bootstrap-tutorial</code></td><td>code</td><td><code>README bootstrap tutorial section</code><br><code>Natural-language command intent examples</code></td></tr><tr><td>big-thinker</td><td><code>docs-update-migrate-readme</code></td><td>plan</td><td><code>README migration docs update scope</code></td></tr><tr><td>feature-specialist</td><td><code>docs-update-migrate-readme</code></td><td>plan</td><td><code>docs/features/docs-update-migrate-readme.md</code><br><code>docs/plans/docs-update-migrate-readme.md</code><br><code>specs/docs-update-migrate-readme.feature</code></td></tr><tr><td>qa-senior</td><td><code>docs-update-migrate-readme</code></td><td>tests</td><td><code>README.md scenarios verified against migration command examples</code><br><code>.workflow/docs-update-migrate-readme-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>docs-update-migrate-readme</code></td><td>code</td><td><code>README.md migration command and hook guidance updates</code></td></tr><tr><td>big-thinker</td><td><code>generate-html-project-docs</code></td><td>plan</td><td><code>Command strategy and report composition plan</code></td></tr><tr><td>feature-specialist</td><td><code>generate-html-project-docs</code></td><td>plan</td><td><code>docs/features/generate-html-project-docs.md</code><br><code>docs/plans/generate-html-project-docs.md</code><br><code>specs/generate-html-project-docs.feature</code></td></tr><tr><td>qa-senior</td><td><code>generate-html-project-docs</code></td><td>tests</td><td><code>cmd/centinela/docs_generate_test.go</code><br><code>cmd/centinela/docs_validate_test.go</code><br><code>internal/docgen/*.go tests</code><br><code>tests/unit/docs_generate_unit_test.go</code><br><code>tests/acceptance/docs_generate_acceptance_test.go</code><br><code>.workflow/generate-html-project-docs-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>generate-html-project-docs</code></td><td>code</td><td><code>cmd/centinela/docs.go</code><br><code>cmd/centinela/docs_generate.go</code><br><code>cmd/centinela/docs_validate.go</code><br><code>internal/docgen/*</code><br><code>docs/architecture/documentation-generator-prompt.md</code></td></tr><tr><td>big-thinker</td><td><code>improve-docs-llm-hybrid-ui</code></td><td>plan</td><td><code>Strategy for polished docs UI and feature-focused graphing</code></td></tr><tr><td>feature-specialist</td><td><code>improve-docs-llm-hybrid-ui</code></td><td>plan</td><td><code>docs/features/improve-docs-llm-hybrid-ui.md</code><br><code>docs/plans/improve-docs-llm-hybrid-ui.md</code><br><code>specs/improve-docs-llm-hybrid-ui.feature</code></td></tr><tr><td>big-thinker</td><td><code>migrate-full-sync</code></td><td>plan</td><td><code>Unified migration direction</code><br><code>Safety-first apply strategy</code></td></tr><tr><td>feature-specialist</td><td><code>migrate-full-sync</code></td><td>plan</td><td><code>docs/features/migrate-full-sync.md</code><br><code>docs/plans/migrate-full-sync.md</code><br><code>specs/migrate-full-sync.feature</code></td></tr><tr><td>qa-senior</td><td><code>migrate-full-sync</code></td><td>tests</td><td><code>cmd/centinela/migrate_setup_test.go</code><br><code>internal/setup/sync_test.go</code><br><code>internal/ui/render_setup_migrate_test.go</code></td></tr><tr><td>senior-engineer</td><td><code>migrate-full-sync</code></td><td>code</td><td><code>Unified migrate command with apply support</code><br><code>Setup sync planning/apply implementation</code><br><code>Hook and UI migration-needed updates</code></td></tr><tr><td>big-thinker</td><td><code>orchestration-smoke-sim</code></td><td>plan</td><td><code>Plan-level simulation scope</code></td></tr><tr><td>feature-specialist</td><td><code>orchestration-smoke-sim</code></td><td>plan</td><td><code>docs/features/orchestration-smoke-sim.md</code><br><code>docs/plans/orchestration-smoke-sim.md</code><br><code>specs/orchestration-smoke-sim.feature</code></td></tr><tr><td>qa-senior</td><td><code>orchestration-smoke-sim</code></td><td>tests</td><td><code>tests/unit/orchestration_smoke_sim_test.go</code><br><code>tests/acceptance/orchestration_smoke_sim_test.go</code><br><code>.workflow/orchestration-smoke-sim-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>orchestration-smoke-sim</code></td><td>code</td><td><code>Code step evidence for simulation</code></td></tr><tr><td>big-thinker</td><td><code>roadmap-senior-pm-analysis</code></td><td>plan</td><td><code>Roadmap analysis enforcement direction</code><br><code>Validation and guard strategy</code></td></tr><tr><td>feature-specialist</td><td><code>roadmap-senior-pm-analysis</code></td><td>plan</td><td><code>docs/features/roadmap-senior-pm-analysis.md</code><br><code>docs/plans/roadmap-senior-pm-analysis.md</code><br><code>specs/roadmap-senior-pm-analysis.feature</code></td></tr><tr><td>qa-senior</td><td><code>roadmap-senior-pm-analysis</code></td><td>tests</td><td><code>internal/roadmap/analysis_test.go</code><br><code>cmd/centinela/start_guard_analysis_test.go</code><br><code>cmd/centinela/roadmap_validate_test.go</code><br><code>cmd/centinela/hook_setup_directive_test.go</code><br><code>internal/ui/render_other_test.go</code><br><code>tests/unit/roadmap_senior_pm_analysis_unit_test.go</code><br><code>tests/acceptance/roadmap_senior_pm_analysis_test.go</code><br><code>.workflow/roadmap-senior-pm-analysis-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>roadmap-senior-pm-analysis</code></td><td>code</td><td><code>internal/roadmap/analysis.go</code><br><code>internal/roadmap/analysis_cycle.go</code><br><code>cmd/centinela/start_guard.go</code><br><code>cmd/centinela/roadmap_validate.go</code><br><code>cmd/centinela/hook_setup.go</code><br><code>internal/ui/render_roadmap.go</code><br><code>internal/ui/render_roadmap_analysis.go</code></td></tr></table></section><section id="examples"><h2>Documentation Examples</h2><p>Use this sequence for hybrid generation with LLM synthesis first.</p><div class="sample"><div class="sample-title">1) Validate artifacts</div><pre>centinela docs validate</pre></div><div class="sample"><div class="sample-title">2) Ask LLM to compose docs narrative + visual structure</div><pre>Use docs/architecture/documentation-generator-prompt.md to generate project-facing docs narrative and visuals.</pre></div><div class="sample"><div class="sample-title">3) Deterministic fallback renderer</div><pre>centinela docs generate --out docs/project-docs/index.html</pre></div></section><section id="sources"><h2>Source Context</h2><details><summary>PROJECT.md excerpt</summary><pre># Centinela — Project Definition
 
 &gt; This file is the single source of truth for everything project-specific.
 &gt; CLAUDE.md defines how to build. This file defines what to build.
@@ -25,144 +96,9 @@ Centinela is a best-practices and engineering workflow enforcement tool that for
 
 **G2 rule (layer boundaries):** `cmd/` may import `internal/*`. `internal/workflow` and `internal/gates` may import `internal/config` only. `internal/ui` may import `internal/workflow`, `internal/gates`, `internal/roadmap` (read-only, for rendering types). `internal/config` imports nothing internal.
 
-**G7 rule (outer layer):** `cmd/centinela/` is the outer layer. Commands must be thin orchestrators — no business logic, no validation rules, no file classification. All decisions belong in `internal/`.
-
-## Tech Stack
-
-| Concern | Technology |
-|---------|------------|
-| Framework | Cobra (CLI) |
-| Language | Go |
-| Styling | Charmbracelet Lipgloss |
-| Persistence | JSON files in `.workflow/` |
-| Unit/Integration Tests | `go test` (stdlib) |
-| Acceptance Tests | `go test` (stdlib, in tests/acceptance/) |
-| i18n | None (English-only CLI output) |
-| External APIs | Claude Code hooks (stdin/stdout JSON) |
-
-## Folder Structure
-
-```
-cmd/centinela/        # CLI entry points: Cobra commands and hooks (outer layer)
-internal/
-  config/             # TOML config loading — leaf layer, no internal imports
-  workflow/           # Core domain: step state, file classification, artifact validation
-  gates/              # Quality gate enforcement (G1 file size, G11 i18n)
-  ui/                 # Terminal rendering: styles, boxes, status — pure presentation
-  roadmap/            # Feature/phase tracking, derives status from workflow state
-  setup/              # Hook wiring: injects centinela commands into .claude/settings.json
-  scaffold/           # Template extraction: embeds and writes CLAUDE.md, PROJECT.md.template, docs/
-docs/
-  architecture/       # Architecture guides (archetype docs, gatekeeper prompt, etc.)
-  plans/              # Per-feature plan documents
-specs/                # Gherkin .feature files (acceptance criteria)
-tests/
-  unit/               # Unit tests mirroring internal/ packages
-  integration/        # Integration tests (multi-package interactions)
-  acceptance/         # Acceptance step definitions
-.workflow/            # Runtime state: per-feature JSON + gatekeeper reports
-```
-
-## Domain Language
-
-| Entity | What it represents |
-|--------|--------------------|
-| Workflow | A single feature&#39;s 4-step lifecycle (plan → code → tests → validate) |
-| Step | One of the four phases; has a status (pending / in-progress / done) |
-| Feature | The named unit of work being tracked (maps to a `.workflow/&lt;feature&gt;.json` file) |
-| Gate | A built-in automated check (G1 file size, G11 i18n) run at the validate step |
-| Config | The centinela.toml settings for the host project |
-| Scaffold | The embedded templates centinela copies into a new project on `init` |
-
-## Layer Mapping
-
-| Abstract Layer | Concrete Path |
-|---------------|---------------|
-| Outer (CLI) | `cmd/centinela/` |
-| Application / Orchestration | `cmd/centinela/` (thin wiring only) |
-| Domain / Business Logic | `internal/workflow/`, `internal/gates/` |
-| Supporting Domain | `internal/roadmap/` |
-| Presentation | `internal/ui/` |
-| Infrastructure | `internal/setup/`, `internal/scaffold/` |
-| Configuration (leaf) | `internal/config/` |
-
-## Integration Points
-
-| Service | Purpose | Protocol / Auth |
-|---------|---------|-----------------|
-| Claude Code hooks | Intercept file writes (PreToolUse) and inject workflow tags (PostToolUse) | stdin/stdout JSON |
-| `.claude/settings.json` | Register centinela commands as hooks | Local file read/write |
-
-## Project-Specific Rules
-
-1. `cmd/` commands must not contain business logic. If a decision belongs to the domain (e.g. &#34;is this file allowed in this step?&#34;), it lives in `internal/workflow/` or `internal/gates/`.
-2. `internal/ui/` must not mutate state. It renders; it does not decide.
-3. All user-visible text is English only. No i18n gate required.
-4. Test file suffix for Go: `_test.go` (stdlib convention). The `[workflow] test_suffixes` in `centinela.toml` should be set to `[&#34;_test.go&#34;]` for centinela&#39;s own tests.
-
-## Naming Conventions
-
-| Layer | Pattern | Example |
-|-------|---------|---------|
-| Domain type | PascalCase noun | `Workflow`, `StepState`, `FileType` |
-| Domain function | PascalCase verb phrase | `ClassifyFile`, `ValidateArtifacts` |
-| Gate | PascalCase noun | `FileSizeGate` (in file_size.go) |
-| Config struct | PascalCase + Config suffix | `WorkflowConfig`, `GatesConfig` |
-| CLI command file | snake_case verb | `hook_prewrite.go`, `complete.go` |
-| UI render function | Render + PascalCase noun | `RenderContext`, `RenderBlocked` |
-| Test file | mirrors file under test + `_test.go` | `classify_test.go` |
-| Spec | kebab-case + `.feature` | `workflow-steps.feature` |
-
-## Locales
-
-| Code | Language |
-|------|----------|
-| `en` | English (only) |
-
-i18n gate: **disabled** (`gates.i18n = false` in centinela.toml).
-
-## Gatekeeper Paths
-
-| What | Path |
-|------|------|
-| Feature specs | `specs/` |
-| Domain — workflow logic | `internal/workflow/` |
-| Domain — gates | `internal/gates/` |
-| Configuration | `internal/config/` |
-| Presentation | `internal/ui/` |
-| CLI commands (outer layer) | `cmd/centinela/` |
-| Supporting domain | `internal/roadmap/` |
-| Infrastructure | `internal/setup/`, `internal/scaffold/` |
-</pre><h2>Roadmap Narrative</h2><pre># Roadmap
+**G7 rule (outer layer):** `cmd/centinela/` is the outer layer. Commands must be thin orchestrators — no business logic, no validation rules, no file classification. All decisions belong in `internal/`.</pre></details><details><summary>ROADMAP.md excerpt</summary><pre># Roadmap
 
 ## Phase 0: Bootstrap
 
 - docs-migration-managed-docs
-</pre><h2>Mermaid: Feature Dependencies</h2><pre class="mermaid">flowchart LR
-  docs-migration-managed-docs
-</pre><h2>Mermaid: Evidence Handoffs</h2><pre class="mermaid">flowchart TD
-  big-thinker --> feature-specialist
-  feature-specialist --> senior-engineer
-  qa-senior --> validate
-  senior-engineer --> qa-senior
-  big-thinker --> feature-specialist
-  feature-specialist --> senior-engineer
-  qa-senior --> validate
-  senior-engineer --> qa-senior
-  big-thinker --> feature-specialist
-  feature-specialist --> senior-engineer
-  qa-senior --> validate
-  senior-engineer --> qa-senior
-  big-thinker --> feature-specialist
-  feature-specialist --> senior-engineer
-  qa-senior --> validate
-  senior-engineer --> qa-senior
-  big-thinker --> feature-specialist
-  feature-specialist --> senior-engineer
-  qa-senior --> validate
-  senior-engineer --> qa-senior
-  big-thinker --> feature-specialist
-  feature-specialist --> senior-engineer
-  qa-senior --> validate
-  senior-engineer --> qa-senior
-</pre><h2>Comparison Matrix</h2><table border="1"><tr><th>Feature</th><th>Current Step</th><th>Status</th></tr></table><h2>Specs</h2><p>Files: 29 · Scenarios: 82</p><ul><li><code>specs/adapt-opencode-support.feature</code></li><li><code>specs/add-ci-validate-workflow.feature</code></li><li><code>specs/auto-start-feature-intent.feature</code></li><li><code>specs/automate-semver-release.feature</code></li><li><code>specs/bootstrap-phase-zero-workflow.feature</code></li><li><code>specs/docs-consistency-pass.feature</code></li><li><code>specs/docs-migration-managed-docs.feature</code></li><li><code>specs/docs-readme-bootstrap-tutorial.feature</code></li><li><code>specs/docs-update-migrate-readme.feature</code></li><li><code>specs/edge-case-subagent-tests-phase.feature</code></li><li><code>specs/enforce-coverage-in-validate.feature</code></li><li><code>specs/enforce-step-subagent-orchestration.feature</code></li><li><code>specs/fix-release-trigger-after-bump.feature</code></li><li><code>specs/fix-release-workflow-run-tag-resolution.feature</code></li><li><code>specs/fix-roadmap-write-blocked.feature</code></li><li><code>specs/fix-setup-hook-template-detection.feature</code></li><li><code>specs/fix-setup-next-step.feature</code></li><li><code>specs/fix-validate-plan-by-name.feature</code></li><li><code>specs/generate-html-project-docs.feature</code></li><li><code>specs/harden-main-release-automation.feature</code></li><li><code>specs/harden-opencode-plugin-compat.feature</code></li><li><code>specs/improve-centinela-render-ui.feature</code></li><li><code>specs/migrate-full-sync.feature</code></li><li><code>specs/opencode-hook-parity.feature</code></li><li><code>specs/orchestration-smoke-sim.feature</code></li><li><code>specs/raise-test-coverage-90.feature</code></li><li><code>specs/reach-100-coverage.feature</code></li><li><code>specs/refactor-hook-policy-core.feature</code></li><li><code>specs/roadmap-senior-pm-analysis.feature</code></li></ul><h2>Feature Docs</h2><ul><li><code>docs/features/adapt-opencode-support.md</code></li><li><code>docs/features/add-ci-validate-workflow.md</code></li><li><code>docs/features/auto-start-feature-intent.md</code></li><li><code>docs/features/automate-semver-release.md</code></li><li><code>docs/features/bootstrap-phase-zero-workflow.md</code></li><li><code>docs/features/docs-consistency-pass.md</code></li><li><code>docs/features/docs-migration-managed-docs.md</code></li><li><code>docs/features/docs-readme-bootstrap-tutorial.md</code></li><li><code>docs/features/docs-update-migrate-readme.md</code></li><li><code>docs/features/edge-case-subagent-tests-phase.md</code></li><li><code>docs/features/enforce-coverage-in-validate.md</code></li><li><code>docs/features/enforce-step-subagent-orchestration.md</code></li><li><code>docs/features/fix-release-trigger-after-bump.md</code></li><li><code>docs/features/fix-release-workflow-run-tag-resolution.md</code></li><li><code>docs/features/fix-roadmap-write-blocked.md</code></li><li><code>docs/features/fix-setup-hook-template-detection.md</code></li><li><code>docs/features/fix-setup-next-step.md</code></li><li><code>docs/features/fix-validate-plan-by-name.md</code></li><li><code>docs/features/generate-html-project-docs.md</code></li><li><code>docs/features/harden-main-release-automation.md</code></li><li><code>docs/features/harden-opencode-plugin-compat.md</code></li><li><code>docs/features/improve-centinela-render-ui.md</code></li><li><code>docs/features/migrate-full-sync.md</code></li><li><code>docs/features/opencode-hook-parity.md</code></li><li><code>docs/features/orchestration-smoke-sim.md</code></li><li><code>docs/features/raise-test-coverage-90.md</code></li><li><code>docs/features/reach-100-coverage.md</code></li><li><code>docs/features/refactor-hook-policy-core.md</code></li><li><code>docs/features/roadmap-senior-pm-analysis.md</code></li></ul><h2>Plan Docs</h2><ul><li><code>docs/plans/adapt-opencode-support.md</code></li><li><code>docs/plans/add-ci-validate-workflow.md</code></li><li><code>docs/plans/auto-start-feature-intent.md</code></li><li><code>docs/plans/automate-semver-release.md</code></li><li><code>docs/plans/bootstrap-phase-zero-workflow.md</code></li><li><code>docs/plans/docs-consistency-pass.md</code></li><li><code>docs/plans/docs-migration-managed-docs.md</code></li><li><code>docs/plans/docs-readme-bootstrap-tutorial.md</code></li><li><code>docs/plans/docs-update-migrate-readme.md</code></li><li><code>docs/plans/edge-case-subagent-tests-phase.md</code></li><li><code>docs/plans/enforce-coverage-in-validate.md</code></li><li><code>docs/plans/enforce-step-subagent-orchestration.md</code></li><li><code>docs/plans/fix-release-trigger-after-bump.md</code></li><li><code>docs/plans/fix-release-workflow-run-tag-resolution.md</code></li><li><code>docs/plans/fix-roadmap-write-blocked.md</code></li><li><code>docs/plans/fix-setup-hook-template-detection.md</code></li><li><code>docs/plans/fix-setup-next-step.md</code></li><li><code>docs/plans/fix-validate-plan-by-name.md</code></li><li><code>docs/plans/generate-html-project-docs.md</code></li><li><code>docs/plans/harden-main-release-automation.md</code></li><li><code>docs/plans/harden-opencode-plugin-compat.md</code></li><li><code>docs/plans/improve-centinela-render-ui.md</code></li><li><code>docs/plans/migrate-full-sync.md</code></li><li><code>docs/plans/opencode-hook-parity.md</code></li><li><code>docs/plans/orchestration-smoke-sim.md</code></li><li><code>docs/plans/raise-test-coverage-90-gaps.md</code></li><li><code>docs/plans/raise-test-coverage-90.md</code></li><li><code>docs/plans/reach-100-coverage.md</code></li><li><code>docs/plans/refactor-hook-policy-core.md</code></li><li><code>docs/plans/roadmap-senior-pm-analysis.md</code></li></ul><h2>Evidence to Code References</h2><table border="1"><tr><th>Role</th><th>Feature</th><th>Step</th><th>Code refs</th></tr><tr><td>big-thinker</td><td><code>docs-readme-bootstrap-tutorial</code></td><td>plan</td><td><code>Tutorial information architecture</code><br><code>Intent phrase taxonomy for roadmap/start/continue</code></td></tr><tr><td>feature-specialist</td><td><code>docs-readme-bootstrap-tutorial</code></td><td>plan</td><td><code>docs/features/docs-readme-bootstrap-tutorial.md</code><br><code>docs/plans/docs-readme-bootstrap-tutorial.md</code><br><code>specs/docs-readme-bootstrap-tutorial.feature</code></td></tr><tr><td>qa-senior</td><td><code>docs-readme-bootstrap-tutorial</code></td><td>tests</td><td><code>README.md</code><br><code>.workflow/docs-readme-bootstrap-tutorial-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>docs-readme-bootstrap-tutorial</code></td><td>code</td><td><code>README bootstrap tutorial section</code><br><code>Natural-language command intent examples</code></td></tr><tr><td>big-thinker</td><td><code>docs-update-migrate-readme</code></td><td>plan</td><td><code>README migration docs update scope</code></td></tr><tr><td>feature-specialist</td><td><code>docs-update-migrate-readme</code></td><td>plan</td><td><code>docs/features/docs-update-migrate-readme.md</code><br><code>docs/plans/docs-update-migrate-readme.md</code><br><code>specs/docs-update-migrate-readme.feature</code></td></tr><tr><td>qa-senior</td><td><code>docs-update-migrate-readme</code></td><td>tests</td><td><code>README.md scenarios verified against migration command examples</code><br><code>.workflow/docs-update-migrate-readme-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>docs-update-migrate-readme</code></td><td>code</td><td><code>README.md migration command and hook guidance updates</code></td></tr><tr><td>big-thinker</td><td><code>generate-html-project-docs</code></td><td>plan</td><td><code>Command strategy and report composition plan</code></td></tr><tr><td>feature-specialist</td><td><code>generate-html-project-docs</code></td><td>plan</td><td><code>docs/features/generate-html-project-docs.md</code><br><code>docs/plans/generate-html-project-docs.md</code><br><code>specs/generate-html-project-docs.feature</code></td></tr><tr><td>qa-senior</td><td><code>generate-html-project-docs</code></td><td>tests</td><td><code>cmd/centinela/docs_generate_test.go</code><br><code>cmd/centinela/docs_validate_test.go</code><br><code>internal/docgen/*.go tests</code><br><code>tests/unit/docs_generate_unit_test.go</code><br><code>tests/acceptance/docs_generate_acceptance_test.go</code><br><code>.workflow/generate-html-project-docs-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>generate-html-project-docs</code></td><td>code</td><td><code>cmd/centinela/docs.go</code><br><code>cmd/centinela/docs_generate.go</code><br><code>cmd/centinela/docs_validate.go</code><br><code>internal/docgen/*</code><br><code>docs/architecture/documentation-generator-prompt.md</code></td></tr><tr><td>big-thinker</td><td><code>migrate-full-sync</code></td><td>plan</td><td><code>Unified migration direction</code><br><code>Safety-first apply strategy</code></td></tr><tr><td>feature-specialist</td><td><code>migrate-full-sync</code></td><td>plan</td><td><code>docs/features/migrate-full-sync.md</code><br><code>docs/plans/migrate-full-sync.md</code><br><code>specs/migrate-full-sync.feature</code></td></tr><tr><td>qa-senior</td><td><code>migrate-full-sync</code></td><td>tests</td><td><code>cmd/centinela/migrate_setup_test.go</code><br><code>internal/setup/sync_test.go</code><br><code>internal/ui/render_setup_migrate_test.go</code></td></tr><tr><td>senior-engineer</td><td><code>migrate-full-sync</code></td><td>code</td><td><code>Unified migrate command with apply support</code><br><code>Setup sync planning/apply implementation</code><br><code>Hook and UI migration-needed updates</code></td></tr><tr><td>big-thinker</td><td><code>orchestration-smoke-sim</code></td><td>plan</td><td><code>Plan-level simulation scope</code></td></tr><tr><td>feature-specialist</td><td><code>orchestration-smoke-sim</code></td><td>plan</td><td><code>docs/features/orchestration-smoke-sim.md</code><br><code>docs/plans/orchestration-smoke-sim.md</code><br><code>specs/orchestration-smoke-sim.feature</code></td></tr><tr><td>qa-senior</td><td><code>orchestration-smoke-sim</code></td><td>tests</td><td><code>tests/unit/orchestration_smoke_sim_test.go</code><br><code>tests/acceptance/orchestration_smoke_sim_test.go</code><br><code>.workflow/orchestration-smoke-sim-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>orchestration-smoke-sim</code></td><td>code</td><td><code>Code step evidence for simulation</code></td></tr><tr><td>big-thinker</td><td><code>roadmap-senior-pm-analysis</code></td><td>plan</td><td><code>Roadmap analysis enforcement direction</code><br><code>Validation and guard strategy</code></td></tr><tr><td>feature-specialist</td><td><code>roadmap-senior-pm-analysis</code></td><td>plan</td><td><code>docs/features/roadmap-senior-pm-analysis.md</code><br><code>docs/plans/roadmap-senior-pm-analysis.md</code><br><code>specs/roadmap-senior-pm-analysis.feature</code></td></tr><tr><td>qa-senior</td><td><code>roadmap-senior-pm-analysis</code></td><td>tests</td><td><code>internal/roadmap/analysis_test.go</code><br><code>cmd/centinela/start_guard_analysis_test.go</code><br><code>cmd/centinela/roadmap_validate_test.go</code><br><code>cmd/centinela/hook_setup_directive_test.go</code><br><code>internal/ui/render_other_test.go</code><br><code>tests/unit/roadmap_senior_pm_analysis_unit_test.go</code><br><code>tests/acceptance/roadmap_senior_pm_analysis_test.go</code><br><code>.workflow/roadmap-senior-pm-analysis-edge-cases.md</code></td></tr><tr><td>senior-engineer</td><td><code>roadmap-senior-pm-analysis</code></td><td>code</td><td><code>internal/roadmap/analysis.go</code><br><code>internal/roadmap/analysis_cycle.go</code><br><code>cmd/centinela/start_guard.go</code><br><code>cmd/centinela/roadmap_validate.go</code><br><code>cmd/centinela/hook_setup.go</code><br><code>internal/ui/render_roadmap.go</code><br><code>internal/ui/render_roadmap_analysis.go</code></td></tr></table></body></html>
+</pre></details></section></main></div></body></html>

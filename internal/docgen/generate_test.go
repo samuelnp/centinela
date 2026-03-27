@@ -20,7 +20,7 @@ func TestGenerateAndRender(t *testing.T) {
 		t.Fatalf("read output: %v", err)
 	}
 	s := string(out)
-	for _, want := range []string{"Mermaid: Feature Dependencies", "Comparison Matrix", "flowchart", "Evidence to Code References"} {
+	for _, want := range []string{"Project Overview", "Feature Topology", "Documentation Examples", "class=\"mermaid\""} {
 		if !strings.Contains(s, want) {
 			t.Fatalf("missing %q", want)
 		}
