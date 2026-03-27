@@ -1,0 +1,22 @@
+{
+  "feature": "improve-docs-llm-hybrid-ui",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Updated docgen renderer and docs prompt files"
+  ],
+  "outputs": [
+    "internal/docgen/generate_test.go",
+    "internal/docgen/render_more_test.go",
+    "tests/acceptance/docs_generate_acceptance_test.go",
+    "tests/acceptance/improve_docs_llm_hybrid_ui_acceptance_test.go",
+    ".workflow/improve-docs-llm-hybrid-ui-edge-cases.md"
+  ],
+  "edgeCases": [
+    "No workflow-specific mermaid graphs in generated HTML",
+    "Hybrid prompt includes LLM-first and fallback guidance"
+  ],
+  "handoffTo": "validate"
+}
