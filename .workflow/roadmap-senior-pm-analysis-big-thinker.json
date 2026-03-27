@@ -1,0 +1,16 @@
+{
+  "feature": "roadmap-senior-pm-analysis",
+  "step": "plan",
+  "role": "big-thinker",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Need roadmap-level quality and dependency sequencing before feature start"
+  ],
+  "outputs": [
+    "Roadmap analysis enforcement direction",
+    "Validation and guard strategy"
+  ],
+  "edgeCases": [],
+  "handoffTo": "feature-specialist"
+}

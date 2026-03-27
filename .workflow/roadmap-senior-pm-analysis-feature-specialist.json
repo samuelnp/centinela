@@ -1,0 +1,20 @@
+{
+  "feature": "roadmap-senior-pm-analysis",
+  "step": "plan",
+  "role": "feature-specialist",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Big-thinker handoff",
+    "Current roadmap/start guard behavior"
+  ],
+  "outputs": [
+    "docs/features/roadmap-senior-pm-analysis.md",
+    "docs/plans/roadmap-senior-pm-analysis.md",
+    "specs/roadmap-senior-pm-analysis.feature"
+  ],
+  "edgeCases": [
+    "Roadmap analysis can exist but be stale against roadmap features"
+  ],
+  "handoffTo": "senior-engineer"
+}
