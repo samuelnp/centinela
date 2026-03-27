@@ -1,0 +1,17 @@
+{
+  "feature": "docs-readme-bootstrap-tutorial",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Plan artifacts for docs-readme-bootstrap-tutorial",
+    "Existing README Quick Start structure"
+  ],
+  "outputs": [
+    "README bootstrap tutorial section",
+    "Natural-language command intent examples"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}

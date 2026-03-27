@@ -110,6 +110,61 @@ MIN_COVERAGE=96.5 ./scripts/check-coverage.sh
 
 Commands run natively via the OS. No shell scripts, no bash dependency — works on Windows, macOS, and Linux.
 
+### Example: Bootstrap a new project
+
+Use this flow when starting from scratch.
+
+```bash
+centinela init
+```
+
+Then open your coding agent in the repo and follow setup prompts.
+
+Expected sequence:
+
+1. If `PROJECT.md` is missing, centinela asks the agent to interview you and write it.
+2. Once `PROJECT.md` exists, centinela asks the agent to define your roadmap.
+3. The agent produces:
+   - `ROADMAP.md` (human-readable phased plan)
+   - `.workflow/roadmap.json` (machine-readable roadmap)
+   - `docs/features/<feature-slug>.md` for each Phase 1 feature
+
+Verify roadmap status:
+
+```bash
+centinela roadmap
+```
+
+Start implementation from the first roadmap feature:
+
+```bash
+centinela start <first-feature-slug>
+```
+
+You can also use natural language instead of typing commands directly. The agent
+maps your intent to centinela commands under the hood.
+
+Roadmap and status intent examples:
+
+- `Check roadmap`
+- `Show roadmap progress`
+- `What feature should we build next?`
+- `What step are we currently in?`
+
+Start feature intent examples:
+
+- `Implement first feature`
+- `Start the next roadmap feature`
+- `Begin feature: user-auth`
+- `Kick off checkout-flow`
+
+Continue feature intent examples:
+
+- `Continue current feature`
+- `Resume work on billing-retries`
+- `Complete this step`
+- `Move to the next step for onboarding-wizard`
+
 ### 4. Start building
 
 ```bash
