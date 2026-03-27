@@ -19,7 +19,11 @@ func buildHookSettings(path string) (bool, []byte, error) {
 	_ = json.Unmarshal(rawHooks["PostToolUse"], &post)
 	_ = json.Unmarshal(rawHooks["UserPromptSubmit"], &prompt)
 	if !mergeHooks(&pre, &post, &prompt) {
-		return false, nil, nil
+		if !ensureStatusLine(rawSettings) {
+			return false, nil, nil
+		}
+	} else {
+		ensureStatusLine(rawSettings)
 	}
 	rawHooks["PreToolUse"], _ = json.Marshal(pre)
 	rawHooks["PostToolUse"], _ = json.Marshal(post)

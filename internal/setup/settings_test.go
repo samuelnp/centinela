@@ -1,6 +1,7 @@
 package setup
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"testing"
@@ -21,5 +22,12 @@ func TestInjectHooksCreatesAndPreserves(t *testing.T) {
 	}
 	if _, err := os.Stat(path); err != nil {
 		t.Fatalf("missing settings file: %v", err)
+	}
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(data, []byte(`"statusLine"`)) {
+		t.Fatalf("expected statusLine config, got: %s", string(data))
 	}
 }

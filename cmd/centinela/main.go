@@ -21,7 +21,7 @@ var rootCmd = &cobra.Command{
 
 var hookCmd = &cobra.Command{
 	Use:   "hook",
-	Short: "Hook integrations (prewrite / postwrite / context / setup)",
+	Short: "Hook integrations (prewrite / postwrite / context / setup / statusline)",
 }
 
 func init() {
