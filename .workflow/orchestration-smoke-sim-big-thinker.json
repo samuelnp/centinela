@@ -1,0 +1,15 @@
+{
+  "feature": "orchestration-smoke-sim",
+  "step": "plan",
+  "role": "big-thinker",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Need to verify strict orchestration triggers"
+  ],
+  "outputs": [
+    "Plan-level simulation scope"
+  ],
+  "edgeCases": [],
+  "handoffTo": "feature-specialist"
+}
