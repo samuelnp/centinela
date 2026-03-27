@@ -185,7 +185,7 @@ The `/centinela-setup` wizard will ask you to describe these explicitly.
 
 Regardless of archetype:
 
-- **4-step workflow** — plan → code → tests → validate
+- **5-step workflow** — plan → code → tests → validate → docs
 - **Spec-first** — Gherkin before implementation
 - **Tests mandatory** — unit + acceptance cannot be skipped
 - **Gatekeeper AI** — conflict check before every implementation

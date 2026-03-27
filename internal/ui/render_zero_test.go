@@ -39,7 +39,7 @@ func TestRenderZeroCoverageFunctions(t *testing.T) {
 	wf := &workflow.Workflow{CurrentStep: "done", Steps: map[string]workflow.StepState{"plan": {Status: "done"}}}
 	wf2 := &workflow.Workflow{CurrentStep: "code", Steps: map[string]workflow.StepState{"code": {Status: "in-progress"}}}
 	wf3 := &workflow.Workflow{CurrentStep: "unknown", Steps: map[string]workflow.StepState{}}
-	if wfDoneCount(wf) != 4 || wfDoneCount(wf3) != 0 || roadmapIcon("planned") == "" || roadmapIcon("in-progress") == "" || stepStatusLine(wf2, "code", wf2.Steps["code"]) == "" || stepStatusLine(wf, "plan", wf.Steps["plan"]) == "" {
+	if wfDoneCount(wf) != 5 || wfDoneCount(wf3) != 0 || roadmapIcon("planned") == "" || roadmapIcon("in-progress") == "" || stepStatusLine(wf2, "code", wf2.Steps["code"]) == "" || stepStatusLine(wf, "plan", wf.Steps["plan"]) == "" {
 		t.Fatal("expected helper outputs")
 	}
 }

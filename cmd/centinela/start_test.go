@@ -40,10 +40,10 @@ func TestRunStartCreatesWorkflow(t *testing.T) {
 }
 
 func TestStepArrow(t *testing.T) {
-	if stepArrow([]string{"plan", "code", "validate"}) != "plan → code → validate" {
+	if stepArrow([]string{"plan", "code", "validate", "docs"}) != "plan → code → validate → docs" {
 		t.Fatal("expected three-step arrow")
 	}
-	if stepArrow([]string{"plan", "code", "tests", "validate"}) != "plan → code → tests → validate" {
+	if stepArrow([]string{"plan", "code", "tests", "validate", "docs"}) != "plan → code → tests → validate → docs" {
 		t.Fatal("expected four-step arrow")
 	}
 }

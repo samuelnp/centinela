@@ -9,15 +9,15 @@ import (
 
 // commitStep stages all changes and commits with a workflow step message.
 // Fails silently if git is unavailable, not a repo, or nothing to commit.
-func commitStep(feature, step string, stepNum int) {
+func commitStep(feature, step string, stepNum, total int) {
 	add := exec.Command("git", "add", "-A")
 	if err := add.Run(); err != nil {
 		return // not a git repo or git not installed
 	}
 
 	msg := fmt.Sprintf(
-		"chore(workflow): %s — %s complete [%d/4]",
-		feature, step, stepNum,
+		"chore(workflow): %s — %s complete [%d/%d]",
+		feature, step, stepNum, total,
 	)
 	commit := exec.Command("git", "commit", "-m", msg)
 	out, err := commit.CombinedOutput()

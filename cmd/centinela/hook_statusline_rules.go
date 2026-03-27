@@ -37,6 +37,15 @@ func statusBlockAndNext(wf *workflow.Workflow, cfg *config.Config) (string, stri
 		}
 		return "none", "run-validate"
 	}
+	if wf.CurrentStep == "docs" {
+		if !fileExists("docs/project-docs/index.html") {
+			return "MISSING_DOCS_OUTPUT", "run-documentation-specialist"
+		}
+		if err := workflow.ValidateArtifacts(wf.Feature, "docs", cfg); err != nil {
+			return "MISSING_DOCS_EVIDENCE", "write-docs-evidence"
+		}
+		return "none", "complete-step"
+	}
 	return "none", "implement-" + wf.CurrentStep
 }
 

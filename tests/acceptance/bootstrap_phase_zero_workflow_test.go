@@ -8,14 +8,14 @@ import (
 )
 
 // Acceptance: specs/bootstrap-phase-zero-workflow.feature
-func TestBootstrapWorkflowUsesThreeStepsAndStrictTestArtifacts(t *testing.T) {
+func TestBootstrapWorkflowUsesDocsStepAndStrictTestArtifacts(t *testing.T) {
 	workflowPath := filepath.Join("..", "..", "internal", "workflow", "order.go")
 	workflowData, err := os.ReadFile(workflowPath)
 	if err != nil {
 		t.Fatalf("read order file: %v", err)
 	}
 	workflowContent := string(workflowData)
-	if !strings.Contains(workflowContent, `{"plan", "code", "validate"}`) {
+	if !strings.Contains(workflowContent, `{"plan", "code", "validate", "docs"}`) {
 		t.Fatal("bootstrap step order missing")
 	}
 	validatePath := filepath.Join("..", "..", "internal", "workflow", "validate_tests.go")

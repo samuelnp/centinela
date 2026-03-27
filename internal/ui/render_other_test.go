@@ -53,4 +53,7 @@ func TestRenderRoadmapAndReview(t *testing.T) {
 	if !strings.Contains(RenderEdgeCaseReportNeeded("f"), "edge-case") {
 		t.Fatal("edge-case reminder should render")
 	}
+	if !strings.Contains(RenderDocumentationNeeded("f"), "Documentation") {
+		t.Fatal("documentation reminder should render")
+	}
 }

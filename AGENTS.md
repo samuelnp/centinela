@@ -7,7 +7,7 @@ This project uses Centinela workflow enforcement.
 - Read and follow CLAUDE.md for framework rules.
 - Read PROJECT.md before planning or coding.
 - Start every feature with centinela start <feature>.
-- Do not bypass workflow order: plan -> code -> tests -> validate.
+- Do not bypass workflow order: plan -> code -> tests -> validate -> docs.
 
 ## OpenCode Integration
 - Centinela prewrite checks are enforced by .opencode/plugins/centinela.js.

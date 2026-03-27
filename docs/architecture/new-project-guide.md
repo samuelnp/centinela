@@ -149,7 +149,7 @@ centinela start <feature-name>
 Then follow:
 
 ```
-plan -> code -> tests -> validate
+plan -> code -> tests -> validate -> docs
 ```
 
 
@@ -159,4 +159,3 @@ plan -> code -> tests -> validate
 - `centinela.toml` contains validate commands for your stack.
 - `centinela start test-feature` works.
 - Paths in `PROJECT.md` match actual project folders.
-

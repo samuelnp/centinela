@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -52,8 +53,5 @@ func runStart(_ *cobra.Command, args []string) error {
 }
 
 func stepArrow(order []string) string {
-	if len(order) == 3 {
-		return "plan → code → validate"
-	}
-	return "plan → code → tests → validate"
+	return strings.Join(order, " → ")
 }

@@ -70,3 +70,24 @@ func TestStatuslineRulesValidate(t *testing.T) {
 		t.Fatalf("expected prod blocking, got %s", block)
 	}
 }
+
+func TestStatuslineRulesDocs(t *testing.T) {
+	d := t.TempDir()
+	o := withDir(t, d)
+	defer o()
+	wf := workflow.New("alpha")
+	wf.CurrentStep = "docs"
+	cfg := &config.Config{}
+	mkdir(t, ".workflow")
+	workflow.Save(wf) //nolint:errcheck
+	block, _ := statusBlockAndNext(wf, cfg)
+	if block != "MISSING_DOCS_OUTPUT" {
+		t.Fatalf("expected missing docs output, got %s", block)
+	}
+	mkdir(t, "docs/project-docs")
+	write(t, "docs/project-docs/index.html", "<html></html>")
+	block, _ = statusBlockAndNext(wf, cfg)
+	if block != "MISSING_DOCS_EVIDENCE" {
+		t.Fatalf("expected missing docs evidence, got %s", block)
+	}
+}

@@ -18,7 +18,7 @@ func TestAgentFlags(t *testing.T) {
 }
 
 func TestNextStep(t *testing.T) {
-	if nextStep("plan") != "code" || nextStep("validate") != "done" {
+	if nextStep("plan") != "code" || nextStep("validate") != "docs" || nextStep("docs") != "done" {
 		t.Fatal("nextStep mismatch")
 	}
 }

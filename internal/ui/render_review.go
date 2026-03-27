@@ -27,3 +27,15 @@ func RenderEdgeCaseReportNeeded(feature string) string {
 	)
 	return renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body)
 }
+
+// RenderDocumentationNeeded reminds the agent to run docs-specialist workflow.
+func RenderDocumentationNeeded(feature string) string {
+	body := lipgloss.JoinVertical(lipgloss.Left,
+		StyleYellow.Render("⚠ Documentation output missing: "+feature),
+		"",
+		"Docs step requires generated human-facing documentation.",
+		StyleMuted.Render("Run docs specialist using docs/architecture/documentation-generator-prompt.md"),
+		StyleMuted.Render("Then write: docs/project-docs/index.html"),
+	)
+	return renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body)
+}

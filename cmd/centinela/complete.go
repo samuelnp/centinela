@@ -58,7 +58,7 @@ func runComplete(_ *cobra.Command, args []string) error {
 	}
 
 	if !cfg.Workflow.DisableAutoCommit {
-		commitStep(feature, current, workflow.StepNumberFor(wf, current))
+		commitStep(feature, current, workflow.StepNumberFor(wf, current), len(wf.OrderedSteps()))
 	}
 
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Step %q completed for %q.", current, feature)))

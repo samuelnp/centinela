@@ -2,9 +2,9 @@ package workflow
 
 import "time"
 
-var DefaultStepOrder = []string{"plan", "code", "tests", "validate"}
+var DefaultStepOrder = []string{"plan", "code", "tests", "validate", "docs"}
 
-var BootstrapStepOrder = []string{"plan", "code", "validate"}
+var BootstrapStepOrder = []string{"plan", "code", "validate", "docs"}
 
 const StrictOrchestrationMode = "strict-subagents-v1"
 

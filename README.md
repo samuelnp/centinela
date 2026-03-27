@@ -1,6 +1,6 @@
 # Centinela
 
-A development workflow enforcer for Claude Code and OpenCode projects. Centinela turns the "plan → code → tests → validate" discipline from a suggestion into a mechanical constraint — enforced by agent integrations that run automatically in coding sessions.
+A development workflow enforcer for Claude Code and OpenCode projects. Centinela turns the "plan → code → tests → validate → docs" discipline from a suggestion into a mechanical constraint — enforced by agent integrations that run automatically in coding sessions.
 
 ---
 
@@ -197,12 +197,12 @@ centinela migrate setup --agent both --apply
 
 ---
 
-## The Four-Step Workflow
+## The Five-Step Workflow
 
-Every feature follows the same four steps in order. No step can be skipped.
+Every feature follows the same five steps in order. No step can be skipped.
 
 ```
-plan → code → tests → validate
+plan → code → tests → validate → docs
 ```
 
 | Step | What you produce | What centinela checks before advancing |
@@ -211,6 +211,7 @@ plan → code → tests → validate
 | **code** | Implementation | Nothing — architecture rules govern this step |
 | **tests** | Unit, integration, acceptance + edge-case analysis | Test files exist + `.workflow/<feature>-edge-cases.md` exists |
 | **validate** | Gatekeeper conflict report | All gate checks pass + all `centinela.toml` commands exit 0 |
+| **docs** | Human-facing project documentation | `.workflow/<feature>-documentation-specialist.md` + `.workflow/<feature>-documentation-specialist.json` + `docs/project-docs/index.html` |
 
 ### Workflow commands
 
@@ -422,7 +423,7 @@ Centinela uses its own workflow to develop itself.
 
 ```bash
 centinela start <feature-name>
-# plan → code → tests → validate
+# plan → code → tests → validate → docs
 centinela complete <feature-name>
 ```
 

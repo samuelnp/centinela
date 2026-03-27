@@ -5,13 +5,13 @@
 
 ## Elevator Pitch
 
-Centinela is a best-practices and engineering workflow enforcement tool that forces Claude to always plan, write code, write tests, and validate — in order — without skipping steps.
+Centinela is a best-practices and engineering workflow enforcement tool that forces Claude to always plan, write code, write tests, validate, and document — in order — without skipping steps.
 
 ## Problem Statement
 
 **Who uses it:** Developers using Claude Code to autonomously generate code.
 
-**Pain it solves:** Claude tends to skip planning, skip writing tests, or jump straight to code without validation. Centinela enforces the plan → code → tests → validate cycle via Claude hooks, blocking out-of-order file writes and requiring explicit step completion.
+**Pain it solves:** Claude tends to skip planning, skip writing tests, or jump straight to code without validation and documentation. Centinela enforces the plan → code → tests → validate → docs cycle via Claude hooks, blocking out-of-order file writes and requiring explicit step completion.
 
 ## Architecture Choice
 
@@ -67,7 +67,7 @@ tests/
 
 | Entity | What it represents |
 |--------|--------------------|
-| Workflow | A single feature's 4-step lifecycle (plan → code → tests → validate) |
+| Workflow | A single feature's 5-step lifecycle (plan → code → tests → validate → docs) |
 | Step | One of the four phases; has a status (pending / in-progress / done) |
 | Feature | The named unit of work being tracked (maps to a `.workflow/<feature>.json` file) |
 | Gate | A built-in automated check (G1 file size, G11 i18n) run at the validate step |

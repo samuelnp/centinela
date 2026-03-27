@@ -25,11 +25,12 @@ centinela status <feature>    # Show progress
 centinela validate            # Run gate checks + validate commands
 ```
 
-### 4 Steps:
+### 5 Steps:
 1. **plan** -> Write plan in `docs/plans/` + Gherkin `.feature` spec in `specs/`
 2. **code** -> Write code in any layer. Architecture rules enforce correctness.
 3. **tests** -> Unit + integration + acceptance tests. All three must exist.
 4. **validate** -> Gatekeeper report + full test suite. All pass or it doesn't ship.
+5. **docs** -> Documentation specialist output + generated docs HTML.
 
 **No steps can be skipped. No skip command exists.**
 
@@ -40,8 +41,9 @@ centinela validate            # Run gate checks + validate commands
 | code | Nothing — architecture rules govern this |
 | tests | Test suite files in `tests/unit/` or `tests/integration/` + acceptance step definitions in `tests/acceptance/` + `.workflow/<feature>-edge-cases.md` |
 | validate | Gatekeeper report at `.workflow/<feature>-gatekeeper.md` + `centinela validate` passes |
+| docs | `.workflow/<feature>-documentation-specialist.md` + `.workflow/<feature>-documentation-specialist.json` + `docs/project-docs/index.html` |
 
-**Hooks auto-inject** `[workflow: <feature> | step: <step> | X/4]` after every file write.
+**Hooks auto-inject** `[workflow: <feature> | step: <step> | X/5]` after every file write.
 
 ## Folder Structure
 

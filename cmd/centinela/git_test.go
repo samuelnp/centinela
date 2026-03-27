@@ -18,7 +18,7 @@ func TestCommitStepNoPanic(t *testing.T) {
 	os.Setenv("GIT_COMMITTER_NAME", "t")     //nolint:errcheck
 	os.Setenv("GIT_COMMITTER_EMAIL", "t@t")  //nolint:errcheck
 	os.WriteFile("a.txt", []byte("x"), 0644) //nolint:errcheck
-	commitStep("f", "code", 2)
+	commitStep("f", "code", 2, 5)
 	out, _ := exec.Command("git", "log", "--oneline", "-1").CombinedOutput()
 	if len(out) == 0 {
 		t.Fatal("expected at least one git commit")

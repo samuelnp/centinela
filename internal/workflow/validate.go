@@ -22,6 +22,8 @@ func ValidateArtifacts(feature, step string, cfg *config.Config) error {
 			return err
 		}
 		err = validateProductionReadiness(feature, cfg)
+	case "docs":
+		err = validateDocsOutput(feature)
 	}
 	if err != nil {
 		return err

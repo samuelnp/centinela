@@ -60,6 +60,14 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 			fmt.Println(ui.RenderEdgeCaseReportNeeded(wf.Feature))
 		}
 	}
+	for _, wf := range wfs {
+		if wf.CurrentStep != "docs" {
+			continue
+		}
+		if _, err := os.Stat("docs/project-docs/index.html"); os.IsNotExist(err) {
+			fmt.Println(ui.RenderDocumentationNeeded(wf.Feature))
+		}
+	}
 	return nil
 }
 

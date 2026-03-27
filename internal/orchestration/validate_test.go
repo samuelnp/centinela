@@ -13,7 +13,7 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	defer os.Chdir(o)              //nolint:errcheck
 	os.Chdir(d)                    //nolint:errcheck
 	os.MkdirAll(".workflow", 0755) //nolint:errcheck
-	if len(RequiredRoles("plan")) != 2 || len(RequiredRoles("code")) != 1 || len(RequiredRoles("validate")) != 0 {
+	if len(RequiredRoles("plan")) != 2 || len(RequiredRoles("code")) != 1 || len(RequiredRoles("docs")) != 1 || len(RequiredRoles("validate")) != 0 {
 		t.Fatal("unexpected role mapping")
 	}
 	if err := ValidateStep("f", "plan"); err == nil {
@@ -23,6 +23,13 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	writeEvidence(t, "f", "plan", RoleFeatureSpecial, true)
 	if err := ValidateStep("f", "plan"); err != nil {
 		t.Fatalf("expected valid evidence: %v", err)
+	}
+	if err := ValidateStep("f", "docs"); err == nil {
+		t.Fatal("expected missing docs evidence failure")
+	}
+	writeEvidence(t, "f", "docs", RoleDocsSpecialist, false)
+	if err := ValidateStep("f", "docs"); err != nil {
+		t.Fatalf("expected docs evidence success: %v", err)
 	}
 }
 

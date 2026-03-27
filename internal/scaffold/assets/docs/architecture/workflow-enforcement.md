@@ -116,5 +116,5 @@ Commands run natively via the OS — no shell scripts required. This works on Wi
 
 ## Skip Rules
 
-All four steps are mandatory. No step can be skipped — this is enforced by the binary.
+All five steps are mandatory. No step can be skipped — this is enforced by the binary.
 Domain/core logic, tests, and validate are especially non-negotiable.

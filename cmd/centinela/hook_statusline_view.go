@@ -58,7 +58,8 @@ func isRoleWorkflow(feature string) bool {
 	return strings.HasSuffix(feature, "-big-thinker") ||
 		strings.HasSuffix(feature, "-feature-specialist") ||
 		strings.HasSuffix(feature, "-senior-engineer") ||
-		strings.HasSuffix(feature, "-qa-senior")
+		strings.HasSuffix(feature, "-qa-senior") ||
+		strings.HasSuffix(feature, "-documentation-specialist")
 }
 
 func doneCount(wf *workflow.Workflow) int {

@@ -116,7 +116,7 @@ Commands run natively via the OS — no shell scripts required. This works on Wi
 
 ## Skip Rules
 
-All four steps are mandatory. No step can be skipped — this is enforced by the binary.
+All five steps are mandatory. No step can be skipped — this is enforced by the binary.
 Domain/core logic, tests, and validate are especially non-negotiable.
 
 ## Preserved Custom Sections
@@ -125,7 +125,7 @@ Domain/core logic, tests, and validate are especially non-negotiable.
 
 Each feature has `.workflow/<feature>.json` with:
 
-- `currentStep` in `plan|code|tests|validate|done`
+- `currentStep` in `plan|code|tests|validate|docs|done`
 - per-step status (`pending|in-progress|done`)
 - completion timestamps
 
@@ -164,4 +164,3 @@ These hooks are wired by `centinela init` for Claude and OpenCode integrations.
 2. Do work only for the active step.
 3. After producing artifacts, run `centinela complete <feature>`.
 4. Do not auto-advance without explicit user confirmation.
-
