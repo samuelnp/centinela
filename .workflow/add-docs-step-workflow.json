@@ -1,7 +1,7 @@
 {
   "feature": "add-docs-step-workflow",
   "startedAt": "2026-03-27T22:53:15.229944Z",
-  "currentStep": "validate",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
@@ -16,8 +16,8 @@
       "completedAt": "2026-03-27T23:05:13Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-27T23:06:01Z"
     }
   },
   "stepOrder": [
