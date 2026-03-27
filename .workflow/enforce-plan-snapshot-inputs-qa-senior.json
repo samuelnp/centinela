@@ -1,0 +1,22 @@
+{
+  "feature": "enforce-plan-snapshot-inputs",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-03-28T00:00:00Z",
+  "inputs": [
+    "internal/orchestration/evidence.go",
+    "internal/orchestration/plan_snapshot.go"
+  ],
+  "outputs": [
+    "internal/orchestration/evidence_snapshot_test.go",
+    "internal/orchestration/validate_test.go",
+    "internal/workflow/validate_orchestration_test.go",
+    ".workflow/enforce-plan-snapshot-inputs-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Plan evidence fails if any docs/features file is missing from inputs",
+    "Path normalization handles relative and prefixed forms"
+  ],
+  "handoffTo": "validate"
+}
