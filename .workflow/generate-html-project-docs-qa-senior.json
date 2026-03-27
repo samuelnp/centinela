@@ -1,0 +1,23 @@
+{
+  "feature": "generate-html-project-docs",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Docs command and internal generator implementation"
+  ],
+  "outputs": [
+    "cmd/centinela/docs_generate_test.go",
+    "cmd/centinela/docs_validate_test.go",
+    "internal/docgen/*.go tests",
+    "tests/unit/docs_generate_unit_test.go",
+    "tests/acceptance/docs_generate_acceptance_test.go",
+    ".workflow/generate-html-project-docs-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Generator fallback when roadmap-analysis artifacts are absent",
+    "Validation failure messages for missing roadmap inputs"
+  ],
+  "handoffTo": "validate"
+}
