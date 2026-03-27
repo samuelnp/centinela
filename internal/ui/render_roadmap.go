@@ -30,7 +30,10 @@ func RenderRoadmapNeeded() string {
 		StyleMuted.Render("   ## Problem · ## User Stories · ## Acceptance Criteria"),
 		StyleMuted.Render("   ## Edge Cases · ## Data Model · ## Integration Points"),
 		StyleMuted.Render("   ## Risks · ## Decomposition"),
-		StyleMuted.Render("6. Suggest: centinela start <first-feature>"),
+		StyleMuted.Render("6. Delegate senior PM analysis and write roadmap artifacts:"),
+		StyleMuted.Render("   .workflow/roadmap-analysis.md + .workflow/roadmap-analysis.json"),
+		StyleMuted.Render("   JSON role must be senior-product-manager"),
+		StyleMuted.Render("7. Suggest: centinela start <first-feature>"),
 		"",
 		StyleRed.Render("Do not start any feature until the roadmap AND feature briefs are written."),
 	)

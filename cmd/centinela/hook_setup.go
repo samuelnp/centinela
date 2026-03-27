@@ -38,6 +38,11 @@ func runHookSetup(_ *cobra.Command, _ []string) error {
 		fmt.Println(ui.RenderRoadmapNeeded())
 		return nil
 	}
+	if !exists(".workflow/roadmap-analysis.md") || !exists(".workflow/roadmap-analysis.json") {
+		fmt.Println("CENTINELA DIRECTIVE: roadmap analysis required. Delegate to senior product manager.")
+		fmt.Println(ui.RenderRoadmapAnalysisNeeded())
+		return nil
+	}
 	if !exists("docs/architecture/production-readiness-prompt.md") {
 		fmt.Println("CENTINELA DIRECTIVE: configure production-readiness prompt before continuing.")
 		fmt.Println(ui.RenderProductionReadinessSetupNeeded())

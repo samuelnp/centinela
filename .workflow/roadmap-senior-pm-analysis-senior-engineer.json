@@ -1,0 +1,22 @@
+{
+  "feature": "roadmap-senior-pm-analysis",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Plan artifacts for roadmap-senior-pm-analysis",
+    "Existing roadmap and start guard behavior"
+  ],
+  "outputs": [
+    "internal/roadmap/analysis.go",
+    "internal/roadmap/analysis_cycle.go",
+    "cmd/centinela/start_guard.go",
+    "cmd/centinela/roadmap_validate.go",
+    "cmd/centinela/hook_setup.go",
+    "internal/ui/render_roadmap.go",
+    "internal/ui/render_roadmap_analysis.go"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}
