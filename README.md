@@ -220,6 +220,8 @@ centinela status <feature>      # Show current step and artifact status
 centinela status-all            # Show all active features
 centinela complete <feature>    # Mark step done and advance
 centinela validate              # Run gate checks manually
+centinela docs validate         # Validate inputs for project documentation report
+centinela docs generate         # Generate HTML docs with Mermaid diagrams
 ```
 
 ---
@@ -374,7 +376,7 @@ your-project/
 
 ## Included Architecture Documentation
 
-`centinela init` copies 14 reference documents into `docs/architecture/`:
+`centinela init` copies 15 reference documents into `docs/architecture/`:
 
 | Document | Contents |
 |----------|---------|
@@ -388,6 +390,7 @@ your-project/
 | `testing-strategy.md` | Unit, integration, and acceptance test structure for all archetypes |
 | `gatekeepers.md` | Full gate reference (G1–G11) with per-archetype rules |
 | `gatekeeper-prompt.md` | Prompt for the Gatekeeper AI subagent conflict review |
+| `documentation-generator-prompt.md` | Prompt template for running docs HTML generation workflow |
 | `workflow-enforcement.md` | How the three enforcement layers work |
 | `i18n-strategy.md` | Translation key conventions by format |
 | `example-feature-walkthrough.md` | End-to-end example of the four-step workflow |
