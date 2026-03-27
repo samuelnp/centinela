@@ -1,0 +1,21 @@
+{
+  "feature": "docs-readme-bootstrap-tutorial",
+  "step": "plan",
+  "role": "feature-specialist",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Big-thinker orchestration output",
+    "Current README Quick Start structure"
+  ],
+  "outputs": [
+    "docs/features/docs-readme-bootstrap-tutorial.md",
+    "docs/plans/docs-readme-bootstrap-tutorial.md",
+    "specs/docs-readme-bootstrap-tutorial.feature"
+  ],
+  "edgeCases": [
+    "Users prefer chat prompts over direct CLI commands",
+    "Greenfield flow requires roadmap artifacts before feature start"
+  ],
+  "handoffTo": "senior-engineer"
+}
