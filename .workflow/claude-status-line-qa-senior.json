@@ -1,0 +1,23 @@
+{
+  "feature": "claude-status-line",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-03-27T12:00:00Z",
+  "inputs": [
+    "specs/claude-status-line.feature",
+    "cmd/centinela/hook_statusline_test.go"
+  ],
+  "outputs": [
+    "tests/unit/claude_statusline_unit_test.go",
+    "tests/integration/claude_statusline_integration_test.go",
+    "tests/acceptance/claude_statusline_acceptance_test.go",
+    ".workflow/claude-status-line-edge-cases.md"
+  ],
+  "edgeCases": [
+    "no active workflow",
+    "malformed workflow entries",
+    "tests step missing edge-case report"
+  ],
+  "handoffTo": "validate"
+}
