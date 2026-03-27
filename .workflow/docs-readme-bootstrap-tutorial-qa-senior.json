@@ -1,0 +1,20 @@
+{
+  "feature": "docs-readme-bootstrap-tutorial",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "README bootstrap tutorial content",
+    "Existing Quick Start and workflow command documentation"
+  ],
+  "outputs": [
+    "README.md",
+    ".workflow/docs-readme-bootstrap-tutorial-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Natural-language aliases for starting features",
+    "Natural-language aliases for continuing active feature work"
+  ],
+  "handoffTo": "validate"
+}
