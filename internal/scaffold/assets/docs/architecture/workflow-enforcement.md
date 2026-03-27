@@ -118,3 +118,7 @@ Commands run natively via the OS — no shell scripts required. This works on Wi
 
 All five steps are mandatory. No step can be skipped — this is enforced by the binary.
 Domain/core logic, tests, and validate are especially non-negotiable.
+
+In strict orchestration mode, `plan` evidence from `big-thinker` and
+`feature-specialist` must include all `docs/features/*.md` paths in JSON `inputs`
+(including the current feature brief).

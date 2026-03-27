@@ -1,18 +1,18 @@
 {
   "feature": "enforce-plan-snapshot-inputs",
   "startedAt": "2026-03-27T23:10:47.581098Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-27T23:15:02Z"
     },
     "plan": {
       "status": "done",
       "completedAt": "2026-03-27T23:12:00Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {

@@ -142,6 +142,11 @@ Before advancing, Centinela validates required artifacts:
 | code | none (architecture rules apply during implementation) |
 | tests | test files in `tests/unit` or `tests/integration`, acceptance files in `tests/acceptance`, and `.workflow/<feature>-edge-cases.md` |
 | validate | gatekeeper report at `.workflow/<feature>-gatekeeper.md` and `centinela validate` pass |
+| docs | `.workflow/<feature>-documentation-specialist.md`, `.workflow/<feature>-documentation-specialist.json`, and `docs/project-docs/index.html` |
+
+In strict orchestration mode, `plan` evidence from `big-thinker` and
+`feature-specialist` must include a full snapshot of `docs/features/*.md` paths in
+their JSON `inputs` list (including the current feature brief).
 
 If validation fails, the step remains in progress.
 

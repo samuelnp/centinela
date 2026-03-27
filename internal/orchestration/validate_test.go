@@ -50,9 +50,13 @@ func writeEvidence(t *testing.T, f, s string, r Role, edge bool) {
 	t.Helper()
 	os.WriteFile(MarkdownPath(f, r), []byte("# evidence"), 0644) //nolint:errcheck
 	edgeCases := `[]`
+	inputs := `"inputs":["i"]`
+	if s == "plan" && (r == RoleBigThinker || r == RoleFeatureSpecial) {
+		inputs = `"inputs":["docs/features/` + f + `.md"]`
+	}
 	if edge {
 		edgeCases = `["e"]`
 	}
-	data := `{"feature":"` + f + `","step":"` + s + `","role":"` + string(r) + `","status":"done","generatedAt":"` + time.Now().UTC().Format(time.RFC3339) + `","inputs":["i"],"outputs":["o"],"edgeCases":` + edgeCases + `,"handoffTo":"orchestrator","extra":"ok"}`
+	data := `{"feature":"` + f + `","step":"` + s + `","role":"` + string(r) + `","status":"done","generatedAt":"` + time.Now().UTC().Format(time.RFC3339) + `",` + inputs + `,"outputs":["o"],"edgeCases":` + edgeCases + `,"handoffTo":"orchestrator","extra":"ok"}`
 	os.WriteFile(JSONPath(f, r), []byte(data), 0644) //nolint:errcheck
 }
