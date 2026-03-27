@@ -41,3 +41,22 @@ func TestRunHookSetupDirectiveBeforePanel(t *testing.T) {
 		}
 	})
 }
+
+func TestRunHookSetupRoadmapAnalysisDirective(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o)                             //nolint:errcheck
+	os.Chdir(d)                                   //nolint:errcheck
+	os.WriteFile("PROJECT.md", []byte("x"), 0644) //nolint:errcheck
+	os.WriteFile("ROADMAP.md", []byte("x"), 0644) //nolint:errcheck
+
+	withStdin(t, "{}", func() {
+		out := captureStdout(t, func() { _ = runHookSetup(nil, nil) })
+		if !strings.Contains(out, "roadmap analysis required") {
+			t.Fatalf("expected roadmap analysis directive, got %q", out)
+		}
+		if !strings.Contains(out, "senior PM review required") {
+			t.Fatalf("expected roadmap analysis panel content, got %q", out)
+		}
+	})
+}

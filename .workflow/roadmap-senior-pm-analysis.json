@@ -1,7 +1,7 @@
 {
   "feature": "roadmap-senior-pm-analysis",
   "startedAt": "2026-03-27T21:17:57.021941Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -12,11 +12,11 @@
       "completedAt": "2026-03-27T21:18:43Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-03-27T21:29:45Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },

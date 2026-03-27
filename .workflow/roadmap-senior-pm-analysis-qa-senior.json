@@ -1,0 +1,25 @@
+{
+  "feature": "roadmap-senior-pm-analysis",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Code changes for roadmap analysis validation and setup/start enforcement"
+  ],
+  "outputs": [
+    "internal/roadmap/analysis_test.go",
+    "cmd/centinela/start_guard_analysis_test.go",
+    "cmd/centinela/roadmap_validate_test.go",
+    "cmd/centinela/hook_setup_directive_test.go",
+    "internal/ui/render_other_test.go",
+    "tests/unit/roadmap_senior_pm_analysis_unit_test.go",
+    "tests/acceptance/roadmap_senior_pm_analysis_test.go",
+    ".workflow/roadmap-senior-pm-analysis-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Dependency cycles in roadmap analysis",
+    "Missing senior PM analysis blocks greenfield feature start"
+  ],
+  "handoffTo": "validate"
+}
