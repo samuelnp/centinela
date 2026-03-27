@@ -1,0 +1,17 @@
+{
+  "feature": "claude-status-line",
+  "step": "plan",
+  "role": "big-thinker",
+  "status": "done",
+  "generatedAt": "2026-03-27T12:00:00Z",
+  "inputs": [
+    "docs/features/claude-status-line.md",
+    "docs/plans/claude-status-line.md"
+  ],
+  "outputs": [
+    "specs/claude-status-line.feature",
+    "plan alignment confirmed"
+  ],
+  "edgeCases": [],
+  "handoffTo": "feature-specialist"
+}

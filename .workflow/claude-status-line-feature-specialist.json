@@ -1,0 +1,21 @@
+{
+  "feature": "claude-status-line",
+  "step": "plan",
+  "role": "feature-specialist",
+  "status": "done",
+  "generatedAt": "2026-03-27T12:00:00Z",
+  "inputs": [
+    "docs/features/claude-status-line.md",
+    "specs/claude-status-line.feature"
+  ],
+  "outputs": [
+    "plan acceptance confirmed",
+    "implementation constraints captured"
+  ],
+  "edgeCases": [
+    "no workflow state",
+    "missing tests edge-case report",
+    "missing validate gatekeeper report"
+  ],
+  "handoffTo": "senior-engineer"
+}

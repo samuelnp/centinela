@@ -1,0 +1,9 @@
+{
+  "role": "senior-product-manager",
+  "features": [
+    {
+      "name": "docs-migration-managed-docs",
+      "dependsOn": []
+    }
+  ]
+}
