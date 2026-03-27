@@ -1,0 +1,30 @@
+{
+  "feature": "add-docs-step-workflow",
+  "startedAt": "2026-03-27T22:53:15.229944Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-27T22:55:55Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

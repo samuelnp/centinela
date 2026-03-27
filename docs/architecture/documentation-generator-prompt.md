@@ -1,3 +1,4 @@
+<!-- centinela:doc-version=1 template=docs/architecture/documentation-generator-prompt.md -->
 # Documentation Generator Skill Prompt
 
 Use this prompt when you want an agent to generate project documentation HTML.

@@ -1,0 +1,15 @@
+{
+  "feature": "add-docs-step-workflow",
+  "step": "plan",
+  "role": "big-thinker",
+  "status": "done",
+  "generatedAt": "2026-03-27T00:00:00Z",
+  "inputs": [
+    "Request to enforce docs as final workflow step"
+  ],
+  "outputs": [
+    "5-step workflow strategy including bootstrap"
+  ],
+  "edgeCases": [],
+  "handoffTo": "feature-specialist"
+}

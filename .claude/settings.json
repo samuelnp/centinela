@@ -89,5 +89,9 @@
         ]
       }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "centinela hook statusline"
   }
 }
