@@ -37,6 +37,38 @@ func writeRoadmapAnalysis(t *testing.T, names ...string) {
 	}
 }
 
+func writeRoadmapQuality(t *testing.T, overall int, names ...string) {
+	t.Helper()
+	type scores struct {
+		AcceptanceCriteria int `json:"acceptanceCriteria"`
+		UserValue          int `json:"userValue"`
+		DefinitionClarity  int `json:"definitionClarity"`
+		Dependencies       int `json:"dependencies"`
+		EffortEstimation   int `json:"effortEstimation"`
+		Overall            int `json:"overall"`
+	}
+	type item struct {
+		Name    string `json:"name"`
+		Scores  scores `json:"scores"`
+		Summary string `json:"summary"`
+	}
+	payload := struct {
+		Role      string `json:"role"`
+		Threshold int    `json:"threshold"`
+		Features  []item `json:"features"`
+	}{Role: "roadmap-quality-evaluator", Threshold: 9}
+	for _, name := range names {
+		s := scores{9, 9, 9, 9, 2, overall}
+		payload.Features = append(payload.Features, item{Name: name, Scores: s, Summary: "ok"})
+	}
+	os.WriteFile(".workflow/roadmap-quality.md", []byte("# ok"), 0644) //nolint:errcheck
+	data, err := json.Marshal(payload)
+	if err != nil {
+		t.Fatalf("marshal quality: %v", err)
+	}
+	os.WriteFile(".workflow/roadmap-quality.json", data, 0644) //nolint:errcheck
+}
+
 func TestWorkflowOrderForFeatureGreenfieldRequiresAnalysis(t *testing.T) {
 	d := t.TempDir()
 	o, _ := os.Getwd()

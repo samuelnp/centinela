@@ -29,6 +29,7 @@ func TestWorkflowOrderForFeatureGreenfieldBlocksNonBootstrap(t *testing.T) {
 	r := &roadmap.Roadmap{Phases: []roadmap.Phase{{Name: "Phase 0: Bootstrap", Features: []roadmap.Feature{{Name: "setup"}}}}}
 	roadmap.Save(r) //nolint:errcheck
 	writeRoadmapAnalysis(t, "setup")
+	writeRoadmapQuality(t, 9, "setup")
 	if _, err := workflowOrderForFeature("feature-x"); err == nil {
 		t.Fatal("expected greenfield non-bootstrap to be blocked")
 	}
@@ -43,6 +44,7 @@ func TestWorkflowOrderForFeatureGreenfieldBootstrapUsesThreeSteps(t *testing.T) 
 	r := &roadmap.Roadmap{Phases: []roadmap.Phase{{Name: "Phase 0: Bootstrap", Features: []roadmap.Feature{{Name: "setup"}}}}}
 	roadmap.Save(r) //nolint:errcheck
 	writeRoadmapAnalysis(t, "setup")
+	writeRoadmapQuality(t, 9, "setup")
 	order, err := workflowOrderForFeature("setup")
 	if err != nil || len(order) != 4 || order[2] != "validate" || order[3] != "docs" {
 		t.Fatalf("expected bootstrap order: %v %v", order, err)
@@ -65,6 +67,7 @@ func TestWorkflowOrderForFeatureGreenfieldRequiresRoadmapAndBootstrapPhase(t *te
 	r := &roadmap.Roadmap{Phases: []roadmap.Phase{{Name: "Phase 1", Features: []roadmap.Feature{{Name: "x"}}}}}
 	roadmap.Save(r) //nolint:errcheck
 	writeRoadmapAnalysis(t, "x")
+	writeRoadmapQuality(t, 9, "x")
 	if _, err := workflowOrderForFeature("x"); err == nil {
 		t.Fatal("expected error when bootstrap phase is missing")
 	}
@@ -79,6 +82,7 @@ func TestWorkflowOrderForFeatureGreenfieldAllowsAfterBootstrapComplete(t *testin
 	r := &roadmap.Roadmap{Phases: []roadmap.Phase{{Name: "Phase 0: Bootstrap", Features: []roadmap.Feature{{Name: "setup"}}}, {Name: "Phase 1", Features: []roadmap.Feature{{Name: "feature-x"}}}}}
 	roadmap.Save(r) //nolint:errcheck
 	writeRoadmapAnalysis(t, "setup", "feature-x")
+	writeRoadmapQuality(t, 9, "setup", "feature-x")
 	os.MkdirAll(workflow.WorkflowDir, 0755)                                                                          //nolint:errcheck
 	workflow.Save(&workflow.Workflow{Feature: "setup", CurrentStep: "done", Steps: map[string]workflow.StepState{}}) //nolint:errcheck
 	order, err := workflowOrderForFeature("feature-x")

@@ -14,6 +14,7 @@ func RenderRoadmapAnalysisNeeded() string {
 		StyleMuted.Render("3. Write .workflow/roadmap-analysis.md summary"),
 		StyleMuted.Render("4. Write .workflow/roadmap-analysis.json with role senior-product-manager"),
 		StyleMuted.Render("   Include all roadmap features and dependsOn arrays"),
+		StyleMuted.Render("5. After this, run roadmap quality scoring until all features are overall >= 9"),
 		"",
 		StyleRed.Render("Do not start features until roadmap analysis artifacts are present."),
 	)

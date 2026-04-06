@@ -84,6 +84,8 @@ func TestRunHookSetupProductionReadinessDirective(t *testing.T) {
 	os.MkdirAll(".workflow", 0755)                                      //nolint:errcheck
 	os.WriteFile(".workflow/roadmap-analysis.md", []byte("x"), 0644)    //nolint:errcheck
 	os.WriteFile(".workflow/roadmap-analysis.json", []byte("{}"), 0644) //nolint:errcheck
+	os.WriteFile(".workflow/roadmap-quality.md", []byte("x"), 0644)     //nolint:errcheck
+	os.WriteFile(".workflow/roadmap-quality.json", []byte("{}"), 0644)  //nolint:errcheck
 	withStdin(t, "{}", func() {
 		out := captureStdout(t, func() { _ = runHookSetup(nil, nil) })
 		if !strings.Contains(out, "production-readiness prompt") {

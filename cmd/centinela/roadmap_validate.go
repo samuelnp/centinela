@@ -11,7 +11,7 @@ import (
 
 var roadmapValidateCmd = &cobra.Command{
 	Use:   "validate",
-	Short: "Validate roadmap dependency analysis artifacts",
+	Short: "Validate roadmap analysis and quality artifacts",
 	RunE:  runRoadmapValidate,
 }
 
@@ -27,6 +27,9 @@ func runRoadmapValidate(_ *cobra.Command, _ []string) error {
 	if err := roadmap.ValidateAnalysis(r); err != nil {
 		return err
 	}
-	fmt.Println(ui.RenderSuccess("Roadmap analysis is valid."))
+	if err := roadmap.ValidateQuality(r); err != nil {
+		return err
+	}
+	fmt.Println(ui.RenderSuccess("Roadmap analysis and quality are valid."))
 	return nil
 }

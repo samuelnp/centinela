@@ -19,6 +19,7 @@ func TestRunRoadmapValidate(t *testing.T) {
 		t.Fatal("expected missing analysis error")
 	}
 	writeRoadmapAnalysis(t, "user")
+	writeRoadmapQuality(t, 9, "user")
 	if err := runRoadmapValidate(nil, nil); err != nil {
 		t.Fatalf("expected validate success, got %v", err)
 	}

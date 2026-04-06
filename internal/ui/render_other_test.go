@@ -38,6 +38,9 @@ func TestRenderRoadmapAndReview(t *testing.T) {
 	if !strings.Contains(RenderRoadmapAnalysisNeeded(), "senior PM") {
 		t.Fatal("roadmap analysis output missing marker")
 	}
+	if !strings.Contains(RenderRoadmapQualityNeeded(), "overall score") {
+		t.Fatal("roadmap quality output missing marker")
+	}
 	if !strings.Contains(RenderRoadmapSummary(r), "Roadmap") {
 		t.Fatal("roadmap summary output missing label")
 	}
