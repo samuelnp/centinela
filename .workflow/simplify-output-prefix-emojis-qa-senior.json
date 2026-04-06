@@ -1,0 +1,21 @@
+{
+  "feature": "simplify-output-prefix-emojis",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-04-06T17:40:00Z",
+  "inputs": [
+    "internal/ui/persona_test.go",
+    "tests/integration/add_personality_feedback_integration_test.go",
+    "tests/acceptance/add_personality_feedback_test.go"
+  ],
+  "outputs": [
+    "tests/unit/add_personality_feedback_unit_test.go",
+    "tests/integration/improve_centinela_render_ui_integration_test.go",
+    ".workflow/simplify-output-prefix-emojis-edge-cases.md"
+  ],
+  "edgeCases": [
+    "All tones use same emoji prefix without losing HOOK/CLI metadata"
+  ],
+  "handoffTo": "validate"
+}
