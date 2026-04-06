@@ -1,0 +1,19 @@
+{
+  "feature": "configurable-step-confirmation-mode",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-04-06T17:19:00Z",
+  "inputs": [
+    "README.md",
+    "CLAUDE.md",
+    "internal/scaffold/assets/centinela.toml",
+    "docs/architecture/workflow-enforcement.md"
+  ],
+  "outputs": [
+    ".workflow/configurable-step-confirmation-mode-documentation-specialist.md",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

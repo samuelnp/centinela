@@ -1,15 +1,15 @@
 {
   "feature": "configurable-step-confirmation-mode",
   "startedAt": "2026-04-06T21:06:20.852041Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-04-06T21:12:26Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-06T21:13:59Z"
     },
     "plan": {
       "status": "done",
