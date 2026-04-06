@@ -213,6 +213,13 @@ plan → code → tests → validate → docs
 | **validate** | Gatekeeper conflict report | All gate checks pass + all `centinela.toml` commands exit 0 |
 | **docs** | Human-facing project documentation | `.workflow/<feature>-documentation-specialist.md` + `.workflow/<feature>-documentation-specialist.json` + `docs/project-docs/index.html` |
 
+Step confirmation prompts are configurable in `centinela.toml`:
+
+```toml
+[workflow]
+step_confirmation_mode = "every_step" # every_step | after_plan | auto
+```
+
 ### Workflow commands
 
 ```bash

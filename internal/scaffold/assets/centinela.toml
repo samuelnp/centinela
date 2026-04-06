@@ -17,11 +17,17 @@
 # code_dirs: path segments that classify a file as "code" (step enforcement).
 #   Leave empty to use the built-in defaults:
 #   /src/, /app/, /cmd/, /internal/, /pkg/, /lib/, /backend/, /frontend/
+#
+# step_confirmation_mode: when Centinela should ask before step advancement.
+#   "every_step" (default): ask before each `centinela complete`.
+#   "after_plan": ask only for plan -> code transition.
+#   "auto": no review prompt (agent still runs `centinela complete` explicitly).
 # ---------------------------------------------------------------------------
 [workflow]
 # test_suffixes      = ["_test.go"]
 # acceptance_suffix  = "_steps_test.go"
 # code_dirs          = ["/cmd/", "/internal/", "/pkg/"]
+# step_confirmation_mode = "every_step"
 
 # ---------------------------------------------------------------------------
 # Validate commands

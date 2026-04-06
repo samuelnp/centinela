@@ -30,6 +30,8 @@ type WorkflowConfig struct {
 	CodeDirs []string `toml:"code_dirs"`
 	// DisableAutoCommit prevents centinela from committing on step completion.
 	DisableAutoCommit bool `toml:"disable_auto_commit"`
+	// StepConfirmationMode controls when review prompts are shown.
+	StepConfirmationMode string `toml:"step_confirmation_mode"`
 }
 
 // ValidateConfig holds user-defined commands that centinela runs during validate.
@@ -86,4 +88,5 @@ func applyDefaults(cfg *Config) {
 	if cfg.Gates.FileSizeEnabled == false && cfg.Gates.I18nEnabled == false {
 		cfg.Gates.FileSizeEnabled = true
 	}
+	cfg.Workflow.StepConfirmationMode = NormalizeStepConfirmationMode(cfg.Workflow.StepConfirmationMode)
 }

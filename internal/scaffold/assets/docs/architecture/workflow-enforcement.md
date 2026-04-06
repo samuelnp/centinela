@@ -95,6 +95,10 @@ AFTER each step:
 1. Run `centinela complete <feature-name>`
 2. This validates the artifact exists and advances to next step
 3. Output the current workflow status to the user
+4. Respect `workflow.step_confirmation_mode` for review prompts:
+   - `every_step` (default): require explicit confirmation each step.
+   - `after_plan`: require confirmation only for plan -> code.
+   - `auto`: no review prompt; still run `centinela complete` explicitly.
 
 ## Validate Step
 

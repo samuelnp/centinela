@@ -40,7 +40,7 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 	}
 	fmt.Println(ui.RenderContext(wfs))
 	for _, wf := range wfs {
-		if wf.CurrentStep != "done" && workflow.ValidateArtifacts(wf.Feature, wf.CurrentStep, cfg) == nil {
+		if shouldRenderReviewPrompt(wf, cfg) && workflow.ValidateArtifacts(wf.Feature, wf.CurrentStep, cfg) == nil {
 			fmt.Println(ui.RenderReviewReady(wf.Feature, wf.CurrentStep, nextStepFor(wf, wf.CurrentStep)))
 		}
 	}

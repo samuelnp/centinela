@@ -14,7 +14,7 @@
 6. **No business logic in the outer layer.** What the "outer layer" is depends on the archetype (views in Rails, Components in ECS, UI components in Hexagonal). See PROJECT.md → Architecture Choice.
 7. **No hardcoded strings.** All user-facing text through i18n (all locales in PROJECT.md → Locales).
 
-8. **Never auto-advance steps.** After writing step artifacts, STOP. Present what was created and ask: "Step [X] complete — shall I advance to [next step]?" Only run `centinela complete <feature>` after explicit user confirmation ("yes", "continue", "proceed", etc.).
+8. **Respect step confirmation mode.** Default behavior is manual review: after writing step artifacts, STOP and ask: "Step [X] complete — shall I advance to [next step]?" Only run `centinela complete <feature>` after explicit confirmation unless `workflow.step_confirmation_mode` config relaxes prompts (`after_plan` or `auto`).
 
 ## Development Workflow (ENFORCED BY HOOKS)
 

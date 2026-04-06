@@ -64,6 +64,25 @@ func TestLoad_ParseError(t *testing.T) {
 	}
 }
 
+func TestLoad_StepConfirmationModeDefaultsToEveryStep(t *testing.T) {
+	dir := t.TempDir()
+	orig, _ := os.Getwd()
+	defer os.Chdir(orig) //nolint:errcheck
+	os.Chdir(dir)        //nolint:errcheck
+
+	os.WriteFile(Filename, []byte("[workflow]\nstep_confirmation_mode=\"weird\"\n"), 0644) //nolint:errcheck
+	cfg, err := Load()
+	if err != nil || cfg.Workflow.StepConfirmationMode != ConfirmEveryStep {
+		t.Fatalf("expected every_step default, got %q err=%v", cfg.Workflow.StepConfirmationMode, err)
+	}
+}
+
+func TestNormalizeStepConfirmationMode(t *testing.T) {
+	if NormalizeStepConfirmationMode("after_plan") != ConfirmAfterPlan || NormalizeStepConfirmationMode("AUTO") != ConfirmAuto {
+		t.Fatal("expected explicit modes to normalize")
+	}
+}
+
 func TestLoad_ReadError(t *testing.T) {
 	dir := t.TempDir()
 	orig, _ := os.Getwd()

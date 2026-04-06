@@ -168,4 +168,7 @@ These hooks are wired by `centinela init` for Claude and OpenCode integrations.
 1. Start every feature with `centinela start <feature>`.
 2. Do work only for the active step.
 3. After producing artifacts, run `centinela complete <feature>`.
-4. Do not auto-advance without explicit user confirmation.
+4. Respect `workflow.step_confirmation_mode` for review prompts:
+   - `every_step` (default): require explicit user confirmation for each step.
+   - `after_plan`: require confirmation only for plan -> code transition.
+   - `auto`: no review prompt; still run `centinela complete <feature>` explicitly.
