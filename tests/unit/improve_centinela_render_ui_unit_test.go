@@ -14,7 +14,7 @@ func TestRenderUIBrandingPrimitivesExist(t *testing.T) {
 		t.Fatalf("read panel file: %v", err)
 	}
 	content := string(data)
-	checks := []string{"CENTINELA", "renderSystemPanel", "renderSystemLine", "toneWarn"}
+	checks := []string{"renderSystemPanel", "renderSystemLine", "toneWarn", "personaLabel"}
 	for _, c := range checks {
 		if !strings.Contains(content, c) {
 			t.Fatalf("panel missing %q", c)
