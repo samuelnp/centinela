@@ -1,0 +1,18 @@
+{
+  "feature": "simplify-output-prefix-emojis",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-04-06T17:38:00Z",
+  "inputs": [
+    "internal/ui/persona.go",
+    "internal/ui/panel.go"
+  ],
+  "outputs": [
+    "internal/ui/persona_test.go",
+    "tests/integration/add_personality_feedback_integration_test.go",
+    "tests/integration/improve_centinela_render_ui_integration_test.go"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}

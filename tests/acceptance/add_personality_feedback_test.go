@@ -18,7 +18,7 @@ func TestPersonaOutputKeepsActionableContent(t *testing.T) {
 	tag := ui.RenderTag(wf)
 	blocked := ui.RenderBlocked("code", "plan", "f", "/tmp/a.go")
 
-	if !strings.Contains(tag, "CENTINELA says") || !strings.Contains(tag, "HOOK") {
+	if !strings.Contains(tag, "🛡️👁️") || !strings.Contains(tag, "HOOK") {
 		t.Fatal("tag output should keep source metadata with persona")
 	}
 	if !strings.Contains(blocked, "Next action") || !strings.Contains(blocked, "BLOCKED WRITE") {

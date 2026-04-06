@@ -14,7 +14,7 @@ func TestPersonaPrimitivesExist(t *testing.T) {
 		t.Fatalf("read persona file: %v", err)
 	}
 	content := string(data)
-	checks := []string{"personaFace", "personaLabel", "CENTINELA says", "ò_ó"}
+	checks := []string{"personaLabel", "🛡️👁️"}
 	for _, c := range checks {
 		if !strings.Contains(content, c) {
 			t.Fatalf("persona file missing %q", c)

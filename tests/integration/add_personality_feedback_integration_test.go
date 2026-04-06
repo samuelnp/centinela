@@ -12,13 +12,13 @@ func TestPersonaAppearsAcrossMessageTones(t *testing.T) {
 	info := ui.RenderStep("Next step", "tests")
 	errorLine := ui.RenderBlocked("code", "plan", "f", "/tmp/a.go")
 
-	if !strings.Contains(success, "CENTINELA says") || !strings.Contains(success, "^_^") {
-		t.Fatal("success output should include success persona")
+	if !strings.Contains(success, "🛡️👁️") {
+		t.Fatal("success output should include emoji prefix")
 	}
-	if !strings.Contains(info, "CENTINELA says") || !strings.Contains(info, "o_o") {
-		t.Fatal("info output should include info persona")
+	if !strings.Contains(info, "🛡️👁️") {
+		t.Fatal("info output should include emoji prefix")
 	}
-	if !strings.Contains(errorLine, "CENTINELA says") || !strings.Contains(errorLine, "ò_ó") {
-		t.Fatal("error output should include error persona")
+	if !strings.Contains(errorLine, "🛡️👁️") {
+		t.Fatal("error output should include emoji prefix")
 	}
 }
