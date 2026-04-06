@@ -28,7 +28,7 @@ func RenderStatus(wf *workflow.Workflow) string {
 
 // RenderSuccess returns a green check-mark line for confirmation messages.
 func RenderSuccess(msg string) string {
-	return renderSystemLine("CLI", "OK  "+msg, toneSuccess)
+	return renderSystemLine("CLI", msg, toneSuccess)
 }
 
 // RenderStep returns the step progress hint used after start/complete.

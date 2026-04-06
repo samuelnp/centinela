@@ -18,7 +18,7 @@ func renderSystemPanel(channel, title string, t tone, body string) string {
 }
 
 func renderSystemLine(channel, title string, t tone) string {
-	label := styleForTone(t).Bold(true).Render(" CENTINELA ")
+	label := styleForTone(t).Bold(true).Render(personaLabel(t))
 	meta := StyleMuted.Render(" " + channel + " ")
 	text := StyleBold.Render(" " + title)
 	return label + meta + text
