@@ -11,8 +11,8 @@ func TestHasAcceptanceTestsSuffixAndAny(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(d)       //nolint:errcheck
 
-	os.MkdirAll("tests/acceptance", 0755)                          //nolint:errcheck
-	os.WriteFile("tests/acceptance/a.steps.ts", []byte("x"), 0644) //nolint:errcheck
+	os.MkdirAll("tests/acceptance", 0755)                                                                    //nolint:errcheck
+	os.WriteFile("tests/acceptance/a.steps.ts", []byte("Given('x', () => {})\nThen('y', () => {})\n"), 0644) //nolint:errcheck
 	if !hasAcceptanceTests(".steps.ts") {
 		t.Fatal("expected acceptance suffix match")
 	}

@@ -1,5 +1,6 @@
 [validate]
 commands = [
+  "go test ./...",
   "./scripts/check-coverage.sh"
 ]
 

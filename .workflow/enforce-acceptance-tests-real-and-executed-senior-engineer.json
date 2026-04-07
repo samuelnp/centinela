@@ -1,0 +1,24 @@
+{
+  "feature": "enforce-acceptance-tests-real-and-executed",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-04-07T00:00:00Z",
+  "inputs": [
+    "docs/features/enforce-acceptance-tests-real-and-executed.md",
+    "docs/plans/enforce-acceptance-tests-real-and-executed.md",
+    "specs/enforce-acceptance-tests-real-and-executed.feature"
+  ],
+  "outputs": [
+    "internal/workflow/validate_tests.go",
+    "internal/workflow/validate_tests_acceptance_artifacts.go",
+    "internal/workflow/validate_tests_acceptance_commands.go",
+    "tests/acceptance/orchestration_smoke_sim_test.go",
+    "centinela.toml"
+  ],
+  "edgeCases": [
+    "Comment-only or placeholder acceptance files no longer satisfy tests step",
+    "Tests step fails without validate command that executes acceptance tests"
+  ],
+  "handoffTo": "qa-senior"
+}

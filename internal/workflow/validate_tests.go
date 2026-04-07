@@ -17,7 +17,10 @@ func validateTests(feature string, cfg *config.Config) error {
 		return fmt.Errorf("no unit/integration tests found in tests/")
 	}
 	if !hasAcceptanceTests(acceptance) {
-		return fmt.Errorf("no acceptance step definitions found in tests/acceptance/")
+		return fmt.Errorf("no executable acceptance test artifacts found in tests/acceptance/")
+	}
+	if !hasAcceptanceExecutionCommand(cfg.Validate.Commands) {
+		return fmt.Errorf("validate.commands must include a command that executes acceptance tests")
 	}
 	if !hasEdgeCaseReport(feature) {
 		return fmt.Errorf("edge-case report missing: .workflow/%s-edge-cases.md", feature)
@@ -46,12 +49,7 @@ func hasUnitOrIntegrationTests(suffixes []string) bool {
 	return false
 }
 
-func hasAcceptanceTests(suffix string) bool {
-	if suffix == "" {
-		return hasAnyFile("tests/acceptance")
-	}
-	return hasFileSuffix("tests/acceptance", suffix)
-}
+func hasAcceptanceTests(suffix string) bool { return hasExecutableAcceptanceTests(suffix) }
 
 func hasFileSuffix(dir, suffix string) bool {
 	found := false
