@@ -35,11 +35,13 @@
 # Use the native tool for your stack — no shell scripts required on Windows.
 #
 # Examples by stack:
-#   TypeScript/Node:  "npx tsc --noEmit", "npx vitest run"
-#   Python:           "mypy --strict src", "pytest"
-#   Go:               "go vet ./...", "go test ./..."
-#   Ruby:             "bundle exec rubocop", "bundle exec rspec"
-#   Rust:             "cargo check", "cargo test"
+#   TypeScript/Node:  "npx tsc --noEmit", "npx vitest run", "npx cucumber-js"
+#   Python:           "mypy --strict src", "pytest", "behave"
+#   Go:               "go vet ./...", "go test ./..." (includes tests/acceptance)
+#   Ruby:             "bundle exec rubocop", "bundle exec rspec", "bundle exec cucumber"
+#   Rust:             "cargo check", "cargo test" (+ acceptance runner if separate)
+#
+# At least one command must execute acceptance tests.
 # ---------------------------------------------------------------------------
 [validate]
 commands = [

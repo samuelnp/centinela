@@ -39,7 +39,7 @@ centinela validate            # Run gate checks + validate commands
 |------|--------------------|
 | plan | Feature brief in `docs/features/` + plan file in `docs/plans/` + `.feature` spec in `specs/` |
 | code | Nothing — architecture rules govern this |
-| tests | Test suite files in `tests/unit/` or `tests/integration/` + acceptance step definitions in `tests/acceptance/` + `.workflow/<feature>-edge-cases.md` |
+| tests | Test suite files in `tests/unit/` or `tests/integration/` + executable acceptance artifacts in `tests/acceptance/` + `validate.commands` includes acceptance execution + `.workflow/<feature>-edge-cases.md` |
 | validate | Gatekeeper report at `.workflow/<feature>-gatekeeper.md` + `centinela validate` passes |
 | docs | `.workflow/<feature>-documentation-specialist.md` + `.workflow/<feature>-documentation-specialist.json` + `docs/project-docs/index.html` |
 

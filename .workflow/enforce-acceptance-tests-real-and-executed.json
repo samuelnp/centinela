@@ -1,15 +1,15 @@
 {
   "feature": "enforce-acceptance-tests-real-and-executed",
   "startedAt": "2026-04-07T16:20:15.944149Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-04-07T20:24:14Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-07T20:32:07Z"
     },
     "plan": {
       "status": "done",

@@ -333,11 +333,11 @@ See [`docs/architecture/architecture-overview.md`](internal/scaffold/assets/docs
 # Executed natively — no shell scripts required.
 [validate]
 commands = [
-  # TypeScript:  "npx tsc --noEmit", "npx vitest run"
-  # Python:      "mypy --strict src", "pytest"
-  # Go:          "go vet ./...", "go test ./..."
-  # Ruby:        "bundle exec rubocop", "bundle exec rspec"
-  # Rust:        "cargo check", "cargo test"
+  # TypeScript:  "npx tsc --noEmit", "npx vitest run", "npx cucumber-js"
+  # Python:      "mypy --strict src", "pytest", "behave"
+  # Go:          "go vet ./...", "go test ./..."      # includes tests/acceptance
+  # Ruby:        "bundle exec rubocop", "bundle exec rspec", "bundle exec cucumber"
+  # Rust:        "cargo check", "cargo test"          # add acceptance runner if separate
 ]
 
 # Built-in gate toggles
@@ -384,7 +384,7 @@ your-project/
     unit/
     integration/
     acceptance/
-      <feature>.steps.*          ← Gherkin step definitions
+      <feature>.steps.*          ← executable Gherkin step definitions
 ```
 
 ---

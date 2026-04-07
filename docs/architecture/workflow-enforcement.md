@@ -47,7 +47,7 @@ If validation fails, the step stays in-progress and the command exits with an er
 |------|-----------|----------------|
 | plan | File search | A plan file in `docs/plans/` + a `.feature` file exists in `specs/` |
 | code | None | Architecture rules govern this step |
-| tests | File search | Test suite files in `tests/unit/` or `tests/integration/` + acceptance step definitions in `tests/acceptance/` + `.workflow/<feature>-edge-cases.md` |
+| tests | File search | Test suite files in `tests/unit/` or `tests/integration/` + executable acceptance artifacts in `tests/acceptance/` + `validate.commands` includes acceptance execution + `.workflow/<feature>-edge-cases.md` |
 | validate | Gate checks + commands | All built-in gates pass + all `centinela.toml` validate commands exit 0 |
 
 > Note: The exact file extensions and paths checked are project-specific. See PROJECT.md → Folder Structure for the authoritative paths.
@@ -109,6 +109,7 @@ Configure your stack's lint/type-check/test commands in `centinela.toml`:
 commands = [
   "npx tsc --noEmit",
   "npx vitest run",
+  "npx cucumber-js"
 ]
 ```
 
@@ -140,7 +141,7 @@ Before advancing, Centinela validates required artifacts:
 |------|--------------------|
 | plan | `docs/features/<feature>.md`, `docs/plans/<feature>.md`, and at least one `specs/*.feature` |
 | code | none (architecture rules apply during implementation) |
-| tests | test files in `tests/unit` or `tests/integration`, acceptance files in `tests/acceptance`, and `.workflow/<feature>-edge-cases.md` |
+| tests | test files in `tests/unit` or `tests/integration`, executable acceptance files in `tests/acceptance`, at least one acceptance execution command in `[validate] commands`, and `.workflow/<feature>-edge-cases.md` |
 | validate | gatekeeper report at `.workflow/<feature>-gatekeeper.md` and `centinela validate` pass |
 | docs | `.workflow/<feature>-documentation-specialist.md`, `.workflow/<feature>-documentation-specialist.json`, and `docs/project-docs/index.html` |
 

@@ -65,6 +65,8 @@ commands = [
 ]
 ```
 
+At least one `validate.commands` entry must execute acceptance tests.
+
 If your project uses i18n, enable the built-in key parity check:
 
 ```toml
