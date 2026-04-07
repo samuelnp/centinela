@@ -44,3 +44,9 @@ func TestCheckFileSize_FailsWhenExceptionMaxExceeded(t *testing.T) {
 		t.Fatalf("expected fail with details, got %+v", r)
 	}
 }
+
+func TestFileSizeExceptionMapHandlesNilConfig(t *testing.T) {
+	if m := fileSizeExceptionMap(nil); len(m) != 0 {
+		t.Fatalf("expected empty map for nil config, got %d", len(m))
+	}
+}
