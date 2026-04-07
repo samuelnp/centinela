@@ -25,7 +25,7 @@ func RunAll(cfg *config.Config) []Result {
 	var results []Result
 
 	if cfg.Gates.FileSizeEnabled {
-		results = append(results, checkFileSize())
+		results = append(results, checkFileSize(cfg))
 	}
 
 	if cfg.Gates.I18nEnabled {

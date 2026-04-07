@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/samuelnp/centinela/internal/config"
 )
 
 func TestCheckFileSizePassAndFail(t *testing.T) {
@@ -14,7 +16,7 @@ func TestCheckFileSizePassAndFail(t *testing.T) {
 
 	os.MkdirAll("src", 0755)                              //nolint:errcheck
 	os.WriteFile("src/a.go", []byte("package a\n"), 0644) //nolint:errcheck
-	if r := checkFileSize(); r.Status != Pass {
+	if r := checkFileSize(&config.Config{}); r.Status != Pass {
 		t.Fatalf("expected pass, got %v", r.Status)
 	}
 	big := ""
@@ -22,7 +24,7 @@ func TestCheckFileSizePassAndFail(t *testing.T) {
 		big += "x\n"
 	}
 	os.WriteFile("src/b.go", []byte(big), 0644) //nolint:errcheck
-	r := checkFileSize()
+	r := checkFileSize(&config.Config{})
 	if r.Status != Fail || len(r.Details) == 0 {
 		t.Fatalf("expected fail with violations, got %+v", r)
 	}
@@ -39,7 +41,7 @@ func TestExistingRootsAndFindOversized(t *testing.T) {
 	if roots := existingRoots(); len(roots) == 0 {
 		t.Fatal("expected at least one existing root")
 	}
-	if v := findOversizedFiles(); len(v) != 0 {
+	if v, _ := findOversizedFiles(&config.Config{}); len(v) != 0 {
 		t.Fatalf("did not expect violations, got %v", v)
 	}
 }

@@ -1,0 +1,26 @@
+{
+  "feature": "g1-justified-file-size-exceptions",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-04-07T00:00:00Z",
+  "inputs": [
+    "docs/features/g1-justified-file-size-exceptions.md",
+    "docs/plans/g1-justified-file-size-exceptions.md",
+    "specs/g1-justified-file-size-exceptions.feature"
+  ],
+  "outputs": [
+    "internal/config/config.go",
+    "internal/config/file_size_exceptions.go",
+    "internal/gates/file_size.go",
+    "internal/gates/file_size_exceptions.go",
+    "internal/gates/file_size_test.go",
+    "internal/gates/file_size_more_test.go",
+    "internal/gates/gates.go"
+  ],
+  "edgeCases": [
+    "Exception path normalization via filepath clean + slash conversion",
+    "Configured exception exists but file exceeds justified max_lines"
+  ],
+  "handoffTo": "qa-senior"
+}

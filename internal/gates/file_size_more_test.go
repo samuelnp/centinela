@@ -3,6 +3,8 @@ package gates
 import (
 	"os"
 	"testing"
+
+	"github.com/samuelnp/centinela/internal/config"
 )
 
 func TestFindOversizedFilesFallbackRoot(t *testing.T) {
@@ -16,7 +18,7 @@ func TestFindOversizedFilesFallbackRoot(t *testing.T) {
 		big += "x\n"
 	}
 	os.WriteFile("main.go", []byte(big), 0644) //nolint:errcheck
-	v := findOversizedFiles()
+	v, _ := findOversizedFiles(&config.Config{})
 	if len(v) != 0 {
 		t.Fatalf("expected no violations when only fallback root is used, got %v", v)
 	}

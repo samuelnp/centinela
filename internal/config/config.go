@@ -41,9 +41,10 @@ type ValidateConfig struct {
 
 // GatesConfig controls which built-in gates are active.
 type GatesConfig struct {
-	FileSizeEnabled            bool `toml:"file_size"`
-	I18nEnabled                bool `toml:"i18n"`
-	ProductionReadinessEnabled bool `toml:"production_readiness"`
+	FileSizeEnabled            bool                `toml:"file_size"`
+	FileSizeExceptions         []FileSizeException `toml:"file_size_exceptions"`
+	I18nEnabled                bool                `toml:"i18n"`
+	ProductionReadinessEnabled bool                `toml:"production_readiness"`
 }
 
 // I18nConfig describes how to check translations for G11.
@@ -72,6 +73,9 @@ func Load() (*Config, error) {
 	}
 
 	applyDefaults(&cfg)
+	if err := validateConfig(&cfg); err != nil {
+		return nil, err
+	}
 	return &cfg, nil
 }
 
