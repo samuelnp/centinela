@@ -1,0 +1,21 @@
+{
+  "feature": "g1-justified-file-size-exceptions",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-04-07T00:00:00Z",
+  "inputs": [
+    "Code changes for file-size exception config and gate behavior"
+  ],
+  "outputs": [
+    "internal/config/file_size_exceptions_test.go",
+    "internal/gates/file_size_exceptions_test.go",
+    "internal/gates/file_size_more_test.go",
+    ".workflow/g1-justified-file-size-exceptions-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Config rejects exceptions above cap",
+    "Backslash paths normalize and match scanned files"
+  ],
+  "handoffTo": "validate"
+}

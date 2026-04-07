@@ -20,7 +20,8 @@ func validateConfig(cfg *Config) error {
 		if strings.TrimSpace(ex.Path) == "" {
 			return fmt.Errorf("gates.file_size_exceptions[%d].path is required", i)
 		}
-		cfg.Gates.FileSizeExceptions[i].Path = filepath.ToSlash(filepath.Clean(ex.Path))
+		normalized := filepath.ToSlash(filepath.Clean(ex.Path))
+		cfg.Gates.FileSizeExceptions[i].Path = strings.ReplaceAll(normalized, "\\", "/")
 		if ex.Kind != "configuration" && ex.Kind != "domain_atomic" {
 			return fmt.Errorf("gates.file_size_exceptions[%d].kind must be configuration or domain_atomic", i)
 		}
