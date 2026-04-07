@@ -51,8 +51,15 @@ commands = [
 # Built-in gate configuration
 # ---------------------------------------------------------------------------
 [gates]
-# G1: Block commits when any source file exceeds 100 lines.
+# G1: Block commits when source files exceed 100 lines by default.
 file_size = true
+
+# Optional justified G1 exceptions (rare cases only, max_lines must be 101..130)
+# [[gates.file_size_exceptions]]
+# path = "internal/config/generated_map.go"
+# kind = "configuration" # "configuration" or "domain_atomic"
+# reason = "Large static map is clearer as one unit"
+# max_lines = 130
 
 # G11: Check i18n completeness. Requires [i18n] section below.
 i18n = false

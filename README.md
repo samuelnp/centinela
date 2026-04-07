@@ -272,7 +272,7 @@ Gates are quality checks that must pass before a feature can ship. They run duri
 
 | Gate | Rule | Config |
 |------|------|--------|
-| **G1: File Size** | No source file exceeds 100 lines | `[gates] file_size = true` |
+| **G1: File Size** | Default max 100 lines, with optional justified exceptions up to 130 lines | `[gates] file_size = true` |
 | **G11: i18n** | All locale files have identical keys (no missing translations) | `[gates] i18n = true` |
 
 G11 supports two formats natively:
@@ -342,8 +342,15 @@ commands = [
 
 # Built-in gate toggles
 [gates]
-file_size = true   # G1: fail if any source file exceeds 100 lines
+file_size = true   # G1: fail if any source file exceeds 100 lines by default
 i18n      = false  # G11: check translation key completeness
+
+# Optional: explicit justified G1 exceptions for rare cases
+[[gates.file_size_exceptions]]
+path = "internal/config/generated_map.go"
+kind = "configuration"  # "configuration" or "domain_atomic"
+reason = "Large static map is clearer as one unit"
+max_lines = 130
 
 # i18n config (required when gates.i18n = true)
 [i18n]

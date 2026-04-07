@@ -10,9 +10,9 @@ Automated and manual checks that MUST pass before any feature ships.
 ## Pre-Commit Gates
 
 ### G1: File Size Limit
-- **Rule:** No file exceeds 100 lines.
+- **Rule:** Source files default to a 100-line maximum. Rare, explicit exceptions are allowed only when justified in `centinela.toml` and capped at 130 lines.
 - **Check:** `scripts/check-file-size.sh` (or equivalent for your language).
-- **Fail action:** Block commit. Split the file.
+- **Fail action:** Block commit. Split the file or add a valid justified exception.
 
 ### G2: Layer Dependency Violations
 - **Rule:** No imports cross forbidden layer boundaries. The forbidden boundaries are defined per archetype in PROJECT.md → Architecture Choice → G2 rule.
@@ -202,9 +202,9 @@ Gates are enforced at four levels:
 ## Pre-Commit Gates (automated via lint/scripts)
 
 ### G1: File Size Limit
-- **Rule**: No file exceeds 100 lines.
+- **Rule**: Source files default to a 100-line maximum. Rare, explicit exceptions are allowed only when justified in `centinela.toml` and capped at 130 lines.
 - **Check**: `scripts/check-file-size.sh`
-- **Fail action**: Block commit. Split the file.
+- **Fail action**: Block commit. Split the file or add a valid justified exception.
 
 ### G2: Layer Dependency Violations
 - **Rule**: No imports cross forbidden layer boundaries. What is "forbidden" depends on the archetype in PROJECT.md → Architecture Choice → G2 rule. See [architecture-overview.md](architecture-overview.md) for the rules per archetype.
@@ -254,4 +254,3 @@ Gates are enforced at four levels:
 - **Rule**: Each file exports one thing and does one thing.
 - **Check**: Code review.
 - **Fail action**: Split the file.
-

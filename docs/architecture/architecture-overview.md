@@ -173,7 +173,7 @@ The `/centinela-setup` wizard will ask you to describe these explicitly.
 
 | Gate | Universal rule | Archetype-specific definition |
 |------|---------------|-------------------------------|
-| G1 — File size | Max 100 lines | Same for all archetypes |
+| G1 — File size | Default max 100 lines; justified exceptions can raise to 130 | Same for all archetypes |
 | G2 — Layer boundaries | No forbidden cross-layer imports | Defined per archetype above |
 | G3 — Type safety | Strictest mode for the language | Same for all archetypes |
 | G4 — Tests | Unit + integration + acceptance | Same for all archetypes |
@@ -190,4 +190,4 @@ Regardless of archetype:
 - **Tests mandatory** — unit + acceptance cannot be skipped
 - **Gatekeeper AI** — conflict check before every implementation
 - **`centinela validate`** — full validation before shipping
-- **Max 100 lines per file** — no exceptions
+- **Default 100-line file limit** — only explicit justified exceptions up to 130

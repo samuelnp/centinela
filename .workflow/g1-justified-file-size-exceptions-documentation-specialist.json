@@ -1,0 +1,25 @@
+{
+  "feature": "g1-justified-file-size-exceptions",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-04-07T00:00:00Z",
+  "inputs": [
+    "README.md",
+    "CLAUDE.md",
+    "docs/architecture/gatekeepers.md",
+    "docs/architecture/architecture-overview.md",
+    "internal/scaffold/assets/CLAUDE.md",
+    "internal/scaffold/assets/centinela.toml",
+    "internal/scaffold/assets/docs/architecture/gatekeepers.md",
+    "internal/scaffold/assets/docs/architecture/architecture-overview.md"
+  ],
+  "outputs": [
+    ".workflow/g1-justified-file-size-exceptions-documentation-specialist.md",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [
+    "Scaffold documentation mirrors root documentation for G1 exception policy"
+  ],
+  "handoffTo": "complete"
+}

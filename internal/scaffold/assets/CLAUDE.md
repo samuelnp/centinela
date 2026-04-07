@@ -8,7 +8,7 @@
 
 1. **Workflow enforcer is mandatory.** Run `centinela start <feature>` before ANY work. Hooks enforce this automatically.
 2. **Separation of concerns.** Follow the layer dependency rules for your architecture archetype (PROJECT.md → Architecture Choice → Archetype). See [architecture-overview.md](docs/architecture/architecture-overview.md) for the rules per archetype. No business logic in the outer layer.
-3. **Max 100 lines per file.** No exceptions. Split if exceeded.
+3. **Default max 100 lines per source file.** Split if exceeded, unless a justified G1 exception is explicitly configured (max 130 lines).
 4. **Strictest type safety available for the project's language.** No dynamic typing shortcuts (e.g., `any` in TypeScript, untyped variables in Ruby). Use the project's static analysis tooling.
 5. **Tests are mandatory.** All must pass before workflow completes.
 6. **No business logic in the outer layer.** What the "outer layer" is depends on the archetype (views in Rails, Components in ECS, UI components in Hexagonal). See PROJECT.md → Architecture Choice.
@@ -56,7 +56,7 @@ Save report to `.workflow/<feature>-gatekeeper.md`. Required before completing `
 
 ## Gate Keepers Checklist
 
-- [ ] All files under 100 lines
+- [ ] All source files are <=100 lines, or have valid justified G1 exceptions (<=130)
 - [ ] No cross-layer import violations (per archetype rules in PROJECT.md)
 - [ ] `centinela validate` passes (lint + type check + full test suite)
 - [ ] No business logic in the outer layer (definition per archetype)
