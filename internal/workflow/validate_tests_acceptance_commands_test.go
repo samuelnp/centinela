@@ -12,4 +12,10 @@ func TestHasAcceptanceExecutionCommand(t *testing.T) {
 	if !hasAcceptanceExecutionCommand([]string{"npx cucumber-js"}) {
 		t.Fatal("expected cucumber command to qualify")
 	}
+	if !hasAcceptanceExecutionCommand([]string{"go test ./tests/acceptance/..."}) {
+		t.Fatal("expected tests/acceptance command to qualify")
+	}
+	if !hasAcceptanceExecutionCommand([]string{"npm run test:acceptance"}) {
+		t.Fatal("expected acceptance + test command to qualify")
+	}
 }

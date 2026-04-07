@@ -56,7 +56,7 @@ func isPlaceholderAcceptanceBody(body string) bool {
 }
 
 func looksLikeExecutableTest(body string) bool {
-	keys := []string{"func test", "testing.t", "t.", "given(", "when(", "then(", "describe(", "it(", "scenario", "def test", "assert", "expect("}
+	keys := []string{"t.", "given(", "when(", "then(", "describe(", "it(", "scenario(", "def test", "assert", "expect(", "should "}
 	for _, k := range keys {
 		if strings.Contains(body, k) {
 			return true
