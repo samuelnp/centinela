@@ -1,7 +1,7 @@
 {
   "feature": "enforce-acceptance-tests-real-and-executed",
   "startedAt": "2026-04-07T16:20:15.944149Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -16,11 +16,11 @@
       "completedAt": "2026-04-07T16:21:52Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-07T20:24:47Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },

@@ -1,0 +1,27 @@
+{
+  "feature": "enforce-acceptance-tests-real-and-executed",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-04-07T00:00:00Z",
+  "inputs": [
+    "internal/workflow/validate_tests.go",
+    "internal/workflow/validate_tests_acceptance_artifacts.go",
+    "internal/workflow/validate_tests_acceptance_commands.go"
+  ],
+  "outputs": [
+    "internal/workflow/validate_tests_acceptance_enforcement_test.go",
+    "internal/workflow/validate_tests_acceptance_commands_test.go",
+    "internal/workflow/validate_tests_test.go",
+    "internal/workflow/validate_tests_more_test.go",
+    "internal/workflow/validate_tests_errors_test.go",
+    "tests/unit/edge_case_tests_phase_unit_test.go",
+    "tests/acceptance/orchestration_smoke_sim_test.go",
+    ".workflow/enforce-acceptance-tests-real-and-executed-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Comment-only acceptance artifacts fail tests validation",
+    "No acceptance execution command in validate commands fails tests validation"
+  ],
+  "handoffTo": "validate"
+}
