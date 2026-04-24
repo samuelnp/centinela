@@ -36,7 +36,7 @@ func TestInjectOpenCodeConfig_MergesWithoutLosingKeys(t *testing.T) {
 	}
 	var ins []string
 	json.Unmarshal(parsed["instructions"], &ins) //nolint:errcheck
-	if len(ins) != 2 || ins[0] != "RULES.md" || ins[1] != "CLAUDE.md" {
+	if len(ins) != 3 || ins[0] != "RULES.md" || ins[1] != "AGENTS.md" || ins[2] != "CLAUDE.md" {
 		t.Fatalf("unexpected instructions: %#v", ins)
 	}
 	if _, ok := parsed["command"]; !ok {
@@ -50,7 +50,7 @@ func TestInjectOpenCodeConfig_IsIdempotent(t *testing.T) {
 	defer os.Chdir(origDir) //nolint:errcheck
 	os.Chdir(dir)           //nolint:errcheck
 
-	os.WriteFile("opencode.json", []byte(`{"$schema":"https://opencode.ai/config.json","instructions":["CLAUDE.md"]}`), 0644) //nolint:errcheck
+	os.WriteFile("opencode.json", []byte(`{"$schema":"https://opencode.ai/config.json","instructions":["AGENTS.md","CLAUDE.md"]}`), 0644) //nolint:errcheck
 	changed, err := setup.InjectOpenCodeConfig("opencode.json")
 	if err != nil {
 		t.Fatalf("InjectOpenCodeConfig error: %v", err)

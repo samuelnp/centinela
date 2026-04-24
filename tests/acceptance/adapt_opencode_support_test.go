@@ -29,7 +29,7 @@ func TestOpenCodeConfig_ExistingKeysRemain(t *testing.T) {
 	}
 	var instructions []string
 	json.Unmarshal(parsed["instructions"], &instructions) //nolint:errcheck
-	if len(instructions) != 1 || instructions[0] != "CLAUDE.md" {
-		t.Fatalf("expected CLAUDE.md instruction, got %#v", instructions)
+	if len(instructions) != 2 || instructions[0] != "AGENTS.md" || instructions[1] != "CLAUDE.md" {
+		t.Fatalf("expected AGENTS.md and CLAUDE.md instructions, got %#v", instructions)
 	}
 }
