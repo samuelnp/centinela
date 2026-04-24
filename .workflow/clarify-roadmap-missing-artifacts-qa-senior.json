@@ -1,0 +1,26 @@
+{
+  "feature": "clarify-roadmap-missing-artifacts",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-04-24T09:10:00Z",
+  "inputs": [
+    "Updated roadmap command and setup hook behavior",
+    "go test ./... results"
+  ],
+  "outputs": [
+    "cmd/centinela/start_guard_missing_roadmap_test.go",
+    "cmd/centinela/roadmap_test.go",
+    "cmd/centinela/roadmap_validate_test.go",
+    "cmd/centinela/hook_setup_directive_test.go",
+    "cmd/centinela/hook_setup_quality_test.go",
+    "internal/ui/render_other_test.go",
+    "tests/acceptance/clarify_roadmap_missing_artifacts_test.go",
+    ".workflow/clarify-roadmap-missing-artifacts-edge-cases.md"
+  ],
+  "edgeCases": [
+    "ROADMAP.md can exist while .workflow/roadmap.json is missing",
+    "Artifact templates must cover both setup files and per-feature workflow files"
+  ],
+  "handoffTo": "gatekeeper"
+}

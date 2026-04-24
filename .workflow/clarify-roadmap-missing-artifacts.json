@@ -1,7 +1,7 @@
 {
   "feature": "clarify-roadmap-missing-artifacts",
   "startedAt": "2026-04-24T08:18:05.63708Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -16,11 +16,11 @@
       "completedAt": "2026-04-24T08:19:44Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-24T10:48:59Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },
