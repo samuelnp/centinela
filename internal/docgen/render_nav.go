@@ -3,11 +3,11 @@ package docgen
 import "fmt"
 
 func renderNav(d *Data) string {
-	return fmt.Sprintf(`<aside class="sidebar"><div class="brand">%s</div><div class="caption">Hybrid docs report</div><nav class="toc"><a href="#overview">Overview</a><a href="#feature-graphs">Feature Graphs</a><a href="#roadmap">Roadmap</a><a href="#specs">Specs</a><a href="#workflow-state">Feature States</a><a href="#artifacts">Artifacts</a><a href="#examples">Examples</a><a href="#sources">Source Context</a></nav><p class="caption">%d specs · %d scenarios</p></aside>`, esc(d.Title), len(d.Specs), d.Scenarios)
+	return fmt.Sprintf(`<aside class="sidebar"><div class="brand">%s</div><div class="caption">Hybrid docs report</div><nav class="toc"><a href="#overview">Overview</a><a href="#latest-features">Latest Features</a><a href="#getting-started">Getting Started</a><a href="#feature-graphs">Feature Graphs</a><a href="#roadmap">Roadmap</a><a href="#specs">Specs</a><a href="#workflow-state">Feature States</a><a href="#artifacts">Artifacts</a><a href="#examples">Examples</a><a href="#sources">Source Context</a></nav><p class="caption">%d specs · %d scenarios</p></aside>`, esc(d.Title), len(d.Specs), d.Scenarios)
 }
 
 func renderHero(d *Data) string {
-	return fmt.Sprintf(`<header class="hero"><h1>%s</h1><p class="meta">LLM-first documentation with deterministic command fallback. Visuals focus on product features, not Centinela internals.</p><span class="pill">Mermaid: feature topology</span><span class="pill">Responsive layout</span><span class="pill">Examples included</span></header>`, esc(d.Title))
+	return fmt.Sprintf(`<header class="hero"><h1>%s</h1><p class="meta">Generated from Centinela artifacts with a current workflow story, command surface, and traceability view for the project.</p><span class="pill">Latest features</span><span class="pill">Workflow onboarding</span><span class="pill">Mermaid topology</span></header>`, esc(d.Title))
 }
 
 func renderOverview(d *Data) string {

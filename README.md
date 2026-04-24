@@ -17,6 +17,17 @@ The result: every feature ships with a written plan, a Gherkin spec, three test 
 
 ---
 
+## Latest Features
+
+- **Claude + OpenCode parity** with shared setup prompts, workflow context, prewrite enforcement, postwrite status updates, and migration guidance.
+- **Roadmap-first bootstrap** with automatic `PROJECT.md` setup, `ROADMAP.md` creation, roadmap analysis artifacts, roadmap quality artifacts, and `centinela roadmap validate`.
+- **Strict five-step workflow** with configurable review mode via `workflow.step_confirmation_mode = "every_step" | "after_plan" | "auto"`.
+- **Prompt-driven workflow UX** with auto-start for new feature intent, strict orchestration guidance, and a compact Centinela status line.
+- **Managed migrations** through `centinela migrate`, `centinela migrate docs`, and `centinela migrate setup --agent claude|opencode|both`.
+- **Project docs generation** through `centinela docs validate` and `centinela docs generate --out docs/project-docs/index.html --title "..."`.
+
+---
+
 ## Install
 
 **Prerequisites:** Go 1.21+
@@ -46,7 +57,7 @@ centinela --help
 
 ---
 
-## Quick Start
+## Getting Started
 
 ### 1. Initialize a project
 
@@ -125,14 +136,13 @@ Expected sequence:
 1. If `PROJECT.md` is missing, centinela asks the agent to interview you and write it.
 2. Once `PROJECT.md` exists, centinela asks the agent to define your roadmap.
 3. The agent produces:
-   - `ROADMAP.md` (human-readable phased plan)
-   - `.workflow/roadmap.json` (machine-readable roadmap)
-   - `docs/features/<feature-slug>.md` for each Phase 1 feature
+   `ROADMAP.md` (human-readable phased plan), `.workflow/roadmap.json` (machine-readable roadmap), `.workflow/roadmap-analysis.md`, `.workflow/roadmap-analysis.json`, `.workflow/roadmap-quality.md`, `.workflow/roadmap-quality.json`, and `docs/features/<feature-slug>.md` for the initial feature set.
 
 Verify roadmap status:
 
 ```bash
 centinela roadmap
+centinela roadmap validate
 ```
 
 Start implementation from the first roadmap feature:
@@ -171,7 +181,14 @@ Continue feature intent examples:
 centinela start my-feature
 ```
 
-The hooks take it from here.
+Then follow the same feature path every time:
+
+1. Write the plan artifacts in `docs/plans/` and `specs/`.
+2. Run `centinela complete <feature>` to advance to `code`.
+3. Implement the change, then advance to `tests`.
+4. Add unit, integration, acceptance, and edge-case coverage, then advance to `validate`.
+5. Run `centinela validate`, resolve any gate failures, then advance to `docs`.
+6. Run `centinela docs validate` and `centinela docs generate` to publish the project-facing HTML output.
 
 ### 5. Migrate managed assets
 
@@ -179,6 +196,12 @@ Preview all managed upgrades (docs + setup):
 
 ```bash
 centinela migrate
+```
+
+Preview docs-only upgrades:
+
+```bash
+centinela migrate docs
 ```
 
 Apply full sync:
@@ -193,6 +216,13 @@ Scope setup migration to one integration when needed:
 centinela migrate setup --agent claude
 centinela migrate setup --agent opencode
 centinela migrate setup --agent both --apply
+```
+
+Regenerate the HTML presentation explicitly when needed:
+
+```bash
+centinela docs validate
+centinela docs generate --out docs/project-docs/index.html --title "Centinela Project Documentation"
 ```
 
 ---
@@ -227,7 +257,12 @@ centinela start <feature>       # Start a feature (required before any file writ
 centinela status <feature>      # Show current step and artifact status
 centinela status-all            # Show all active features
 centinela complete <feature>    # Mark step done and advance
+centinela roadmap               # Show roadmap phase and feature progress
+centinela roadmap validate      # Validate roadmap analysis and quality artifacts
 centinela validate              # Run gate checks manually
+centinela migrate               # Preview full managed docs + setup migration
+centinela migrate docs          # Preview managed docs migration only
+centinela migrate setup         # Preview setup migration only
 centinela docs validate         # Validate inputs for project documentation report
 centinela docs generate         # Generate HTML docs with Mermaid diagrams
 ```
@@ -236,7 +271,7 @@ centinela docs generate         # Generate HTML docs with Mermaid diagrams
 
 ## How the Hooks Work
 
-`centinela init` registers Claude Code hooks that run automatically:
+`centinela init` wires Claude and OpenCode integrations. Under the hood those integrations call `centinela hook ...` commands to keep workflow enforcement, setup guidance, and session context in sync.
 
 ### PreToolUse — Write / Edit
 
@@ -247,20 +282,24 @@ Before Claude writes or edits any file, centinela checks whether that file belon
 After every file write, centinela appends a compact status tag to the session:
 
 ```
-↳ my-feature · code · 2/4
+↳ my-feature · code · 2/5
 ```
+
+For Claude, Centinela can also render a compact status line so the current feature, step, and risk state stay visible outside the main response flow.
 
 ### UserPromptSubmit
 
 Multiple hooks run at the start of every message:
 
-**Project setup** — if `PROJECT.md` is missing but `PROJECT.md.template` exists, centinela injects a prompt instructing Claude to interview the user and write `PROJECT.md`. The prompt disappears automatically once the file is created.
+**Project setup** — if `PROJECT.md` is missing but `PROJECT.md.template` exists, centinela injects a prompt instructing the agent to interview the user and write `PROJECT.md`. Once `PROJECT.md` exists, Centinela can also require `ROADMAP.md`, roadmap analysis artifacts, roadmap quality artifacts, and production-readiness setup before feature work continues.
 
 **Managed migration** — if managed docs or setup assets are outdated, centinela
 injects migration guidance and instructs the assistant to ask for approval before
 running apply commands.
 
 **Workflow context** — injects a context block showing all active workflows and their current step, so Claude always has accurate state without reading any files.
+
+**Autostart + orchestration** — when no workflow is active, Centinela can auto-start a feature from prompt intent. In strict orchestration mode it also tells the agent which specialist evidence files are required before `centinela complete` can advance the step.
 
 ---
 
@@ -408,7 +447,7 @@ your-project/
 | `documentation-generator-prompt.md` | LLM-first prompt template for polished docs generation with CLI fallback |
 | `workflow-enforcement.md` | How the three enforcement layers work |
 | `i18n-strategy.md` | Translation key conventions by format |
-| `example-feature-walkthrough.md` | End-to-end example of the four-step workflow |
+| `example-feature-walkthrough.md` | End-to-end example of the five-step workflow |
 | `new-project-guide.md` | Step-by-step setup for new projects |
 
 ---

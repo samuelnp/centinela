@@ -12,7 +12,7 @@ func RenderHTML(d *Data) string {
 	fmt.Fprint(b, esc(d.Title))
 	fmt.Fprint(b, "</title>", renderHeadAssets())
 	fmt.Fprint(b, "</head><body><div class=\"page\">", renderNav(d), "<main class=\"content\">")
-	fmt.Fprint(b, renderHero(d), renderOverview(d), renderFeatureGraphs(d))
+	fmt.Fprint(b, renderHero(d), renderOverview(d), renderLatestFeatures(), renderGettingStarted(), renderFeatureGraphs(d))
 	fmt.Fprint(b, renderRoadmapNarrative(d), renderSpecs(d), renderWorkflowState(d))
 	fmt.Fprint(b, renderArtifacts(d), renderExamples(), renderSources(d))
 	fmt.Fprint(b, "</main></div></body></html>")

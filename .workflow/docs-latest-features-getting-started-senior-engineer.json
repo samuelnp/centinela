@@ -1,0 +1,21 @@
+{
+  "feature": "docs-latest-features-getting-started",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-04-24T08:10:00Z",
+  "inputs": [
+    "Plan artifacts for docs-latest-features-getting-started",
+    "Current README.md",
+    "Current internal/docgen renderer"
+  ],
+  "outputs": [
+    "README.md",
+    "internal/docgen/render_story.go",
+    "internal/docgen/render_nav.go",
+    "internal/docgen/render.go",
+    "internal/docgen/generate_test.go"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}
