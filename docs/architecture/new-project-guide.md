@@ -81,19 +81,18 @@ locales = ["en", "es"]
 
 ---
 
-## Step 5: Verify the setup
+## Step 5: Verify roadmap artifacts
 
 ```bash
-# PROJECT.md exists and is complete
-cat PROJECT.md
+# Confirm the roadmap files exist
+ls ROADMAP.md .workflow/roadmap.json
 
-# Start a test workflow to confirm hooks are working
-centinela start test-feature
-centinela status test-feature
-
-# Clean up the test workflow file
-rm .workflow/test-feature.json
+# Validate roadmap analysis + quality artifacts
+centinela roadmap
+centinela roadmap validate
 ```
+
+Use `docs/architecture/artifact-templates.md` if the agent needs the exact file shapes.
 
 ---
 
@@ -115,7 +114,7 @@ This sets the workflow to the `plan` step. The hooks will block any file writes 
 | `PROJECT.md` | Project definition: domain, stack, folder structure |
 | `PROJECT.md.template` | Blank template — copy and fill in manually |
 | `centinela.toml` | Validate commands + built-in gate configuration |
-| `docs/architecture/` | Architecture reference documentation |
+| `docs/architecture/` | Architecture reference documentation + artifact templates |
 
 ---
 
@@ -125,7 +124,8 @@ Before starting your first feature, confirm:
 
 - [ ] `PROJECT.md` exists and has no `<!-- comment -->` placeholders
 - [ ] `centinela.toml` has at least one validate command (or a note explaining why none are needed)
-- [ ] `centinela start test-feature` runs without error
+- [ ] `ROADMAP.md` and `.workflow/roadmap.json` exist and match each other
+- [ ] `centinela roadmap validate` runs without error
 - [ ] The folder paths in `PROJECT.md → Folder Structure` match the actual layout
 - [ ] All locales in `PROJECT.md → Locales` have their locale files at the expected paths
 

@@ -92,6 +92,7 @@ Save to `.workflow/<feature>-production-readiness.md`. Required when gate is ena
 | Dependency injection | [dependency-injection.md](docs/architecture/dependency-injection.md) |
 | Gate keepers (full) | [gatekeepers.md](docs/architecture/gatekeepers.md) |
 | Testing strategy | [testing-strategy.md](docs/architecture/testing-strategy.md) |
+| Artifact templates | [artifact-templates.md](docs/architecture/artifact-templates.md) |
 | i18n conventions | [i18n-strategy.md](docs/architecture/i18n-strategy.md) |
 | Workflow enforcement | [workflow-enforcement.md](docs/architecture/workflow-enforcement.md) |
 | Gatekeeper prompt | [gatekeeper-prompt.md](docs/architecture/gatekeeper-prompt.md) |

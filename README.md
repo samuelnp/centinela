@@ -138,6 +138,8 @@ Expected sequence:
 3. The agent produces:
    `ROADMAP.md` (human-readable phased plan), `.workflow/roadmap.json` (machine-readable roadmap), `.workflow/roadmap-analysis.md`, `.workflow/roadmap-analysis.json`, `.workflow/roadmap-quality.md`, `.workflow/roadmap-quality.json`, and `docs/features/<feature-slug>.md` for the initial feature set.
 
+If the agent misses one of those files, use `docs/architecture/artifact-templates.md` for the exact setup and per-feature workflow artifact shapes.
+
 Verify roadmap status:
 
 ```bash
@@ -415,7 +417,7 @@ your-project/
     <feature>.json               ← workflow state per feature
     <feature>-gatekeeper.md      ← gatekeeper conflict report
   docs/
-    architecture/                ← 14 reference documents
+    architecture/                ← 16 reference documents
     plans/                       ← one plan doc per feature
   specs/
     <feature>.feature            ← Gherkin acceptance criteria
@@ -430,11 +432,12 @@ your-project/
 
 ## Included Architecture Documentation
 
-`centinela init` copies 15 reference documents into `docs/architecture/`:
+`centinela init` copies 16 reference documents into `docs/architecture/`:
 
 | Document | Contents |
 |----------|---------|
 | `architecture-overview.md` | All five archetypes compared — when to use each |
+| `artifact-templates.md` | Exact setup and per-feature workflow artifact templates |
 | `hexagonal.md` | Ports-and-adapters layers, dependency rules, forbidden imports |
 | `rails-native.md` | MVC conventions, what belongs in models vs services vs views |
 | `n-tier.md` | Controller → Service → Repository layer rules |
