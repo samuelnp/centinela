@@ -16,8 +16,10 @@ export const CentinelaPlugin = async () => {
 
     "tui.prompt.append": async (_input, output) => {
       const promptPayload = typeof _input === "string" ? _input : JSON.stringify(_input || {})
-      appendContext(output, runHook("setup", "", false))
-      appendContext(output, runHook("migrate", "", false))
+      prependContext(output, joinText(
+        runHook("setup", "", false),
+        runHook("migrate", "", false),
+      ))
       appendContext(output, runHook("autostart", promptPayload, false))
       appendContext(output, runHook("orchestration", "", false))
       appendContext(output, runHook("context", "", false))
@@ -38,6 +40,10 @@ function runHook(name, payload, blocking) {
     throw new Error(err || out || "centinela blocked this write")
   }
   return out
+}
+
+function joinText(...parts) {
+  return parts.filter(Boolean).join("\n\n")
 }
 
 function isWriteTool(tool) {
@@ -67,13 +73,21 @@ function getFilePath(input) {
   )
 }
 
+function prependContext(output, text) {
+  writeContext(output, text, true)
+}
+
 function appendContext(output, text) {
+  writeContext(output, text, false)
+}
+
+function writeContext(output, text, front) {
   if (!text || !output || typeof output !== "object") return
   if (typeof output.prompt === "string") {
-    output.prompt += "\n\n" + text
+    output.prompt = front ? text + "\n\n" + output.prompt : output.prompt + "\n\n" + text
     return
   }
   if (Array.isArray(output.context)) {
-    output.context.push(text)
+    front ? output.context.unshift(text) : output.context.push(text)
   }
 }

@@ -11,6 +11,8 @@ This project uses Centinela workflow enforcement.
 
 ## OpenCode Integration
 - Centinela prewrite checks are enforced by .opencode/plugins/centinela.js.
+- Treat Centinela setup and migration directives as higher priority than casual chat.
+- If setup or roadmap is required, do not reply to greetings first; start the required setup flow immediately.
 - If a write is blocked, fix step alignment instead of forcing the write.
 
 ## Commands

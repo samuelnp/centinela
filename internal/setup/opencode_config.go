@@ -23,11 +23,30 @@ func InjectOpenCodeConfig(path string) (bool, error) {
 func mergeInstructions(raw map[string]json.RawMessage) bool {
 	var values []string
 	_ = json.Unmarshal(raw["instructions"], &values)
-	if hasValue(values, "CLAUDE.md") {
+	ordered := []string{}
+	for _, v := range values {
+		if v == "AGENTS.md" || v == "CLAUDE.md" || hasValue(ordered, v) {
+			continue
+		}
+		ordered = append(ordered, v)
+	}
+	ordered = append(ordered, "AGENTS.md", "CLAUDE.md")
+	if sameStrings(values, ordered) {
 		return false
 	}
-	values = append(values, "CLAUDE.md")
-	raw["instructions"], _ = json.Marshal(values)
+	raw["instructions"], _ = json.Marshal(ordered)
+	return true
+}
+
+func sameStrings(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
 	return true
 }
 
