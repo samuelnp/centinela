@@ -1,14 +1,14 @@
 {
   "feature": "docs-latest-features-getting-started",
   "startedAt": "2026-04-24T07:48:56.302485Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-04-24T08:02:24Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-04-24T08:03:35Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-24T08:08:54Z"
     }
   },
   "stepOrder": [

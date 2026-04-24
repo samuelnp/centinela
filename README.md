@@ -21,7 +21,7 @@ The result: every feature ships with a written plan, a Gherkin spec, three test 
 
 - **Claude + OpenCode parity** with shared setup prompts, workflow context, prewrite enforcement, postwrite status updates, and migration guidance.
 - **Roadmap-first bootstrap** with automatic `PROJECT.md` setup, `ROADMAP.md` creation, roadmap analysis artifacts, roadmap quality artifacts, and `centinela roadmap validate`.
-- **Strict five-step workflow** with configurable review mode via `workflow.step_confirmation_mode = "every_step" | "after_plan" | "auto"`.
+- **Strict standard workflow** with a five-step delivery path for regular features and roadmap-defined bootstrap exceptions where required.
 - **Prompt-driven workflow UX** with auto-start for new feature intent, strict orchestration guidance, and a compact Centinela status line.
 - **Managed migrations** through `centinela migrate`, `centinela migrate docs`, and `centinela migrate setup --agent claude|opencode|both`.
 - **Project docs generation** through `centinela docs validate` and `centinela docs generate --out docs/project-docs/index.html --title "..."`.
@@ -181,7 +181,7 @@ Continue feature intent examples:
 centinela start my-feature
 ```
 
-Then follow the same feature path every time:
+For standard product features, follow the same path every time:
 
 1. Write the plan artifacts in `docs/plans/` and `specs/`.
 2. Run `centinela complete <feature>` to advance to `code`.
@@ -227,9 +227,9 @@ centinela docs generate --out docs/project-docs/index.html --title "Centinela Pr
 
 ---
 
-## The Five-Step Workflow
+## The Standard Five-Step Workflow
 
-Every feature follows the same five steps in order. No step can be skipped.
+Most delivery features follow the same five steps in order. Phase 0 bootstrap work can use a shorter roadmap-defined step order, but Centinela still enforces that order and its required artifacts.
 
 ```
 plan → code → tests → validate → docs
