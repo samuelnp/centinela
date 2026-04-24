@@ -1,0 +1,21 @@
+{
+  "feature": "docs-latest-features-getting-started",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-04-24T08:15:00Z",
+  "inputs": [
+    "Updated README and docgen renderer",
+    "go test ./... results"
+  ],
+  "outputs": [
+    "internal/docgen/generate_test.go",
+    "tests/acceptance/docs_latest_features_getting_started_test.go",
+    ".workflow/docs-latest-features-getting-started-edge-cases.md"
+  ],
+  "edgeCases": [
+    "README and generated HTML can drift if feature summaries are updated in only one place",
+    "Minimal roadmap data must not prevent the presentation from showing current capabilities"
+  ],
+  "handoffTo": "gatekeeper"
+}
