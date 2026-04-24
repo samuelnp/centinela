@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/samuelnp/centinela/internal/roadmap"
@@ -15,6 +16,8 @@ func TestRunRoadmap(t *testing.T) {
 
 	if err := runRoadmap(nil, nil); err == nil {
 		t.Fatal("expected no roadmap error")
+	} else if !strings.Contains(err.Error(), ".workflow/roadmap.json") {
+		t.Fatalf("expected roadmap json path in error, got %v", err)
 	}
 	r := &roadmap.Roadmap{Phases: []roadmap.Phase{{Name: "P1", Features: []roadmap.Feature{{Name: "f"}}}}}
 	if err := roadmap.Save(r); err != nil {

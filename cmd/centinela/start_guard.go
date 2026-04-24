@@ -18,7 +18,7 @@ func workflowOrderForFeature(feature string) ([]string, error) {
 	}
 	r, err := roadmap.Load()
 	if err != nil {
-		return nil, fmt.Errorf("greenfield project requires roadmap before start")
+		return nil, roadmapStartError(err)
 	}
 	if err := roadmap.ValidateAnalysis(r); err != nil {
 		return nil, fmt.Errorf("greenfield project requires roadmap senior PM analysis: %w", err)

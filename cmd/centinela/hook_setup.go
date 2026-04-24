@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/samuelnp/centinela/internal/roadmap"
 	"github.com/samuelnp/centinela/internal/ui"
 )
 
@@ -38,6 +39,11 @@ func runHookSetup(_ *cobra.Command, _ []string) error {
 		fmt.Println(ui.RenderRoadmapNeeded())
 		return nil
 	}
+	if _, err := roadmap.Load(); err != nil {
+		fmt.Println(roadmapJSONDirective(err))
+		fmt.Println(ui.RenderRoadmapJSONNeeded(err))
+		return nil
+	}
 	if !exists(".workflow/roadmap-analysis.md") || !exists(".workflow/roadmap-analysis.json") {
 		fmt.Println("CENTINELA DIRECTIVE: roadmap analysis required. Delegate to senior product manager.")
 		fmt.Println(ui.RenderRoadmapAnalysisNeeded())
@@ -59,4 +65,11 @@ func runHookSetup(_ *cobra.Command, _ []string) error {
 func exists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
+}
+
+func roadmapJSONDirective(err error) string {
+	if os.IsNotExist(err) {
+		return "CENTINELA DIRECTIVE: roadmap json required. Write .workflow/roadmap.json."
+	}
+	return "CENTINELA DIRECTIVE: roadmap json invalid. Fix .workflow/roadmap.json."
 }

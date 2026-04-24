@@ -22,7 +22,7 @@ func init() {
 func runRoadmap(_ *cobra.Command, _ []string) error {
 	r, err := roadmap.Load()
 	if err != nil {
-		return fmt.Errorf("no roadmap found — define one with Claude or run centinela init")
+		return roadmapCommandError(err)
 	}
 	fmt.Println(ui.RenderRoadmap(r))
 	return nil

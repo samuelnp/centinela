@@ -31,7 +31,7 @@ func TestRunRoadmapValidateNoRoadmap(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(d)       //nolint:errcheck
 	err := runRoadmapValidate(nil, nil)
-	if err == nil || !strings.Contains(err.Error(), "no roadmap found") {
+	if err == nil || !strings.Contains(err.Error(), ".workflow/roadmap.json") {
 		t.Fatalf("expected no roadmap error, got %v", err)
 	}
 }

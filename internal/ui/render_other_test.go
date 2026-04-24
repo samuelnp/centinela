@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -34,6 +35,9 @@ func TestRenderRoadmapAndReview(t *testing.T) {
 	r2 := &roadmap.Roadmap{Phases: nil}
 	if !strings.Contains(RenderRoadmapNeeded(), "ROADMAP.md") {
 		t.Fatal("roadmap needed output missing marker")
+	}
+	if !strings.Contains(RenderRoadmapJSONNeeded(os.ErrNotExist), ".workflow/roadmap.json") {
+		t.Fatal("roadmap json output missing marker")
 	}
 	if !strings.Contains(RenderRoadmapAnalysisNeeded(), "senior PM") {
 		t.Fatal("roadmap analysis output missing marker")

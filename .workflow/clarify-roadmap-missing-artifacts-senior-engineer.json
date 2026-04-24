@@ -1,0 +1,24 @@
+{
+  "feature": "clarify-roadmap-missing-artifacts",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-04-24T09:05:00Z",
+  "inputs": [
+    "Plan artifacts for clarify-roadmap-missing-artifacts",
+    "Current roadmap start/validate/setup flows",
+    "Current scaffolded setup docs"
+  ],
+  "outputs": [
+    "cmd/centinela/roadmap_errors.go",
+    "cmd/centinela/start_guard.go",
+    "cmd/centinela/roadmap.go",
+    "cmd/centinela/roadmap_validate.go",
+    "cmd/centinela/hook_setup.go",
+    "internal/ui/render_roadmap_json.go",
+    "internal/scaffold/assets/docs/architecture/artifact-templates.md",
+    "internal/scaffold/assets/docs/architecture/new-project-guide.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}
