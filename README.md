@@ -100,7 +100,7 @@ centinela init --agent both   # default
 
 ### 2. Fill in PROJECT.md
 
-Open a Claude session in your project — the setup hook will detect that `PROJECT.md` is missing and automatically prompt Claude to interview you and write it. Alternatively, rename `PROJECT.md.template` to `PROJECT.md` and complete every section manually. This file tells both you and Claude what the project is, which architecture pattern it follows, and where everything lives.
+Open your coding agent in the project — if `PROJECT.md` is missing, Centinela will prompt Claude or OpenCode to interview you and write it. Alternatively, rename `PROJECT.md.template` to `PROJECT.md` and complete every section manually. This file tells both you and the agent what the project is, which architecture pattern it follows, and where everything lives.
 
 ### 3. Configure centinela.toml
 

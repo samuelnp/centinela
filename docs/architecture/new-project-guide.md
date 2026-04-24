@@ -39,7 +39,7 @@ centinela init --local
 
 ## Step 3: Fill in PROJECT.md
 
-Rename `PROJECT.md.template` to `PROJECT.md` and fill in every section:
+Open Claude or OpenCode in the repo and let the setup hook create `PROJECT.md`, or rename `PROJECT.md.template` to `PROJECT.md` and fill in every section manually:
 
 1. **Project name and elevator pitch** — what the project does
 2. **Architecture Choice** — pick one archetype (Hexagonal, Rails-native, N-Tier, ECS, Modular)
