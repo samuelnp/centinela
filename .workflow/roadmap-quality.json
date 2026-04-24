@@ -1,0 +1,18 @@
+{
+  "role": "roadmap-quality-evaluator",
+  "threshold": 9,
+  "features": [
+    {
+      "name": "docs-migration-managed-docs",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 10,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Bootstrap docs migration is clearly defined and low risk for Phase 0 execution."
+    }
+  ]
+}
