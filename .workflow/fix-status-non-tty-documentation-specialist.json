@@ -1,0 +1,21 @@
+{
+  "feature": "fix-status-non-tty",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-04-25T00:00:00Z",
+  "inputs": [
+    "cmd/centinela/status.go",
+    "cmd/centinela/status_model.go",
+    "specs/fix-status-non-tty.feature",
+    ".workflow/fix-status-non-tty-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/fix-status-non-tty-documentation-specialist.md",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [
+    "Status output must remain readable when stdin or stdout is not a tty"
+  ],
+  "handoffTo": "complete"
+}
