@@ -14,6 +14,12 @@ import (
 
 var statusInput = os.Stdin
 var statusOutput = os.Stdout
+var statusHasTTY = hasTTY
+var runInteractiveStatus = func(wfs []*workflow.Workflow) error {
+	p := tea.NewProgram(statusModel{workflows: wfs})
+	_, err := p.Run()
+	return err
+}
 
 type statusModel struct {
 	workflows []*workflow.Workflow
@@ -37,13 +43,11 @@ func (m statusModel) View() string {
 }
 
 func runStatusModel(wfs []*workflow.Workflow) error {
-	if !hasTTY(statusInput) || !hasTTY(statusOutput) {
+	if !statusHasTTY(statusInput) || !statusHasTTY(statusOutput) {
 		fmt.Fprintln(statusOutput, renderStatusBody(wfs))
 		return nil
 	}
-	p := tea.NewProgram(statusModel{workflows: wfs})
-	_, err := p.Run()
-	return err
+	return runInteractiveStatus(wfs)
 }
 
 func renderStatusBody(wfs []*workflow.Workflow) string {

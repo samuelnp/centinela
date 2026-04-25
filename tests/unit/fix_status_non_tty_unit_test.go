@@ -15,9 +15,9 @@ func TestStatusRunnerKeepsTTYFallbackLogic(t *testing.T) {
 	}
 	content := string(data)
 	checks := []string{
-		"if !hasTTY(statusInput) || !hasTTY(statusOutput)",
+		"if !statusHasTTY(statusInput) || !statusHasTTY(statusOutput)",
 		"fmt.Fprintln(statusOutput, renderStatusBody(wfs))",
-		"tea.NewProgram(statusModel{workflows: wfs})",
+		"return runInteractiveStatus(wfs)",
 	}
 	for _, check := range checks {
 		if !strings.Contains(content, check) {
