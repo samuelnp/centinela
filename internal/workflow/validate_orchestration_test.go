@@ -42,9 +42,11 @@ func TestValidateArtifactsStrictOrchestrationAndLegacy(t *testing.T) {
 func writePlanEvidence(feature string, role orchestration.Role, edge bool) {
 	os.WriteFile(orchestration.MarkdownPath(feature, role), []byte("# role"), 0644) //nolint:errcheck
 	edgeCases := `[]`
+	output := `"outputs":["docs/plans/` + feature + `.md"]`
 	if edge {
 		edgeCases = `["e"]`
+		output = `"outputs":["specs/` + feature + `.feature"]`
 	}
-	data := `{"feature":"` + feature + `","step":"plan","role":"` + string(role) + `","status":"done","generatedAt":"` + time.Now().UTC().Format(time.RFC3339) + `","inputs":["docs/features/` + feature + `.md"],"outputs":["o"],"edgeCases":` + edgeCases + `,"handoffTo":"orchestrator"}`
+	data := `{"feature":"` + feature + `","step":"plan","role":"` + string(role) + `","status":"done","generatedAt":"` + time.Now().UTC().Format(time.RFC3339) + `","inputs":["docs/features/` + feature + `.md"],` + output + `,"edgeCases":` + edgeCases + `,"handoffTo":"orchestrator"}`
 	os.WriteFile(orchestration.JSONPath(feature, role), []byte(data), 0644) //nolint:errcheck
 }

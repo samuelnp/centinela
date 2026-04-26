@@ -51,12 +51,25 @@ func writeEvidence(t *testing.T, f, s string, r Role, edge bool) {
 	os.WriteFile(MarkdownPath(f, r), []byte("# evidence"), 0644) //nolint:errcheck
 	edgeCases := `[]`
 	inputs := `"inputs":["i"]`
+	outputs := `"outputs":["docs/project-docs/index.html"]`
 	if s == "plan" && (r == RoleBigThinker || r == RoleFeatureSpecial) {
 		inputs = `"inputs":["docs/features/` + f + `.md"]`
+		os.MkdirAll("docs/plans", 0755)                              //nolint:errcheck
+		os.MkdirAll("specs", 0755)                                   //nolint:errcheck
+		os.WriteFile("docs/plans/"+f+".md", []byte("plan"), 0644)    //nolint:errcheck
+		os.WriteFile("specs/"+f+".feature", []byte("Feature"), 0644) //nolint:errcheck
+		outputs = `"outputs":["docs/plans/` + f + `.md"]`
+		if r == RoleFeatureSpecial {
+			outputs = `"outputs":["specs/` + f + `.feature"]`
+		}
+	}
+	if s == "docs" {
+		os.MkdirAll("docs/project-docs", 0755)                             //nolint:errcheck
+		os.WriteFile("docs/project-docs/index.html", []byte("html"), 0644) //nolint:errcheck
 	}
 	if edge {
 		edgeCases = `["e"]`
 	}
-	data := `{"feature":"` + f + `","step":"` + s + `","role":"` + string(r) + `","status":"done","generatedAt":"` + time.Now().UTC().Format(time.RFC3339) + `",` + inputs + `,"outputs":["o"],"edgeCases":` + edgeCases + `,"handoffTo":"orchestrator","extra":"ok"}`
+	data := `{"feature":"` + f + `","step":"` + s + `","role":"` + string(r) + `","status":"done","generatedAt":"` + time.Now().UTC().Format(time.RFC3339) + `",` + inputs + `,` + outputs + `,"edgeCases":` + edgeCases + `,"handoffTo":"orchestrator","extra":"ok"}`
 	os.WriteFile(JSONPath(f, r), []byte(data), 0644) //nolint:errcheck
 }
