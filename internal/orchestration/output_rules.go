@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func validateActionableOutputs(path, feature string, role Role, outputs []string) error {
+func validateActionableOutputs(path, feature string, role Role, outputs, uiPaths []string) error {
 	if role == RoleDocsSpecialist {
 		return nil
 	}
@@ -32,6 +32,8 @@ func validateActionableOutputs(path, feature string, role Role, outputs []string
 			return nil
 		}
 		return fmt.Errorf("qa-senior outputs must include at least one real test file and %s in: %s", report, path)
+	case RoleUXUISpecialist:
+		return validateUXOutputs(path, files, uiPaths)
 	default:
 		return nil
 	}

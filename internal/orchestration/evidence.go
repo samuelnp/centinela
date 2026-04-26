@@ -21,7 +21,7 @@ type Evidence struct {
 	Checksum    string   `json:"checksum,omitempty"`
 }
 
-func ValidateEvidence(path, feature, step string, role Role) error {
+func ValidateEvidence(path, feature, step string, role Role, uiPaths []string) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return fmt.Errorf("missing evidence json: %s", path)
@@ -36,17 +36,21 @@ func ValidateEvidence(path, feature, step string, role Role) error {
 	if e.Status != "done" || len(e.Inputs) == 0 || len(e.Outputs) == 0 || e.HandoffTo == "" {
 		return fmt.Errorf("incomplete evidence fields: %s", path)
 	}
-	if (role == RoleFeatureSpecial || role == RoleQASeniorEngineer) && len(e.EdgeCases) == 0 {
+	if needsEdgeCases(role) && len(e.EdgeCases) == 0 {
 		return fmt.Errorf("edgeCases required in: %s", path)
 	}
 	if _, err := time.Parse(time.RFC3339, strings.TrimSpace(e.GeneratedAt)); err != nil {
 		return fmt.Errorf("invalid generatedAt in: %s", path)
 	}
-	if err := validateActionableOutputs(path, feature, role, e.Outputs); err != nil {
+	if err := validateActionableOutputs(path, feature, role, e.Outputs, uiPaths); err != nil {
 		return err
 	}
 	if err := validatePlanSnapshotInputs(path, feature, step, role, e.Inputs); err != nil {
 		return err
 	}
 	return nil
+}
+
+func needsEdgeCases(role Role) bool {
+	return role == RoleFeatureSpecial || role == RoleQASeniorEngineer || role == RoleUXUISpecialist
 }

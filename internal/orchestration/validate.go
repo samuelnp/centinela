@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-func ValidateStep(feature, step string) error {
-	roles := RequiredRoles(step)
+func ValidateStep(feature, step string, uiPaths []string) error {
+	roles := RequiredRolesForFeature(feature, step)
 	if len(roles) == 0 {
 		return nil
 	}
@@ -19,7 +19,7 @@ func ValidateStep(feature, step string) error {
 			missing = append(missing, md)
 		}
 		js := JSONPath(feature, role)
-		if err := ValidateEvidence(js, feature, step, role); err != nil {
+		if err := ValidateEvidence(js, feature, step, role, uiPaths); err != nil {
 			if strings.Contains(err.Error(), "missing evidence") {
 				missing = append(missing, js)
 			} else {

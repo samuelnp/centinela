@@ -11,10 +11,11 @@ const Filename = "centinela.toml"
 
 // Config is the centinela.toml structure.
 type Config struct {
-	Workflow WorkflowConfig `toml:"workflow"`
-	Validate ValidateConfig `toml:"validate"`
-	Gates    GatesConfig    `toml:"gates"`
-	I18n     I18nConfig     `toml:"i18n"`
+	Workflow      WorkflowConfig      `toml:"workflow"`
+	Orchestration OrchestrationConfig `toml:"orchestration"`
+	Validate      ValidateConfig      `toml:"validate"`
+	Gates         GatesConfig         `toml:"gates"`
+	I18n          I18nConfig          `toml:"i18n"`
 }
 
 // WorkflowConfig controls language-specific step validation behaviour.

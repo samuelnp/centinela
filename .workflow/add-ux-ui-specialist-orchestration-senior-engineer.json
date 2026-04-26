@@ -1,0 +1,26 @@
+{
+  "feature": "add-ux-ui-specialist-orchestration",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-04-27T00:00:00Z",
+  "inputs": [
+    "docs/plans/add-ux-ui-specialist-orchestration.md",
+    "specs/add-ux-ui-specialist-orchestration.feature"
+  ],
+  "outputs": [
+    "cmd/centinela/hook_orchestration.go",
+    "internal/config/config.go",
+    "internal/config/orchestration.go",
+    "internal/orchestration/evidence.go",
+    "internal/orchestration/feature_surface.go",
+    "internal/orchestration/output_rules.go",
+    "internal/orchestration/output_ui.go",
+    "internal/orchestration/policy.go",
+    "internal/orchestration/validate.go",
+    "internal/workflow/validate.go",
+    "internal/workflow/validate_orchestration.go"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}

@@ -28,7 +28,7 @@ func ValidateArtifacts(feature, step string, cfg *config.Config) error {
 	if err != nil {
 		return err
 	}
-	return validateOrchestration(feature, step)
+	return validateOrchestration(feature, step, cfg)
 }
 
 func validatePlan(feature string) error {

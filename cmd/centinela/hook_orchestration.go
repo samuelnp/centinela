@@ -28,7 +28,7 @@ func runHookOrchestration(_ *cobra.Command, _ []string) error {
 		if wf.OrchestrationMode != workflow.StrictOrchestrationMode {
 			continue
 		}
-		roles := orchestration.RequiredRoles(wf.CurrentStep)
+		roles := orchestration.RequiredRolesForFeature(wf.Feature, wf.CurrentStep)
 		if len(roles) == 0 {
 			continue
 		}
