@@ -16,19 +16,19 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	if len(RequiredRoles("plan")) != 2 || len(RequiredRoles("code")) != 1 || len(RequiredRoles("docs")) != 1 || len(RequiredRoles("validate")) != 0 {
 		t.Fatal("unexpected role mapping")
 	}
-	if err := ValidateStep("f", "plan"); err == nil {
+	if err := ValidateStep("f", "plan", nil); err == nil {
 		t.Fatal("expected missing evidence failure")
 	}
 	writeEvidence(t, "f", "plan", RoleBigThinker, false)
 	writeEvidence(t, "f", "plan", RoleFeatureSpecial, true)
-	if err := ValidateStep("f", "plan"); err != nil {
+	if err := ValidateStep("f", "plan", nil); err != nil {
 		t.Fatalf("expected valid evidence: %v", err)
 	}
-	if err := ValidateStep("f", "docs"); err == nil {
+	if err := ValidateStep("f", "docs", nil); err == nil {
 		t.Fatal("expected missing docs evidence failure")
 	}
 	writeEvidence(t, "f", "docs", RoleDocsSpecialist, false)
-	if err := ValidateStep("f", "docs"); err != nil {
+	if err := ValidateStep("f", "docs", nil); err != nil {
 		t.Fatalf("expected docs evidence success: %v", err)
 	}
 }
@@ -41,7 +41,7 @@ func TestValidateEvidenceBranches(t *testing.T) {
 	os.MkdirAll(".workflow", 0755) //nolint:errcheck
 	path := JSONPath("f", RoleQASeniorEngineer)
 	os.WriteFile(path, []byte(`{"feature":"f","step":"tests","role":"qa-senior","status":"done","generatedAt":"bad","inputs":["i"],"outputs":["o"],"edgeCases":["e"],"handoffTo":"orchestrator"}`), 0644) //nolint:errcheck
-	if err := ValidateEvidence(path, "f", "tests", RoleQASeniorEngineer); err == nil || !strings.Contains(err.Error(), "generatedAt") {
+	if err := ValidateEvidence(path, "f", "tests", RoleQASeniorEngineer, nil); err == nil || !strings.Contains(err.Error(), "generatedAt") {
 		t.Fatalf("expected generatedAt error, got %v", err)
 	}
 }

@@ -1,0 +1,27 @@
+{
+  "feature": "add-ux-ui-specialist-orchestration",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-04-27T00:00:00Z",
+  "inputs": [
+    "specs/add-ux-ui-specialist-orchestration.feature",
+    "cmd/centinela/hook_orchestration.go",
+    "internal/config/orchestration.go",
+    "internal/orchestration/policy.go",
+    "internal/orchestration/feature_surface.go",
+    "internal/orchestration/output_ui.go"
+  ],
+  "outputs": [
+    "tests/unit/add_ux_ui_specialist_orchestration_unit_test.go",
+    "tests/integration/add_ux_ui_specialist_orchestration_integration_test.go",
+    "tests/acceptance/add_ux_ui_specialist_orchestration_test.go",
+    ".workflow/add-ux-ui-specialist-orchestration-edge-cases.md"
+  ],
+  "edgeCases": [
+    "internal features must not require UX evidence",
+    "user-facing code steps must block completion until UX evidence exists",
+    "UX evidence must fail when outputs do not touch configured UI paths"
+  ],
+  "handoffTo": "validate"
+}
