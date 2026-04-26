@@ -127,3 +127,10 @@ Domain/core logic, tests, and validate are especially non-negotiable.
 In strict orchestration mode, `plan` evidence from `big-thinker` and
 `feature-specialist` must include all `docs/features/*.md` paths in JSON `inputs`
 (including the current feature brief).
+
+Strict orchestration evidence must also be actionable. Specialist JSON `outputs`
+must be real repo files on disk, not free-text summaries.
+
+- `big-thinker` and `feature-specialist` outputs must include a real `docs/plans/...` or `specs/...` artifact.
+- `senior-engineer` outputs must include at least one real non-evidence implementation file.
+- `qa-senior` outputs must include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.

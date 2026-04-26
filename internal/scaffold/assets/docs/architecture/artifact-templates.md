@@ -139,6 +139,13 @@ Roles: `big-thinker`, `feature-specialist`, `senior-engineer`, `qa-senior`, `doc
 }
 ```
 
+For strict orchestration roles, `outputs` must be project-relative file paths that already
+exist on disk. Free-text summaries are not valid outputs.
+
+- `big-thinker` and `feature-specialist`: include a real `docs/plans/...` or `specs/...` file.
+- `senior-engineer`: include at least one real non-evidence implementation file.
+- `qa-senior`: include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.
+
 ### Other workflow outputs
 
 - `.workflow/<feature>-edge-cases.md`

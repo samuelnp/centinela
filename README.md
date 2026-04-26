@@ -245,6 +245,12 @@ plan → code → tests → validate → docs
 | **validate** | Gatekeeper conflict report | All gate checks pass + all `centinela.toml` commands exit 0 |
 | **docs** | Human-facing project documentation | `.workflow/<feature>-documentation-specialist.md` + `.workflow/<feature>-documentation-specialist.json` + `docs/project-docs/index.html` |
 
+In strict orchestration mode, specialist evidence must be actionable:
+
+- `big-thinker` and `feature-specialist` outputs must point to real `docs/plans/...` or `specs/...` artifacts.
+- `senior-engineer` outputs must include at least one real non-evidence implementation file.
+- `qa-senior` outputs must include at least one real test file and `.workflow/<feature>-edge-cases.md`.
+
 Step confirmation prompts are configurable in `centinela.toml`:
 
 ```toml
