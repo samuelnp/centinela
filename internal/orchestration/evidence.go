@@ -42,6 +42,9 @@ func ValidateEvidence(path, feature, step string, role Role) error {
 	if _, err := time.Parse(time.RFC3339, strings.TrimSpace(e.GeneratedAt)); err != nil {
 		return fmt.Errorf("invalid generatedAt in: %s", path)
 	}
+	if err := validateActionableOutputs(path, feature, role, e.Outputs); err != nil {
+		return err
+	}
 	if err := validatePlanSnapshotInputs(path, feature, step, role, e.Inputs); err != nil {
 		return err
 	}
