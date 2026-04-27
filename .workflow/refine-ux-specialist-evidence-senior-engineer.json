@@ -1,0 +1,17 @@
+{
+  "feature": "refine-ux-specialist-evidence",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-04-27T00:00:00Z",
+  "inputs": [
+    "docs/plans/refine-ux-specialist-evidence.md",
+    "specs/refine-ux-specialist-evidence.feature"
+  ],
+  "outputs": [
+    "internal/orchestration/evidence.go",
+    "internal/orchestration/evidence_ux.go"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}

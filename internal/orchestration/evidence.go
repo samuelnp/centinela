@@ -17,6 +17,7 @@ type Evidence struct {
 	Inputs      []string `json:"inputs"`
 	Outputs     []string `json:"outputs"`
 	EdgeCases   []string `json:"edgeCases"`
+	MobileFirst *bool    `json:"mobileFirst,omitempty"`
 	HandoffTo   string   `json:"handoffTo"`
 	Checksum    string   `json:"checksum,omitempty"`
 }
@@ -43,6 +44,9 @@ func ValidateEvidence(path, feature, step string, role Role, uiPaths []string) e
 		return fmt.Errorf("invalid generatedAt in: %s", path)
 	}
 	if err := validateActionableOutputs(path, feature, role, e.Outputs, uiPaths); err != nil {
+		return err
+	}
+	if err := validateUXEvidence(path, role, e.EdgeCases, e.MobileFirst); err != nil {
 		return err
 	}
 	if err := validatePlanSnapshotInputs(path, feature, step, role, e.Inputs); err != nil {
