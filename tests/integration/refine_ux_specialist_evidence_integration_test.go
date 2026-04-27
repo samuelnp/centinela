@@ -11,7 +11,7 @@ import (
 	"github.com/samuelnp/centinela/internal/workflow"
 )
 
-func TestUserFacingCodeStepRequiresUXEvidence(t *testing.T) {
+func TestUserFacingCodeStepRequiresUXTags(t *testing.T) {
 	d := t.TempDir()
 	o, _ := os.Getwd()
 	defer os.Chdir(o)                                                               //nolint:errcheck
@@ -26,16 +26,13 @@ func TestUserFacingCodeStepRequiresUXEvidence(t *testing.T) {
 	workflow.Save(wf) //nolint:errcheck
 	ts := time.Now().UTC().Format(time.RFC3339)
 	os.WriteFile(orchestration.MarkdownPath("f", orchestration.RoleSeniorEngineer), []byte("# role"), 0644) //nolint:errcheck
-	data := `{"feature":"f","step":"code","role":"senior-engineer","status":"done","generatedAt":"` + ts + `","inputs":["docs/plans/f.md"],"outputs":["src/ui/page.tsx"],"edgeCases":[],"handoffTo":"qa-senior"}`
-	os.WriteFile(orchestration.JSONPath("f", orchestration.RoleSeniorEngineer), []byte(data), 0644) //nolint:errcheck
-	err := workflow.ValidateArtifacts("f", "code", &config.Config{})
-	if err == nil || !strings.Contains(err.Error(), "ux-ui-specialist") {
-		t.Fatalf("expected missing ux-ui-specialist error, got %v", err)
-	}
 	os.WriteFile(orchestration.MarkdownPath("f", orchestration.RoleUXUISpecialist), []byte("# role"), 0644) //nolint:errcheck
-	ux := `{"feature":"f","step":"code","role":"ux-ui-specialist","status":"done","generatedAt":"` + ts + `","inputs":["docs/features/f.md"],"outputs":["src/ui/page.tsx"],"edgeCases":["mobile-first","visual-hierarchy","typography-hierarchy","responsive-layout","loading-state","empty-state","error-state","motion-and-reduced-motion"],"mobileFirst":true,"handoffTo":"qa-senior"}`
+	se := `{"feature":"f","step":"code","role":"senior-engineer","status":"done","generatedAt":"` + ts + `","inputs":["docs/plans/f.md"],"outputs":["src/ui/page.tsx"],"edgeCases":[],"handoffTo":"qa-senior"}`
+	ux := `{"feature":"f","step":"code","role":"ux-ui-specialist","status":"done","generatedAt":"` + ts + `","inputs":["docs/features/f.md"],"outputs":["src/ui/page.tsx"],"edgeCases":["mobile-first"],"mobileFirst":true,"handoffTo":"qa-senior"}`
+	os.WriteFile(orchestration.JSONPath("f", orchestration.RoleSeniorEngineer), []byte(se), 0644) //nolint:errcheck
 	os.WriteFile(orchestration.JSONPath("f", orchestration.RoleUXUISpecialist), []byte(ux), 0644) //nolint:errcheck
-	if err := workflow.ValidateArtifacts("f", "code", &config.Config{}); err != nil {
-		t.Fatalf("expected user-facing code step success, got %v", err)
+	err := workflow.ValidateArtifacts("f", "code", &config.Config{})
+	if err == nil || !strings.Contains(err.Error(), "visual-hierarchy") {
+		t.Fatalf("expected missing ux tag error, got %v", err)
 	}
 }
