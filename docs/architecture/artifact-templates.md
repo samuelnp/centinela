@@ -112,7 +112,7 @@ Workflow state file created by `centinela start <feature>`.
 
 ### `.workflow/<feature>-<role>.md`
 
-Roles: `big-thinker`, `feature-specialist`, `senior-engineer`, `qa-senior`, `documentation-specialist`.
+Roles: `big-thinker`, `feature-specialist`, `senior-engineer`, `ux-ui-specialist`, `qa-senior`, `documentation-specialist`.
 
 ```md
 # Orchestration Evidence: <role>
@@ -134,7 +134,7 @@ Roles: `big-thinker`, `feature-specialist`, `senior-engineer`, `qa-senior`, `doc
   "generatedAt": "2026-04-24T00:00:00Z",
   "inputs": ["docs/features/feature-slug.md"],
   "outputs": ["docs/plans/feature-slug.md", "specs/feature-slug.feature"],
-  "edgeCases": ["List required for feature-specialist and qa-senior"],
+  "edgeCases": ["List required for feature-specialist, ux-ui-specialist, and qa-senior"],
   "handoffTo": "senior-engineer"
 }
 ```
@@ -144,6 +144,7 @@ exist on disk. Free-text summaries are not valid outputs.
 
 - `big-thinker` and `feature-specialist`: include a real `docs/plans/...` or `specs/...` file.
 - `senior-engineer`: include at least one real non-evidence implementation file.
+- `ux-ui-specialist`: required only for features whose brief includes `surface: user-facing`; include at least one real UI file under configured `ui_paths`.
 - `qa-senior`: include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.
 
 ### Other workflow outputs

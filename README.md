@@ -249,7 +249,15 @@ In strict orchestration mode, specialist evidence must be actionable:
 
 - `big-thinker` and `feature-specialist` outputs must point to real `docs/plans/...` or `specs/...` artifacts.
 - `senior-engineer` outputs must include at least one real non-evidence implementation file.
+- `ux-ui-specialist` is required during `code` only for features whose brief declares `surface: user-facing`; its outputs must include at least one real UI file.
 - `qa-senior` outputs must include at least one real test file and `.workflow/<feature>-edge-cases.md`.
+
+UI path enforcement is configurable:
+
+```toml
+[orchestration]
+ui_paths = ["src/ui", "src/components", "app/views", "web", "styles"]
+```
 
 Step confirmation prompts are configurable in `centinela.toml`:
 
