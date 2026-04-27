@@ -154,7 +154,7 @@ Strict orchestration evidence must also be actionable. Required specialist JSON
 
 - `big-thinker` and `feature-specialist` outputs must include a real `docs/plans/...` or `specs/...` artifact.
 - `senior-engineer` outputs must include at least one real non-evidence implementation file.
-- `ux-ui-specialist` is required during `code` when `docs/features/<feature>.md` declares `surface: user-facing`; its outputs must include at least one real UI file under configured `ui_paths`.
+- `ux-ui-specialist` is required during `code` when `docs/features/<feature>.md` declares `surface: user-facing`; its outputs must include at least one real UI file under configured `ui_paths`, `mobileFirst: true`, and the required UX edge-case tag set.
 - `qa-senior` outputs must include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.
 
 If validation fails, the step remains in progress.

@@ -1,0 +1,25 @@
+{
+  "feature": "refine-ux-specialist-evidence",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-04-27T00:00:00Z",
+  "inputs": [
+    "README.md",
+    "docs/architecture/artifact-templates.md",
+    "docs/architecture/workflow-enforcement.md",
+    "internal/scaffold/assets/docs/architecture/artifact-templates.md",
+    "internal/scaffold/assets/docs/architecture/workflow-enforcement.md",
+    "specs/refine-ux-specialist-evidence.feature"
+  ],
+  "outputs": [
+    "README.md",
+    "docs/architecture/artifact-templates.md",
+    "docs/architecture/workflow-enforcement.md",
+    "internal/scaffold/assets/docs/architecture/artifact-templates.md",
+    "internal/scaffold/assets/docs/architecture/workflow-enforcement.md",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

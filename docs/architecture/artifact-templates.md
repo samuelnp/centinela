@@ -128,14 +128,15 @@ Roles: `big-thinker`, `feature-specialist`, `senior-engineer`, `ux-ui-specialist
 ```json
 {
   "feature": "feature-slug",
-  "step": "plan",
-  "role": "feature-specialist",
+  "step": "code",
+  "role": "ux-ui-specialist",
   "status": "done",
   "generatedAt": "2026-04-24T00:00:00Z",
   "inputs": ["docs/features/feature-slug.md"],
-  "outputs": ["docs/plans/feature-slug.md", "specs/feature-slug.feature"],
-  "edgeCases": ["List required for feature-specialist, ux-ui-specialist, and qa-senior"],
-  "handoffTo": "senior-engineer"
+  "outputs": ["src/ui/page.tsx"],
+  "edgeCases": ["mobile-first", "visual-hierarchy", "typography-hierarchy", "responsive-layout", "loading-state", "empty-state", "error-state", "motion-and-reduced-motion"],
+  "mobileFirst": true,
+  "handoffTo": "qa-senior"
 }
 ```
 
@@ -144,7 +145,7 @@ exist on disk. Free-text summaries are not valid outputs.
 
 - `big-thinker` and `feature-specialist`: include a real `docs/plans/...` or `specs/...` file.
 - `senior-engineer`: include at least one real non-evidence implementation file.
-- `ux-ui-specialist`: required only for features whose brief includes `surface: user-facing`; include at least one real UI file under configured `ui_paths`.
+- `ux-ui-specialist`: required only for features whose brief includes `surface: user-facing`; include at least one real UI file under configured `ui_paths`, set `mobileFirst: true`, and include these tags in `edgeCases`: `mobile-first`, `visual-hierarchy`, `typography-hierarchy`, `responsive-layout`, `loading-state`, `empty-state`, `error-state`, `motion-and-reduced-motion`.
 - `qa-senior`: include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.
 
 ### Other workflow outputs

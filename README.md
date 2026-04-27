@@ -249,7 +249,7 @@ In strict orchestration mode, specialist evidence must be actionable:
 
 - `big-thinker` and `feature-specialist` outputs must point to real `docs/plans/...` or `specs/...` artifacts.
 - `senior-engineer` outputs must include at least one real non-evidence implementation file.
-- `ux-ui-specialist` is required during `code` only for features whose brief declares `surface: user-facing`; its outputs must include at least one real UI file.
+- `ux-ui-specialist` is required during `code` only for features whose brief declares `surface: user-facing`; its outputs must include at least one real UI file, `mobileFirst: true`, and the required UX review tags.
 - `qa-senior` outputs must include at least one real test file and `.workflow/<feature>-edge-cases.md`.
 
 UI path enforcement is configurable:
