@@ -35,6 +35,15 @@ func TestOpenCodeSetupPriority_GeneratedAssetsFavorSetup(t *testing.T) {
 	if !strings.Contains(string(agents), "On a greeting-only first prompt") {
 		t.Fatal("expected AGENTS.md to cover greeting-only first prompts")
 	}
+	if !strings.Contains(string(agents), "do not suggest centinela start <feature>") {
+		t.Fatal("expected AGENTS.md to block feature workflow suggestions during setup")
+	}
+	if !strings.Contains(string(agents), "do not ask what to work on") {
+		t.Fatal("expected AGENTS.md to block feature discovery during setup")
+	}
+	if !strings.Contains(string(agents), "define the roadmap before asking for feature work") {
+		t.Fatal("expected AGENTS.md to require roadmap bootstrap before feature work")
+	}
 	plugin, _ := os.ReadFile(".opencode/plugins/centinela.js") //nolint:errcheck
 	if !strings.Contains(string(plugin), `prependContext(output, joinText(`) {
 		t.Fatal("expected plugin to prepend setup directives")
