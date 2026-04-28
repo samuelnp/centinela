@@ -1,0 +1,35 @@
+{
+  "feature": "enrich-plan-advisor-context",
+  "startedAt": "2026-04-28T11:16:06.518471Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-04-28T11:25:22Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}
