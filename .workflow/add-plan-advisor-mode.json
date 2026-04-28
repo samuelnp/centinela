@@ -1,15 +1,15 @@
 {
   "feature": "add-plan-advisor-mode",
   "startedAt": "2026-04-27T20:56:48.321316Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-04-28T07:51:25Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-28T10:59:15Z"
     },
     "plan": {
       "status": "done",

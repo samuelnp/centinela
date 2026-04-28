@@ -154,3 +154,13 @@ exist on disk. Free-text summaries are not valid outputs.
 - `.workflow/<feature>-gatekeeper.md`
 - `.workflow/<feature>-production-readiness.md` when enabled
 - `docs/project-docs/index.html` after the docs step
+
+### Plan advisor behavior
+
+Plan advisor mode does not create a new orchestration evidence role. It changes prompt behavior
+during the `plan` step and orchestrates between `big-thinker` and `feature-specialist`.
+
+- `workflow.plan_advisor_mode = "missing_info"` (default): ask only the missing high-value questions.
+- `workflow.plan_advisor_mode = "always"`: always ask an advisor round during `plan`.
+- `workflow.plan_advisor_mode = "off"`: disable advisor prompting.
+- `workflow.plan_question_limit` defaults to `4` and caps each advisor round.

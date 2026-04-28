@@ -1,0 +1,27 @@
+{
+  "feature": "add-plan-advisor-mode",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-04-27T00:00:00Z",
+  "inputs": [
+    "README.md",
+    "docs/architecture/workflow-enforcement.md",
+    "docs/architecture/artifact-templates.md",
+    "internal/scaffold/assets/centinela.toml",
+    "internal/scaffold/assets/docs/architecture/workflow-enforcement.md",
+    "internal/scaffold/assets/docs/architecture/artifact-templates.md",
+    "specs/add-plan-advisor-mode.feature"
+  ],
+  "outputs": [
+    "README.md",
+    "docs/architecture/workflow-enforcement.md",
+    "docs/architecture/artifact-templates.md",
+    "internal/scaffold/assets/centinela.toml",
+    "internal/scaffold/assets/docs/architecture/workflow-enforcement.md",
+    "internal/scaffold/assets/docs/architecture/artifact-templates.md",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

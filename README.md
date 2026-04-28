@@ -264,6 +264,8 @@ Step confirmation prompts are configurable in `centinela.toml`:
 ```toml
 [workflow]
 step_confirmation_mode = "every_step" # every_step | after_plan | auto
+plan_advisor_mode = "missing_info"   # missing_info | always | off
+plan_question_limit = 4               # capped at 4 questions per round
 ```
 
 ### Workflow commands
@@ -296,6 +298,14 @@ Before Claude writes or edits any file, centinela checks whether that file belon
 ### PostToolUse — Write / Edit
 
 After every file write, centinela appends a compact status tag to the session:
+
+### Prompt Advisor — Plan Step
+
+During the `plan` step, Centinela also injects a plan-advisor directive. By default it runs in
+`missing_info` mode, inspects `docs/features/<feature>.md`, `docs/plans/<feature>.md`, and
+`specs/<feature>.feature`, and asks up to 4 missing high-value questions through `big-thinker` and
+`feature-specialist` lenses. User-facing features receive UX/mobile-first questions only when those
+topics are still missing.
 
 ```
 ↳ my-feature · code · 2/5

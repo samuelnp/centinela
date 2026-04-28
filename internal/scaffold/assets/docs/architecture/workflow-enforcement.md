@@ -135,3 +135,7 @@ must be real repo files on disk, not free-text summaries.
 - `senior-engineer` outputs must include at least one real non-evidence implementation file.
 - `ux-ui-specialist` is required during `code` when `docs/features/<feature>.md` declares `surface: user-facing`; its outputs must include at least one real UI file under configured `ui_paths`, `mobileFirst: true`, and the required UX edge-case tag set.
 - `qa-senior` outputs must include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.
+
+During `plan`, Centinela also runs plan-advisor mode by default. `workflow.plan_advisor_mode = "missing_info"`
+asks only missing high-value questions from `big-thinker` and `feature-specialist` lenses, while
+`workflow.plan_question_limit` caps each round at `4`.

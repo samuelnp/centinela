@@ -22,12 +22,21 @@
 #   "every_step" (default): ask before each `centinela complete`.
 #   "after_plan": ask only for plan -> code transition.
 #   "auto": no review prompt (agent still runs `centinela complete` explicitly).
+#
+# plan_advisor_mode: adaptive planning prompts during the `plan` step.
+#   "missing_info" (default): ask only missing high-value questions.
+#   "always": always ask an advisor round during plan.
+#   "off": disable plan-advisor prompts.
+#
+# plan_question_limit: max advisor questions per prompt round (default cap: 4).
 # ---------------------------------------------------------------------------
 [workflow]
 # test_suffixes      = ["_test.go"]
 # acceptance_suffix  = "_steps_test.go"
 # code_dirs          = ["/cmd/", "/internal/", "/pkg/"]
 # step_confirmation_mode = "every_step"
+# plan_advisor_mode  = "missing_info"
+# plan_question_limit = 4
 
 # ---------------------------------------------------------------------------
 # Validate commands

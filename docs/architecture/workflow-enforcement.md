@@ -181,3 +181,8 @@ These hooks are wired by `centinela init` for Claude and OpenCode integrations.
    - `every_step` (default): require explicit user confirmation for each step.
    - `after_plan`: require confirmation only for plan -> code transition.
    - `auto`: no review prompt; still run `centinela complete <feature>` explicitly.
+5. During `plan`, Centinela runs plan-advisor mode by default:
+   - `workflow.plan_advisor_mode = "missing_info"` asks only missing high-value questions.
+   - `workflow.plan_advisor_mode = "always"` always asks an advisor round.
+   - `workflow.plan_advisor_mode = "off"` disables advisor prompting.
+   - `workflow.plan_question_limit` caps each advisor round and defaults to `4`.
