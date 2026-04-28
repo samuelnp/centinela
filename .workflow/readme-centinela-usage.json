@@ -1,15 +1,15 @@
 {
   "feature": "readme-centinela-usage",
   "startedAt": "2026-04-28T11:46:03.727752Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-04-28T11:48:27Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-28T13:39:45Z"
     },
     "plan": {
       "status": "done",
