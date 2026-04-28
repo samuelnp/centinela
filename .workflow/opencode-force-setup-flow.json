@@ -1,15 +1,15 @@
 {
   "feature": "opencode-force-setup-flow",
   "startedAt": "2026-04-28T14:03:23.356484Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-04-28T14:05:02Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-28T14:10:02Z"
     },
     "plan": {
       "status": "done",
