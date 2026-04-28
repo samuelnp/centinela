@@ -29,3 +29,21 @@ func TestDirectiveAsksOnlyMissingQuestions(t *testing.T) {
 		t.Fatalf("expected user-facing mobile-first guidance, got: %s", out)
 	}
 }
+
+func TestDirectiveSupportsOffModeAndSolidCoverage(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o)                                                                                                                                 //nolint:errcheck
+	os.Chdir(d)                                                                                                                                       //nolint:errcheck
+	os.MkdirAll("docs/features", 0755)                                                                                                                //nolint:errcheck
+	os.MkdirAll("specs", 0755)                                                                                                                        //nolint:errcheck
+	os.WriteFile("docs/features/f.md", []byte("## Problem\ntext\n## Scope\ntext\n## Constraints\ntext\n## Risks\ntext\n## Edge Cases\ntext\n"), 0644) //nolint:errcheck
+	os.WriteFile("specs/f.feature", []byte("Feature: x\nScenario: y\nGiven a\nWhen b\nThen c\n"), 0644)                                               //nolint:errcheck
+	if out := Directive("f", &config.Config{Workflow: config.WorkflowConfig{PlanAdvisorMode: config.PlanAdvisorOff}}); out != "" {
+		t.Fatalf("expected off mode silence, got: %s", out)
+	}
+	out := Directive("f", &config.Config{})
+	if !strings.Contains(out, "Planning coverage looks solid") {
+		t.Fatalf("expected synthesis guidance, got: %s", out)
+	}
+}
