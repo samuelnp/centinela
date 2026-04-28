@@ -1,14 +1,14 @@
 {
   "feature": "enrich-plan-advisor-context",
   "startedAt": "2026-04-28T11:16:06.518471Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-04-28T11:32:26Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-04-28T11:33:24Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-28T11:39:36Z"
     }
   },
   "stepOrder": [
