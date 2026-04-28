@@ -1,0 +1,23 @@
+{
+  "feature": "readme-centinela-usage",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-04-28T00:00:00Z",
+  "inputs": [
+    "README.md",
+    "HOWTO.md",
+    "specs/readme-centinela-usage.feature"
+  ],
+  "outputs": [
+    "tests/unit/readme_centinela_usage_unit_test.go",
+    "tests/integration/readme_centinela_usage_integration_test.go",
+    "tests/acceptance/readme_centinela_usage_test.go",
+    ".workflow/readme-centinela-usage-edge-cases.md"
+  ],
+  "edgeCases": [
+    "README link and HOWTO content can drift if only one file is updated",
+    "Docs-only changes still need executable acceptance coverage in Centinela workflows"
+  ],
+  "handoffTo": "gatekeeper"
+}
