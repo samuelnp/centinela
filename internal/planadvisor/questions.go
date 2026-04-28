@@ -1,18 +1,29 @@
 package planadvisor
 
+import "strings"
+
 type question struct {
 	Lens string
 	Text string
 	Ask  bool
 }
 
-func selectQuestions(c coverage, limit int, mode string) []question {
+func selectQuestions(b bundle, limit int, mode string) []question {
+	c := b.Coverage
 	force := mode == "always"
+	deps := joined(b.Dependencies)
+	sibs := joined(b.Siblings)
+	lesson := first(b.Lessons)
+	quality := first(b.QualityNotes)
 	all := []question{
 		{"big-thinker", "What exact user or operator pain are we solving, and for whom?", force || !c.Problem},
 		{"big-thinker", "What is explicitly in scope for the first version, and what should stay out?", force || !c.Scope},
+		{"big-thinker", "Given dependencies " + deps + ", what sequencing, compatibility, or shared-contract constraints must we honor?", deps != "" && (force || !c.Constraints)},
+		{"feature-specialist", "Roadmap quality notes include " + quality + ". What exact acceptance criteria should close that clarity gap?", quality != "" && (force || !c.Acceptance)},
 		{"feature-specialist", "What observable behaviors or acceptance criteria must the spec guarantee?", force || !c.Acceptance},
 		{"feature-specialist", "What should the primary mobile-first flow prioritize on small screens and touch devices?", c.UserFacing && (force || !c.MobileFirst)},
+		{"feature-specialist", "Related edge-case lessons include " + lesson + ". Which of those failure patterns also apply here?", lesson != "" && (force || !c.EdgeCases)},
+		{"big-thinker", "How should this feature stay consistent with same-phase siblings " + sibs + " without duplicating scope?", deps == "" && sibs != "" && (force || !c.Scope)},
 		{"feature-specialist", "Which edge cases or invalid states must the feature handle explicitly?", force || !c.EdgeCases},
 		{"feature-specialist", "What should loading, empty, and error states communicate to the user?", c.UserFacing && (force || !c.UXStates)},
 		{"big-thinker", "What constraints or non-negotiables should shape the design and rollout?", force || !c.Constraints},
@@ -28,4 +39,12 @@ func selectQuestions(c coverage, limit int, mode string) []question {
 		}
 	}
 	return out
+}
+
+func joined(items []string) string { return first([]string{strings.Join(items, ", ")}) }
+func first(items []string) string {
+	if len(items) == 0 {
+		return ""
+	}
+	return items[0]
 }

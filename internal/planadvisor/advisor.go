@@ -15,12 +15,17 @@ func Directive(feature string, cfg *config.Config) string {
 	if mode == config.PlanAdvisorOff {
 		return ""
 	}
-	questions := selectQuestions(scan(feature), config.NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit), mode)
+	b := buildBundle(feature)
+	questions := selectQuestions(b, config.NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit), mode)
 	lines := []string{
 		fmt.Sprintf("CENTINELA PLAN ADVISOR: %q", feature),
 		"Operate in two lenses: big-thinker first, then feature-specialist.",
-		"Ask only the missing high-value questions from existing docs/features, docs/plans, and specs.",
+		"Ask only the missing high-value questions from existing docs/features, docs/plans, specs, roadmap context, and prior edge-case lessons.",
 		fmt.Sprintf("Ask at most %d questions this round. Do not jump to implementation.", config.NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit)),
+	}
+	if ctx := contextLines(b); len(ctx) > 0 {
+		lines = append(lines, "Relevant context:")
+		lines = append(lines, ctx...)
 	}
 	if len(questions) == 0 {
 		lines = append(lines, "Planning coverage looks solid. Synthesize the brief, plan, and spec without repeating generic discovery questions.")

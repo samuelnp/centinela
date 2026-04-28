@@ -47,3 +47,23 @@ func TestDirectiveSupportsOffModeAndSolidCoverage(t *testing.T) {
 		t.Fatalf("expected synthesis guidance, got: %s", out)
 	}
 }
+
+func TestDirectiveIncludesDependencyFirstContextSummary(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o)                                                                                                                                                                                            //nolint:errcheck
+	os.Chdir(d)                                                                                                                                                                                                  //nolint:errcheck
+	os.MkdirAll("docs/features", 0755)                                                                                                                                                                           //nolint:errcheck
+	os.MkdirAll(".workflow", 0755)                                                                                                                                                                               //nolint:errcheck
+	os.WriteFile("docs/features/f.md", []byte("## Problem\ntext\n"), 0644)                                                                                                                                       //nolint:errcheck
+	os.WriteFile(".workflow/roadmap.json", []byte(`{"phases":[{"name":"P1","features":[{"name":"dep"},{"name":"sib"},{"name":"f"}]}]}`), 0644)                                                                   //nolint:errcheck
+	os.WriteFile(".workflow/roadmap-analysis.json", []byte(`{"role":"senior-product-manager","features":[{"name":"dep","dependsOn":[]},{"name":"sib","dependsOn":[]},{"name":"f","dependsOn":["dep"]}]}`), 0644) //nolint:errcheck
+	os.WriteFile(".workflow/dep-edge-cases.md", []byte("- duplicate webhook retries"), 0644)                                                                                                                     //nolint:errcheck
+	out := Directive("f", &config.Config{})
+	if strings.Index(out, "dependencies first: dep") > strings.Index(out, "same-phase siblings: sib") {
+		t.Fatalf("expected dependency context before siblings, got: %s", out)
+	}
+	if !strings.Contains(out, "related edge-case lessons: dep: duplicate webhook retries") {
+		t.Fatalf("expected summarized edge-case lesson, got: %s", out)
+	}
+}
