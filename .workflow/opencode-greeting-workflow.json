@@ -1,14 +1,14 @@
 {
   "feature": "opencode-greeting-workflow",
   "startedAt": "2026-04-28T13:52:47.622408Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-04-28T13:55:58Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-04-28T13:56:35Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-28T13:58:11Z"
     }
   },
   "stepOrder": [
