@@ -1,14 +1,14 @@
 {
   "feature": "readme-centinela-usage",
   "startedAt": "2026-04-28T11:46:03.727752Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-04-28T11:48:27Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-04-28T13:23:00Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-28T13:38:40Z"
     }
   },
   "stepOrder": [
