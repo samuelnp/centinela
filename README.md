@@ -19,12 +19,14 @@ The result: every feature ships with a written plan, a Gherkin spec, three test 
 
 ## Latest Features
 
-- **Claude + OpenCode parity** with shared setup prompts, workflow context, prewrite enforcement, postwrite status updates, and migration guidance.
-- **Roadmap-first bootstrap** with automatic `PROJECT.md` setup, `ROADMAP.md` creation, roadmap analysis artifacts, roadmap quality artifacts, and `centinela roadmap validate`.
-- **Strict standard workflow** with a five-step delivery path for regular features and roadmap-defined bootstrap exceptions where required.
-- **Prompt-driven workflow UX** with auto-start for new feature intent, strict orchestration guidance, and a compact Centinela status line.
-- **Managed migrations** through `centinela migrate`, `centinela migrate docs`, and `centinela migrate setup --agent claude|opencode|both`.
-- **Project docs generation** through `centinela docs validate` and `centinela docs generate --out docs/project-docs/index.html --title "..."`.
+- **Claude + OpenCode parity** with shared setup prompts, workflow context, prewrite enforcement, postwrite status updates, setup-priority handling, and migration guidance.
+- **Roadmap-first bootstrap** with automatic `PROJECT.md` setup, `ROADMAP.md` creation, `.workflow/roadmap.json`, roadmap analysis, roadmap quality artifacts, clear missing-artifact recovery, and `centinela roadmap validate`.
+- **Strict five-step delivery** with enforced `plan -> code -> tests -> validate -> docs` order, required step artifacts, explicit step confirmation modes, and no workflow bypass for normal features.
+- **Plan advisor mode** that reads current feature artifacts plus roadmap dependencies, same-phase siblings, quality notes, and prior edge-case lessons before asking a small set of high-value planning questions.
+- **Actionable specialist orchestration** where `big-thinker`, `feature-specialist`, `senior-engineer`, `qa-senior`, `documentation-specialist`, and user-facing `ux-ui-specialist` evidence must point to real project outputs.
+- **Stronger quality gates** including executable acceptance-test enforcement, validation-command coverage for acceptance tests, default 100-line source files, and audited G1 exceptions for rare 130-line cases.
+- **Managed migrations and generated docs** through `centinela migrate`, `centinela migrate docs`, `centinela migrate setup --agent claude|opencode|both`, `centinela docs validate`, and `centinela docs generate`.
+- **Cleaner workflow feedback** with compact `🛡️👁️` CLI output, status tags, and prompt-driven command mapping for roadmap, start, continue, validate, and docs flows.
 
 ---
 
@@ -191,6 +193,16 @@ For standard product features, follow the same path every time:
 4. Add unit, integration, acceptance, and edge-case coverage, then advance to `validate`.
 5. Run `centinela validate`, resolve any gate failures, then advance to `docs`.
 6. Run `centinela docs validate` and `centinela docs generate` to publish the project-facing HTML output.
+
+For a complete agent-collaboration example, see [`HOWTO.md`](HOWTO.md). It walks through using Centinela to generate a small landing page MVP without skipping the required workflow steps.
+
+Proper use checklist:
+
+- Start or resume a named feature before editing files: `centinela start <feature>` or `centinela status <feature>`.
+- Keep all feature work inside the current step; if a write is blocked, create the missing artifact or advance the workflow instead of forcing the edit.
+- Treat `complete` prompts as review gates. Approve advancement only after the current step artifacts exist and match the plan.
+- Put acceptance tests in `tests/acceptance/` and ensure `[validate].commands` runs them.
+- Finish with `centinela validate`, `centinela docs validate`, and `centinela docs generate --out docs/project-docs/index.html`.
 
 ### 5. Migrate managed assets
 
