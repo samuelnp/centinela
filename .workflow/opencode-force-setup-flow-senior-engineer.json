@@ -1,0 +1,1 @@
+{"feature":"opencode-force-setup-flow","step":"code","role":"senior-engineer","status":"done","generatedAt":"2026-04-28T00:00:00Z","inputs":["docs/plans/opencode-force-setup-flow.md","specs/opencode-force-setup-flow.feature"],"outputs":["internal/setup/opencode_agents.go"],"edgeCases":[],"handoffTo":"qa-senior"}

@@ -11,7 +11,10 @@ This project uses Centinela workflow enforcement.
 ## Mandatory
 - Read and follow CLAUDE.md for framework rules.
 - Read PROJECT.md before planning or coding.
-- Start every feature with centinela start <feature>.
+- Bootstrap before features: if PROJECT.md is missing, do not suggest centinela start <feature>, and do not ask what to work on.
+- When PROJECT.md is missing, ask setup questions and write PROJECT.md before any feature or roadmap work.
+- If roadmap setup is required, define the roadmap before asking for feature work.
+- Start every feature with centinela start <feature> only after project setup and roadmap bootstrap are complete.
 - Do not bypass workflow order: plan -> code -> tests -> validate -> docs.
 
 ## OpenCode Integration
