@@ -32,6 +32,9 @@ func TestOpenCodeSetupPriority_GeneratedAssetsFavorSetup(t *testing.T) {
 	if !strings.Contains(string(agents), "do not reply to greetings first") {
 		t.Fatal("expected AGENTS.md to require setup before greeting replies")
 	}
+	if !strings.Contains(string(agents), "On a greeting-only first prompt") {
+		t.Fatal("expected AGENTS.md to cover greeting-only first prompts")
+	}
 	plugin, _ := os.ReadFile(".opencode/plugins/centinela.js") //nolint:errcheck
 	if !strings.Contains(string(plugin), `prependContext(output, joinText(`) {
 		t.Fatal("expected plugin to prepend setup directives")

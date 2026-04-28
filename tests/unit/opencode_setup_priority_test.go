@@ -23,6 +23,7 @@ func TestEnsureAgentsFile_IncludesSetupPriorityRules(t *testing.T) {
 	checks := []string{
 		"Treat Centinela setup and migration directives as higher priority than casual chat.",
 		"do not reply to greetings first; start the required setup flow immediately.",
+		"On a greeting-only first prompt, first state any required Centinela setup",
 	}
 	for _, check := range checks {
 		if !strings.Contains(content, check) {
