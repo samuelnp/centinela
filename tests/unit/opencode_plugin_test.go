@@ -35,6 +35,7 @@ func TestEnsureOpenCodePlugin_IncludesParityHooks(t *testing.T) {
 		`runHook("migrate"`,
 		`runHook("autostart"`,
 		`runHook("orchestration"`,
+		`runHook("plan-advisor"`,
 		`runHook("context"`,
 		`const promptPayload = typeof _input === "string" ? _input : JSON.stringify(_input || {})`,
 		`args.filePath ||`,

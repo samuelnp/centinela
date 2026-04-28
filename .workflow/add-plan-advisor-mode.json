@@ -1,11 +1,11 @@
 {
   "feature": "add-plan-advisor-mode",
   "startedAt": "2026-04-27T20:56:48.321316Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-04-28T07:51:25Z"
     },
     "docs": {
       "status": "pending",
@@ -16,7 +16,7 @@
       "completedAt": "2026-04-28T07:37:31Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {

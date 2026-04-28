@@ -25,6 +25,7 @@ const pluginContent = `export const CentinelaPlugin = async () => {
       ))
       appendContext(output, runHook("autostart", promptPayload, false))
       appendContext(output, runHook("orchestration", "", false))
+      appendContext(output, runHook("plan-advisor", "", false))
       appendContext(output, runHook("context", "", false))
     },
   }
@@ -88,7 +89,6 @@ function writeContext(output, text, front) {
 }
 `
 
-// EnsureOpenCodePlugin writes the Centinela OpenCode plugin if missing.
 func EnsureOpenCodePlugin() (bool, error) {
 	if _, err := os.Stat(pluginFile); err == nil {
 		return false, nil

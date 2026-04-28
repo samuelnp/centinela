@@ -18,23 +18,6 @@ type Config struct {
 	I18n          I18nConfig          `toml:"i18n"`
 }
 
-// WorkflowConfig controls language-specific step validation behaviour.
-type WorkflowConfig struct {
-	// TestSuffixes lists file suffixes that count as unit/integration tests.
-	// If empty, any file in tests/unit or tests/integration is accepted.
-	TestSuffixes []string `toml:"test_suffixes"`
-	// AcceptanceSuffix is the file suffix for acceptance step definitions.
-	// If empty, any file in tests/acceptance is accepted.
-	AcceptanceSuffix string `toml:"acceptance_suffix"`
-	// CodeDirs lists path segments that classify a file as "code".
-	// If empty, a built-in set of common directories is used.
-	CodeDirs []string `toml:"code_dirs"`
-	// DisableAutoCommit prevents centinela from committing on step completion.
-	DisableAutoCommit bool `toml:"disable_auto_commit"`
-	// StepConfirmationMode controls when review prompts are shown.
-	StepConfirmationMode string `toml:"step_confirmation_mode"`
-}
-
 // ValidateConfig holds user-defined commands that centinela runs during validate.
 type ValidateConfig struct {
 	Commands []string `toml:"commands"`
@@ -94,4 +77,6 @@ func applyDefaults(cfg *Config) {
 		cfg.Gates.FileSizeEnabled = true
 	}
 	cfg.Workflow.StepConfirmationMode = NormalizeStepConfirmationMode(cfg.Workflow.StepConfirmationMode)
+	cfg.Workflow.PlanAdvisorMode = NormalizePlanAdvisorMode(cfg.Workflow.PlanAdvisorMode)
+	cfg.Workflow.PlanQuestionLimit = NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit)
 }
