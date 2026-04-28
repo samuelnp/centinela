@@ -303,9 +303,11 @@ After every file write, centinela appends a compact status tag to the session:
 
 During the `plan` step, Centinela also injects a plan-advisor directive. By default it runs in
 `missing_info` mode, inspects `docs/features/<feature>.md`, `docs/plans/<feature>.md`, and
-`specs/<feature>.feature`, and asks up to 4 missing high-value questions through `big-thinker` and
-`feature-specialist` lenses. User-facing features receive UX/mobile-first questions only when those
-topics are still missing.
+`specs/<feature>.feature`, then enriches that with roadmap dependencies, same-phase sibling
+features, roadmap quality notes, and related edge-case lessons. It asks up to 4 missing
+high-value questions through `big-thinker` and `feature-specialist` lenses. Dependency context is
+preferred before sibling context, and user-facing features receive UX/mobile-first questions only
+when those topics are still missing.
 
 ```
 ↳ my-feature · code · 2/5

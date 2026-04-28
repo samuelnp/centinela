@@ -139,3 +139,7 @@ must be real repo files on disk, not free-text summaries.
 During `plan`, Centinela also runs plan-advisor mode by default. `workflow.plan_advisor_mode = "missing_info"`
 asks only missing high-value questions from `big-thinker` and `feature-specialist` lenses, while
 `workflow.plan_question_limit` caps each round at `4`.
+
+Advisor context uses current feature artifacts first, then roadmap dependencies, then same-phase siblings.
+Related edge-case lessons and roadmap quality notes may shape questions through summarized context,
+not raw file dumps.

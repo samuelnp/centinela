@@ -164,3 +164,6 @@ during the `plan` step and orchestrates between `big-thinker` and `feature-speci
 - `workflow.plan_advisor_mode = "always"`: always ask an advisor round during `plan`.
 - `workflow.plan_advisor_mode = "off"`: disable advisor prompting.
 - `workflow.plan_question_limit` defaults to `4` and caps each advisor round.
+- Advisor context reads the current feature brief, plan, spec, and local edge-case report when present.
+- If roadmap analysis exists, dependencies are considered before same-phase siblings.
+- Related edge-case lessons and roadmap quality notes may influence questions through compact summaries rather than raw artifact dumps.

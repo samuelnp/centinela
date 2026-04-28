@@ -186,3 +186,5 @@ These hooks are wired by `centinela init` for Claude and OpenCode integrations.
    - `workflow.plan_advisor_mode = "always"` always asks an advisor round.
    - `workflow.plan_advisor_mode = "off"` disables advisor prompting.
    - `workflow.plan_question_limit` caps each advisor round and defaults to `4`.
+   - advisor context uses current feature artifacts first, then roadmap dependencies, then same-phase siblings.
+   - related edge-case lessons and roadmap quality notes can shape questions, but the hook emits summarized context instead of raw file dumps.
