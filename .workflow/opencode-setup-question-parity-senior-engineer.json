@@ -1,0 +1,1 @@
+{"feature":"opencode-setup-question-parity","step":"code","role":"senior-engineer","status":"done","generatedAt":"2026-04-28T00:00:00Z","inputs":["docs/plans/opencode-setup-question-parity.md","specs/opencode-setup-question-parity.feature"],"outputs":["internal/ui/render_setup.go"],"edgeCases":[],"handoffTo":"qa-senior"}
