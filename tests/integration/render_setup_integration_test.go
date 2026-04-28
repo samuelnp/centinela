@@ -20,3 +20,13 @@ func TestRenderSetupNeeded_ContainsProjectMDReady(t *testing.T) {
 		t.Error("expected 'PROJECT.md is ready' in output")
 	}
 }
+
+func TestRenderSetupNeeded_RequiresExactQuestions(t *testing.T) {
+	output := ui.RenderSetupNeeded()
+	if !strings.Contains(output, "Ask these exact questions; do not combine or omit them") {
+		t.Error("expected exact setup question directive")
+	}
+	if !strings.Contains(output, "Project name") || !strings.Contains(output, "Folder layout") {
+		t.Error("expected setup checklist endpoints")
+	}
+}
