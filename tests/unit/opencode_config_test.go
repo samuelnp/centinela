@@ -42,6 +42,15 @@ func TestInjectOpenCodeConfig_MergesWithoutLosingKeys(t *testing.T) {
 	if _, ok := parsed["command"]; !ok {
 		t.Fatal("existing command key should be preserved")
 	}
+	var agents map[string]json.RawMessage
+	json.Unmarshal(parsed["agent"], &agents) //nolint:errcheck
+	for _, name := range []string{"big-thinker", "feature-specialist", "senior-engineer", "qa-senior", "documentation-specialist", "ux-ui-specialist"} {
+		var cfg map[string]string
+		json.Unmarshal(agents[name], &cfg) //nolint:errcheck
+		if cfg["mode"] != "subagent" {
+			t.Fatalf("expected %s subagent config, got %#v", name, cfg)
+		}
+	}
 }
 
 func TestInjectOpenCodeConfig_IsIdempotent(t *testing.T) {
@@ -50,12 +59,37 @@ func TestInjectOpenCodeConfig_IsIdempotent(t *testing.T) {
 	defer os.Chdir(origDir) //nolint:errcheck
 	os.Chdir(dir)           //nolint:errcheck
 
-	os.WriteFile("opencode.json", []byte(`{"$schema":"https://opencode.ai/config.json","instructions":["AGENTS.md","CLAUDE.md"]}`), 0644) //nolint:errcheck
+	setup.InjectOpenCodeConfig("opencode.json") //nolint:errcheck
 	changed, err := setup.InjectOpenCodeConfig("opencode.json")
 	if err != nil {
 		t.Fatalf("InjectOpenCodeConfig error: %v", err)
 	}
 	if changed {
 		t.Fatal("expected no changes on already-configured file")
+	}
+}
+
+func TestInjectOpenCodeConfig_PreservesExistingAgents(t *testing.T) {
+	dir := t.TempDir()
+	origDir, _ := os.Getwd()
+	defer os.Chdir(origDir) //nolint:errcheck
+	os.Chdir(dir)           //nolint:errcheck
+
+	seed := `{"agent":{"custom":{"description":"keep","mode":"subagent"},"big-thinker":{"description":"mine","mode":"subagent","prompt":"custom"},"build":{"permission":{"task":{"custom":"allow"}}}}}`
+	os.WriteFile("opencode.json", []byte(seed), 0644) //nolint:errcheck
+	setup.InjectOpenCodeConfig("opencode.json")       //nolint:errcheck
+
+	data, _ := os.ReadFile("opencode.json") //nolint:errcheck
+	var parsed map[string]json.RawMessage
+	json.Unmarshal(data, &parsed) //nolint:errcheck
+	var agents map[string]json.RawMessage
+	json.Unmarshal(parsed["agent"], &agents) //nolint:errcheck
+	var big map[string]string
+	json.Unmarshal(agents["big-thinker"], &big) //nolint:errcheck
+	if big["prompt"] != "custom" {
+		t.Fatalf("expected existing big-thinker preserved, got %#v", big)
+	}
+	if _, ok := agents["custom"]; !ok {
+		t.Fatal("expected custom agent preserved")
 	}
 }
