@@ -18,6 +18,9 @@ func buildOpenCodeConfig(path string) (bool, []byte, error) {
 	if mergeInstructions(raw) {
 		changed = true
 	}
+	if mergeOpenCodeAgents(raw) {
+		changed = true
+	}
 	if !changed {
 		return false, nil, nil
 	}
