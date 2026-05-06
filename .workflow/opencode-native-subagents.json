@@ -1,15 +1,15 @@
 {
   "feature": "opencode-native-subagents",
   "startedAt": "2026-05-06T16:48:10.864569Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-06T16:51:06Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-06T16:58:49Z"
     },
     "plan": {
       "status": "done",
