@@ -1,15 +1,15 @@
 {
   "feature": "agent-performance-audit",
   "startedAt": "2026-05-09T21:19:12.186026Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-09T21:25:36Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-09T21:31:03Z"
     },
     "plan": {
       "status": "done",
