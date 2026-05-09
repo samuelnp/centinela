@@ -15,6 +15,8 @@ func TestRunCompleteDoneAndValidatePath(t *testing.T) {
 
 	os.WriteFile("centinela.toml", []byte("[workflow]\ndisable_auto_commit=true\n[validate]\ncommands=[\"true\"]\n"), 0644) //nolint:errcheck
 	os.MkdirAll(workflow.WorkflowDir, 0755)                                                                                 //nolint:errcheck
+	os.MkdirAll("docs/project-docs", 0755)                                                                                  //nolint:errcheck
+	os.WriteFile("docs/project-docs/index.html", []byte("html"), 0644)                                                      //nolint:errcheck
 	os.WriteFile(".workflow/f-gatekeeper.md", []byte("SAFE"), 0644)                                                         //nolint:errcheck
 
 	wf := workflow.New("f")
@@ -30,8 +32,10 @@ func TestRunCompleteDoneAndValidatePath(t *testing.T) {
 	wf2.Steps["code"] = workflow.StepState{Status: "done"}
 	wf2.Steps["tests"] = workflow.StepState{Status: "done"}
 	wf2.Steps["validate"] = workflow.StepState{Status: "in-progress"}
-	workflow.Save(wf2)                                               //nolint:errcheck
-	os.WriteFile(".workflow/f2-gatekeeper.md", []byte("SAFE"), 0644) //nolint:errcheck
+	workflow.Save(wf2)                                                                                                                                                                                                                                                                                  //nolint:errcheck
+	os.WriteFile(".workflow/f2-gatekeeper.md", []byte("SAFE"), 0644)                                                                                                                                                                                                                                    //nolint:errcheck
+	os.WriteFile(".workflow/f2-validation-specialist.md", []byte("# validation"), 0644)                                                                                                                                                                                                                 //nolint:errcheck
+	os.WriteFile(".workflow/f2-validation-specialist.json", []byte(`{"feature":"f2","step":"validate","role":"validation-specialist","status":"done","generatedAt":"2026-05-09T00:00:00Z","inputs":["i"],"outputs":["docs/project-docs/index.html"],"edgeCases":[],"handoffTo":"orchestrator"}`), 0644) //nolint:errcheck
 	if err := runComplete(nil, []string{"f2"}); err != nil {
 		t.Fatalf("validate completion should pass: %v", err)
 	}
