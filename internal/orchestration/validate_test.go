@@ -13,8 +13,11 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	defer os.Chdir(o)              //nolint:errcheck
 	os.Chdir(d)                    //nolint:errcheck
 	os.MkdirAll(".workflow", 0755) //nolint:errcheck
-	if len(RequiredRoles("plan")) != 2 || len(RequiredRoles("code")) != 1 || len(RequiredRoles("docs")) != 1 || len(RequiredRoles("validate")) != 0 {
+	if len(RequiredRoles("plan")) != 2 || len(RequiredRoles("code")) != 1 || len(RequiredRoles("docs")) != 1 || len(RequiredRoles("validate")) != 1 {
 		t.Fatal("unexpected role mapping")
+	}
+	if RequiredRoles("validate")[0] != RoleValidationSpec {
+		t.Fatal("expected validation-specialist for validate step")
 	}
 	if err := ValidateStep("f", "plan", nil); err == nil {
 		t.Fatal("expected missing evidence failure")
@@ -30,6 +33,13 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	writeEvidence(t, "f", "docs", RoleDocsSpecialist, false)
 	if err := ValidateStep("f", "docs", nil); err != nil {
 		t.Fatalf("expected docs evidence success: %v", err)
+	}
+	if err := ValidateStep("f", "validate", nil); err == nil {
+		t.Fatal("expected missing validate evidence failure")
+	}
+	writeEvidence(t, "f", "validate", RoleValidationSpec, false)
+	if err := ValidateStep("f", "validate", nil); err != nil {
+		t.Fatalf("expected validate evidence success: %v", err)
 	}
 }
 
@@ -64,6 +74,10 @@ func writeEvidence(t *testing.T, f, s string, r Role, edge bool) {
 		}
 	}
 	if s == "docs" {
+		os.MkdirAll("docs/project-docs", 0755)                             //nolint:errcheck
+		os.WriteFile("docs/project-docs/index.html", []byte("html"), 0644) //nolint:errcheck
+	}
+	if s == "validate" {
 		os.MkdirAll("docs/project-docs", 0755)                             //nolint:errcheck
 		os.WriteFile("docs/project-docs/index.html", []byte("html"), 0644) //nolint:errcheck
 	}

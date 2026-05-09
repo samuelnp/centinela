@@ -9,6 +9,7 @@ const (
 	RoleUXUISpecialist   Role = "ux-ui-specialist"
 	RoleQASeniorEngineer Role = "qa-senior"
 	RoleDocsSpecialist   Role = "documentation-specialist"
+	RoleValidationSpec   Role = "validation-specialist"
 )
 
 func RequiredRoles(step string) []Role {
@@ -21,6 +22,8 @@ func RequiredRoles(step string) []Role {
 		return []Role{RoleQASeniorEngineer}
 	case "docs":
 		return []Role{RoleDocsSpecialist}
+	case "validate":
+		return []Role{RoleValidationSpec}
 	default:
 		return nil
 	}

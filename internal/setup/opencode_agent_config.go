@@ -23,6 +23,10 @@ var centinelaOpenCodeAgents = map[string]map[string]string{
 		"description": "Centinela documentation specialist for docs validation and generated project docs.",
 		"prompt":      "You are Centinela documentation-specialist. Update user-facing docs when needed, validate docs inputs, and regenerate project documentation outputs.",
 	},
+	"validation-specialist": {
+		"description": "Centinela validation specialist for gatekeeper review, full validation, and readiness checks.",
+		"prompt":      "You are Centinela validation-specialist. Run gatekeeper review, centinela validate, readiness checks when enabled, and report concrete validation outputs.",
+	},
 	"ux-ui-specialist": {
 		"description": "Centinela UX/UI specialist for user-facing flows, mobile-first design, and visual states.",
 		"prompt":      "You are Centinela ux-ui-specialist. Review user-facing UI for mobile-first flow, accessibility, visual hierarchy, loading, empty, and error states.",

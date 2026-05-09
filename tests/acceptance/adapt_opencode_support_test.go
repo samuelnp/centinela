@@ -37,13 +37,16 @@ func TestOpenCodeConfig_ExistingKeysRemain(t *testing.T) {
 	if _, ok := agents["qa-senior"]; !ok {
 		t.Fatal("expected native Centinela subagents")
 	}
+	if _, ok := agents["validation-specialist"]; !ok {
+		t.Fatal("expected native validation-specialist subagent")
+	}
 	var build map[string]json.RawMessage
 	json.Unmarshal(agents["build"], &build) //nolint:errcheck
 	var permission map[string]json.RawMessage
 	json.Unmarshal(build["permission"], &permission) //nolint:errcheck
 	var task map[string]string
 	json.Unmarshal(permission["task"], &task) //nolint:errcheck
-	if task["big-thinker"] != "allow" || task["qa-senior"] != "allow" {
+	if task["big-thinker"] != "allow" || task["qa-senior"] != "allow" || task["validation-specialist"] != "allow" {
 		t.Fatalf("expected build task permissions for Centinela subagents: %#v", task)
 	}
 }

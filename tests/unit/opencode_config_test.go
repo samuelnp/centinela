@@ -44,7 +44,7 @@ func TestInjectOpenCodeConfig_MergesWithoutLosingKeys(t *testing.T) {
 	}
 	var agents map[string]json.RawMessage
 	json.Unmarshal(parsed["agent"], &agents) //nolint:errcheck
-	for _, name := range []string{"big-thinker", "feature-specialist", "senior-engineer", "qa-senior", "documentation-specialist", "ux-ui-specialist"} {
+	for _, name := range []string{"big-thinker", "feature-specialist", "senior-engineer", "qa-senior", "documentation-specialist", "validation-specialist", "ux-ui-specialist"} {
 		var cfg map[string]string
 		json.Unmarshal(agents[name], &cfg) //nolint:errcheck
 		if cfg["mode"] != "subagent" {
