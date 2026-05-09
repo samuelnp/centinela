@@ -8,12 +8,10 @@ export const CentinelaPlugin = async () => {
       const payload = JSON.stringify({ tool_input: { filePath } })
       runHook("prewrite", payload, true)
     },
-
     "tool.execute.after": async (input) => {
       if (!isWriteTool(normalizeTool(input))) return
       runHook("postwrite", "", false)
     },
-
     "tui.prompt.append": async (_input, output) => {
       const promptPayload = typeof _input === "string" ? _input : JSON.stringify(_input || {})
       prependContext(output, joinText(
@@ -22,11 +20,11 @@ export const CentinelaPlugin = async () => {
       ))
       appendContext(output, runHook("autostart", promptPayload, false))
       appendContext(output, runHook("orchestration", "", false))
+      appendContext(output, runHook("plan-advisor", "", false))
       appendContext(output, runHook("context", "", false))
     },
   }
 }
-
 function runHook(name, payload, blocking) {
   const proc = Bun.spawnSync({
     cmd: ["centinela", "hook", name],
@@ -41,21 +39,17 @@ function runHook(name, payload, blocking) {
   }
   return out
 }
-
 function joinText(...parts) {
   return parts.filter(Boolean).join("\n\n")
 }
-
 function isWriteTool(tool) {
   tool = String(tool || "").toLowerCase()
   return tool === "write" || tool === "edit" || tool === "patch"
 }
-
 function normalizeTool(input) {
   if (!input || typeof input !== "object") return ""
   return input.tool || input.toolName || input.name || ""
 }
-
 function getFilePath(input) {
   if (!input || typeof input !== "object") return ""
   const args = input.args && typeof input.args === "object" ? input.args : {}
@@ -72,15 +66,12 @@ function getFilePath(input) {
     ""
   )
 }
-
 function prependContext(output, text) {
   writeContext(output, text, true)
 }
-
 function appendContext(output, text) {
   writeContext(output, text, false)
 }
-
 function writeContext(output, text, front) {
   if (!text || !output || typeof output !== "object") return
   if (typeof output.prompt === "string") {

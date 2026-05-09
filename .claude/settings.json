@@ -87,6 +87,15 @@
             "statusMessage": "Enforcing subagent orchestration..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "centinela hook plan-advisor",
+            "statusMessage": "Advising during plan step..."
+          }
+        ]
       }
     ]
   },
