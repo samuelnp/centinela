@@ -1,6 +1,9 @@
 package gates
 
-import "github.com/samuelnp/centinela/internal/config"
+import (
+	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/gitdiff"
+)
 
 // Status represents the outcome of a gate check.
 type Status int
@@ -20,16 +23,24 @@ type Result struct {
 	Details []string
 }
 
-// RunAll executes all enabled built-in gates and returns their results.
+// RunAll executes all enabled built-in gates in full-scan mode.
+// Kept for backward compatibility; equivalent to RunWithFilter(cfg, nil).
 func RunAll(cfg *config.Config) []Result {
+	return RunWithFilter(cfg, nil)
+}
+
+// RunWithFilter executes all enabled built-in gates. When filter is non-nil
+// the file-scoped gates (G1, G11) only inspect files in the filter set.
+// A nil filter preserves the legacy whole-repo behavior.
+func RunWithFilter(cfg *config.Config, filter *gitdiff.Set) []Result {
 	var results []Result
 
 	if cfg.Gates.FileSizeEnabled {
-		results = append(results, checkFileSize(cfg))
+		results = append(results, checkFileSize(cfg, filter))
 	}
 
 	if cfg.Gates.I18nEnabled {
-		results = append(results, checkI18n(cfg))
+		results = append(results, checkI18nFiltered(cfg, filter))
 	}
 
 	return results

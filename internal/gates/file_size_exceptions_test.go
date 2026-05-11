@@ -20,7 +20,7 @@ func TestCheckFileSize_AllowsJustifiedException(t *testing.T) {
 	}
 	os.WriteFile("internal/config_blob.go", []byte(big), 0644) //nolint:errcheck
 	cfg := &config.Config{Gates: config.GatesConfig{FileSizeExceptions: []config.FileSizeException{{Path: "internal/config_blob.go", Kind: "configuration", Reason: "large static map", MaxLines: 130}}}}
-	r := checkFileSize(cfg)
+	r := checkFileSize(cfg, nil)
 	if r.Status != Pass || len(r.Details) != 1 {
 		t.Fatalf("expected pass with justified detail, got %+v", r)
 	}
@@ -39,7 +39,7 @@ func TestCheckFileSize_FailsWhenExceptionMaxExceeded(t *testing.T) {
 	}
 	os.WriteFile("internal/domain.go", []byte(big), 0644) //nolint:errcheck
 	cfg := &config.Config{Gates: config.GatesConfig{FileSizeExceptions: []config.FileSizeException{{Path: "internal/domain.go", Kind: "domain_atomic", Reason: "single aggregate", MaxLines: 110}}}}
-	r := checkFileSize(cfg)
+	r := checkFileSize(cfg, nil)
 	if r.Status != Fail || len(r.Details) == 0 {
 		t.Fatalf("expected fail with details, got %+v", r)
 	}

@@ -21,6 +21,8 @@ type Config struct {
 // ValidateConfig holds user-defined commands that centinela runs during validate.
 type ValidateConfig struct {
 	Commands []string `toml:"commands"`
+	DiffMode string   `toml:"diff_mode"`
+	DiffBase string   `toml:"diff_base"`
 }
 
 // GatesConfig controls which built-in gates are active.
@@ -79,4 +81,6 @@ func applyDefaults(cfg *Config) {
 	cfg.Workflow.StepConfirmationMode = NormalizeStepConfirmationMode(cfg.Workflow.StepConfirmationMode)
 	cfg.Workflow.PlanAdvisorMode = NormalizePlanAdvisorMode(cfg.Workflow.PlanAdvisorMode)
 	cfg.Workflow.PlanQuestionLimit = NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit)
+	cfg.Validate.DiffMode = NormalizeDiffMode(cfg.Validate.DiffMode)
+	cfg.Validate.DiffBase = NormalizeDiffBase(cfg.Validate.DiffBase)
 }

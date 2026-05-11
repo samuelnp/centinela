@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/gitdiff"
 )
 
 const maxLines = 100
@@ -13,11 +14,13 @@ const maxLines = 100
 var sourceRoots = []string{"src", "internal", "cmd", "lib", "app", "pkg"}
 var ignoreDirs = []string{".git", "node_modules", "vendor", "dist", ".next", "target", "build"}
 
-func checkFileSize(cfg *config.Config) Result {
-	violations, justified := findOversizedFiles(cfg)
+func checkFileSize(cfg *config.Config, filter *gitdiff.Set) Result {
+	violations, justified := findOversizedFiles(cfg, filter)
 	if len(violations) == 0 {
 		msg := "All files under 100 lines."
-		if len(justified) > 0 {
+		if filter != nil && filter.Len() == 0 {
+			msg = "No relevant changes — gate skipped."
+		} else if len(justified) > 0 {
 			msg = "All files meet G1 (including justified exceptions)."
 		}
 		return Result{Name: "G1: File Size", Status: Pass, Message: msg, Details: justified}
@@ -30,7 +33,7 @@ func checkFileSize(cfg *config.Config) Result {
 	}
 }
 
-func findOversizedFiles(cfg *config.Config) ([]string, []string) {
+func findOversizedFiles(cfg *config.Config, filter *gitdiff.Set) ([]string, []string) {
 	roots := existingRoots()
 	if len(roots) == 0 {
 		roots = []string{"."}
@@ -56,6 +59,9 @@ func findOversizedFiles(cfg *config.Config) ([]string, []string) {
 				return nil
 			}
 			seen[path] = true
+			if filter != nil && !filter.Contains(path) {
+				return nil
+			}
 
 			if n := countLines(path); n > maxLines {
 				rel := filepath.ToSlash(path)

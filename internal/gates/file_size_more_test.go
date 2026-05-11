@@ -18,7 +18,7 @@ func TestFindOversizedFilesFallbackRoot(t *testing.T) {
 		big += "x\n"
 	}
 	os.WriteFile("main.go", []byte(big), 0644) //nolint:errcheck
-	v, _ := findOversizedFiles(&config.Config{})
+	v, _ := findOversizedFiles(&config.Config{}, nil)
 	if len(v) != 0 {
 		t.Fatalf("expected no violations when only fallback root is used, got %v", v)
 	}

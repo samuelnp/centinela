@@ -1,17 +1,18 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"os/exec"
-	"runtime"
-	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/gates"
 	"github.com/samuelnp/centinela/internal/ui"
+)
+
+var (
+	validateChanged bool
+	validateFull    bool
 )
 
 var validateCmd = &cobra.Command{
@@ -21,25 +22,43 @@ var validateCmd = &cobra.Command{
 }
 
 func init() {
+	validateCmd.Flags().BoolVar(&validateChanged, "changed", false, "Run built-in gates only over files changed since the diff base")
+	validateCmd.Flags().BoolVar(&validateFull, "full", false, "Force a full-repo scan even when diff_mode would be diff-aware")
 	rootCmd.AddCommand(validateCmd)
 }
 
 func runValidate(_ *cobra.Command, _ []string) error {
-	return executeValidation()
+	if validateChanged && validateFull {
+		return fmt.Errorf("--changed and --full are mutually exclusive")
+	}
+	flag := config.FlagNone
+	switch {
+	case validateChanged:
+		flag = config.FlagForceChanged
+	case validateFull:
+		flag = config.FlagForceFull
+	}
+	return executeValidationWithFlag(flag)
 }
 
-// executeValidation is shared by runValidate and runComplete (validate step).
+// executeValidation runs gates in the default mode (no CLI flag override).
+// Kept as the package-level entry for complete.go and tests.
 func executeValidation() error {
+	return executeValidationWithFlag(config.FlagNone)
+}
+
+func executeValidationWithFlag(flag config.FlagOverride) error {
 	cfg, err := config.Load()
 	if err != nil {
 		return err
 	}
 
-	allPassed := true
+	mode := cfg.Validate.ResolveMode(currentEnv(), flag)
+	filter, header := resolveDiffFilter(cfg, mode)
 
-	// --- Built-in gates ---
-	fmt.Println(ui.StyleBold.Render("Built-in Gates"))
-	results := gates.RunAll(cfg)
+	allPassed := true
+	fmt.Println(ui.StyleBold.Render("Built-in Gates " + header))
+	results := gates.RunWithFilter(cfg, filter)
 	for _, r := range results {
 		fmt.Println(ui.RenderGateResult(r))
 	}
@@ -47,17 +66,8 @@ func executeValidation() error {
 		allPassed = false
 	}
 
-	// --- User commands ---
-	if len(cfg.Validate.Commands) > 0 {
-		fmt.Println()
-		fmt.Println(ui.StyleBold.Render("Validate Commands"))
-		for _, cmd := range cfg.Validate.Commands {
-			passed, out := runCommand(cmd)
-			fmt.Println(ui.RenderCmdResult(cmd, passed, out))
-			if !passed {
-				allPassed = false
-			}
-		}
+	if !runValidateCommands(cfg) {
+		allPassed = false
 	}
 
 	fmt.Println()
@@ -68,21 +78,19 @@ func executeValidation() error {
 	return fmt.Errorf("validation failed — fix the issues above before completing the validate step")
 }
 
-var runtimeOS = runtime.GOOS
-
-// runCommand executes a shell command and returns (passed, combined output).
-func runCommand(cmdStr string) (bool, string) {
-	var cmd *exec.Cmd
-	if runtimeOS == "windows" {
-		cmd = exec.Command("cmd", "/C", cmdStr)
-	} else {
-		cmd = exec.Command("sh", "-c", cmdStr)
+func runValidateCommands(cfg *config.Config) bool {
+	if len(cfg.Validate.Commands) == 0 {
+		return true
 	}
-
-	var buf bytes.Buffer
-	cmd.Stdout = &buf
-	cmd.Stderr = &buf
-
-	err := cmd.Run()
-	return err == nil, strings.TrimSpace(buf.String())
+	fmt.Println()
+	fmt.Println(ui.StyleBold.Render("Validate Commands"))
+	allPassed := true
+	for _, cmd := range cfg.Validate.Commands {
+		passed, out := runCommand(cmd)
+		fmt.Println(ui.RenderCmdResult(cmd, passed, out))
+		if !passed {
+			allPassed = false
+		}
+	}
+	return allPassed
 }
