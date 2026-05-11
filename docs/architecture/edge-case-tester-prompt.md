@@ -7,7 +7,8 @@ Use this subagent during the `tests` step to detect hard paths and edge cases be
 
 ## How to Invoke
 
-Use your agent tool with a prompt based on this template and replace `<FEATURE_NAME>`.
+See [agent-invocation.md](agent-invocation.md) for the canonical Agent
+invocation pattern. Replace `<FEATURE_NAME>` in the template below.
 
 ## Prompt Template
 

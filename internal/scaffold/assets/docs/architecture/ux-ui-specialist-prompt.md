@@ -10,9 +10,9 @@ state coverage of any user-facing surface.
 
 ## How to Invoke
 
-Use the Agent tool with a prompt based on this template, replacing
-`<FEATURE_NAME>`. Skip invocation if the feature has no user-facing
-surface — `RequiredRolesForFeature` in
+See [agent-invocation.md](agent-invocation.md) for the canonical Agent
+invocation pattern. Skip invocation entirely if the feature has no
+user-facing surface — `RequiredRolesForFeature` in
 `internal/orchestration/policy.go` will not request this role unless the
 feature is user-facing.
 

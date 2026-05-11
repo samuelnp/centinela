@@ -11,8 +11,8 @@ the dedicated hard-path report.
 
 ## How to Invoke
 
-Use the Agent tool with a prompt based on this template, replacing
-`<FEATURE_NAME>`.
+See [agent-invocation.md](agent-invocation.md) for the canonical Agent
+invocation pattern. Replace `<FEATURE_NAME>` in the template below.
 
 ## Prompt Template
 

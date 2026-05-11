@@ -3,13 +3,8 @@
 
 ## How to Invoke
 
-Use the **Agent** tool with these parameters:
-
-```
-Tool: Agent
-subagent_type: Explore
-prompt: <the prompt below, with FEATURE_NAME replaced>
-```
+See [agent-invocation.md](agent-invocation.md) for the canonical Agent
+invocation pattern. Replace `<FEATURE_NAME>` in the template below.
 
 ## Prompt Template
 
@@ -72,10 +67,3 @@ For each finding:
 
 Save output to: `.workflow/<feature-name>-gatekeeper.md`
 
-## Decision Rules
-
-| Status | Next Action |
-|--------|-------------|
-| SAFE | Proceed. Run `centinela complete <feature>` |
-| WARNING | Document warnings in plan file. Proceed with caution. Run `centinela complete <feature>` |
-| BLOCKING | STOP. Resolve conflicts first. Do NOT run `centinela complete <feature>` |

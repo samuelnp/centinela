@@ -2,8 +2,9 @@
 
 ## How to Invoke
 
-Use the Agent tool with `subagent_type: Explore`. Pass the prompt below verbatim.
-Save the report to `.workflow/<feature>-production-readiness.md`.
+See [agent-invocation.md](agent-invocation.md) for the canonical Agent
+invocation pattern. Save the report to
+`.workflow/<feature>-production-readiness.md`.
 
 ## Prompt Template
 
@@ -49,15 +50,9 @@ W5: **Observability** — errors on critical paths are logged (not swallowed). S
 
 [STACK_SPECIFIC]
 
-Example values by language (replace at generation time):
-- **Go**: check for goroutine leaks (`go func()` without done channel), missing `defer Close()`,
-  unhandled errors from `rows.Err()`, context propagation to all downstream calls.
-- **TypeScript**: unhandled Promise rejections, missing `await`, `any` casts hiding errors,
-  missing `.catch()` on floating promises.
-- **Python**: bare `except:` clauses, missing `async with` for async context managers,
-  unclosed file handles, missing `finally` for cleanup.
-- **Ruby**: rescue without re-raise on unexpected errors, missing transaction rollback,
-  missing `ensure` for resource cleanup.
+See [stack-checks-reference.md](stack-checks-reference.md) for example
+bullets by language; only the project's own stack should be inlined here
+when the template is rendered.
 
 ### Output Format
 
