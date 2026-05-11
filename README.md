@@ -372,6 +372,46 @@ locales = ["en", "es"]
 
 For other formats (Unity CSV, Android XML, iOS `.lproj`), set `format = "none"` and add a custom command to `[validate] commands`.
 
+### Diff-aware mode
+
+`centinela validate` can scope the file-walking gates (G1, G11) to files changed on the current branch, so the report flags only violations introduced by your work — not pre-existing ones in untouched files.
+
+Default behavior (`diff_mode = "auto"`):
+
+- **Locally** (no `CI` env var): diff-aware. Header reads `Built-in Gates (diff-aware: N files changed since main)`.
+- **In CI** (`CI=true` or `CI=1`): full scan. Header reads `Built-in Gates (full scan)`. The ship gate stays strict.
+
+Configure via `centinela.toml`:
+
+```toml
+[validate]
+diff_mode = "auto"   # "auto" | "always" | "off"
+diff_base = "main"   # any git ref (e.g. "master", "develop")
+```
+
+Override per invocation:
+
+```bash
+centinela validate --changed   # force diff-aware
+centinela validate --full      # force full scan
+```
+
+Flags beat config, config beats CI detection. `--changed` and `--full` are mutually exclusive.
+
+How the change set is built:
+
+- `git diff --name-only --diff-filter=ACMR $(git merge-base HEAD <diff_base>)` for tracked changes.
+- `git ls-files --others --exclude-standard` for untracked files (new code is gated before `git add`).
+- Renamed files appear via the new path. Deleted files are naturally skipped.
+
+G1 walks only files in the change set. G11 runs the full key-completeness comparison when any locale file is in the change set, and short-circuits with a "no locale changes" Pass otherwise (partial-locale comparison is not meaningful).
+
+User `[validate] commands` are **not** scoped by the diff — they always run in full.
+
+Degrade paths: non-git directory, missing diff base, shallow clone, or any git failure prints a one-line `notice:` and falls back to full scan.
+
+CI systems that don't set `CI=true` (uncommon — GitHub Actions, GitLab CI, CircleCI, Travis, Buildkite, and Drone all do) need either `diff_mode = "off"` or `--full` in the pipeline.
+
 ### Manual gates (code review)
 
 | Gate | Rule |
@@ -418,6 +458,8 @@ commands = [
   # Ruby:        "bundle exec rubocop", "bundle exec rspec", "bundle exec cucumber"
   # Rust:        "cargo check", "cargo test"          # add acceptance runner if separate
 ]
+diff_mode = "auto"   # "auto" (default) | "always" | "off" — see Diff-aware mode above
+diff_base = "main"   # any git ref; merge-base with this branch defines the change set
 
 # Built-in gate toggles
 [gates]

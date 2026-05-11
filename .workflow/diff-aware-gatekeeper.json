@@ -1,15 +1,15 @@
 {
   "feature": "diff-aware-gatekeeper",
   "startedAt": "2026-05-11T17:25:43.297993Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-11T17:35:31Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-11T17:48:50Z"
     },
     "plan": {
       "status": "done",

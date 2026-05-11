@@ -194,5 +194,5 @@ Gates are enforced at four levels:
 
 1. **CLAUDE.md** — the AI agent reads and follows all gates as hard rules.
 2. **`centinela hook prewrite`** — blocks file writes in the wrong workflow step (via agent integrations).
-3. **`centinela validate`** — runs built-in gates (G1, G11) + all user commands from `centinela.toml`.
+3. **`centinela validate`** — runs built-in gates (G1, G11) + all user commands from `centinela.toml`. G1 and G11 honor `[validate] diff_mode` and walk only files changed since `diff_base` (default `main`) when the resolved mode is diff-aware. Use `--changed` / `--full` to override per invocation. CI (detected via `CI=true`) defaults to a full scan so the ship gate stays strict; local runs default to diff-aware for a faster inner loop. User `[validate] commands` are not scoped by the diff.
 4. **CI pipeline** — all gates run on every push (once CI is configured).
