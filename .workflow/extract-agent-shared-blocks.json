@@ -1,14 +1,14 @@
 {
   "feature": "extract-agent-shared-blocks",
   "startedAt": "2026-05-09T22:11:04.016091Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-11T16:58:16Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-05-11T17:02:51Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-11T17:04:34Z"
     }
   },
   "stepOrder": [
