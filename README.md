@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/logo.png" alt="Centinela" width="220">
+</p>
+
 # Centinela
 
 A development workflow enforcer for Claude Code and OpenCode projects. Centinela turns the "plan → code → tests → validate → docs" discipline from a suggestion into a mechanical constraint — enforced by agent integrations that run automatically in coding sessions.
