@@ -56,8 +56,59 @@ Output format:
 
 ## Required Artifact
 
-Save report to `.workflow/<feature-name>-ux-ui-specialist.md` and a
-structured companion at `.workflow/<feature-name>-ux-ui-specialist.json`.
+Save the Markdown report to
+`.workflow/<feature-name>-ux-ui-specialist.md` and a structured JSON
+companion at `.workflow/<feature-name>-ux-ui-specialist.json`.
+
+The full schema and validator rules live in
+[evidence-contract.md](evidence-contract.md). Read it before writing the
+JSON — the orchestration validator rejects malformed evidence with no
+auto-repair.
+
+### ux-ui-specialist JSON skeleton
+
+```json
+{
+  "feature": "<FEATURE_NAME>",
+  "step": "code",
+  "role": "ux-ui-specialist",
+  "status": "done",
+  "generatedAt": "<RFC 3339 timestamp>",
+  "inputs": [
+    "docs/features/<FEATURE_NAME>.md",
+    "specs/<FEATURE_NAME>.feature",
+    ".workflow/<FEATURE_NAME>-senior-engineer.md"
+  ],
+  "outputs": [
+    "<real UI/asset paths declared for the feature surface>"
+  ],
+  "edgeCases": [
+    "mobile-first",
+    "visual-hierarchy",
+    "typography-hierarchy",
+    "responsive-layout",
+    "loading-state",
+    "empty-state",
+    "error-state",
+    "motion-and-reduced-motion"
+  ],
+  "mobileFirst": true,
+  "handoffTo": "qa-senior"
+}
+```
+
+### Rules that apply to this role (validator will check)
+
+- `mobileFirst` MUST be present and set to `true`. Missing or `false`
+  fails with `ux-ui-specialist evidence must declare mobileFirst: true`.
+- `edgeCases` MUST contain all eight required UX tags (above). Match is
+  case- and separator-insensitive (`Loading State`, `loading-state`,
+  `loading_state` all count) — but you should write them in the exact
+  hyphenated form shown.
+- `outputs` MUST include real UI/asset paths declared for the feature
+  surface (validator cross-references against the feature's `uiPaths`).
+- `generatedAt` MUST be RFC 3339.
+- `handoffTo` MUST be `qa-senior`.
 
 Required only when the feature is user-facing. CLI-only or backend-only
 features do not invoke this role.

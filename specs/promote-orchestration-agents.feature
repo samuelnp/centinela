@@ -30,7 +30,7 @@ Feature: Promote orchestration roles to standalone prompt files
   Scenario: Per-file length budget is respected
     Given a new orchestration prompt file
     When the file is measured
-    Then it should be at most 70 lines
+    Then it should be at most 130 lines
 
   Scenario: Runtime configuration is unchanged
     Given the promote-orchestration-agents feature is implemented

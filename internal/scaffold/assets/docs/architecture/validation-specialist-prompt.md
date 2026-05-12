@@ -58,8 +58,52 @@ Output format:
 
 ## Required Artifact
 
-Save report to `.workflow/<feature-name>-validation-specialist.md` and a
-structured companion at `.workflow/<feature-name>-validation-specialist.json`.
+Save the Markdown report to
+`.workflow/<feature-name>-validation-specialist.md` and a structured JSON
+companion at `.workflow/<feature-name>-validation-specialist.json`.
+
+The full schema and validator rules live in
+[evidence-contract.md](evidence-contract.md). Read it before writing the
+JSON — the orchestration validator rejects malformed evidence with no
+auto-repair.
+
+### validation-specialist JSON skeleton
+
+```json
+{
+  "feature": "<FEATURE_NAME>",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "<RFC 3339 timestamp>",
+  "inputs": [
+    "docs/plans/<FEATURE_NAME>.md",
+    "specs/<FEATURE_NAME>.feature",
+    ".workflow/<FEATURE_NAME>-gatekeeper.md",
+    ".workflow/<FEATURE_NAME>-qa-senior.md",
+    ".workflow/<FEATURE_NAME>-senior-engineer.md"
+  ],
+  "outputs": [
+    ".workflow/<FEATURE_NAME>-gatekeeper.md"
+  ],
+  "validation": {
+    "g1FileSize": "pass",
+    "goTestAll": "pass",
+    "coverage": "<actual>% >= <threshold>%",
+    "gatekeeperReport": "SAFE"
+  },
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}
+```
+
+### Rules that apply to this role (validator will check)
+
+- Only the global rules apply (no role-specific output type beyond
+  general existence).
+- `outputs` paths MUST exist on disk when `centinela complete` runs.
+- `generatedAt` MUST be RFC 3339.
+- `handoffTo` MUST be `documentation-specialist`.
 
 The `validate` step cannot complete without this artifact plus the
 gatekeeper report (and the production-readiness report when the gate

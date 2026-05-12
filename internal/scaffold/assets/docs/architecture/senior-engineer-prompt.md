@@ -58,8 +58,52 @@ Output format:
 
 ## Required Artifact
 
-Save report to `.workflow/<feature-name>-senior-engineer.md` and a
-structured companion at `.workflow/<feature-name>-senior-engineer.json`.
+Save the Markdown report to `.workflow/<feature-name>-senior-engineer.md`
+and a structured JSON companion at
+`.workflow/<feature-name>-senior-engineer.json`.
+
+The full schema and validator rules live in
+[evidence-contract.md](evidence-contract.md). Read it before writing the
+JSON — the orchestration validator rejects malformed evidence with no
+auto-repair.
+
+### senior-engineer JSON skeleton
+
+```json
+{
+  "feature": "<FEATURE_NAME>",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "<RFC 3339 timestamp>",
+  "inputs": [
+    "docs/plans/<FEATURE_NAME>.md",
+    "specs/<FEATURE_NAME>.feature",
+    ".workflow/<FEATURE_NAME>-big-thinker.md",
+    ".workflow/<FEATURE_NAME>-feature-specialist.md"
+  ],
+  "outputs": [
+    "internal/<package>/<file>.go",
+    "cmd/<binary>/<file>.go"
+  ],
+  "edgeCases": [
+    "Optional — implementation-specific decisions worth recording"
+  ],
+  "handoffTo": "qa-senior"
+}
+```
+
+### Rules that apply to this role (validator will check)
+
+- `outputs` MUST include at least one **real implementation file** outside
+  these prefixes: `.workflow/`, `tests/`, `docs/features/`, `docs/plans/`,
+  `specs/`, `docs/project-docs/`. Pointing only at evidence or doc files
+  is rejected with `senior-engineer outputs must include a real
+  non-evidence implementation file`.
+- All output paths MUST exist on disk when `centinela complete` runs.
+- `generatedAt` MUST be RFC 3339.
+- `handoffTo` MUST be `qa-senior` (or `ux-ui-specialist` first for
+  user-facing features).
 
 The `code` step is governed by architecture rules rather than artifact
 gating, but evidence files are required by the orchestration directive

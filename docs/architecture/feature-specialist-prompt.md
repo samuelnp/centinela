@@ -58,8 +58,51 @@ Output format:
 
 ## Required Artifact
 
-Save report to `.workflow/<feature-name>-feature-specialist.md` and a
-structured companion at `.workflow/<feature-name>-feature-specialist.json`.
+Save the Markdown report to `.workflow/<feature-name>-feature-specialist.md`
+and a structured JSON companion at
+`.workflow/<feature-name>-feature-specialist.json`.
+
+The full schema and validator rules live in
+[evidence-contract.md](evidence-contract.md). Read it before writing the
+JSON — the orchestration validator rejects malformed evidence with no
+auto-repair.
+
+### feature-specialist JSON skeleton
+
+```json
+{
+  "feature": "<FEATURE_NAME>",
+  "step": "plan",
+  "role": "feature-specialist",
+  "status": "done",
+  "generatedAt": "<RFC 3339 timestamp>",
+  "inputs": [
+    "docs/features/<FEATURE_NAME>.md",
+    "docs/plans/<FEATURE_NAME>.md",
+    "…every other docs/features/*.md in the repo (full snapshot)…"
+  ],
+  "outputs": [
+    "docs/features/<FEATURE_NAME>.md",
+    "docs/plans/<FEATURE_NAME>.md",
+    "specs/<FEATURE_NAME>.feature"
+  ],
+  "edgeCases": [
+    "Short, specific cases the spec must guarantee (REQUIRED — non-empty)"
+  ],
+  "handoffTo": "senior-engineer"
+}
+```
+
+### Rules that apply to this role (validator will check)
+
+- `inputs` MUST snapshot **every** `docs/features/*.md` in the repo plus
+  `docs/plans/<FEATURE_NAME>.md`.
+- `outputs` MUST include at least one real file under `docs/plans/` or
+  `specs/`. Pointing at descriptions instead of paths is rejected.
+- `edgeCases` MUST be non-empty — this role enumerates the scenarios the
+  spec guarantees.
+- `generatedAt` MUST be RFC 3339.
+- `handoffTo` MUST be `senior-engineer`.
 
 The `plan` step cannot complete without both files plus the Gherkin spec
 at `specs/<feature-name>.feature`.

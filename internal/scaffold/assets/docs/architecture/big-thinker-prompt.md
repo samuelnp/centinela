@@ -60,9 +60,47 @@ Output format:
 
 ## Required Artifact
 
-Save report to `.workflow/<feature-name>-big-thinker.md` and a structured
-companion at `.workflow/<feature-name>-big-thinker.json` matching the
-schema produced by other plan-step features (see
-`cmd/centinela/hook_orchestration.go:42` for the evidence-path contract).
+Save the Markdown report to `.workflow/<feature-name>-big-thinker.md` and a
+structured JSON companion at `.workflow/<feature-name>-big-thinker.json`.
+
+The full schema and validator rules live in
+[evidence-contract.md](evidence-contract.md). Read it before writing the
+JSON — the orchestration validator rejects malformed evidence with no
+auto-repair.
+
+### big-thinker JSON skeleton
+
+```json
+{
+  "feature": "<FEATURE_NAME>",
+  "step": "plan",
+  "role": "big-thinker",
+  "status": "done",
+  "generatedAt": "<RFC 3339 timestamp>",
+  "inputs": [
+    "docs/features/<FEATURE_NAME>.md",
+    "docs/plans/<FEATURE_NAME>.md",
+    "…every other docs/features/*.md in the repo (full snapshot)…"
+  ],
+  "outputs": [
+    "docs/features/<FEATURE_NAME>.md",
+    "docs/plans/<FEATURE_NAME>.md"
+  ],
+  "edgeCases": [
+    "Optional but recommended — risks or invariants you flagged"
+  ],
+  "handoffTo": "feature-specialist"
+}
+```
+
+### Rules that apply to this role (validator will check)
+
+- `inputs` MUST snapshot **every** `docs/features/*.md` in the repo plus
+  `docs/plans/<FEATURE_NAME>.md`. Missing entries fail with
+  `missing feature-doc snapshot inputs`.
+- `outputs` MUST include at least one real file under `docs/plans/` or
+  `specs/`; descriptive strings are rejected.
+- `generatedAt` MUST be RFC 3339.
+- `handoffTo` MUST be `feature-specialist`.
 
 The `plan` step cannot complete without both files.

@@ -96,6 +96,7 @@ Save to `.workflow/<feature>-production-readiness.md`. Required when gate is ena
 | i18n conventions | [i18n-strategy.md](docs/architecture/i18n-strategy.md) |
 | Workflow enforcement | [workflow-enforcement.md](docs/architecture/workflow-enforcement.md) |
 | Gatekeeper prompt | [gatekeeper-prompt.md](docs/architecture/gatekeeper-prompt.md) |
+| Orchestration evidence contract | [evidence-contract.md](docs/architecture/evidence-contract.md) |
 | Plan agent — big-thinker | [big-thinker-prompt.md](docs/architecture/big-thinker-prompt.md) |
 | Plan agent — feature-specialist | [feature-specialist-prompt.md](docs/architecture/feature-specialist-prompt.md) |
 | Code agent — senior-engineer | [senior-engineer-prompt.md](docs/architecture/senior-engineer-prompt.md) |

@@ -57,8 +57,51 @@ Output format:
 
 ## Required Artifact
 
-Save report to `.workflow/<feature-name>-qa-senior.md` and a structured
-companion at `.workflow/<feature-name>-qa-senior.json`.
+Save the Markdown report to `.workflow/<feature-name>-qa-senior.md` and a
+structured JSON companion at `.workflow/<feature-name>-qa-senior.json`.
+
+The full schema and validator rules live in
+[evidence-contract.md](evidence-contract.md). Read it before writing the
+JSON — the orchestration validator rejects malformed evidence with no
+auto-repair.
+
+### qa-senior JSON skeleton
+
+```json
+{
+  "feature": "<FEATURE_NAME>",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "<RFC 3339 timestamp>",
+  "inputs": [
+    "docs/plans/<FEATURE_NAME>.md",
+    "specs/<FEATURE_NAME>.feature",
+    ".workflow/<FEATURE_NAME>-senior-engineer.md",
+    ".workflow/<FEATURE_NAME>-edge-cases.md"
+  ],
+  "outputs": [
+    "tests/unit/<file>_test.go",
+    "tests/integration/<file>_test.go",
+    "tests/acceptance/<file>_test.go",
+    ".workflow/<FEATURE_NAME>-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Short, specific cases the test suite now covers (REQUIRED — non-empty)"
+  ],
+  "handoffTo": "validation-specialist"
+}
+```
+
+### Rules that apply to this role (validator will check)
+
+- `outputs` MUST include **at least one real path under `tests/`** AND
+  exactly `.workflow/<FEATURE_NAME>-edge-cases.md`. Missing either fails
+  with `qa-senior outputs must include at least one real test file and …`.
+- `edgeCases` MUST be non-empty.
+- All output paths MUST exist on disk when `centinela complete` runs.
+- `generatedAt` MUST be RFC 3339.
+- `handoffTo` MUST be `validation-specialist`.
 
 The edge-case report at `.workflow/<feature-name>-edge-cases.md` is
 required by the `tests` step and is produced by the separate

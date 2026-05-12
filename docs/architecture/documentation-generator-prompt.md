@@ -68,3 +68,46 @@ Do not edit source code unless generation fails due to missing required
 artifacts. If validation fails, explain exactly what files are missing and
 how to produce them.
 ```
+
+## Required Artifact
+
+Save the Markdown report to
+`.workflow/<feature-name>-documentation-specialist.md` and a structured JSON
+companion at `.workflow/<feature-name>-documentation-specialist.json`.
+
+The full schema and validator rules live in
+[evidence-contract.md](evidence-contract.md). Read it before writing the
+JSON.
+
+### documentation-specialist JSON skeleton
+
+```json
+{
+  "feature": "<FEATURE_NAME>",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "<RFC 3339 timestamp>",
+  "inputs": [
+    "docs/features/<FEATURE_NAME>.md",
+    "docs/plans/<FEATURE_NAME>.md",
+    "specs/<FEATURE_NAME>.feature"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/<FEATURE_NAME>.md",
+    "docs/project-docs/kb/<FEATURE_NAME>.html",
+    "docs/project-docs/kb/index.html",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}
+```
+
+### Rules that apply to this role (validator will check)
+
+- This role is **exempt** from the "outputs must be real files" check —
+  but you should still list the real paths you wrote, for traceability.
+- `inputs`, `outputs`, `handoffTo` MUST be non-empty.
+- `generatedAt` MUST be RFC 3339.
+- `handoffTo` MUST be `complete`.
