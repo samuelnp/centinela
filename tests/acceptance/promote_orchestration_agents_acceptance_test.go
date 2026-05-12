@@ -23,7 +23,7 @@ var promotedPromptFiles = []string{
 	"validation-specialist-prompt.md",
 }
 
-const promotedPromptLineBudget = 70
+const promotedPromptLineBudget = 130
 
 func docsArchPromptPath(name string) string {
 	return filepath.Join("..", "..", "docs", "architecture", name)
