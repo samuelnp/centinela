@@ -57,3 +57,35 @@ func TestRenderKBFeature_FallbackSummary(t *testing.T) {
 		t.Fatal("expected fallback summary in hero")
 	}
 }
+
+func TestKBCard_EmptySummaryFallback(t *testing.T) {
+	d := &Data{
+		Specs:  []string{"specs/alpha.feature"},
+		States: []FeatureState{{Feature: "alpha", Status: "done"}},
+		KB:     []KBPage{{Feature: "alpha", WhatItDoes: "x", WhenToUse: "y", HowItBehaves: "z"}},
+	}
+	html := RenderKBIndex(d)
+	if !strings.Contains(html, "Read the guide for plain-language details.") {
+		t.Fatal("expected empty-summary fallback on card")
+	}
+}
+
+func TestMDToHTML_EmptyAndHeadingOnly(t *testing.T) {
+	if mdToHTML("") != "" {
+		t.Fatal("empty input must render empty string")
+	}
+	if mdToHTML("   ") != "" {
+		t.Fatal("whitespace input must render empty string")
+	}
+	out := mdToHTML("- one\n- two")
+	if !strings.HasPrefix(out, "<ul>") || !strings.HasSuffix(out, "</ul>") {
+		t.Fatalf("list-only body should render closed list, got %q", out)
+	}
+}
+
+func TestSplitH2_HeadingWithoutBody(t *testing.T) {
+	m := splitH2("## Lonely")
+	if _, ok := m["Lonely"]; !ok {
+		t.Fatalf("expected heading-only section to be captured: %#v", m)
+	}
+}

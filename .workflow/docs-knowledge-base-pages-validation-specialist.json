@@ -1,0 +1,30 @@
+{
+  "feature": "docs-knowledge-base-pages",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-12T00:00:00Z",
+  "inputs": [
+    ".workflow/docs-knowledge-base-pages-gatekeeper.md",
+    ".workflow/docs-knowledge-base-pages-qa-senior.md",
+    ".workflow/docs-knowledge-base-pages-senior-engineer.md",
+    "docs/plans/docs-knowledge-base-pages.md",
+    "docs/features/docs-knowledge-base-pages.md",
+    "specs/docs-knowledge-base-pages.feature",
+    "internal/docgen/load_kb.go",
+    "internal/docgen/render_kb.go",
+    "internal/docgen/render_kb_parts.go",
+    "internal/docgen/generate.go",
+    "internal/workflow/validate_docs.go"
+  ],
+  "outputs": [
+    ".workflow/docs-knowledge-base-pages-gatekeeper.md"
+  ],
+  "validation": {
+    "g1FileSize": "pass",
+    "goTestAll": "pass",
+    "coverage": "95.0% >= 95.0%",
+    "gatekeeperReport": "SAFE"
+  },
+  "handoffTo": "documentation-specialist"
+}
