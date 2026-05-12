@@ -1,0 +1,26 @@
+{
+  "feature": "add-agent-evidence-contract",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-12T00:00:00Z",
+  "inputs": [
+    "docs/plans/add-agent-evidence-contract.md",
+    "specs/add-agent-evidence-contract.feature",
+    ".workflow/add-agent-evidence-contract-gatekeeper.md",
+    ".workflow/add-agent-evidence-contract-qa-senior.md",
+    ".workflow/add-agent-evidence-contract-senior-engineer.md",
+    "docs/architecture/evidence-contract.md"
+  ],
+  "outputs": [
+    ".workflow/add-agent-evidence-contract-gatekeeper.md"
+  ],
+  "validation": {
+    "g1FileSize": "skipped (no relevant changes)",
+    "goTestAll": "pass",
+    "coverage": "pass",
+    "gatekeeperReport": "SAFE"
+  },
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

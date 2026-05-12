@@ -1,14 +1,14 @@
 {
   "feature": "add-agent-evidence-contract",
   "startedAt": "2026-05-12T20:24:16.520258Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-12T20:29:36Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-05-12T20:31:11Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-12T20:31:40Z"
     }
   },
   "stepOrder": [
