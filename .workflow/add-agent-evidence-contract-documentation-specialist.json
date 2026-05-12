@@ -1,0 +1,21 @@
+{
+  "feature": "add-agent-evidence-contract",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-12T00:00:00Z",
+  "inputs": [
+    "docs/features/add-agent-evidence-contract.md",
+    "docs/plans/add-agent-evidence-contract.md",
+    "specs/add-agent-evidence-contract.feature",
+    "docs/architecture/evidence-contract.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/add-agent-evidence-contract.md",
+    "docs/project-docs/kb/add-agent-evidence-contract.html",
+    "docs/project-docs/kb/index.html",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}
