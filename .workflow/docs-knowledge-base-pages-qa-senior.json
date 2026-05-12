@@ -1,0 +1,34 @@
+{
+  "feature": "docs-knowledge-base-pages",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-05-12T00:00:00Z",
+  "inputs": [
+    "internal/docgen/load_kb.go",
+    "internal/docgen/render_kb.go",
+    "internal/docgen/render_kb_parts.go",
+    "internal/docgen/generate.go",
+    "internal/workflow/validate_docs.go",
+    "docs/architecture/documentation-generator-prompt.md"
+  ],
+  "outputs": [
+    "internal/docgen/load_kb_test.go",
+    "internal/docgen/render_kb_test.go",
+    "internal/docgen/generate_kb_test.go",
+    "internal/workflow/validate_docs_test.go",
+    "internal/workflow/validate_orchestration_docs_test.go",
+    "internal/workflow/steps_test.go",
+    "tests/integration/docs_knowledge_base_integration_test.go",
+    "tests/acceptance/docs_knowledge_base_acceptance_test.go",
+    ".workflow/docs-knowledge-base-pages-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Missing required section fails with feature + section names",
+    "Unterminated frontmatter fails with explicit error",
+    "Features without KB md render as placeholder cards",
+    "Examples section is omitted when empty",
+    "Validator distinguishes missing markdown vs missing HTML"
+  ],
+  "handoffTo": "validation-specialist"
+}
