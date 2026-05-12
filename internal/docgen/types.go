@@ -31,4 +31,16 @@ type Data struct {
 	RoadmapNodes []RoadmapNode
 	Evidence     []EvidenceLink
 	States       []FeatureState
+	KB           []KBPage
+}
+
+type KBPage struct {
+	Feature      string
+	Summary      string
+	Audience     string
+	Status       string
+	WhatItDoes   string
+	WhenToUse    string
+	HowItBehaves string
+	Examples     string
 }

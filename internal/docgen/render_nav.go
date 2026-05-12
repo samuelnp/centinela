@@ -3,7 +3,7 @@ package docgen
 import "fmt"
 
 func renderNav(d *Data) string {
-	return fmt.Sprintf(`<aside class="sidebar"><div class="brand">%s</div><div class="caption">Hybrid docs report</div><nav class="toc"><a href="#overview">Overview</a><a href="#latest-features">Latest Features</a><a href="#getting-started">Getting Started</a><a href="#feature-graphs">Feature Graphs</a><a href="#roadmap">Roadmap</a><a href="#specs">Specs</a><a href="#workflow-state">Feature States</a><a href="#artifacts">Artifacts</a><a href="#examples">Examples</a><a href="#sources">Source Context</a></nav><p class="caption">%d specs · %d scenarios</p></aside>`, esc(d.Title), len(d.Specs), d.Scenarios)
+	return fmt.Sprintf(`<aside class="sidebar"><div class="brand">%s</div><div class="caption">Hybrid docs report</div><nav class="toc"><a href="#overview">Overview</a><a href="#latest-features">Latest Features</a><a href="#getting-started">Getting Started</a><a href="kb/index.html">Knowledge Base</a><a href="#feature-graphs">Feature Graphs</a><a href="#roadmap">Roadmap</a><a href="#specs">Specs</a><a href="#workflow-state">Feature States</a><a href="#artifacts">Artifacts</a><a href="#examples">Examples</a><a href="#sources">Source Context</a></nav><p class="caption">%d specs · %d scenarios · %d KB guides</p></aside>`, esc(d.Title), len(d.Specs), d.Scenarios, len(d.KB))
 }
 
 func renderHero(d *Data) string {

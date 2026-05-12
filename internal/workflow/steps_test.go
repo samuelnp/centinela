@@ -35,8 +35,10 @@ func TestCompleteTransitionsToDone(t *testing.T) {
 	os.MkdirAll(".workflow", 0755)                                                                                                                  //nolint:errcheck
 	os.WriteFile(".workflow/f-edge-cases.md", []byte("ok"), 0644)                                                                                   //nolint:errcheck
 	os.WriteFile(".workflow/f-gatekeeper.md", []byte("SAFE"), 0644)                                                                                 //nolint:errcheck
-	os.MkdirAll("docs/project-docs", 0755)                                                                                                          //nolint:errcheck
+	os.MkdirAll("docs/project-docs/kb", 0755)                                                                                                       //nolint:errcheck
 	os.WriteFile("docs/project-docs/index.html", []byte("<html></html>"), 0644)                                                                     //nolint:errcheck
+	os.WriteFile("docs/project-docs/kb/f.md", []byte("ok"), 0644)                                                                                   //nolint:errcheck
+	os.WriteFile("docs/project-docs/kb/f.html", []byte("<html></html>"), 0644)                                                                      //nolint:errcheck
 
 	wf := New("f")
 	cfg := &config.Config{Workflow: config.WorkflowConfig{DisableAutoCommit: true}, Validate: config.ValidateConfig{Commands: []string{"go test ./..."}}, Gates: config.GatesConfig{FileSizeEnabled: false}}

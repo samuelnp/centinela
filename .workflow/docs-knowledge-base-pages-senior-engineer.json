@@ -1,0 +1,37 @@
+{
+  "feature": "docs-knowledge-base-pages",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-05-12T00:00:00Z",
+  "inputs": [
+    "docs/features/docs-knowledge-base-pages.md",
+    "docs/plans/docs-knowledge-base-pages.md",
+    "specs/docs-knowledge-base-pages.feature",
+    "internal/docgen/load.go",
+    "internal/docgen/render_nav.go",
+    "internal/docgen/generate.go",
+    "internal/workflow/validate_docs.go",
+    "docs/architecture/documentation-generator-prompt.md"
+  ],
+  "outputs": [
+    "internal/docgen/types.go",
+    "internal/docgen/load.go",
+    "internal/docgen/load_kb.go",
+    "internal/docgen/render_kb.go",
+    "internal/docgen/render_kb_parts.go",
+    "internal/docgen/render_nav.go",
+    "internal/docgen/generate.go",
+    "internal/workflow/validate_docs.go",
+    "internal/workflow/validate_docs_test.go",
+    "internal/workflow/validate_orchestration_docs_test.go",
+    "internal/workflow/steps_test.go",
+    "docs/architecture/documentation-generator-prompt.md"
+  ],
+  "edgeCases": [
+    "Frontmatter parser tolerates missing optional fields (audience, status) but still requires the three core H2 sections",
+    "KB index renders placeholder cards for features without a KB markdown so generation never fails on backfill gaps",
+    "Validator names the exact missing path so the agent can fix it without re-reading docs"
+  ],
+  "handoffTo": "qa-senior"
+}

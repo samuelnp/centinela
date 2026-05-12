@@ -21,6 +21,11 @@ func LoadData(title string) (*Data, error) {
 	d.RoadmapNodes = loadRoadmapNodes()
 	d.Evidence = loadEvidence()
 	d.States = loadStates()
+	kb, err := loadKBPages()
+	if err != nil {
+		return nil, err
+	}
+	d.KB = kb
 	return d, nil
 }
 

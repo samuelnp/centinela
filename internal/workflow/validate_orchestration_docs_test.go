@@ -14,9 +14,11 @@ func TestValidateArtifactsDocsStrictOrchestration(t *testing.T) {
 	o, _ := os.Getwd()
 	defer os.Chdir(o)                                                //nolint:errcheck
 	os.Chdir(d)                                                      //nolint:errcheck
-	os.MkdirAll(".workflow", 0755)                                   //nolint:errcheck
-	os.MkdirAll("docs/project-docs", 0755)                           //nolint:errcheck
-	os.WriteFile("docs/project-docs/index.html", []byte("ok"), 0644) //nolint:errcheck
+	os.MkdirAll(".workflow", 0755)                                            //nolint:errcheck
+	os.MkdirAll("docs/project-docs/kb", 0755)                                 //nolint:errcheck
+	os.WriteFile("docs/project-docs/index.html", []byte("ok"), 0644)          //nolint:errcheck
+	os.WriteFile("docs/project-docs/kb/f.md", []byte("ok"), 0644)             //nolint:errcheck
+	os.WriteFile("docs/project-docs/kb/f.html", []byte("<html></html>"), 0644) //nolint:errcheck
 	wf := New("f")
 	wf.CurrentStep = "docs"
 	Save(wf) //nolint:errcheck
