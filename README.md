@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/logo.png" alt="Centinela" width="220">
+  <img src="./assets/logo-banner.png" alt="Centinela" width="100%">
 </p>
 
 # Centinela
