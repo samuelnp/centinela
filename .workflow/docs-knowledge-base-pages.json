@@ -1,15 +1,15 @@
 {
   "feature": "docs-knowledge-base-pages",
   "startedAt": "2026-05-11T18:01:26.808547Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-12T19:56:29Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-12T20:14:21Z"
     },
     "plan": {
       "status": "done",

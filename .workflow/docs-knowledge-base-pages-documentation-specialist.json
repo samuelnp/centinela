@@ -1,0 +1,24 @@
+{
+  "feature": "docs-knowledge-base-pages",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-12T00:00:00Z",
+  "inputs": [
+    "docs/features/docs-knowledge-base-pages.md",
+    "docs/plans/docs-knowledge-base-pages.md",
+    "specs/docs-knowledge-base-pages.feature",
+    "docs/architecture/documentation-generator-prompt.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/docs-knowledge-base-pages.md",
+    "docs/project-docs/kb/docs-knowledge-base-pages.html",
+    "docs/project-docs/kb/index.html",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [
+    "Only this feature's KB md ships in this change; other features remain placeholders until their next docs step",
+    "Frontmatter status reflects the feature's current workflow state at write time"
+  ],
+  "handoffTo": "complete"
+}
