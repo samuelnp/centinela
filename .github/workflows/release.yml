@@ -82,7 +82,7 @@ jobs:
           cd dist
           sha256sum * > SHA256SUMS
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.build-and-release.outputs.tag }}
           generate_release_notes: true
