@@ -1,0 +1,35 @@
+{
+  "feature": "landing-page",
+  "startedAt": "2026-05-13T05:58:18.685889Z",
+  "currentStep": "plan",
+  "steps": {
+    "code": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

@@ -4,7 +4,59 @@
 
 # Centinela
 
+> **Plan → code → tests → validate → docs — enforced.**
+
+<p align="left">
+  <a href="https://github.com/samuelnp/centinela/actions/workflows/validate.yml"><img src="https://github.com/samuelnp/centinela/actions/workflows/validate.yml/badge.svg" alt="validate"></a>
+  <a href="https://github.com/samuelnp/centinela/releases/latest"><img src="https://img.shields.io/github/v/release/samuelnp/centinela?display_name=tag&sort=semver" alt="latest release"></a>
+  <a href="https://github.com/samuelnp/centinela/blob/main/go.mod"><img src="https://img.shields.io/github/go-mod/go-version/samuelnp/centinela" alt="go version"></a>
+  <a href="https://github.com/samuelnp/centinela/blob/main/LICENSE"><img src="https://img.shields.io/github/license/samuelnp/centinela" alt="license"></a>
+  <a href="https://goreportcard.com/report/github.com/samuelnp/centinela"><img src="https://goreportcard.com/badge/github.com/samuelnp/centinela" alt="go report card"></a>
+  <a href="https://github.com/samuelnp/centinela/stargazers"><img src="https://img.shields.io/github/stars/samuelnp/centinela?style=social" alt="stars"></a>
+</p>
+
 A development workflow enforcer for Claude Code and OpenCode projects. Centinela turns the "plan → code → tests → validate → docs" discipline from a suggestion into a mechanical constraint — enforced by agent integrations that run automatically in coding sessions.
+
+### 30-second tour
+
+```bash
+go install github.com/samuelnp/centinela@latest
+
+centinela init                    # wire Claude/OpenCode hooks + scaffold docs/
+centinela start my-feature        # required before any file write — opens "plan" step
+# write docs/plans/my-feature.md + specs/my-feature.feature, then:
+centinela complete my-feature     # advances plan → code (blocked if artifacts missing)
+# … implement … advance through tests → validate → docs
+centinela validate                # runs G1 file-size, i18n, your test/lint commands
+```
+
+If an agent tries to write source code while the workflow is in the `plan` step, the prewrite hook blocks the write and tells the agent what's missing.
+
+### Contents
+
+- [Demo](#demo)
+- [Why Centinela](#why-centinela)
+- [When *not* to use Centinela](#when-not-to-use-centinela)
+- [Latest Features](#latest-features)
+- [Install](#install)
+- [Getting Started](#getting-started)
+- [The Standard Five-Step Workflow](#the-standard-five-step-workflow)
+- [How the Hooks Work](#how-the-hooks-work)
+- [Gate Checks](#gate-checks)
+- [Architecture Archetypes](#architecture-archetypes)
+- [`centinela.toml` Reference](#centinelatoml-reference)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Demo
+
+<p align="center">
+  <img src="./assets/demo.gif" alt="Centinela workflow demo" width="800">
+</p>
+
+> Recorded with [`vhs`](https://github.com/charmbracelet/vhs). To regenerate: `vhs assets/demo.tape`.
 
 ---
 
@@ -18,6 +70,19 @@ AI coding agents are fast but undisciplined. Left to their own devices they skip
 - **Injecting context** into every agent session so the model always knows which feature is active and which step it is on
 
 The result: every feature ships with a written plan, a Gherkin spec, three test layers, and a passing gate suite — regardless of whether a human or an AI agent wrote it.
+
+---
+
+## When *not* to use Centinela
+
+Centinela trades flexibility for discipline. Skip it if any of these apply:
+
+- **Throwaway scripts / one-off experiments.** The 5-step ceremony is overhead you'll regret.
+- **Solo prototyping in the first 48 hours of an idea.** Plans, specs, and gate suites are useful *after* you've validated the idea — not while you're still figuring out what to build.
+- **You don't use an AI coding agent.** Centinela's strongest leverage is forcing structure on agent-generated code; humans typing every keystroke already have plenty of friction.
+- **Your team has a different workflow you actually follow.** Centinela is opinionated. If your team already ships clean specs, tests, and docs without enforcement, the hooks will feel like a tax.
+
+Centinela is for *production code* you intend to maintain, where an AI agent is doing meaningful work and you want the agent's output to look like it came from a disciplined human team.
 
 ---
 

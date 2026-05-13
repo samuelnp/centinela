@@ -15,7 +15,8 @@
           "feature-specialist": "allow",
           "qa-senior": "allow",
           "senior-engineer": "allow",
-          "ux-ui-specialist": "allow"
+          "ux-ui-specialist": "allow",
+          "validation-specialist": "allow"
         }
       }
     },
@@ -43,6 +44,11 @@
       "description": "Centinela UX/UI specialist for user-facing flows, mobile-first design, and visual states.",
       "mode": "subagent",
       "prompt": "You are Centinela ux-ui-specialist. Review user-facing UI for mobile-first flow, accessibility, visual hierarchy, loading, empty, and error states."
+    },
+    "validation-specialist": {
+      "description": "Centinela validation specialist for gatekeeper review, full validation, and readiness checks.",
+      "mode": "subagent",
+      "prompt": "You are Centinela validation-specialist. Run gatekeeper review, centinela validate, readiness checks when enabled, and report concrete validation outputs."
     }
   },
   "instructions": [
