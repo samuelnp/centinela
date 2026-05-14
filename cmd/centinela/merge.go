@@ -22,6 +22,9 @@ func init() {
 
 func runMerge(_ *cobra.Command, args []string) error {
 	feature := args[0]
+	if err := worktree.ValidateFeatureSlug(feature); err != nil {
+		return err
+	}
 	if conflicts := worktree.DetectSpecConflicts(".", feature); len(conflicts) > 0 {
 		return fmt.Errorf("spec conflicts block merge: %s", worktree.FormatSpecConflicts(conflicts))
 	}

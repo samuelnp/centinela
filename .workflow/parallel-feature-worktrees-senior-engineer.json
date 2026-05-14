@@ -10,6 +10,7 @@
     "specs/parallel-feature-worktrees.feature",
     ".workflow/parallel-feature-worktrees-big-thinker.md",
     ".workflow/parallel-feature-worktrees-feature-specialist.md",
+    ".workflow/parallel-feature-worktrees-edge-cases.md",
     "PROJECT.md",
     "CLAUDE.md",
     "docs/architecture/senior-engineer-prompt.md",
@@ -23,6 +24,7 @@
     "internal/worktree/ignore_append.go",
     "internal/worktree/ignore_tsconfig.go",
     "internal/worktree/start_hook.go",
+    "internal/worktree/slug.go",
     "internal/worktree/merger.go",
     "internal/worktree/merger_git.go",
     "internal/worktree/steward.go",
@@ -54,7 +56,9 @@
     "Hooks running inside .worktrees/<feature>/ resolve workflow state from that worktree only; cross-worktree state is ignored",
     "merge command short-circuits on a dirty main checkout before touching git or invoking the Steward",
     "spec-conflict pre-check runs before git merge so contradictory specs across active worktrees block the merge with both file names surfaced",
-    "Merge Steward role lives outside the 5-step workflow — RequiredRoles(step) does not list it; orchestration validator only enforces output rules when evidence is written"
+    "Merge Steward role lives outside the 5-step workflow — RequiredRoles(step) does not list it; orchestration validator only enforces output rules when evidence is written",
+    "ValidateFeatureSlug rejects shell-unsafe and path-traversal feature names (alpha/../beta, alpha;rm, names with /, spaces, uppercase) before they reach git worktree add or the filesystem; called from worktree.Create and defensively from cmd/centinela/start.go and cmd/centinela/merge.go",
+    "DetectFeatureFromCwd resolves symlinks via filepath.EvalSymlinks before scanning for the .worktrees/<feature> segment, so symlinked parents (e.g. macOS /tmp -> /private/tmp) do not mask the worktree root"
   ],
   "handoffTo": "qa-senior"
 }

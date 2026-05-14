@@ -26,6 +26,9 @@ func init() {
 
 func runStart(_ *cobra.Command, args []string) error {
 	feature := args[0]
+	if err := worktree.ValidateFeatureSlug(feature); err != nil {
+		return err
+	}
 
 	if _, err := os.Stat("PROJECT.md"); err != nil {
 		return fmt.Errorf("PROJECT.md not found — run the /centinela-setup skill to initialise your project")

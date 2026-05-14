@@ -16,11 +16,16 @@ func Path(repo, feature string) string {
 
 // DetectFeatureFromCwd walks parents of cwd looking for a `.worktrees/<feature>`
 // segment. Returns the feature slug and the worktree root, or empty strings
-// when cwd is not inside any worktree.
+// when cwd is not inside any worktree. Resolves symlinks (e.g. macOS
+// `/tmp` -> `/private/tmp`) before scanning so links along the path do not
+// mask the `.worktrees/<feature>` segment.
 func DetectFeatureFromCwd(cwd string) (feature, root string) {
 	abs, err := filepath.Abs(cwd)
 	if err != nil {
 		return "", ""
+	}
+	if resolved, err := filepath.EvalSymlinks(abs); err == nil {
+		abs = resolved
 	}
 	parts := strings.Split(filepath.ToSlash(abs), "/")
 	for i := 0; i+1 < len(parts); i++ {

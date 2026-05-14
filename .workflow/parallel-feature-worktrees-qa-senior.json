@@ -1,0 +1,36 @@
+{
+  "feature": "parallel-feature-worktrees",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-05-14T13:05:00Z",
+  "inputs": [
+    "docs/plans/parallel-feature-worktrees.md",
+    "specs/parallel-feature-worktrees.feature",
+    ".workflow/parallel-feature-worktrees-senior-engineer.md",
+    ".workflow/parallel-feature-worktrees-edge-cases.md"
+  ],
+  "outputs": [
+    "tests/unit/worktree_slug_test.go",
+    "tests/unit/worktree_path_test.go",
+    "tests/unit/worktree_ignore_sync_test.go",
+    "tests/unit/worktree_ignore_tsconfig_test.go",
+    "tests/unit/worktree_spec_conflicts_test.go",
+    "tests/integration/worktree_provision_test.go",
+    "tests/integration/worktree_merger_test.go",
+    "tests/integration/worktree_hook_resolution_test.go",
+    "tests/acceptance/parallel_feature_worktrees_test.go",
+    ".workflow/parallel-feature-worktrees-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Shell-unsafe and path-escape feature slugs are rejected before any disk side effect",
+    "DetectFeatureFromCwd resolves symlinked parent paths (macOS /tmp -> /private/tmp)",
+    "SyncIgnores is idempotent across .gitignore, .eslintignore, .prettierignore, .dockerignore, .rgignore, and tsconfig.json",
+    "Malformed tsconfig.json is treated as no-op (no crash); missing exclude key is added; string exclude is repaired to array",
+    "Merger fails fast on dirty main without invoking the validator",
+    "Clean merge removes the worktree; text conflicts and validate failures keep it for the Steward",
+    "Spec-conflict detection flags contradictory Given/Then across in-flight worktrees, ignores same-owner self-comparisons, and tolerates missing specs/ directories",
+    "MergeOutcome surfaces StewardReason and StewardHint so the caller can route to the Merge Steward without auto-dispatch yet"
+  ],
+  "handoffTo": "validation-specialist"
+}

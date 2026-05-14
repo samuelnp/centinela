@@ -77,3 +77,31 @@
 - **Outstanding TODOs** (not blocking qa-senior):
   - Wire the actual Merge Steward Agent invocation behind the "Merge Steward required" exit in `cmd/centinela/merge.go`. Today the command exits non-zero with the evidence-path hint; the Agent dispatch is a Phase 2.1 task.
   - Confirmed: `merge-steward` lives outside the 5-step workflow and is NOT part of `RequiredRoles(step)` — validator only fires on the role when evidence is written.
+
+---
+
+### Patch addendum (2026-05-14): edge-case fixes
+
+Two surgical patches in response to the edge-case tester report at `.workflow/parallel-feature-worktrees-edge-cases.md` (Top Gaps: feature-slug validation, symlink normalization).
+
+| Path | Reason |
+|------|--------|
+| internal/worktree/slug.go | New: `ValidateFeatureSlug(name string) error`. Enforces kebab-case ASCII `^[a-z0-9]+(-[a-z0-9]+)*$` before any feature name reaches `git worktree add` or the filesystem. Rejects shell-unsafe and path-traversal inputs (`alpha/../beta`, `alpha;rm`, names with `/`, spaces, uppercase). Placed in its own file so `path.go` stays focused; the project had no prior slug validator to reuse (confirmed by grep across `internal/workflow/` and `internal/roadmap/`). |
+| internal/worktree/provision.go | `Create` now calls `ValidateFeatureSlug(feature)` first thing. Replaces the previous bare empty-string guard, since the slug regex already rejects empty input. Belt-and-braces: validation also fires from the cmd layer, but the package-level guard ensures any future caller is safe by default. |
+| internal/worktree/path.go | `DetectFeatureFromCwd` now resolves symlinks via `filepath.EvalSymlinks(abs)` before scanning for the `.worktrees/<feature>` segment. Fixes macOS `/tmp` -> `/private/tmp` and any other symlinked parent path; without normalization the un-resolved cwd could fail to match the on-disk worktree root. EvalSymlinks failure is treated as "not inside a worktree" (falls through to the unresolved path), matching the existing no-feature-no-error contract. |
+| cmd/centinela/start.go | Defensive call to `worktree.ValidateFeatureSlug(feature)` at the top of `runStart` — feature slug is user-supplied CLI input. Fails fast before any filesystem or workflow state touches the disk. |
+| cmd/centinela/merge.go | Same defensive call at the top of `runMerge`. Prevents a stray `centinela merge "alpha;rm -rf"` from reaching `worktree.DetectSpecConflicts` or `worktree.Merge`. |
+
+#### Verification
+
+- `go build ./...` — clean
+- `go vet ./...` — clean
+- `go test ./...` — all packages pass (cached + cmd/centinela re-run at 1.027s)
+- File sizes: `slug.go` 26L, `path.go` 51L, `provision.go` 51L, `start.go` 81L, `merge.go` 48L — all well under the G1 100-line ceiling.
+
+#### Scope decisions
+
+- Single regex slug (`^[a-z0-9]+(-[a-z0-9]+)*$`) — kebab-case only, no underscores, no leading/trailing hyphen. Matches the wording in `internal/ui/render_roadmap.go` ("Feature names must be valid centinela slugs (lowercase, hyphens)"). Tightening rather than broadening avoids future edge cases.
+- `worktree.Create` short-circuits on the slug error instead of falling through to `Exists()`. A bad slug must never produce a path or touch git, even by accident.
+- Validation in `cmd/centinela/start.go` runs **before** the `PROJECT.md` existence check so the error message is about the slug, not a missing project file, when both are invalid.
+- No tests added — qa-senior owns coverage (test gaps for `TestCreate_InvalidFeatureSlug` and `TestDetectFeatureFromCwd_WithSymlinks` are already in the edge-case report).

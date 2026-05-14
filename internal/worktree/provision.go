@@ -18,8 +18,8 @@ var gitRunner = func(repo string, args ...string) ([]byte, error) {
 // Create provisions `.worktrees/<feature>` for the feature branch.
 // Idempotent: if the worktree path already exists, returns it without error.
 func Create(repo, feature string) (string, error) {
-	if feature == "" {
-		return "", fmt.Errorf("worktree: feature name required")
+	if err := ValidateFeatureSlug(feature); err != nil {
+		return "", err
 	}
 	target := Path(repo, feature)
 	if Exists(repo, feature) {
