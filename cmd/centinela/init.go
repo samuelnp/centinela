@@ -50,6 +50,9 @@ func runInit(_ *cobra.Command, _ []string) error {
 	if len(result.Created) > 0 {
 		fmt.Println()
 	}
+	if err := syncWorktreeIgnores("."); err != nil {
+		return err
+	}
 	if usesOpenCode(agent) {
 		if err := setupOpenCode(); err != nil {
 			return err

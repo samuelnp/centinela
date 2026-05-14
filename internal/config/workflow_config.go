@@ -9,4 +9,7 @@ type WorkflowConfig struct {
 	StepConfirmationMode string   `toml:"step_confirmation_mode"`
 	PlanAdvisorMode      string   `toml:"plan_advisor_mode"`
 	PlanQuestionLimit    int      `toml:"plan_question_limit"`
+	// UseWorktrees enables per-feature git worktrees at `.worktrees/<feature>/`.
+	// Default false preserves the single-checkout flow.
+	UseWorktrees bool `toml:"use_worktrees"`
 }

@@ -22,6 +22,9 @@ type Workflow struct {
 	Steps             map[string]StepState `json:"steps"`
 	StepOrder         []string             `json:"stepOrder,omitempty"`
 	OrchestrationMode string               `json:"orchestrationMode,omitempty"`
+	// WorktreePath is the absolute path of the worktree this workflow runs
+	// in. Empty when the project uses a single-checkout flow.
+	WorktreePath string `json:"worktreePath,omitempty"`
 }
 
 // WorkflowDir is the directory where workflow JSON files are stored.

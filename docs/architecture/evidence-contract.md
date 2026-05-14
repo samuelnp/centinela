@@ -104,6 +104,27 @@ rejected and rewritten.
   other gate reports synthesised.
 - `handoffTo` → `documentation-specialist`.
 
+### merge-steward (out-of-band on `centinela merge`)
+
+The Merge Steward runs outside the 5-step workflow. `centinela merge`
+invokes it when `git merge` produces a text conflict OR when
+`centinela validate` fails on the merged tree, so it is NOT included in
+`RequiredRoles(step)`. When the steward writes evidence, the validator
+applies these rules:
+
+- `feature` MUST be the feature being merged.
+- `step` MAY be the literal string `"merge"` — there is no workflow
+  step gate keyed off this role.
+- `role` MUST be `"merge-steward"`.
+- `outputs` MUST include `.workflow/<feature>-merge-steward.md` (the
+  human-readable report). Additional entries (proposed-diff files,
+  test reproductions) are allowed.
+- `handoffTo` MUST be the literal string `"complete"` on a successful
+  resolution, or `"user"` when the steward escalates due to low
+  confidence.
+- `edgeCases` SHOULD enumerate every conflict class detected
+  (text-conflict, post-merge-validate-failed, spec-contract).
+
 ### documentation-specialist (step: docs)
 
 - Exempt from the "outputs must be real files" check (the validator skips

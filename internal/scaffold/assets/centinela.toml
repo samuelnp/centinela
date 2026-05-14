@@ -29,8 +29,14 @@
 #   "off": disable plan-advisor prompts.
 #
 # plan_question_limit: max advisor questions per prompt round (default cap: 4).
+#
+# use_worktrees: when true, `centinela start <feature>` provisions an isolated
+#   git worktree at `.worktrees/<feature>/` so multiple feature workflows can
+#   run concurrently. Default false to keep the single-checkout flow. New
+#   projects scaffolded by the wizard default this to true.
 # ---------------------------------------------------------------------------
 [workflow]
+use_worktrees = true
 # test_suffixes      = ["_test.go"]
 # acceptance_suffix  = "_steps_test.go"
 # code_dirs          = ["/cmd/", "/internal/", "/pkg/"]

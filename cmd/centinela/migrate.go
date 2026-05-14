@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/migration"
 	"github.com/samuelnp/centinela/internal/setup"
 	"github.com/samuelnp/centinela/internal/ui"
@@ -60,6 +61,11 @@ func runMigrate(_ *cobra.Command, args []string) error {
 	}
 	if setupPlan.HasChanges() {
 		if err := setup.ApplySync(setupPlan); err != nil {
+			return err
+		}
+	}
+	if cfg, _ := config.Load(); cfg != nil && cfg.Workflow.UseWorktrees {
+		if err := syncWorktreeIgnores("."); err != nil {
 			return err
 		}
 	}

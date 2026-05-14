@@ -10,6 +10,11 @@ const (
 	RoleQASeniorEngineer Role = "qa-senior"
 	RoleDocsSpecialist   Role = "documentation-specialist"
 	RoleValidationSpec   Role = "validation-specialist"
+	// RoleMergeSteward runs out-of-band on `centinela merge <feature>` and is
+	// not part of the 5-step workflow. It does not appear in RequiredRoles
+	// for any step but it MUST validate as evidence when the merger writes
+	// `.workflow/<feature>-merge-steward.{md,json}`.
+	RoleMergeSteward Role = "merge-steward"
 )
 
 func RequiredRoles(step string) []Role {
