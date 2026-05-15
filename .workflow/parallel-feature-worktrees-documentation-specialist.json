@@ -1,0 +1,41 @@
+{
+  "feature": "parallel-feature-worktrees",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-15T13:44:00Z",
+  "inputs": [
+    "PROJECT.md",
+    "ROADMAP.md",
+    "docs/features/parallel-feature-worktrees.md",
+    "docs/plans/parallel-feature-worktrees.md",
+    "specs/parallel-feature-worktrees.feature",
+    "docs/architecture/documentation-generator-prompt.md",
+    "docs/architecture/evidence-contract.md",
+    ".workflow/parallel-feature-worktrees-big-thinker.md",
+    ".workflow/parallel-feature-worktrees-feature-specialist.md",
+    ".workflow/parallel-feature-worktrees-senior-engineer.md",
+    ".workflow/parallel-feature-worktrees-qa-senior.md",
+    ".workflow/parallel-feature-worktrees-gatekeeper.md",
+    ".workflow/parallel-feature-worktrees-validation-specialist.md",
+    "docs/project-docs/kb/add-agent-evidence-contract.md",
+    "docs/project-docs/kb/docs-knowledge-base-pages.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/parallel-feature-worktrees.md",
+    "docs/project-docs/kb/parallel-feature-worktrees.html",
+    "docs/project-docs/kb/index.html",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [
+    "Worktrees disabled: single-checkout flow unchanged, no .worktrees/ created",
+    "Ignore-list sync is idempotent across wizard and migrate re-runs",
+    "Clean text merge that fails validate is treated as a semantic conflict",
+    "Spec contradictions across in-flight worktrees are blocked pre-merge",
+    "Low-confidence Steward resolutions escalate to the user, never applied silently",
+    "Dirty main aborts centinela merge before git is touched",
+    "Restart with existing worktree resumes in place (run start from main checkout)",
+    "Merge Steward agent auto-dispatch is a documented v1.1 follow-up; merge exits with the hint path"
+  ],
+  "handoffTo": "complete"
+}
