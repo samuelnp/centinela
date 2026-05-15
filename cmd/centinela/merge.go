@@ -9,6 +9,8 @@ import (
 	"github.com/samuelnp/centinela/internal/worktree"
 )
 
+var mergeContinue bool
+
 var mergeCmd = &cobra.Command{
 	Use:   "merge <feature>",
 	Short: "Merge a completed feature worktree back into the main branch",
@@ -17,6 +19,7 @@ var mergeCmd = &cobra.Command{
 }
 
 func init() {
+	mergeCmd.Flags().BoolVar(&mergeContinue, "continue", false, "Resume a stalled merge after the Merge Steward writes evidence")
 	rootCmd.AddCommand(mergeCmd)
 }
 
@@ -24,6 +27,9 @@ func runMerge(_ *cobra.Command, args []string) error {
 	feature := args[0]
 	if err := worktree.ValidateFeatureSlug(feature); err != nil {
 		return err
+	}
+	if mergeContinue {
+		return runMergeContinue(feature)
 	}
 	if conflicts := worktree.DetectSpecConflicts(".", feature); len(conflicts) > 0 {
 		return fmt.Errorf("spec conflicts block merge: %s", worktree.FormatSpecConflicts(conflicts))
@@ -33,8 +39,7 @@ func runMerge(_ *cobra.Command, args []string) error {
 		return err
 	}
 	if outcome.TextConflict || outcome.ValidateFail {
-		fmt.Println(ui.RenderStep("Merge Steward required", feature))
-		return fmt.Errorf("merge requires steward review — see %s", outcome.StewardHint())
+		return dispatchSteward(outcome)
 	}
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Merged %q into main and removed its worktree.", feature)))
 	return nil

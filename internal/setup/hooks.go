@@ -9,6 +9,7 @@ const (
 	cmdContext   = "centinela hook context"
 	cmdSetup     = "centinela hook setup"
 	cmdMigrate   = "centinela hook migrate"
+	cmdMerge     = "centinela hook merge"
 )
 
 func mergeHooks(pre, post, prompt *[]HookGroup) bool {
@@ -22,6 +23,7 @@ func mergeHooks(pre, post, prompt *[]HookGroup) bool {
 	c = ensurePrompt(prompt, cmdContext, "Checking workflow status...") || c
 	c = ensurePrompt(prompt, cmdSetup, "Checking project setup...") || c
 	c = ensurePrompt(prompt, cmdMigrate, "Checking managed migrations...") || c
+	c = ensurePrompt(prompt, cmdMerge, "Checking pending merges...") || c
 	return c
 }
 

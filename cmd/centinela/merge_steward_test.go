@@ -52,7 +52,10 @@ func TestRunMerge_TextConflict_ReturnsStewardRequired(t *testing.T) {
 	if err == nil {
 		t.Fatal("runMerge should return an error when text-conflict invokes Steward")
 	}
-	if !strings.Contains(err.Error(), "steward review") {
+	if !strings.Contains(err.Error(), "Merge Steward review") {
 		t.Fatalf("expected steward review hint, got: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(d, ".workflow", "delta-merge-pending.json")); err != nil {
+		t.Fatalf("pending marker must be written on text conflict: %v", err)
 	}
 }

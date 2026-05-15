@@ -24,3 +24,19 @@ func (o MergeOutcome) StewardReason() string {
 		return ""
 	}
 }
+
+// StewardPromptPath is the invocation guide the orchestrator must follow.
+const StewardPromptPath = "docs/architecture/merge-steward-prompt.md"
+
+// StewardDirective returns the two-line CENTINELA DIRECTIVE block that
+// tells the orchestrator session to dispatch the merge-steward subagent
+// and how to resume the merge afterwards. The wording mirrors the other
+// directive hooks (imperative line + a details line).
+func (o MergeOutcome) StewardDirective() string {
+	return fmt.Sprintf(
+		"CENTINELA DIRECTIVE: merge stalled (%s) for %q; delegate to merge-steward per %s.\n"+
+			"Required evidence before resume: %s, %s. Then run: centinela merge --continue %s",
+		o.StewardReason(), o.Feature, StewardPromptPath,
+		o.StewardHint(), o.StewardJSONPath(), o.Feature,
+	)
+}
