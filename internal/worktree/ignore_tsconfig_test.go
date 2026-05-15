@@ -1,4 +1,4 @@
-package unit_test
+package worktree_test
 
 import (
 	"encoding/json"
@@ -9,7 +9,6 @@ import (
 	"github.com/samuelnp/centinela/internal/worktree"
 )
 
-// Bare tsconfig with no exclude key: SyncIgnores must add `"exclude": [".worktrees"]`.
 func TestSyncIgnores_TsconfigMissingExcludeKey(t *testing.T) {
 	repo := t.TempDir()
 	cfg := `{"compilerOptions":{"strict":true}}`
@@ -36,8 +35,6 @@ func TestSyncIgnores_TsconfigMissingExcludeKey(t *testing.T) {
 	}
 }
 
-// `exclude` as a non-array (a string) is intentionally repaired to an array.
-// The implementation decodes to nil and appends. This documents that behaviour.
 func TestSyncIgnores_TsconfigExcludeAsString_RepairsToArray(t *testing.T) {
 	repo := t.TempDir()
 	cfg := `{"compilerOptions":{},"exclude":"node_modules"}`

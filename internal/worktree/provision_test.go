@@ -1,4 +1,4 @@
-package integration_test
+package worktree_test
 
 import (
 	"os"
@@ -9,8 +9,6 @@ import (
 	"github.com/samuelnp/centinela/internal/worktree"
 )
 
-// initRepoForWorktrees seeds a real git repo with one commit on main.
-// Returns the absolute repo path.
 func initRepoForWorktrees(t *testing.T) string {
 	t.Helper()
 	dir := t.TempDir()
@@ -20,8 +18,6 @@ func initRepoForWorktrees(t *testing.T) string {
 	if err := os.WriteFile(filepath.Join(dir, "README.md"), []byte("seed\n"), 0644); err != nil {
 		t.Fatalf("write seed: %v", err)
 	}
-	// Mimic the wizard/migrate contract: .worktrees/ is gitignored so the
-	// directory does not register as untracked when isDirty checks main.
 	if err := os.WriteFile(filepath.Join(dir, ".gitignore"), []byte(".worktrees/\n"), 0644); err != nil {
 		t.Fatalf("write gitignore: %v", err)
 	}
@@ -48,7 +44,6 @@ func TestCreate_FreshWorktreeAndBranch(t *testing.T) {
 	if _, err := os.Stat(path); err != nil {
 		t.Fatalf("worktree dir not on disk: %v", err)
 	}
-	// New branch must exist after provisioning.
 	if out, err := exec.Command("git", "-C", repo, "rev-parse", "--verify", "refs/heads/alpha").CombinedOutput(); err != nil {
 		t.Fatalf("branch alpha missing: %v\n%s", err, out)
 	}
@@ -71,13 +66,11 @@ func TestCreate_Idempotent_SecondCallNoOp(t *testing.T) {
 
 func TestCreate_ReusesExistingBranch(t *testing.T) {
 	repo := initRepoForWorktrees(t)
-	// Create the branch in main first, then provision the worktree.
 	gitRun(t, repo, "branch", "alpha")
 	path, err := worktree.Create(repo, "alpha")
 	if err != nil {
 		t.Fatalf("Create with existing branch failed: %v", err)
 	}
-	// The worktree must be checked out on the existing alpha branch.
 	out, err := exec.Command("git", "-C", path, "rev-parse", "--abbrev-ref", "HEAD").Output()
 	if err != nil {
 		t.Fatalf("rev-parse HEAD in worktree: %v", err)
@@ -92,7 +85,6 @@ func TestCreate_InvalidSlug_RefusesBeforeDiskTouch(t *testing.T) {
 	if _, err := worktree.Create(repo, "alpha/../beta"); err == nil {
 		t.Fatal("Create accepted path-escape slug")
 	}
-	// Ensure no .worktrees side-effect was written.
 	if _, err := os.Stat(filepath.Join(repo, ".worktrees")); !os.IsNotExist(err) {
 		t.Fatalf(".worktrees should not exist after rejected slug: err=%v", err)
 	}

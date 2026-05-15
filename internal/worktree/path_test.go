@@ -1,4 +1,4 @@
-package unit_test
+package worktree_test
 
 import (
 	"os"
@@ -36,7 +36,6 @@ func TestDetectFeatureFromCwd_Outside(t *testing.T) {
 }
 
 func TestDetectFeatureFromCwd_NoFeatureAfterDir(t *testing.T) {
-	// Exactly `.worktrees` with no child returns no feature.
 	cwd := filepath.Join(string(filepath.Separator), "repo", ".worktrees")
 	feat, _ := worktree.DetectFeatureFromCwd(cwd)
 	if feat != "" {
@@ -45,8 +44,6 @@ func TestDetectFeatureFromCwd_NoFeatureAfterDir(t *testing.T) {
 }
 
 func TestDetectFeatureFromCwd_WithSymlinks(t *testing.T) {
-	// Mirror the macOS /tmp → /private/tmp case: a real worktree on disk reached
-	// through a symlinked parent must still be detected via EvalSymlinks.
 	root := t.TempDir()
 	wt := filepath.Join(root, ".worktrees", "alpha", "src")
 	if err := os.MkdirAll(wt, 0755); err != nil {
@@ -56,7 +53,6 @@ func TestDetectFeatureFromCwd_WithSymlinks(t *testing.T) {
 	if err := os.Symlink(root, link); err != nil {
 		t.Skipf("symlink not supported: %v", err)
 	}
-	// cwd via the symlinked parent
 	via := filepath.Join(link, ".worktrees", "alpha", "src")
 	feat, _ := worktree.DetectFeatureFromCwd(via)
 	if feat != "alpha" {
@@ -93,7 +89,6 @@ func TestExists_FilePathReturnsFalse(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(repo, ".worktrees"), 0755); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
-	// Create `.worktrees/alpha` as a regular file, not a directory.
 	if err := os.WriteFile(filepath.Join(repo, ".worktrees", "alpha"), []byte("x"), 0644); err != nil {
 		t.Fatalf("write: %v", err)
 	}

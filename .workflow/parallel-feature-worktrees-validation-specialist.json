@@ -1,0 +1,36 @@
+{
+  "feature": "parallel-feature-worktrees",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-15T11:05:00Z",
+  "inputs": [
+    "docs/plans/parallel-feature-worktrees.md",
+    "specs/parallel-feature-worktrees.feature",
+    ".workflow/parallel-feature-worktrees-gatekeeper.md",
+    ".workflow/parallel-feature-worktrees-qa-senior.md",
+    ".workflow/parallel-feature-worktrees-senior-engineer.md",
+    ".workflow/parallel-feature-worktrees-big-thinker.md",
+    ".workflow/parallel-feature-worktrees-feature-specialist.md",
+    ".workflow/parallel-feature-worktrees-edge-cases.md"
+  ],
+  "outputs": [
+    ".workflow/parallel-feature-worktrees-gatekeeper.md",
+    ".workflow/parallel-feature-worktrees-validation-specialist.md"
+  ],
+  "validation": {
+    "g1FileSize": "pass",
+    "goTestAll": "pass",
+    "coverage": "pass (>= 95.0% threshold via scripts/check-coverage.sh)",
+    "gatekeeperReport": "SAFE"
+  },
+  "edgeCases": [
+    "Legacy .workflow/<feature>.json without worktreePath decodes safely (omitempty zero value)",
+    "RoleMergeSteward excluded from RequiredRoles so no workflow step is gated by it",
+    "Scaffold mirror parity verified byte-identical for the two feature-touched docs",
+    "Pre-existing unrelated docs/architecture scaffold drift is out of feature scope and not enforced by parity tests",
+    "Acknowledged: Merge Steward Agent auto-dispatch stubbed (v1.1 follow-up; escalation honored via non-zero exit + StewardHint)",
+    "Acknowledged: second centinela start from inside a provisioned worktree fails idempotency check (low severity; contract is to run from main)"
+  ],
+  "handoffTo": "documentation-specialist"
+}

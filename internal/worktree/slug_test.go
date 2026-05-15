@@ -1,4 +1,4 @@
-package unit_test
+package worktree_test
 
 import (
 	"testing"
