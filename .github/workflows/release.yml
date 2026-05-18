@@ -44,7 +44,7 @@ jobs:
           echo "value=$TAG" >> "$GITHUB_OUTPUT"
       - name: Setup Go
         if: steps.tag.outputs.skip != 'true'
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
       - name: Build binary
