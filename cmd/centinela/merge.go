@@ -41,6 +41,11 @@ func runMerge(_ *cobra.Command, args []string) error {
 	if outcome.TextConflict || outcome.ValidateFail {
 		return dispatchSteward(outcome)
 	}
+	// A clean merge supersedes any stale pending marker from a prior
+	// stalled attempt, so the hook stops re-emitting its directive.
+	if err := worktree.ClearPending(".", feature); err != nil {
+		return err
+	}
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Merged %q into main and removed its worktree.", feature)))
 	return nil
 }

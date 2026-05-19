@@ -41,8 +41,15 @@ func WritePending(repo string, o MergeOutcome) error {
 	if err != nil {
 		return fmt.Errorf("pending marker: cannot encode: %w", err)
 	}
-	if err := os.WriteFile(PendingPath(repo, o.Feature), data, 0o644); err != nil {
+	// Atomic write: a concurrent `centinela merge` must never observe a
+	// half-written marker. Write to a temp file then rename in place.
+	final := PendingPath(repo, o.Feature)
+	tmp := final + ".tmp"
+	if err := os.WriteFile(tmp, data, 0o644); err != nil {
 		return fmt.Errorf("pending marker: cannot write: %w", err)
+	}
+	if err := os.Rename(tmp, final); err != nil {
+		return fmt.Errorf("pending marker: cannot commit: %w", err)
 	}
 	return nil
 }
