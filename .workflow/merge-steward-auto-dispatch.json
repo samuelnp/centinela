@@ -1,15 +1,15 @@
 {
   "feature": "merge-steward-auto-dispatch",
   "startedAt": "2026-05-15T20:59:22.324144Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-15T21:27:15Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-20T17:23:37Z"
     },
     "plan": {
       "status": "done",

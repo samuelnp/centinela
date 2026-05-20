@@ -1,0 +1,34 @@
+{
+  "feature": "merge-steward-auto-dispatch",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-20T12:00:00Z",
+  "inputs": [
+    "docs/features/merge-steward-auto-dispatch.md",
+    "docs/plans/merge-steward-auto-dispatch.md",
+    "specs/merge-steward-auto-dispatch.feature",
+    "docs/project-docs/kb/parallel-feature-worktrees.md",
+    "docs/architecture/documentation-generator-prompt.md",
+    "docs/architecture/evidence-contract.md",
+    ".workflow/merge-steward-auto-dispatch-big-thinker.md",
+    ".workflow/merge-steward-auto-dispatch-feature-specialist.md",
+    ".workflow/merge-steward-auto-dispatch-senior-engineer.md",
+    ".workflow/merge-steward-auto-dispatch-qa-senior.md",
+    ".workflow/merge-steward-auto-dispatch-edge-cases.md",
+    ".workflow/merge-steward-auto-dispatch-gatekeeper.md",
+    ".workflow/merge-steward-auto-dispatch-validation-specialist.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/merge-steward-auto-dispatch.md",
+    "docs/project-docs/kb/merge-steward-auto-dispatch.html",
+    "docs/project-docs/kb/index.html",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [
+    "Clean merge regression guard preserved — no marker, no directive, exit zero",
+    "Hook stays silent on valid ESCALATE evidence; --continue surfaces escalation loudly",
+    "Closes parent feature's v1.1 follow-up gap (automatic hand-off to the Merge Steward)"
+  ],
+  "handoffTo": "complete"
+}
