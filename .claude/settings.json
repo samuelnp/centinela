@@ -42,6 +42,18 @@
         ]
       }
     ],
+    "SessionStart": [
+      {
+        "matcher": "startup|clear|compact|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "centinela hook session",
+            "statusMessage": "Rehydrating session context..."
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [

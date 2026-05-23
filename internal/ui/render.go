@@ -35,6 +35,13 @@ func RenderTag(wf *workflow.Workflow) string {
 // RenderContext returns a styled box summarising all active workflows,
 // used by the UserPromptSubmit hook.
 func RenderContext(wfs []*workflow.Workflow) string {
+	return RenderContextCapped(wfs, 0)
+}
+
+// RenderContextCapped renders the active-workflows panel and, when more > 0,
+// appends a muted "+N more active" trailing line indicating how many capped
+// workflows are not shown.
+func RenderContextCapped(wfs []*workflow.Workflow, more int) string {
 	var sections []string
 	for _, wf := range wfs {
 		count := wfDoneCount(wf)
@@ -44,6 +51,9 @@ func RenderContext(wfs []*workflow.Workflow) string {
 		sections = append(sections, lipgloss.JoinVertical(lipgloss.Left, header, stepBar(wf)))
 	}
 	body := strings.Join(sections, "\n\n")
+	if more > 0 {
+		body += "\n\n" + StyleMuted.Render(fmt.Sprintf("+%d more active", more))
+	}
 	return renderSystemPanel("HOOK", "ACTIVE WORKFLOWS", toneInfo, body)
 }
 

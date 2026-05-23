@@ -10,10 +10,9 @@ func FirstIncompleteBootstrap(r *roadmap.Roadmap) (string, bool) {
 	if r == nil {
 		return "", false
 	}
-	features := roadmap.BootstrapFeatures(r)
-	for _, name := range features {
-		if roadmap.FeatureStatus(name) != "done" {
-			return name, true
+	for _, name := range roadmap.BootstrapFeatures(r) {
+		if first, ok := roadmap.FirstNotDone(name); ok {
+			return first, true
 		}
 	}
 	return "", false

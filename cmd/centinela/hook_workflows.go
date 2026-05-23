@@ -2,30 +2,26 @@ package main
 
 import (
 	"os"
-	"path/filepath"
-	"strings"
 
 	"github.com/samuelnp/centinela/internal/workflow"
 	"github.com/samuelnp/centinela/internal/worktree"
 )
 
 func loadActiveWorkflows() []*workflow.Workflow {
-	// When cwd is inside a worktree, only that worktree's .workflow/ is
-	// authoritative. Otherwise fall back to the main checkout's .workflow/.
+	// Classification (evidence-leak rejection, dedupe, recency sort) lives in
+	// the domain layer. cmd/ keeps ONLY the worktree-scoping filter: when cwd
+	// is inside a worktree, that worktree's feature is authoritative.
 	cwd, _ := os.Getwd()
 	feature, _ := worktree.DetectFeatureFromCwd(cwd)
-	entries, _ := filepath.Glob(filepath.Join(workflow.WorkflowDir, "*.json"))
-	var out []*workflow.Workflow
-	for _, p := range entries {
-		name := strings.TrimSuffix(filepath.Base(p), ".json")
-		wf, err := workflow.Load(name)
-		if err != nil || wf.CurrentStep == "done" {
-			continue
+	active := workflow.ActiveWorkflows(workflow.WorkflowDir)
+	if feature == "" {
+		return active
+	}
+	out := active[:0]
+	for _, wf := range active {
+		if wf.Feature == feature {
+			out = append(out, wf)
 		}
-		if feature != "" && wf.Feature != feature {
-			continue
-		}
-		out = append(out, wf)
 	}
 	return out
 }

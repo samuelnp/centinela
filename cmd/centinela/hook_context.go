@@ -38,7 +38,9 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 	if cfg == nil {
 		cfg = &config.Config{}
 	}
-	fmt.Println(ui.RenderContext(wfs))
+	const activePanelCap = 5
+	shown, more := workflow.CapActive(wfs, activePanelCap)
+	fmt.Println(ui.RenderContextCapped(shown, more))
 	for _, wf := range wfs {
 		if shouldRenderReviewPrompt(wf, cfg) && workflow.ValidateArtifacts(wf.Feature, wf.CurrentStep, cfg) == nil {
 			fmt.Println(ui.RenderReviewReady(wf.Feature, wf.CurrentStep, nextStepFor(wf, wf.CurrentStep)))

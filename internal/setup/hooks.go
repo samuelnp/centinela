@@ -10,9 +10,15 @@ const (
 	cmdSetup     = "centinela hook setup"
 	cmdMigrate   = "centinela hook migrate"
 	cmdMerge     = "centinela hook merge"
+	cmdSession   = "centinela hook session"
+
+	// sessionMatcher is a single combined regex covering all four SessionStart
+	// sources. Claude Code SessionStart matchers are regex over the source
+	// string, so one matcher covers startup, clear, compact, and resume.
+	sessionMatcher = "startup|clear|compact|resume"
 )
 
-func mergeHooks(pre, post, prompt *[]HookGroup) bool {
+func mergeHooks(pre, post, prompt, session *[]HookGroup) bool {
 	c := ensureGroup(pre, "Write", cmdPrewrite, "Validating workflow step...")
 	c = ensureGroup(pre, "Edit", cmdPrewrite, "Validating workflow step...") || c
 	c = ensureGroup(post, "Write", cmdPostwrite, "") || c
@@ -24,6 +30,7 @@ func mergeHooks(pre, post, prompt *[]HookGroup) bool {
 	c = ensurePrompt(prompt, cmdSetup, "Checking project setup...") || c
 	c = ensurePrompt(prompt, cmdMigrate, "Checking managed migrations...") || c
 	c = ensurePrompt(prompt, cmdMerge, "Checking pending merges...") || c
+	c = ensureGroup(session, sessionMatcher, cmdSession, "Rehydrating session context...") || c
 	return c
 }
 

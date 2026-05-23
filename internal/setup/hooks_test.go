@@ -3,14 +3,14 @@ package setup
 import "testing"
 
 func TestMergeHooksAndIdempotency(t *testing.T) {
-	var pre, post, prompt []HookGroup
-	if !mergeHooks(&pre, &post, &prompt) {
+	var pre, post, prompt, session []HookGroup
+	if !mergeHooks(&pre, &post, &prompt, &session) {
 		t.Fatal("expected first merge to change")
 	}
-	if len(pre) != 2 || len(post) != 2 || len(prompt) != 7 {
-		t.Fatalf("unexpected group sizes: %d %d %d", len(pre), len(post), len(prompt))
+	if len(pre) != 2 || len(post) != 2 || len(prompt) != 7 || len(session) != 1 {
+		t.Fatalf("unexpected group sizes: %d %d %d %d", len(pre), len(post), len(prompt), len(session))
 	}
-	if mergeHooks(&pre, &post, &prompt) {
+	if mergeHooks(&pre, &post, &prompt, &session) {
 		t.Fatal("expected second merge to be no-op")
 	}
 }
