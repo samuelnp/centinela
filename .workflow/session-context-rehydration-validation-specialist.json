@@ -1,0 +1,26 @@
+{
+  "feature": "session-context-rehydration",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-23T21:23:45Z",
+  "inputs": [
+    "docs/plans/session-context-rehydration.md",
+    "specs/session-context-rehydration.feature",
+    ".workflow/session-context-rehydration-gatekeeper.md",
+    ".workflow/session-context-rehydration-qa-senior.md",
+    ".workflow/session-context-rehydration-senior-engineer.md"
+  ],
+  "outputs": [
+    ".workflow/session-context-rehydration-gatekeeper.md",
+    ".workflow/session-context-rehydration-validation-specialist.md"
+  ],
+  "validation": {
+    "g1FileSize": "pass",
+    "goTestAll": "pass",
+    "coverage": "95.1% >= 95.0%",
+    "gatekeeperReport": "SAFE"
+  },
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

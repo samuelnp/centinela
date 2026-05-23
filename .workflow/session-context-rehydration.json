@@ -1,14 +1,14 @@
 {
   "feature": "session-context-rehydration",
   "startedAt": "2026-05-23T15:49:10.003758Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-23T16:31:58Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-05-23T21:08:34Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-23T21:28:09Z"
     }
   },
   "stepOrder": [
