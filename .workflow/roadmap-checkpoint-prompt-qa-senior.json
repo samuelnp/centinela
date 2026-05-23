@@ -1,0 +1,45 @@
+{
+  "feature": "roadmap-checkpoint-prompt",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-05-23T14:26:10Z",
+  "inputs": [
+    "docs/plans/roadmap-checkpoint-prompt.md",
+    "docs/features/roadmap-checkpoint-prompt.md",
+    "specs/roadmap-checkpoint-prompt.feature",
+    ".workflow/roadmap-checkpoint-prompt-senior-engineer.md",
+    ".workflow/roadmap-checkpoint-prompt-senior-engineer.json",
+    "docs/architecture/qa-senior-prompt.md",
+    "docs/architecture/evidence-contract.md",
+    "internal/roadmapcheckpoint/checkpoint.go",
+    "internal/roadmapcheckpoint/marker.go",
+    "internal/roadmapcheckpoint/firstfeature.go",
+    "internal/roadmapcheckpoint/artifacts.go",
+    "internal/roadmapcheckpoint/osfs.go",
+    "cmd/centinela/hook_setup.go",
+    "cmd/centinela/roadmap_iterate.go",
+    "internal/ui/render_roadmap_checkpoint.go"
+  ],
+  "outputs": [
+    "internal/roadmapcheckpoint/checkpoint_decide_test.go",
+    "tests/unit/roadmap_checkpoint_prompt_unit_test.go",
+    "cmd/centinela/roadmap_checkpoint_prompt_test.go",
+    "tests/acceptance/roadmap_checkpoint_prompt_test.go",
+    ".workflow/roadmap-checkpoint-prompt-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Stale-vs-fresh boundary: marker at == latest artifact mtime suppresses; strictly-later artifact re-fires",
+    "Malformed marker JSON is treated as stale and re-emits without crashing the hook",
+    "Unparseable RFC3339 at field is treated as stale and re-emits",
+    "Precedence: missing ROADMAP.md emits roadmap-required, not checkpoint",
+    "Precedence: invalid roadmap.json emits roadmap-json directive, not checkpoint",
+    "Suppressed when bootstrap complete (all Phase 0 features done) or no Phase 0 phase exists",
+    "Suppressed when the workflow file for the first incomplete feature already exists",
+    "Multi-feature: first done, second incomplete picks the second as panel target",
+    "Anti-spam idempotency: real centinela roadmap iterate then a second hook setup stays silent",
+    "mtime-granularity trade-off: second-precision marker at vs sub-second artifact mtimes can re-fire on same-second writes (documented, not papered over)",
+    "Degenerate no-artifacts-on-disk with a valid marker suppresses rather than emitting a meaningless decision"
+  ],
+  "handoffTo": "validation-specialist"
+}
