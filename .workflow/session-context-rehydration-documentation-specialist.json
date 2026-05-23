@@ -1,0 +1,30 @@
+{
+  "feature": "session-context-rehydration",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-23T21:33:17Z",
+  "inputs": [
+    "docs/architecture/documentation-generator-prompt.md",
+    "docs/architecture/evidence-contract.md",
+    "docs/features/session-context-rehydration.md",
+    "docs/plans/session-context-rehydration.md",
+    "specs/session-context-rehydration.feature",
+    ".workflow/session-context-rehydration-senior-engineer.md",
+    ".workflow/session-context-rehydration-qa-senior.md",
+    ".workflow/session-context-rehydration-edge-cases.md",
+    "ROADMAP.md",
+    ".workflow/roadmap.json",
+    "docs/project-docs/kb/merge-steward-auto-dispatch.md",
+    "docs/project-docs/kb/parallel-feature-worktrees.md",
+    "docs/project-docs/kb/add-agent-evidence-contract.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/session-context-rehydration.md",
+    "docs/project-docs/kb/session-context-rehydration.html",
+    "docs/project-docs/kb/index.html",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}
