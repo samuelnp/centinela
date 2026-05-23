@@ -1,0 +1,35 @@
+{
+  "feature": "roadmap-checkpoint-prompt",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-05-23T09:19:41Z",
+  "inputs": [
+    "docs/plans/roadmap-checkpoint-prompt.md",
+    "docs/features/roadmap-checkpoint-prompt.md",
+    "specs/roadmap-checkpoint-prompt.feature",
+    ".workflow/roadmap-checkpoint-prompt-big-thinker.md",
+    ".workflow/roadmap-checkpoint-prompt-feature-specialist.md",
+    "docs/architecture/senior-engineer-prompt.md",
+    "docs/architecture/evidence-contract.md"
+  ],
+  "outputs": [
+    "internal/roadmapcheckpoint/osfs.go",
+    "internal/ui/render_roadmap_checkpoint.go",
+    "cmd/centinela/hook_setup.go",
+    "cmd/centinela/roadmap_iterate.go",
+    ".workflow/roadmap-checkpoint-prompt-senior-engineer.md"
+  ],
+  "edgeCases": [
+    "osFS treats every os error as absent: Stat returns ok=false on a missing path (no ModTime leaked), ReadFile returns ok=false on missing/unreadable, Exists is os.Stat==nil — so the production adapter matches the FS contract Decide relies on for missing files.",
+    "DecisionEmit reached at runtime when MarkerPath is absent: NewOSFS().ReadFile returns ok=false, Decide short-circuits to Emit before any mtime comparison.",
+    "DecisionStale reached two ways through the real FS: (a) marker JSON unparseable or 'at' not RFC3339 -> parseMarkerAt ok=false -> Stale; (b) marker parses but LatestMtime(RequiredArtifacts) is After(markerAt) -> Stale. Both print the identical directive+panel; only the internal Decision differs.",
+    "DecisionSuppressed reached when marker 'at' >= latest artifact mtime, OR FirstIncompleteBootstrap returns ('',false) (no/empty Phase 0 or all done), OR .workflow/<first>.json already exists (user picked start). emitRoadmapCheckpoint returns silently in every suppress case.",
+    "Anti-spam: writing the marker via 'centinela roadmap iterate' sets at=now().UTC(); next hook run sees latest mtime <= at -> Suppressed, so the directive does not re-fire until a roadmap artifact mtime moves past the marker.",
+    "Marker idempotency: WriteMarker uses os.WriteFile (truncate) with fixed {choice:iterate,at:<rfc3339>}; re-running 'centinela roadmap iterate' overwrites in place, never appends, last writer wins with equivalent content.",
+    "Hook never blocks: emitRoadmapCheckpoint has no error return and is called as the last statement before 'return nil'; a Suppressed decision produces zero output and the command still exits zero.",
+    "Roadmap loaded once: hook_setup reuses the r,err := roadmap.Load() value from the JSON-validity branch, so the checkpoint branch only runs after roadmap.json parsed successfully (invalid json hits roadmapJSONDirective and returns first, preserving directive precedence).",
+    "UI/decision separation: render_roadmap_checkpoint.go imports only lipgloss and takes featureName as a string param; it never imports roadmapcheckpoint, keeping all emit/suppress logic out of internal/ui (G7)."
+  ],
+  "handoffTo": "qa-senior"
+}

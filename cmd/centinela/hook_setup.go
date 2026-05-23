@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/roadmap"
+	"github.com/samuelnp/centinela/internal/roadmapcheckpoint"
 	"github.com/samuelnp/centinela/internal/ui"
 )
 
@@ -39,7 +41,8 @@ func runHookSetup(_ *cobra.Command, _ []string) error {
 		fmt.Println(ui.RenderRoadmapNeeded())
 		return nil
 	}
-	if _, err := roadmap.Load(); err != nil {
+	r, err := roadmap.Load()
+	if err != nil {
 		fmt.Println(roadmapJSONDirective(err))
 		fmt.Println(ui.RenderRoadmapJSONNeeded(err))
 		return nil
@@ -59,7 +62,20 @@ func runHookSetup(_ *cobra.Command, _ []string) error {
 		fmt.Println(ui.RenderProductionReadinessSetupNeeded())
 		return nil
 	}
+	emitRoadmapCheckpoint(r)
 	return nil
+}
+
+// emitRoadmapCheckpoint prints the checkpoint directive when the decision
+// package says to emit. It never blocks: all rules live in roadmapcheckpoint.
+func emitRoadmapCheckpoint(r *roadmap.Roadmap) {
+	first, hasFirst := roadmapcheckpoint.FirstIncompleteBootstrap(r)
+	d := roadmapcheckpoint.Decide(time.Now(), first, hasFirst, roadmapcheckpoint.NewOSFS())
+	if d == roadmapcheckpoint.DecisionSuppressed {
+		return
+	}
+	fmt.Println("CENTINELA DIRECTIVE: roadmap checkpoint. Ask the user to iterate or start the first Phase 0 feature.")
+	fmt.Println(ui.RenderRoadmapCheckpoint(first))
 }
 
 func exists(path string) bool {
