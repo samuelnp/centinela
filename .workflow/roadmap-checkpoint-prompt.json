@@ -1,15 +1,15 @@
 {
   "feature": "roadmap-checkpoint-prompt",
   "startedAt": "2026-05-20T17:35:10.614545Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-23T09:22:26Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-23T15:34:13Z"
     },
     "plan": {
       "status": "done",

@@ -1,0 +1,28 @@
+{
+  "feature": "roadmap-checkpoint-prompt",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-23T15:25:11Z",
+  "inputs": [
+    "docs/features/roadmap-checkpoint-prompt.md",
+    "docs/plans/roadmap-checkpoint-prompt.md",
+    "specs/roadmap-checkpoint-prompt.feature",
+    "docs/architecture/documentation-generator-prompt.md",
+    "docs/architecture/evidence-contract.md",
+    "PROJECT.md",
+    ".workflow/roadmap-checkpoint-prompt-senior-engineer.md",
+    ".workflow/roadmap-checkpoint-prompt-qa-senior.md",
+    ".workflow/roadmap-checkpoint-prompt-edge-cases.md",
+    "docs/project-docs/kb/merge-steward-auto-dispatch.md",
+    "docs/project-docs/kb/parallel-feature-worktrees.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/roadmap-checkpoint-prompt.md",
+    "docs/project-docs/kb/roadmap-checkpoint-prompt.html",
+    "docs/project-docs/kb/index.html",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}
