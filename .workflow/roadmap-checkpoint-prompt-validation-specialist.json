@@ -1,0 +1,27 @@
+{
+  "feature": "roadmap-checkpoint-prompt",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-23T15:45:00Z",
+  "inputs": [
+    "docs/plans/roadmap-checkpoint-prompt.md",
+    "specs/roadmap-checkpoint-prompt.feature",
+    ".workflow/roadmap-checkpoint-prompt-gatekeeper.md",
+    ".workflow/roadmap-checkpoint-prompt-qa-senior.md",
+    ".workflow/roadmap-checkpoint-prompt-senior-engineer.md",
+    ".workflow/roadmap-checkpoint-prompt-edge-cases.md"
+  ],
+  "outputs": [
+    ".workflow/roadmap-checkpoint-prompt-gatekeeper.md",
+    ".workflow/roadmap-checkpoint-prompt-validation-specialist.md"
+  ],
+  "validation": {
+    "g1FileSize": "pass (full scan / CI and diff-aware) — REMEDIATED: the two oversized test files were split into <=100-line files in-package (checkpoint_decide/checkpoint_funcs/firstfeature/marker_osfs and roadmap_checkpoint_prompt/emit/precedence); `CI=true centinela validate` now reports 'All files under 100 lines'",
+    "goTestAll": "pass",
+    "coverage": "95.1% >= 95.0%",
+    "gatekeeperReport": "SAFE"
+  },
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}
