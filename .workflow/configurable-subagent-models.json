@@ -1,14 +1,14 @@
 {
   "feature": "configurable-subagent-models",
   "startedAt": "2026-05-24T19:50:27.039248Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-24T20:28:27Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-05-24T20:58:31Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-24T21:02:50Z"
     }
   },
   "stepOrder": [
