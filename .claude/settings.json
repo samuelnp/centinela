@@ -108,6 +108,15 @@
             "statusMessage": "Advising during plan step..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "centinela hook merge",
+            "statusMessage": "Checking pending merges..."
+          }
+        ]
       }
     ]
   },
