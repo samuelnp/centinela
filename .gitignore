@@ -9,3 +9,6 @@
 
 # Dependency vendor directory (we use go modules)
 vendor/
+
+# Per-feature git worktrees (workflow.use_worktrees)
+.worktrees/

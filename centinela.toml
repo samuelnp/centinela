@@ -1,3 +1,7 @@
+[workflow]
+# Enable per-feature git worktrees at .worktrees/<feature>/ on `centinela start`.
+use_worktrees = true
+
 [validate]
 commands = [
   "go test ./...",
