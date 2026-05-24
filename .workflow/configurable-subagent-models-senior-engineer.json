@@ -1,0 +1,37 @@
+{
+  "feature": "configurable-subagent-models",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-05-24T20:26:04Z",
+  "inputs": [
+    "docs/plans/configurable-subagent-models.md",
+    "docs/features/configurable-subagent-models.md",
+    "PROJECT.md",
+    "CLAUDE.md",
+    "internal/orchestration/policy.go",
+    "internal/orchestration/paths.go",
+    "internal/orchestration/feature_surface.go",
+    "internal/config/config.go",
+    "internal/config/orchestration.go",
+    "internal/config/file_size_exceptions.go",
+    "cmd/centinela/hook_orchestration.go"
+  ],
+  "outputs": [
+    "internal/orchestration/models.go",
+    "internal/orchestration/resolve.go",
+    "internal/config/orchestration.go",
+    "internal/config/orchestration_models.go",
+    "internal/config/file_size_exceptions.go",
+    "cmd/centinela/hook_orchestration.go",
+    "cmd/centinela/orchestration_annotate.go"
+  ],
+  "edgeCases": [
+    "missing tier->model mapping returns tier name without panic (ResolveModel ok=false)",
+    "unknown runner (RunnerUnknown) emits both-runner reference line, never a single ID",
+    "absent or empty [orchestration.models] table applies all defaults (zero-config-safe)",
+    "tier values with casing/whitespace normalized before validation and resolution",
+    "config.Load() error in hook falls back to default overrides, directive still emitted"
+  ],
+  "handoffTo": "qa-senior"
+}

@@ -6,7 +6,16 @@ import (
 )
 
 type OrchestrationConfig struct {
-	UIPaths []string `toml:"ui_paths"`
+	UIPaths []string          `toml:"ui_paths"`
+	Models  map[string]string `toml:"models"`
+}
+
+// OrchestrationModels returns the role→tier override map (nil-safe).
+func OrchestrationModels(cfg *Config) map[string]string {
+	if cfg == nil {
+		return nil
+	}
+	return cfg.Orchestration.Models
 }
 
 var defaultUIPaths = []string{"src/ui", "src/components", "app/views", "web", "styles", "internal/ui"}

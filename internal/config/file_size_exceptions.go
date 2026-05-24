@@ -32,5 +32,8 @@ func validateConfig(cfg *Config) error {
 			return fmt.Errorf("gates.file_size_exceptions[%d].max_lines must be 101..%d", i, FileSizeExceptionCap)
 		}
 	}
+	if err := validateOrchestrationModels(cfg); err != nil {
+		return err
+	}
 	return nil
 }
