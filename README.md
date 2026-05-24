@@ -37,6 +37,7 @@ If an agent tries to write source code while the workflow is in the `plan` step,
 - [Demo](#demo)
 - [Why Centinela](#why-centinela)
 - [When *not* to use Centinela](#when-not-to-use-centinela)
+- [How Centinela Works](#how-centinela-works)
 - [Latest Features](#latest-features)
 - [Install](#install)
 - [Getting Started](#getting-started)
@@ -83,6 +84,90 @@ Centinela trades flexibility for discipline. Skip it if any of these apply:
 - **Your team has a different workflow you actually follow.** Centinela is opinionated. If your team already ships clean specs, tests, and docs without enforcement, the hooks will feel like a tax.
 
 Centinela is for *production code* you intend to maintain, where an AI agent is doing meaningful work and you want the agent's output to look like it came from a disciplined human team.
+
+---
+
+## How Centinela Works
+
+Bootstrap once, then every feature runs through five enforced steps **inside its own git worktree**, driven by specialist subagents and guarded by agent hooks, ending in a validated merge back to `main`.
+
+```mermaid
+flowchart TB
+    subgraph BOOT["🏗️ Bootstrap · once per project"]
+        direction LR
+        INIT["centinela init<br/>wires Claude + OpenCode hooks<br/>scaffolds docs/ + centinela.toml"]
+        PROJ["PROJECT.md<br/>archetype + stack"]
+        ROAD["ROADMAP.md + .workflow/roadmap.json<br/>phased feature plan"]
+        INIT --> PROJ --> ROAD
+    end
+
+    ROAD --> START["centinela start &lt;feature&gt;<br/>required before any file write"]
+    START --> WT["git worktree add<br/>.worktrees/&lt;feature&gt; · branch &lt;feature&gt;<br/>state: .workflow/&lt;feature&gt;.json"]
+    WT --> PLAN
+
+    subgraph FLOW["🔒 Five-step workflow · enforced order · runs inside the feature worktree"]
+        direction TB
+
+        subgraph PLAN["1 · plan"]
+            direction LR
+            BT["big-thinker<br/>reasoning · opus-4-7"] --> FS["feature-specialist<br/>balanced · sonnet-4-6"]
+            FS --> PLANART["docs/features/&lt;f&gt;.md<br/>docs/plans/&lt;f&gt;.md<br/>specs/&lt;f&gt;.feature"]
+        end
+
+        subgraph CODE["2 · code"]
+            direction LR
+            SE["senior-engineer<br/>reasoning · opus-4-7"] -. user-facing only .-> UX["ux-ui-specialist<br/>balanced · sonnet-4-6<br/>mobileFirst"]
+            SE --> CODEART["implementation files"]
+        end
+
+        subgraph TESTS["3 · tests"]
+            direction LR
+            QA["qa-senior<br/>balanced · sonnet-4-6"] --> ECT["edge-case-tester<br/>fast · haiku-4-5"]
+            ECT --> TESTART["tests/unit · tests/integration<br/>tests/acceptance<br/>.workflow/&lt;f&gt;-edge-cases.md"]
+        end
+
+        subgraph VAL["4 · validate"]
+            direction LR
+            VS["validation-specialist<br/>fast · haiku-4-5"] --> GATES["Gates<br/>G1 file-size · G11 i18n<br/>G2/G3/G5/G6/G7/G8 review<br/>+ centinela.toml commands"]
+            GATES --> GK["gatekeeper report<br/>.workflow/&lt;f&gt;-gatekeeper.md"]
+            GK --> PRD["production-readiness<br/>when gate enabled"]
+        end
+
+        subgraph DOCSTEP["5 · docs"]
+            direction LR
+            DS["documentation-specialist<br/>fast · haiku-4-5"] --> DOCART["docs/project-docs/index.html<br/>+ specialist .md / .json evidence"]
+        end
+
+        PLAN -->|complete| CODE -->|complete| TESTS -->|complete| VAL -->|complete| DOCSTEP
+    end
+
+    DOCSTEP --> MERGE["centinela merge &lt;feature&gt;"]
+    MERGE --> CONF{"spec conflicts?"}
+    CONF -- yes --> BLOCK["blocked —<br/>resolve conflicting specs"]
+    CONF -- no --> MV{"merge + validate clean?"}
+    MV -- yes --> DONE["merge into main<br/>remove .worktrees/&lt;feature&gt;"]
+    MV -- no --> STEWARD["merge-steward<br/>reasoning · opus-4-7<br/>writes evidence →<br/>centinela merge --continue"]
+    STEWARD --> MV
+
+    subgraph HOOKS["⚙️ Agent hooks · enforce all of the above automatically"]
+        direction LR
+        PRE["PreToolUse<br/>block writes that don't<br/>match the current step"]
+        POST["PostToolUse<br/>append status tag<br/>↳ feature · step · X/5"]
+        UPS["UserPromptSubmit<br/>inject workflow context,<br/>plan-advisor questions,<br/>required evidence"]
+    end
+    HOOKS -. guards .-> FLOW
+
+    classDef agent fill:#1f6feb22,stroke:#1f6feb,color:#adbac7;
+    classDef artifact fill:#23863622,stroke:#238636,color:#adbac7;
+    classDef gate fill:#9e6a0322,stroke:#d29922,color:#adbac7;
+    classDef cmd fill:#8957e522,stroke:#8957e5,color:#adbac7;
+    class BT,FS,SE,UX,QA,ECT,VS,DS,STEWARD agent;
+    class PLANART,CODEART,TESTART,DOCART,GK artifact;
+    class GATES,PRD gate;
+    class INIT,START,WT,MERGE,DONE cmd;
+```
+
+**Legend** — 🟦 subagents (`tier · model`) · 🟩 required artifacts · 🟨 quality gates · 🟪 `centinela` commands. Model tiers shown are the built-in defaults; override any role via `[orchestration.models]` in `centinela.toml`. Each step only advances when `centinela complete` finds its required artifacts, and the hooks block any file write that doesn't belong to the current step.
 
 ---
 
