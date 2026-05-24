@@ -1,0 +1,44 @@
+{
+  "feature": "configurable-subagent-models",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-05-24T00:00:00Z",
+  "inputs": [
+    "docs/plans/configurable-subagent-models.md",
+    "docs/features/configurable-subagent-models.md",
+    "specs/configurable-subagent-models.feature",
+    "internal/orchestration/models.go",
+    "internal/orchestration/resolve.go",
+    "internal/config/orchestration_models.go",
+    "internal/config/orchestration.go",
+    "cmd/centinela/orchestration_annotate.go",
+    "cmd/centinela/hook_orchestration.go"
+  ],
+  "outputs": [
+    "tests/unit/configurable_subagent_models_unit_test.go",
+    "tests/unit/configurable_subagent_models_resolve_unit_test.go",
+    "tests/unit/configurable_subagent_models_config_unit_test.go",
+    "tests/integration/configurable_subagent_models_integration_test.go",
+    "tests/acceptance/configurable_subagent_models_test.go",
+    "tests/acceptance/configurable_subagent_models_config_test.go",
+    "internal/orchestration/models_test.go",
+    "internal/orchestration/resolve_test.go",
+    "internal/config/orchestration_models_test.go",
+    ".workflow/configurable-subagent-models-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Tier normalization casing: 'Reasoning' normalizes to 'reasoning'",
+    "Tier normalization whitespace: ' fast ' normalizes to 'fast'",
+    "Empty [orchestration.models] table is valid — same as absent",
+    "Unknown role key rejected with error naming the key",
+    "Invalid tier after normalization (' Genius ') is rejected",
+    "Missing tier-to-model mapping returns tier name + ok=false without panic",
+    "RunnerUnknown returns tier name as fallback, ok=false",
+    "Out-of-band roles (gatekeeper, production-readiness, edge-case-tester, merge-steward) are not annotated in the directive",
+    "Allow-list parity: all AllowedTiers() values accepted by config.Load(); all AllowedRoleSlugs() values accepted as keys",
+    "ModelReference deduplication: duplicate input tiers produce a single entry",
+    "ModelReference stable order: reasoning before balanced before fast regardless of input order"
+  ],
+  "handoffTo": "validation-specialist"
+}
