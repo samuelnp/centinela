@@ -7,11 +7,17 @@ target at `https://samuelnp.github.io/centinela/`.
 
 ## File & directory layout
 
-- `index.html` — repo root. The entire page: one HTML file with an inline
-  `<style>` block (terminal/brand-dark theme) and, optionally, one small inline
-  `<script>` for progressive-enhancement only. No external CSS/JS, no CDN.
-- `assets/` — reuse existing files, do not regenerate:
-  `logo-banner.png`, `logo.png`, `social-preview.png`, `demo.gif`.
+- `web/index.html` — the deployable site directory. The entire page: one HTML
+  file with an inline `<style>` block (terminal/brand-dark theme) and, optionally,
+  one small inline `<script>` for progressive-enhancement only. No external
+  CSS/JS, no CDN. (`web/` is a default Centinela `ui_paths` prefix, so the
+  ux-ui-specialist code-step evidence validates against it; it is also a clean,
+  self-contained publishable unit whose contents map 1:1 to the gh-pages root.)
+- `web/assets/` — copies of only the assets the page references
+  (`logo-banner.png`, `social-preview.png`, `demo.gif`), so `web/` is fully
+  self-contained and portable. The canonical source assets stay in repo-root
+  `assets/`; `logo.png` (977 KB) is not copied — a lightweight inline SVG favicon
+  is used instead.
 - `.nojekyll` — added on the `gh-pages` branch only, so GitHub Pages serves
   the page verbatim (no Jekyll processing).
 - G1 note: the G1 file-size gate (`internal/gates/file_size_scan.go`,
@@ -84,11 +90,12 @@ target at `https://samuelnp.github.io/centinela/`.
 
 ## Publish to `gh-pages` (out-of-band, maintainer-run)
 
-1. Commit `index.html` on `main` (the source of record).
+1. Commit `web/` on `main` (the source of record).
 2. Create an orphan publish branch:
    `git switch --orphan gh-pages`
-3. Keep only `index.html` + `assets/` on it, add an empty `.nojekyll`, commit,
-   and `git push -u origin gh-pages`.
+3. Put the **contents of `web/`** at the branch root (so `web/index.html` →
+   `/index.html` and `web/assets/*` → `/assets/*`), add an empty `.nojekyll`,
+   commit, and `git push -u origin gh-pages`.
 4. In GitHub repo settings → Pages, set source to branch `gh-pages`, folder
    `/ (root)`. Wait for the build, then confirm
    `https://samuelnp.github.io/centinela/` resolves and renders.

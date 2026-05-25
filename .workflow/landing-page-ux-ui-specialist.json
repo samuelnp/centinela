@@ -1,0 +1,28 @@
+{
+  "feature": "landing-page",
+  "step": "code",
+  "role": "ux-ui-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-25T00:00:00Z",
+  "inputs": [
+    "docs/features/landing-page.md",
+    "specs/landing-page.feature",
+    ".workflow/landing-page-senior-engineer.md",
+    "web/index.html"
+  ],
+  "outputs": [
+    "web/index.html"
+  ],
+  "edgeCases": [
+    "mobile-first",
+    "visual-hierarchy",
+    "typography-hierarchy",
+    "responsive-layout",
+    "loading-state",
+    "empty-state",
+    "error-state",
+    "motion-and-reduced-motion"
+  ],
+  "mobileFirst": true,
+  "handoffTo": "qa-senior"
+}

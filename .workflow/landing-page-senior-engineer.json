@@ -1,0 +1,28 @@
+{
+  "feature": "landing-page",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-05-25T00:00:00Z",
+  "inputs": [
+    "docs/plans/landing-page.md",
+    "specs/landing-page.feature",
+    ".workflow/landing-page-big-thinker.md",
+    ".workflow/landing-page-feature-specialist.md"
+  ],
+  "outputs": [
+    "web/index.html",
+    "web/assets/logo-banner.png",
+    "web/assets/social-preview.png",
+    "web/assets/demo.gif"
+  ],
+  "edgeCases": [
+    "No-JS path: reveal animations are gated behind an html.js class added only by the script, so every section renders fully opaque without JavaScript.",
+    "Reduced motion: all animation lives inside @media (prefers-reduced-motion: no-preference); base styles are static and the script does not add the js class when reduce is set.",
+    "Missing demo.gif: img has meaningful alt + reserved width/height box, so a 404 shows alt text without layout shift and throws no JS error.",
+    "Value prop arrows/'enforced' are wrapped in spans for color; the element textContent still collapses to the exact canonical string.",
+    "Inline SVG data-URI favicon (shield+eye) used instead of copying the 977 KB logo.png, keeping web/ self-contained and lean.",
+    "OG/Twitter meta use absolute https://samuelnp.github.io/centinela/ URLs so social cards resolve off-host."
+  ],
+  "handoffTo": "ux-ui-specialist"
+}
