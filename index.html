@@ -22,18 +22,18 @@
 
   <style>
     :root{
-      --bg:#0a0f0a;
-      --bg-2:#0b110c;
-      --panel:#0e160f;
-      --panel-2:#101a12;
-      --line:#1d2a20;
-      --line-2:#27392b;
-      --ink:#e6f0e6;       /* body, high contrast on --bg (>= 13:1) */
-      --muted:#9fb3a4;      /* secondary text, AA on --bg */
-      --dim:#8aa494;        /* tertiary — raised from #6f8676 to clear WCAG AA at small sizes (contrast ≥4.5:1 on --bg) */
-      --accent:#40a0e0;     /* logo azure (sampled from shield gradient) */
-      --accent-2:#30c0d0;   /* logo cyan/teal (lower shield gradient) */
-      --accent-ink:#bfe4ff; /* lighter accent for text/links on dark */
+      --bg:#0a0e16;
+      --bg-2:#0b1019;
+      --panel:#0e151f;
+      --panel-2:#101926;
+      --line:#1d2940;
+      --line-2:#27384f;
+      --ink:#e6ecf5;       /* body, high contrast on --bg (>= 13:1) */
+      --muted:#9fb0c8;      /* secondary text, AA on --bg */
+      --dim:#8a9ec0;        /* tertiary — blue-gray, clears WCAG AA at small sizes (contrast ≥4.5:1 on --bg) */
+      --accent:#40a0e0;     /* logo azure (blue-dominant: b > g > r) */
+      --accent-2:#2f7fe6;   /* deeper blue (gradient partner) */
+      --accent-ink:#cfe2ff; /* lighter accent for text/links on dark */
       --danger:#ff6b6b;
       --warn:#f0c674;
       --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
@@ -55,7 +55,7 @@
       background-image:
         radial-gradient(circle at center, rgba(64,160,224,.05) 1px, transparent 1px),
         linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px),
-        radial-gradient(1200px 600px at 50% -10%, rgba(48,192,208,.07), transparent 60%);
+        radial-gradient(1200px 600px at 50% -10%, rgba(47,127,230,.07), transparent 60%);
       background-size:26px 26px, 100% 3px, 100% 100%;
       background-attachment:fixed;
     }
@@ -235,11 +235,11 @@
     .mini-loop b{color:var(--accent)}
 
     /* ---- terminal / enforcement ---- */
-    .term{max-width:760px;margin:0 auto;border:1px solid var(--line-2);border-radius:12px;overflow:hidden;background:#070b08;box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 0 1px rgba(64,160,224,.04)}
+    .term{max-width:760px;margin:0 auto;border:1px solid var(--line-2);border-radius:12px;overflow:hidden;background:#070a12;box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 0 1px rgba(64,160,224,.04)}
     .term-bar{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--panel-2);border-bottom:1px solid var(--line)}
     .dots{display:flex;gap:7px}
     .dots i{width:12px;height:12px;border-radius:50%;display:block}
-    .dots .r{background:#ff5f56}.dots .y{background:#ffbd2e}.dots .g{background:#27c93f}
+    .dots .r{background:#ff5f56}.dots .y{background:#ffbd2e}.dots .g{background:#40a0e0}
     .term-title{font-family:var(--mono);font-size:.82rem;color:var(--muted);margin-left:6px}
     .term-body{font-family:var(--mono);font-size:.86rem;line-height:1.7;padding:18px 18px 22px;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
     .term-body .pmt{color:var(--accent)}
