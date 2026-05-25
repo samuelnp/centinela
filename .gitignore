@@ -12,3 +12,8 @@ vendor/
 
 # Per-feature git worktrees (workflow.use_worktrees)
 .worktrees/
+
+# Playwright MCP scratch (page snapshots, console logs) + local screenshots
+.playwright-mcp/
+landing-*.png
+landing-*.jpeg
