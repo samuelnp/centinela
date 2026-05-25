@@ -1,0 +1,25 @@
+{
+  "feature": "landing-page",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-25T00:00:00Z",
+  "inputs": [
+    "docs/plans/landing-page.md",
+    "specs/landing-page.feature",
+    ".workflow/landing-page-gatekeeper.md",
+    ".workflow/landing-page-qa-senior.md",
+    ".workflow/landing-page-senior-engineer.md"
+  ],
+  "outputs": [
+    ".workflow/landing-page-gatekeeper.md"
+  ],
+  "validation": {
+    "g1FileSize": "pass",
+    "goTestAll": "pass",
+    "coverage": "95.0% >= 95.0%",
+    "gatekeeperReport": "SAFE"
+  },
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}
