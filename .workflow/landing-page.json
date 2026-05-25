@@ -1,10 +1,10 @@
 {
   "feature": "landing-page",
   "startedAt": "2026-05-13T05:58:18.685889Z",
-  "currentStep": "plan",
+  "currentStep": "code",
   "steps": {
     "code": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "docs": {
@@ -12,8 +12,8 @@
       "completedAt": null
     },
     "plan": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-25T08:28:19Z"
     },
     "tests": {
       "status": "pending",
