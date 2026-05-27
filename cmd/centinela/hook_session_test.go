@@ -21,7 +21,8 @@ func runSession(t *testing.T) string {
 	return out
 }
 
-// Spec Half-B: valid roadmap → directive + roadmap + next feature + both pointers.
+// Spec Half-B: valid roadmap → directive + roadmap + plural ready frontier + pointers.
+// No-dep planned features derive to "ready", so the body annotates them (ready).
 func TestRunHookSession_ValidRoadmapEmitsRehydration(t *testing.T) {
 	chdirIntoTemp(t)
 	writeFile(t, "PROJECT.md", "x")
@@ -29,7 +30,8 @@ func TestRunHookSession_ValidRoadmapEmitsRehydration(t *testing.T) {
 		`{"phases":[{"name":"Phase 0","features":[{"name":"next-feature"},{"name":"later"}]}]}`)
 	out := runSession(t)
 	for _, want := range []string{
-		sessionDirective, "next-feature", "(planned)",
+		sessionDirective, "next-feature", "(ready)",
+		"Ready to start now:",
 		"PROJECT.md", "docs/features/next-feature.md",
 	} {
 		if !strings.Contains(out, want) {
@@ -38,8 +40,9 @@ func TestRunHookSession_ValidRoadmapEmitsRehydration(t *testing.T) {
 	}
 }
 
-// Spec: next feature is first incomplete across ALL phases (not just Phase 0).
-func TestRunHookSession_NextIsFirstIncompleteAcrossPhases(t *testing.T) {
+// Spec: rehydration lists the full ready frontier across ALL phases (not just
+// Phase 0). With p0a/p0b done, the no-dep Phase 1 feature is ready.
+func TestRunHookSession_ListsReadyFrontier(t *testing.T) {
 	chdirIntoTemp(t)
 	writeFile(t, "PROJECT.md", "x")
 	writeFile(t, ".workflow/roadmap.json",
@@ -48,8 +51,11 @@ func TestRunHookSession_NextIsFirstIncompleteAcrossPhases(t *testing.T) {
 	markCmdDone(t, "p0a")
 	markCmdDone(t, "p0b")
 	out := runSession(t)
-	if !strings.Contains(out, "Next feature to plan: phase-1-first") {
-		t.Fatalf("expected phase-1-first as next, got:\n%s", out)
+	if !strings.Contains(out, "Ready to start now:") {
+		t.Fatalf("expected ready frontier header, got:\n%s", out)
+	}
+	if !strings.Contains(out, "phase-1-first") {
+		t.Fatalf("expected phase-1-first in ready frontier, got:\n%s", out)
 	}
 	if !strings.Contains(out, "docs/features/phase-1-first.md") {
 		t.Fatalf("expected phase-1-first pointer, got:\n%s", out)

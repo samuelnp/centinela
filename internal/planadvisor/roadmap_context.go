@@ -1,9 +1,6 @@
 package planadvisor
 
 import (
-	"encoding/json"
-	"os"
-
 	"github.com/samuelnp/centinela/internal/roadmap"
 )
 
@@ -12,18 +9,18 @@ func relatedNames(feature string) ([]string, []string) {
 	return deps, take(siblingNames(feature, deps), 2)
 }
 
+// dependencyNames reads dependsOn for the given feature from roadmap.json.
+// Returns nil when roadmap is missing or the feature has no deps.
 func dependencyNames(feature string) []string {
-	data, err := os.ReadFile(roadmap.RoadmapAnalysisFile)
+	r, err := roadmap.Load()
 	if err != nil {
 		return nil
 	}
-	var a roadmap.Analysis
-	if json.Unmarshal(data, &a) != nil {
-		return nil
-	}
-	for _, f := range a.Features {
-		if f.Name == feature {
-			return append([]string{}, f.DependsOn...)
+	for _, phase := range r.Phases {
+		for _, f := range phase.Features {
+			if f.Name == feature {
+				return append([]string{}, f.DependsOn...)
+			}
 		}
 	}
 	return nil

@@ -1,0 +1,49 @@
+{
+  "feature": "roadmap-parallel-readiness",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-05-27T15:30:00Z",
+  "inputs": [
+    "docs/plans/roadmap-parallel-readiness.md",
+    "docs/features/roadmap-parallel-readiness.md",
+    "specs/roadmap-parallel-readiness.feature",
+    ".workflow/roadmap-parallel-readiness-big-thinker.md",
+    "internal/roadmap/roadmap.go",
+    "internal/roadmap/analysis.go",
+    "internal/roadmap/analysis_cycle.go",
+    "internal/roadmap/dependencies.go",
+    "internal/roadmap/readiness.go",
+    "internal/planadvisor/roadmap_context.go",
+    "internal/docgen/load.go",
+    "internal/ui/render_roadmap.go",
+    "internal/ui/render_readiness.go",
+    "internal/ui/render_session.go",
+    "cmd/centinela/hook_session.go"
+  ],
+  "outputs": [
+    "internal/ui/render_session.go",
+    "cmd/centinela/hook_session.go",
+    "internal/ui/render_session_test.go",
+    "cmd/centinela/hook_session_test.go",
+    "internal/roadmap/analysis.go",
+    "internal/roadmap/analysis_test.go",
+    "internal/roadmap/dependencies_test.go",
+    "internal/planadvisor/roadmap_context_test.go",
+    "tests/unit/session_context_render_unit_test.go",
+    "tests/unit/enrich_plan_advisor_context_unit_test.go",
+    "tests/integration/enrich_plan_advisor_context_integration_test.go",
+    "tests/acceptance/session_context_rehydration_test.go"
+  ],
+  "edgeCases": [
+    "pure render: RenderSessionRehydration now takes (r, ready []string, hasIncomplete bool); caller computes the ready set, renderer never touches disk/workflow state",
+    "no-deps backward compat: a planned feature with empty/omitted dependsOn derives to 'ready' and annotates (ready), not (planned) — tests updated accordingly",
+    "empty frontier: len(ready)==0 && !hasIncomplete -> 'Roadmap complete'; len(ready)==0 && hasIncomplete -> 'No features ready ... in-progress or blocked'",
+    "cycle/unknown/self-dep: Option B moved these checks off ValidateAnalysis onto ValidateDependencies(*Roadmap); coverage relocated to internal/roadmap/dependencies_test.go (2-node cycle, self-dep 1-node cycle, unknown slug, valid+nil graphs)",
+    "ValidateAnalysis new contract: role + markdown/json presence + full-feature coverage + analysis-references-unknown-feature only (no dependsOn)",
+    "planadvisor dependencyNames reads dependsOn from roadmap.json (Option B source of truth); fixtures updated to declare dependsOn on roadmap.json feature 'f'",
+    "rehydration emits the plural ready frontier (Ready to start now: + one pointer per ready feature) instead of a single 'Next feature to plan' line",
+    "nil roadmap: ReadySet/DeriveReadiness/ValidateDependencies remain nil-safe; rehydration stays silent on absent/invalid roadmap"
+  ],
+  "handoffTo": "qa-senior"
+}

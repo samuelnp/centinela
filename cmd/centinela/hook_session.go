@@ -28,8 +28,11 @@ func runHookSession(_ *cobra.Command, _ []string) error {
 		// No roadmap (absent or invalid) — exit silently, no payload.
 		return nil
 	}
-	next, hasNext := roadmap.FirstIncomplete(r)
+	// Compute the ready set + incomplete flag here so the renderer stays pure.
+	ready := roadmap.ReadySet(r)
+	planned, inProgress, _ := r.Summary()
+	hasIncomplete := planned > 0 || inProgress > 0
 	fmt.Println("CENTINELA DIRECTIVE: session rehydration — recovered project state below.")
-	fmt.Println(ui.RenderSessionRehydration(r, next, hasNext))
+	fmt.Println(ui.RenderSessionRehydration(r, ready, hasIncomplete))
 	return nil
 }

@@ -19,18 +19,21 @@ func rmap(features ...string) *roadmap.Roadmap {
 }
 
 // Spec Half-B: the rehydration payload carries the banner, the roadmap body with
-// per-feature status, the next-feature reference and the two pointer PATHS — and
-// never inlines file contents (paths only).
+// per-feature readiness, the plural ready frontier and a pointer PATH per ready
+// feature — and never inlines file contents (paths only). The ready set is passed
+// in explicitly so the renderer stays pure and the assertion is deterministic.
 func TestRenderSessionRehydration_SuccessPayloadHasPointersNotContents(t *testing.T) {
 	r := rmap("next-feature", "later-feature")
-	out := ui.RenderSessionRehydration(r, "next-feature", true)
+	out := ui.RenderSessionRehydration(r, []string{"next-feature", "later-feature"}, true)
 	for _, want := range []string{
-		"rehydration",                        // banner
-		"next-feature",                       // roadmap body feature
-		"(planned)",                          // per-feature status from RenderRoadmap
-		"Next feature to plan: next-feature", // next reference
-		"PROJECT.md",                         // pointer path
-		"docs/features/next-feature.md",      // pointer path
+		"rehydration",                    // banner
+		"next-feature",                   // roadmap body feature
+		"(ready)",                        // per-feature readiness from RenderRoadmap
+		"Ready to start now:",            // plural frontier header
+		"later-feature",                  // second ready feature listed
+		"PROJECT.md",                     // pointer path
+		"docs/features/next-feature.md",  // pointer path
+		"docs/features/later-feature.md", // pointer path per ready feature
 	} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("expected payload to contain %q, got:\n%s", want, out)
@@ -43,11 +46,12 @@ func TestRenderSessionRehydration_SuccessPayloadHasPointersNotContents(t *testin
 	}
 }
 
-// Spec roadmap-complete: !hasNext renders a complete-style line and emits NO
-// docs/features/<next>.md pointer.
+// Spec roadmap-complete: an empty frontier with no incomplete work renders the
+// complete-style line and emits NO docs/features/<next>.md pointer (i.e. when all
+// features are done the rehydration shows no ready features).
 func TestRenderSessionRehydration_CompleteHasNoNextPointer(t *testing.T) {
 	r := rmap("done-a")
-	out := ui.RenderSessionRehydration(r, "", false)
+	out := ui.RenderSessionRehydration(r, nil, false)
 	if !strings.Contains(out, "Roadmap complete") {
 		t.Fatalf("expected roadmap-complete line, got:\n%s", out)
 	}

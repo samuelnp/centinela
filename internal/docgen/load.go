@@ -53,25 +53,23 @@ func loadSpecs() ([]string, int) {
 }
 
 func loadRoadmapNodes() []RoadmapNode {
-	raw := readFile(".workflow/roadmap-analysis.json")
-	var in struct {
-		Features []RoadmapNode `json:"features"`
-	}
-	json.Unmarshal([]byte(raw), &in) //nolint:errcheck
-	if len(in.Features) > 0 {
-		return in.Features
-	}
-	raw = readFile(".workflow/roadmap.json")
+	raw := readFile(".workflow/roadmap.json")
 	var rm struct {
 		Phases []struct {
-			Features []struct{ Name string }
-		}
+			Features []struct {
+				Name      string   `json:"name"`
+				DependsOn []string `json:"dependsOn"`
+			} `json:"features"`
+		} `json:"phases"`
 	}
 	json.Unmarshal([]byte(raw), &rm) //nolint:errcheck
 	out := []RoadmapNode{}
 	for _, p := range rm.Phases {
 		for _, f := range p.Features {
-			out = append(out, RoadmapNode{Name: f.Name})
+			out = append(out, RoadmapNode{
+				Name:      f.Name,
+				DependsOn: f.DependsOn,
+			})
 		}
 	}
 	return out

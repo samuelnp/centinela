@@ -11,7 +11,8 @@ const RoadmapFile = ".workflow/roadmap.json"
 
 // Feature is a single deliverable within a phase.
 type Feature struct {
-	Name string `json:"name"`
+	Name      string   `json:"name"`
+	DependsOn []string `json:"dependsOn,omitempty"`
 }
 
 // Phase groups related features under a milestone.
@@ -33,6 +34,9 @@ func Load() (*Roadmap, error) {
 	}
 	var r Roadmap
 	if err := json.Unmarshal(data, &r); err != nil {
+		return nil, err
+	}
+	if err := ValidateDependencies(&r); err != nil {
 		return nil, err
 	}
 	return &r, nil

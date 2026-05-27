@@ -29,4 +29,6 @@ var (
 	IconActive  = StyleYellow.Render("▶")
 	IconDone    = StyleGreen.Render("✓")
 	IconPending = StyleMuted.Render("○")
+	IconReady   = "🔓"
+	IconBlocked = "🔒"
 )

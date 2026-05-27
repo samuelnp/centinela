@@ -18,7 +18,7 @@ func TestPlanAdvisorSummarizesRelatedContextWithoutRawDump(t *testing.T) {
 	os.MkdirAll(".workflow", 0755)                                                                                                                                                                               //nolint:errcheck
 	os.WriteFile("docs/features/f.md", []byte("## Problem\ntext\n"), 0644)                                                                                                                                       //nolint:errcheck
 	os.WriteFile("docs/features/dep.md", []byte("FULL RAW PARAGRAPH SHOULD NOT APPEAR"), 0644)                                                                                                                   //nolint:errcheck
-	os.WriteFile(".workflow/roadmap.json", []byte(`{"phases":[{"name":"P1","features":[{"name":"dep"},{"name":"sib"},{"name":"f"}]}]}`), 0644)                                                                   //nolint:errcheck
+	os.WriteFile(".workflow/roadmap.json", []byte(`{"phases":[{"name":"P1","features":[{"name":"dep"},{"name":"sib"},{"name":"f","dependsOn":["dep"]}]}]}`), 0644)                                               //nolint:errcheck
 	os.WriteFile(".workflow/roadmap-analysis.json", []byte(`{"role":"senior-product-manager","features":[{"name":"dep","dependsOn":[]},{"name":"sib","dependsOn":[]},{"name":"f","dependsOn":["dep"]}]}`), 0644) //nolint:errcheck
 	os.WriteFile(".workflow/dep-edge-cases.md", []byte("- duplicate webhook retries"), 0644)                                                                                                                     //nolint:errcheck
 	out := planadvisor.Directive("f", &config.Config{})

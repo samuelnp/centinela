@@ -59,7 +59,7 @@ func TestFeatureStatusAndSummary(t *testing.T) {
 	os.MkdirAll(workflow.WorkflowDir, 0755)                                                                          //nolint:errcheck
 	workflow.Save(&workflow.Workflow{Feature: "done", CurrentStep: "done", Steps: map[string]workflow.StepState{}})  //nolint:errcheck
 	workflow.Save(&workflow.Workflow{Feature: "doing", CurrentStep: "code", Steps: map[string]workflow.StepState{}}) //nolint:errcheck
-	r := &Roadmap{Phases: []Phase{{Features: []Feature{{"done"}, {"doing"}, {"new"}}}}}
+	r := &Roadmap{Phases: []Phase{{Features: []Feature{{Name: "done"}, {Name: "doing"}, {Name: "new"}}}}}
 	p, ip, dn := r.Summary()
 	if p != 1 || ip != 1 || dn != 1 {
 		t.Fatalf("unexpected summary: %d %d %d", p, ip, dn)

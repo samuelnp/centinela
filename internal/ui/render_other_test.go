@@ -51,7 +51,7 @@ func TestRenderRoadmapAndReview(t *testing.T) {
 	if !strings.Contains(RenderRoadmapSummary(r2), "Roadmap") {
 		t.Fatal("empty roadmap summary should still render")
 	}
-	if !strings.Contains(RenderRoadmap(r), "P1") || roadmapIcon("done") == "" {
+	if !strings.Contains(RenderRoadmap(r), "P1") || IconDone == "" {
 		t.Fatal("roadmap render should include phase and icon")
 	}
 	if !strings.Contains(RenderReviewReady("f", "plan", "code"), "shall I advance") {
