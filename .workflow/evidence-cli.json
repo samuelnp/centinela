@@ -1,0 +1,36 @@
+{
+  "feature": "evidence-cli",
+  "startedAt": "2026-05-28T09:51:46.230617Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-05-28T20:07:52Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-05-28T21:02:03Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-05-28T10:11:37Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-05-28T20:33:47Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-05-28T20:54:04Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "worktreePath": ".worktrees/evidence-cli"
+}
