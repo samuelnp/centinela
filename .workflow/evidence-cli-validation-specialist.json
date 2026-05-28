@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "cli_version": "dev",
+    "written_at": "2026-05-28T20:51:33Z"
+  },
+  "feature": "evidence-cli",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-28T20:51:36Z",
+  "inputs": [
+    "docs/plans/evidence-cli.md",
+    "specs/evidence-cli.feature",
+    ".workflow/evidence-cli-gatekeeper.md",
+    ".workflow/evidence-cli-qa-senior.md",
+    ".workflow/evidence-cli-edge-cases.md",
+    ".workflow/evidence-cli-senior-engineer.md"
+  ],
+  "outputs": [
+    ".workflow/evidence-cli-validation-specialist.md"
+  ],
+  "edgeCases": [
+    "Gatekeeper Finding 1: specs/add-agent-evidence-contract.feature Scenario 2 stale — prompts now mandate centinela evidence schema not embedded skeleton. Acceptance test enforces this; spec text needs update.",
+    "Gatekeeper Finding 2: mobileFirst set in non-UX-specialist evidence files. Schema init may emit the field for all roles. Harmless on disk but violates contract rule 6; corrected in follow-up.",
+    "QA edge case: Lock file orphaning after crash; Repair only removes .json.tmp not .lock files. Mitigated by extending Repair; pinned in tests.",
+    "QA edge case: extra key collision with future reserved fields; no guard in setExtra. Mitigated by documenting reservation + adding check; deferred to follow-up."
+  ],
+  "handoffTo": "documentation-specialist"
+}

@@ -17,6 +17,22 @@ invocation pattern. Replace `<FEATURE_NAME>` in the template below.
 ```
 You are the Centinela Feature-Specialist for feature "<FEATURE_NAME>".
 
+Authoring rules (REQUIRED):
+- Use `centinela evidence init <FEATURE_NAME> feature-specialist` to create
+  your evidence pair — never hand-write the JSON.
+- Use `centinela evidence set <FEATURE_NAME> feature-specialist <field>
+  <value>` for scalar fields and `centinela evidence append <FEATURE_NAME>
+  feature-specialist <field> <value>` for list fields (`inputs`, `outputs`,
+  `edgeCases`).
+- Use `centinela evidence read <FEATURE_NAME> big-thinker --field <name>`
+  to inspect predecessor evidence (no jq, no python).
+- Use `centinela evidence schema feature-specialist` to print the JSON
+  skeleton — it is no longer embedded in this prompt.
+- Do NOT use `python3 -c`, `python3 <<EOF`, `cat <<EOF`, `jq` filters, or
+  any heredoc to write or mutate `.workflow/*.json`. The postwrite hook
+  reformats your output and the orchestration validator rejects schema
+  mismatches with no auto-repair.
+
 Read the big-thinker report at .workflow/<FEATURE_NAME>-big-thinker.md,
 the feature brief at docs/features/<FEATURE_NAME>.md, and the plan at
 docs/plans/<FEATURE_NAME>.md. Then produce the acceptance contract.
@@ -67,31 +83,9 @@ The full schema and validator rules live in
 JSON — the orchestration validator rejects malformed evidence with no
 auto-repair.
 
-### feature-specialist JSON skeleton
-
-```json
-{
-  "feature": "<FEATURE_NAME>",
-  "step": "plan",
-  "role": "feature-specialist",
-  "status": "done",
-  "generatedAt": "<RFC 3339 timestamp>",
-  "inputs": [
-    "docs/features/<FEATURE_NAME>.md",
-    "docs/plans/<FEATURE_NAME>.md",
-    "…every other docs/features/*.md in the repo (full snapshot)…"
-  ],
-  "outputs": [
-    "docs/features/<FEATURE_NAME>.md",
-    "docs/plans/<FEATURE_NAME>.md",
-    "specs/<FEATURE_NAME>.feature"
-  ],
-  "edgeCases": [
-    "Short, specific cases the spec must guarantee (REQUIRED — non-empty)"
-  ],
-  "handoffTo": "senior-engineer"
-}
-```
+Run `centinela evidence schema feature-specialist` to print the current
+JSON skeleton — the embedded skeleton has been removed in favor of a
+single source of truth.
 
 ### Rules that apply to this role (validator will check)
 

@@ -12,7 +12,7 @@ Feature: Make orchestration evidence contract explicit in agent prompts
   Scenario: Plan-step prompts require the feature-doc snapshot
     Given the big-thinker and feature-specialist prompts
     Then each prompt should state that inputs must include every docs/features/*.md
-    And each prompt should embed a role-specific JSON skeleton with realistic placeholders
+    And each prompt should reference `centinela evidence schema <role>` as the source of the role-specific JSON skeleton
 
   Scenario: Senior-engineer prompt rejects evidence-only outputs
     Given the senior-engineer prompt

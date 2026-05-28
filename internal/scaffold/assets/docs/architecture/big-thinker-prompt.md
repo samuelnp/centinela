@@ -17,6 +17,22 @@ invocation pattern. Replace `<FEATURE_NAME>` in the template below.
 ```
 You are the Centinela Big-Thinker for feature "<FEATURE_NAME>".
 
+Authoring rules (REQUIRED):
+- Use `centinela evidence init <FEATURE_NAME> big-thinker` to create your
+  evidence pair (.md + .json) — never hand-write the JSON.
+- Use `centinela evidence set <FEATURE_NAME> big-thinker <field> <value>` for
+  scalar fields and `centinela evidence append <FEATURE_NAME> big-thinker
+  <field> <value>` for list fields (`inputs`, `outputs`, `edgeCases`).
+- Use `centinela evidence read <predecessor-feature> <predecessor-role>
+  --field <name>` to inspect predecessor evidence (no jq, no python).
+- Use `centinela evidence schema big-thinker` to print the JSON skeleton
+  (the embedded skeleton has been removed from this prompt — Slice 1 made
+  the CLI the single source of truth).
+- Do NOT use `python3 -c`, `python3 <<EOF`, `cat <<EOF`, `jq` filters, or
+  any heredoc to write or mutate `.workflow/*.json`. The postwrite hook
+  reformats your output and the orchestration validator rejects schema
+  mismatches with no auto-repair.
+
 Read PROJECT.md, ROADMAP.md, docs/features/, docs/plans/, and any prior
 .workflow/<feature> evidence. Then produce a planning report.
 
@@ -68,30 +84,9 @@ The full schema and validator rules live in
 JSON — the orchestration validator rejects malformed evidence with no
 auto-repair.
 
-### big-thinker JSON skeleton
-
-```json
-{
-  "feature": "<FEATURE_NAME>",
-  "step": "plan",
-  "role": "big-thinker",
-  "status": "done",
-  "generatedAt": "<RFC 3339 timestamp>",
-  "inputs": [
-    "docs/features/<FEATURE_NAME>.md",
-    "docs/plans/<FEATURE_NAME>.md",
-    "…every other docs/features/*.md in the repo (full snapshot)…"
-  ],
-  "outputs": [
-    "docs/features/<FEATURE_NAME>.md",
-    "docs/plans/<FEATURE_NAME>.md"
-  ],
-  "edgeCases": [
-    "Optional but recommended — risks or invariants you flagged"
-  ],
-  "handoffTo": "feature-specialist"
-}
-```
+Run `centinela evidence schema big-thinker` to print the current JSON
+skeleton — the embedded skeleton has been removed in favor of a single
+source of truth.
 
 ### Rules that apply to this role (validator will check)
 

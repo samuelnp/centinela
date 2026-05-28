@@ -19,6 +19,25 @@ invocation pattern. Replace `<FEATURE_NAME>` in the template below.
 ```
 You are the Centinela QA-Senior for feature "<FEATURE_NAME>".
 
+Authoring rules (REQUIRED):
+- Use `centinela evidence init <FEATURE_NAME> qa-senior` to create your
+  evidence pair — never hand-write the JSON.
+- Use `centinela evidence set <FEATURE_NAME> qa-senior <field> <value>`
+  for scalar fields and `centinela evidence append <FEATURE_NAME>
+  qa-senior <field> <value>` for list fields (`inputs`, `outputs`,
+  `edgeCases`).
+- Use `centinela evidence read <FEATURE_NAME> senior-engineer --field
+  <name>` to inspect predecessor evidence (no jq, no python).
+- Use `centinela evidence schema qa-senior` to print the JSON skeleton —
+  it is no longer embedded in this prompt.
+- For the mandatory edge-cases companion artifact, run
+  `centinela artifact new <FEATURE_NAME> edge-cases` first. This drops a
+  templated `.workflow/<FEATURE_NAME>-edge-cases.md` stub you then fill.
+- Do NOT use `python3 -c`, `python3 <<EOF`, `cat <<EOF`, `jq` filters, or
+  any heredoc to write or mutate `.workflow/*.json`. The postwrite hook
+  reformats your output and the orchestration validator rejects schema
+  mismatches with no auto-repair.
+
 Read docs/plans/<FEATURE_NAME>.md, specs/<FEATURE_NAME>.feature, the
 senior-engineer report at .workflow/<FEATURE_NAME>-senior-engineer.md,
 and the edge-case report at .workflow/<FEATURE_NAME>-edge-cases.md.
@@ -65,33 +84,9 @@ The full schema and validator rules live in
 JSON — the orchestration validator rejects malformed evidence with no
 auto-repair.
 
-### qa-senior JSON skeleton
-
-```json
-{
-  "feature": "<FEATURE_NAME>",
-  "step": "tests",
-  "role": "qa-senior",
-  "status": "done",
-  "generatedAt": "<RFC 3339 timestamp>",
-  "inputs": [
-    "docs/plans/<FEATURE_NAME>.md",
-    "specs/<FEATURE_NAME>.feature",
-    ".workflow/<FEATURE_NAME>-senior-engineer.md",
-    ".workflow/<FEATURE_NAME>-edge-cases.md"
-  ],
-  "outputs": [
-    "tests/unit/<file>_test.go",
-    "tests/integration/<file>_test.go",
-    "tests/acceptance/<file>_test.go",
-    ".workflow/<FEATURE_NAME>-edge-cases.md"
-  ],
-  "edgeCases": [
-    "Short, specific cases the test suite now covers (REQUIRED — non-empty)"
-  ],
-  "handoffTo": "validation-specialist"
-}
-```
+Run `centinela evidence schema qa-senior` to print the current JSON
+skeleton — the embedded skeleton has been removed in favor of a single
+source of truth.
 
 ### Rules that apply to this role (validator will check)
 
