@@ -19,6 +19,22 @@ invocation pattern. Replace `<FEATURE_NAME>` in the template below.
 ```
 You are the Centinela Validation-Specialist for feature "<FEATURE_NAME>".
 
+Authoring rules (REQUIRED):
+- Use `centinela evidence init <FEATURE_NAME> validation-specialist` to
+  create your evidence pair — never hand-write the JSON.
+- Use `centinela evidence set <FEATURE_NAME> validation-specialist <field>
+  <value>` for scalar fields and `centinela evidence append
+  <FEATURE_NAME> validation-specialist <field> <value>` for list fields
+  (`inputs`, `outputs`, `edgeCases`).
+- Use `centinela evidence read <FEATURE_NAME> <predecessor-role> --field
+  <name>` to inspect predecessor evidence (no jq, no python).
+- Use `centinela evidence schema validation-specialist` to print the JSON
+  skeleton — it is no longer embedded in this prompt.
+- Do NOT use `python3 -c`, `python3 <<EOF`, `cat <<EOF`, `jq` filters, or
+  any heredoc to write or mutate `.workflow/*.json`. The postwrite hook
+  reformats your output and the orchestration validator rejects schema
+  mismatches with no auto-repair.
+
 Read docs/plans/<FEATURE_NAME>.md and specs/<FEATURE_NAME>.feature.
 Then orchestrate the gates in this order:
 
@@ -67,35 +83,9 @@ The full schema and validator rules live in
 JSON — the orchestration validator rejects malformed evidence with no
 auto-repair.
 
-### validation-specialist JSON skeleton
-
-```json
-{
-  "feature": "<FEATURE_NAME>",
-  "step": "validate",
-  "role": "validation-specialist",
-  "status": "done",
-  "generatedAt": "<RFC 3339 timestamp>",
-  "inputs": [
-    "docs/plans/<FEATURE_NAME>.md",
-    "specs/<FEATURE_NAME>.feature",
-    ".workflow/<FEATURE_NAME>-gatekeeper.md",
-    ".workflow/<FEATURE_NAME>-qa-senior.md",
-    ".workflow/<FEATURE_NAME>-senior-engineer.md"
-  ],
-  "outputs": [
-    ".workflow/<FEATURE_NAME>-gatekeeper.md"
-  ],
-  "validation": {
-    "g1FileSize": "pass",
-    "goTestAll": "pass",
-    "coverage": "<actual>% >= <threshold>%",
-    "gatekeeperReport": "SAFE"
-  },
-  "edgeCases": [],
-  "handoffTo": "documentation-specialist"
-}
-```
+Run `centinela evidence schema validation-specialist` to print the
+current JSON skeleton — the embedded skeleton has been removed in favor
+of a single source of truth.
 
 ### Rules that apply to this role (validator will check)
 

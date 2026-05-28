@@ -60,7 +60,7 @@ Feature: Typed evidence CLI
 
   Scenario: Artifact new with unknown kind exits non-zero
     Given an active workflow "alpha"
-    When I run "centinela evidence artifact new alpha bogus-kind"
+    When I run "centinela artifact new alpha bogus-kind"
     Then exit code is non-zero
     And stderr lists the allowed kinds: edge-cases, gatekeeper, production-readiness, documentation-specialist
 

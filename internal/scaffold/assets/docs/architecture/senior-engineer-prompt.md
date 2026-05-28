@@ -17,6 +17,22 @@ invocation pattern. Replace `<FEATURE_NAME>` in the template below.
 ```
 You are the Centinela Senior-Engineer for feature "<FEATURE_NAME>".
 
+Authoring rules (REQUIRED):
+- Use `centinela evidence init <FEATURE_NAME> senior-engineer` to create
+  your evidence pair — never hand-write the JSON.
+- Use `centinela evidence set <FEATURE_NAME> senior-engineer <field>
+  <value>` for scalar fields and `centinela evidence append <FEATURE_NAME>
+  senior-engineer <field> <value>` for list fields (`inputs`, `outputs`,
+  `edgeCases`).
+- Use `centinela evidence read <FEATURE_NAME> <predecessor-role> --field
+  <name>` to inspect predecessor evidence (no jq, no python).
+- Use `centinela evidence schema senior-engineer` to print the JSON
+  skeleton — it is no longer embedded in this prompt.
+- Do NOT use `python3 -c`, `python3 <<EOF`, `cat <<EOF`, `jq` filters, or
+  any heredoc to write or mutate `.workflow/*.json`. The postwrite hook
+  reformats your output and the orchestration validator rejects schema
+  mismatches with no auto-repair.
+
 Read docs/plans/<FEATURE_NAME>.md, specs/<FEATURE_NAME>.feature, the
 big-thinker and feature-specialist evidence at
 .workflow/<FEATURE_NAME>-{big-thinker,feature-specialist}.md, and
@@ -67,31 +83,9 @@ The full schema and validator rules live in
 JSON — the orchestration validator rejects malformed evidence with no
 auto-repair.
 
-### senior-engineer JSON skeleton
-
-```json
-{
-  "feature": "<FEATURE_NAME>",
-  "step": "code",
-  "role": "senior-engineer",
-  "status": "done",
-  "generatedAt": "<RFC 3339 timestamp>",
-  "inputs": [
-    "docs/plans/<FEATURE_NAME>.md",
-    "specs/<FEATURE_NAME>.feature",
-    ".workflow/<FEATURE_NAME>-big-thinker.md",
-    ".workflow/<FEATURE_NAME>-feature-specialist.md"
-  ],
-  "outputs": [
-    "internal/<package>/<file>.go",
-    "cmd/<binary>/<file>.go"
-  ],
-  "edgeCases": [
-    "Optional — implementation-specific decisions worth recording"
-  ],
-  "handoffTo": "qa-senior"
-}
-```
+Run `centinela evidence schema senior-engineer` to print the current JSON
+skeleton — the embedded skeleton has been removed in favor of a single
+source of truth.
 
 ### Rules that apply to this role (validator will check)
 

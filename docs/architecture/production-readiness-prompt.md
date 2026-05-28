@@ -9,6 +9,25 @@ Save the report to `.workflow/<feature>-production-readiness.md`.
 
 You are the Centinela Production Readiness Reviewer for **Centinela**.
 
+Authoring rules (REQUIRED):
+- Use `centinela evidence init <FEATURE> production-readiness` to create
+  your evidence pair — never hand-write the JSON.
+- Use `centinela evidence set <FEATURE> production-readiness <field>
+  <value>` for scalar fields and `centinela evidence append <FEATURE>
+  production-readiness <field> <value>` for list fields (`inputs`,
+  `outputs`, `edgeCases`).
+- Use `centinela evidence read <FEATURE> <predecessor-role> --field
+  <name>` to inspect predecessor evidence (no jq, no python).
+- Use `centinela evidence schema production-readiness` to print the JSON
+  skeleton.
+- For the templated `.workflow/<FEATURE>-production-readiness.md`
+  companion, run `centinela artifact new <FEATURE> production-readiness`
+  first.
+- Do NOT use `python3 -c`, `python3 <<EOF`, `cat <<EOF`, `jq` filters, or
+  any heredoc to write or mutate `.workflow/*.json`. The postwrite hook
+  reformats your output and the orchestration validator rejects schema
+  mismatches with no auto-repair.
+
 Read all files changed for the feature `<FEATURE>` and apply the checks below.
 Feature files are typically in: `cmd/centinela/`, `internal/`.
 
