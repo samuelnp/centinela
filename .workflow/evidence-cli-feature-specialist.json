@@ -88,6 +88,5 @@
     "Hand-written JSON rejection: evidence written outside the CLI (via Write/Edit tool) is auto-reformatted by the hook; if schema validation fails, the hook surfaces a block message with a fix hint",
     "Prompt-mandate drift: acceptance test asserts every docs/architecture/*-prompt.md and its internal/scaffold/assets mirror forbids python3 -c, heredoc <<EOF near .workflow, and raw JSON authoring; test failure on any future drift"
   ],
-  "mobileFirst": true,
   "handoffTo": "senior-engineer"
 }

@@ -87,6 +87,5 @@
     "Agents may keep hand-writing JSON via heredoc/python — caught by acceptance test scanning prompts and scaffold mirror",
     "Schema drift between docs/architecture/evidence-contract.md, the new Go structs, and the existing validator in internal/orchestration/"
   ],
-  "mobileFirst": true,
   "handoffTo": "feature-specialist"
 }

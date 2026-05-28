@@ -145,6 +145,5 @@
     "Prompt mandate freeze: a new acceptance test fails CI if any prompt drops the 'centinela evidence init/set/append' references or smuggles a heredoc/jq/python invocation near .workflow paths.",
     "Schema version skew: unknown JSON fields are preserved under the 'extra' carrier so older binaries don't drop newer metadata on round-trip."
   ],
-  "mobileFirst": true,
   "handoffTo": "qa-senior"
 }

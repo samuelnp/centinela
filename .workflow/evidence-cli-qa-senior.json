@@ -32,6 +32,5 @@
     "extra.feature clobbers typed Feature after round-trip due to duplicate JSON keys (known limitation)",
     "Postwrite hook silently skips reformat when CWD is outside any worktree (no diagnostic emitted)"
   ],
-  "mobileFirst": false,
   "handoffTo": "validation-specialist"
 }
