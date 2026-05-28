@@ -16,13 +16,12 @@ func rmapUI(features ...string) *roadmap.Roadmap {
 	return &roadmap.Roadmap{Phases: []roadmap.Phase{p}}
 }
 
-// hasNext branch: banner + roadmap body + next ref + both pointer PATHS, with no
-// inlined file contents.
+// ready branch: banner + roadmap body + ready list + pointer PATHS, no inlined contents.
 func TestRenderSessionRehydration_HasNext(t *testing.T) {
-	out := RenderSessionRehydration(rmapUI("next-feature"), "next-feature", true)
+	out := RenderSessionRehydration(rmapUI("next-feature"), []string{"next-feature"}, true)
 	for _, want := range []string{
-		"rehydration", "next-feature", "(planned)",
-		"Next feature to plan: next-feature",
+		"rehydration", "next-feature",
+		"Ready to start now:",
 		"PROJECT.md", "docs/features/next-feature.md",
 	} {
 		if !strings.Contains(out, want) {
@@ -34,9 +33,9 @@ func TestRenderSessionRehydration_HasNext(t *testing.T) {
 	}
 }
 
-// !hasNext branch: roadmap-complete line, no <next>.md pointer.
+// !hasIncomplete branch: roadmap-complete line, no pointer.
 func TestRenderSessionRehydration_NoNext(t *testing.T) {
-	out := RenderSessionRehydration(rmapUI("done-a"), "", false)
+	out := RenderSessionRehydration(rmapUI("done-a"), nil, false)
 	if !strings.Contains(out, "Roadmap complete") {
 		t.Fatalf("expected roadmap-complete line:\n%s", out)
 	}

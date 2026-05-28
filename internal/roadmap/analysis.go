@@ -9,9 +9,10 @@ import (
 const RoadmapAnalysisFile = ".workflow/roadmap-analysis.json"
 const RoadmapAnalysisMarkdown = ".workflow/roadmap-analysis.md"
 
+// AnalysisFeature is a single feature entry in the senior-PM analysis.
+// DependsOn was removed in Option B — dependencies are now on roadmap.json.
 type AnalysisFeature struct {
-	Name      string   `json:"name"`
-	DependsOn []string `json:"dependsOn"`
+	Name string `json:"name"`
 }
 
 type Analysis struct {
@@ -19,6 +20,8 @@ type Analysis struct {
 	Features []AnalysisFeature `json:"features"`
 }
 
+// ValidateAnalysis checks role, markdown presence, and feature coverage only.
+// Cycle and unknown-dep validation are now handled by ValidateDependencies.
 func ValidateAnalysis(r *Roadmap) error {
 	if _, err := os.Stat(RoadmapAnalysisMarkdown); err != nil {
 		return fmt.Errorf("roadmap analysis markdown missing: %s", RoadmapAnalysisMarkdown)
@@ -36,26 +39,16 @@ func ValidateAnalysis(r *Roadmap) error {
 	}
 	names := roadmapFeatureSet(r)
 	seen := map[string]bool{}
-	deps := map[string][]string{}
 	for _, f := range a.Features {
 		if !names[f.Name] {
 			return fmt.Errorf("analysis references unknown feature: %s", f.Name)
 		}
 		seen[f.Name] = true
-		for _, dep := range f.DependsOn {
-			if !names[dep] {
-				return fmt.Errorf("feature %s depends on unknown feature %s", f.Name, dep)
-			}
-		}
-		deps[f.Name] = f.DependsOn
 	}
 	for name := range names {
 		if !seen[name] {
 			return fmt.Errorf("analysis missing feature: %s", name)
 		}
-	}
-	if hasCycle(deps) {
-		return fmt.Errorf("roadmap analysis contains dependency cycle")
 	}
 	return nil
 }

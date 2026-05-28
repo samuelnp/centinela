@@ -71,16 +71,18 @@ func TestAcceptance_SessionStartPayloadOnEachSource(t *testing.T) {
 			t.Fatalf("source %s: exit %d\n%s", src, code, out)
 		}
 		mustContain(t, out, sessionDirective)
-		mustContain(t, out, "next-feature") // full roadmap + next feature
-		mustContain(t, out, "(planned)")    // per-feature status
-		mustContain(t, out, "PROJECT.md")   // pointer path
+		mustContain(t, out, "next-feature")        // full roadmap + ready frontier
+		mustContain(t, out, "(ready)")             // per-feature readiness status
+		mustContain(t, out, "Ready to start now:") // plural frontier header
+		mustContain(t, out, "PROJECT.md")          // pointer path
 		mustContain(t, out, "docs/features/next-feature.md")
 		mustNotContain(t, out, "## Problem") // paths only — no inlined brief contents
 	}
 }
 
-// Next feature is the first incomplete across ALL phases, not just Phase 0.
-func TestAcceptance_NextIsFirstIncompleteAcrossPhases(t *testing.T) {
+// The ready frontier spans ALL phases, not just Phase 0: with p0a/p0b done,
+// the no-dep Phase 1 feature becomes ready and is listed.
+func TestAcceptance_ListsReadyFrontier(t *testing.T) {
 	bin := newBin(t)
 	dir := t.TempDir()
 	write(t, dir, "PROJECT.md", "x")
@@ -93,7 +95,8 @@ func TestAcceptance_NextIsFirstIncompleteAcrossPhases(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("exit %d\n%s", code, out)
 	}
-	mustContain(t, out, "Next feature to plan: phase-1-first")
+	mustContain(t, out, "Ready to start now:")
+	mustContain(t, out, "phase-1-first")
 	mustContain(t, out, "docs/features/phase-1-first.md")
 }
 

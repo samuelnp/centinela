@@ -23,8 +23,9 @@ func RenderRoadmapNeeded() string {
 		StyleMuted.Render("2. Propose a phased roadmap — iterate until the user approves"),
 		StyleMuted.Render("3. Write ROADMAP.md (readable markdown with phases + features)"),
 		StyleMuted.Render("4. Write .workflow/roadmap.json in this exact format:"),
-		StyleMuted.Render(`   {"phases":[{"name":"Phase 0: Bootstrap","features":[{"name":"project-bootstrap"}]},{"name":"Phase 1","features":[{"name":"feature-slug"}]}]}`),
+		StyleMuted.Render(`   {"phases":[{"name":"Phase 0: Bootstrap","features":[{"name":"project-bootstrap","dependsOn":[]}]},{"name":"Phase 1","features":[{"name":"feature-slug","dependsOn":["project-bootstrap"]}]}]}`),
 		StyleMuted.Render("   Feature names must be valid centinela slugs (lowercase, hyphens)"),
+		StyleMuted.Render("   dependsOn is optional; omit or set [] for no dependencies"),
 		StyleMuted.Render("   If PROJECT.md says Project Stage: existing, Phase 0 is optional"),
 		StyleMuted.Render("5. For each Phase 1 feature, write docs/features/<slug>.md with:"),
 		StyleMuted.Render("   ## Problem · ## User Stories · ## Acceptance Criteria"),
@@ -54,30 +55,24 @@ func RenderRoadmapSummary(r *roadmap.Roadmap) string {
 	return renderSystemLine("ROADMAP", line, toneInfo)
 }
 
-// RenderRoadmap returns a full styled roadmap with per-feature status.
+// RenderRoadmap returns a full styled roadmap with per-feature readiness status.
 func RenderRoadmap(r *roadmap.Roadmap) string {
+	readiness := roadmap.DeriveReadiness(r)
+	idx := map[string]roadmap.FeatureReadiness{}
+	for _, fr := range readiness {
+		idx[fr.Name] = fr
+	}
 	var sections []string
 	for _, phase := range r.Phases {
 		lines := []string{StyleBold.Render(phase.Name)}
 		for _, f := range phase.Features {
-			status := roadmap.FeatureStatus(f.Name)
-			icon := roadmapIcon(status)
+			fr := idx[f.Name]
+			icon, annotation := readinessMarker(fr)
 			lines = append(lines, "  "+icon+" "+f.Name+
-				StyleMuted.Render("  ("+status+")"))
+				StyleMuted.Render("  "+annotation))
 		}
 		sections = append(sections, strings.Join(lines, "\n"))
 	}
 	body := strings.Join(sections, "\n\n")
 	return renderSystemPanel("ROADMAP", "PHASE OVERVIEW", toneInfo, body)
-}
-
-func roadmapIcon(status string) string {
-	switch status {
-	case "done":
-		return IconDone
-	case "in-progress":
-		return IconActive
-	default:
-		return IconPending
-	}
 }
