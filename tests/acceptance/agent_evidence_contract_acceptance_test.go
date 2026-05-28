@@ -65,6 +65,10 @@ func TestEvidenceContract_PerRoleRulesPresent(t *testing.T) {
 }
 
 func TestPromptsLinkToEvidenceContract(t *testing.T) {
+	// Slice 3 (evidence-cli): the embedded JSON skeleton was removed from
+	// every prompt and replaced with `centinela evidence schema <role>`
+	// as the single source of truth. The prompt must still reference
+	// evidence-contract.md and name the role in the schema invocation.
 	for role, path := range rolePrompts {
 		b, err := os.ReadFile(repoRel(path))
 		if err != nil {
@@ -74,11 +78,8 @@ func TestPromptsLinkToEvidenceContract(t *testing.T) {
 		if !strings.Contains(s, "evidence-contract.md") {
 			t.Fatalf("%s prompt missing reference to evidence-contract.md", role)
 		}
-		if !strings.Contains(s, "JSON skeleton") {
-			t.Fatalf("%s prompt missing JSON skeleton section", role)
-		}
-		if !strings.Contains(s, `"role": "`+role+`"`) {
-			t.Fatalf("%s prompt JSON skeleton missing role field with value %q", role, role)
+		if !strings.Contains(s, "centinela evidence schema "+role) {
+			t.Fatalf("%s prompt missing `centinela evidence schema %s` reference", role, role)
 		}
 	}
 }
@@ -110,22 +111,26 @@ func TestQASeniorPromptRequiresTestsAndEdgeCases(t *testing.T) {
 }
 
 func TestUXPromptListsAllEightTagsAndMobileFirst(t *testing.T) {
+	// Slice 3 (evidence-cli): the inline JSON skeleton (and the eight
+	// enumerated tags it carried) was removed; the canonical tag list
+	// now lives in docs/architecture/evidence-contract.md and is
+	// enforced by `centinela evidence validate`. The prompt itself must
+	// still surface mobileFirst, the validator's eight-tag rule, and
+	// point readers at the contract.
 	b, err := os.ReadFile(repoRel(rolePrompts["ux-ui-specialist"]))
 	if err != nil {
 		t.Fatalf("read ux prompt: %v", err)
 	}
 	s := string(b)
-	if !strings.Contains(s, `"mobileFirst": true`) {
-		t.Fatal("ux prompt missing mobileFirst: true")
+	if !strings.Contains(s, "mobileFirst") || !strings.Contains(s, "true") {
+		t.Fatal("ux prompt missing mobileFirst:true mandate")
 	}
-	for _, tag := range []string{
-		"mobile-first", "visual-hierarchy", "typography-hierarchy",
-		"responsive-layout", "loading-state", "empty-state",
-		"error-state", "motion-and-reduced-motion",
-	} {
-		if !strings.Contains(s, tag) {
-			t.Fatalf("ux prompt missing required tag %q", tag)
-		}
+	if !strings.Contains(s, "evidence-contract.md") {
+		t.Fatal("ux prompt missing evidence-contract.md reference")
+	}
+	if !strings.Contains(s, "eight required UX tags") &&
+		!strings.Contains(s, "eight UX tags") {
+		t.Fatal("ux prompt missing eight-tag validator rule statement")
 	}
 }
 
