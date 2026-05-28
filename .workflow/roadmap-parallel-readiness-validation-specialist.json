@@ -1,0 +1,28 @@
+{
+  "feature": "roadmap-parallel-readiness",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-28T05:55:46Z",
+  "inputs": [
+    "docs/plans/roadmap-parallel-readiness.md",
+    "specs/roadmap-parallel-readiness.feature",
+    ".workflow/roadmap-parallel-readiness-gatekeeper.md",
+    ".workflow/roadmap-parallel-readiness-qa-senior.md",
+    ".workflow/roadmap-parallel-readiness-senior-engineer.md"
+  ],
+  "outputs": [
+    ".workflow/roadmap-parallel-readiness-gatekeeper.md",
+    ".workflow/roadmap-parallel-readiness-validation-specialist.md"
+  ],
+  "validation": {
+    "g1FileSize": "pass",
+    "goTestAll": "pass",
+    "coverage": "95.1% >= 95.0%",
+    "gatekeeperReport": "WARNING"
+  },
+  "edgeCases": [
+    "Spec-prose drift in 3 scenarios (runtime correct, prose stale): session-context-rehydration (2 scenarios), roadmap-senior-pm-analysis (1 scenario), enrich-plan-advisor-context (1 scenario)"
+  ],
+  "handoffTo": "documentation-specialist"
+}
