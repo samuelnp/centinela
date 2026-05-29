@@ -7,6 +7,14 @@
           "name": "docs-migration-managed-docs"
         }
       ]
+    },
+    {
+      "name": "Phase 1: Harness Capabilities",
+      "features": [
+        {
+          "name": "governed-project-memory"
+        }
+      ]
     }
   ]
 }
