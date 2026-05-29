@@ -7,6 +7,7 @@ import (
 
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/ui"
+	"github.com/samuelnp/centinela/internal/verify"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
 
@@ -48,6 +49,9 @@ func runComplete(_ *cobra.Command, args []string) error {
 		if err := executeValidation(); err != nil {
 			return err
 		}
+		if err := runClaimVerification(feature, current, cfg); err != nil {
+			return err
+		}
 	}
 
 	if err := wf.Complete(cfg); err != nil {
@@ -69,6 +73,21 @@ func runComplete(_ *cobra.Command, args []string) error {
 	}
 	if warn := workflow.ProductionReadinessWarning(feature, cfg); warn != "" {
 		fmt.Println(ui.RenderProductionReadinessWarning(feature))
+	}
+	return nil
+}
+
+// runClaimVerification re-derives ground truth for the step's evidence claims
+// and hard-blocks completion on any failing claim. Warnings (e.g. the heuristic
+// edge-case-to-test mapping) are surfaced but do not block.
+func runClaimVerification(feature, step string, cfg *config.Config) error {
+	res := verify.Verify(feature, step, cfg, verify.Deps{
+		Root:   verifyRoot(),
+		Runner: verify.NewExecRunner(),
+	})
+	fmt.Println(ui.RenderVerification(res))
+	if res.HasFailures() {
+		return fmt.Errorf("claim verification failed for %q — evidence diverges from ground truth", feature)
 	}
 	return nil
 }

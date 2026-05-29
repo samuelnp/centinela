@@ -55,6 +55,8 @@ func ReadField(r *RoleEvidence, field string) (any, error) {
 		return r.HandoffTo, nil
 	case "mobileFirst":
 		return r.MobileFirst, nil
+	case "coverage":
+		return r.Coverage, nil
 	case "inputs":
 		return r.Inputs, nil
 	case "outputs":
