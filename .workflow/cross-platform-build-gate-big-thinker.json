@@ -84,7 +84,8 @@
     "internal/gates/gates.go",
     "internal/gates/file_size.go",
     "internal/config/config.go",
-    "scripts/check-coverage.sh"
+    "scripts/check-coverage.sh",
+    "docs/features/claim-verification.md"
   ],
   "outputs": [
     "docs/plans/cross-platform-build-gate.md",

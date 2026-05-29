@@ -77,7 +77,8 @@
     "docs/features/roadmap-senior-pm-analysis.md",
     "docs/features/session-context-rehydration.md",
     "docs/features/simplify-output-prefix-emojis.md",
-    "docs/plans/cross-platform-build-gate.md"
+    "docs/plans/cross-platform-build-gate.md",
+    "docs/features/claim-verification.md"
   ],
   "outputs": [
     "specs/cross-platform-build-gate.feature",
