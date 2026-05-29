@@ -1,11 +1,9 @@
 package evidence
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
-	"syscall"
 	"time"
 
 	"github.com/samuelnp/centinela/internal/workflow"
@@ -19,7 +17,7 @@ const LockTimeout = 2 * time.Second
 // LockPollInterval is the retry cadence inside the LockTimeout window.
 const LockPollInterval = 25 * time.Millisecond
 
-// lockPath returns the .lock sibling file we flock for advisory mutual
+// lockPath returns the .lock sibling file we lock for advisory mutual
 // exclusion. Keeping it separate from the JSON means the JSON itself is
 // never opened with a held lock.
 func lockPath(feature string, role Role) string {
@@ -29,7 +27,8 @@ func lockPath(feature string, role Role) string {
 // Lock takes an advisory file lock on the (feature, role) pair and returns
 // a release function that callers MUST defer. On timeout the error message
 // names the file and suggests `centinela evidence read` so the user can
-// inspect predecessor state before retrying.
+// inspect predecessor state before retrying. The OS-specific acquire/release
+// primitives live in lock_unix.go and lock_windows.go.
 func Lock(feature string, role Role) (func(), error) {
 	if err := os.MkdirAll(workflow.WorkflowDir, 0o755); err != nil {
 		return nil, fmt.Errorf("evidence lock mkdir: %w", err)
@@ -41,16 +40,16 @@ func Lock(feature string, role Role) (func(), error) {
 	}
 	deadline := time.Now().Add(LockTimeout)
 	for {
-		err := syscall.Flock(int(f.Fd()), syscall.LOCK_EX|syscall.LOCK_NB)
-		if err == nil {
+		locked, err := tryLockExclusive(f)
+		if err != nil {
+			f.Close() //nolint:errcheck
+			return nil, fmt.Errorf("evidence lock %s: %w", path, err)
+		}
+		if locked {
 			return func() {
-				_ = syscall.Flock(int(f.Fd()), syscall.LOCK_UN)
+				_ = unlockFile(f)
 				_ = f.Close()
 			}, nil
-		}
-		if !errors.Is(err, syscall.EWOULDBLOCK) {
-			f.Close() //nolint:errcheck
-			return nil, fmt.Errorf("evidence flock %s: %w", path, err)
 		}
 		if time.Now().After(deadline) {
 			f.Close() //nolint:errcheck
