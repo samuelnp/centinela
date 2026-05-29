@@ -16,6 +16,7 @@ type Config struct {
 	Validate      ValidateConfig      `toml:"validate"`
 	Gates         GatesConfig         `toml:"gates"`
 	I18n          I18nConfig          `toml:"i18n"`
+	Memory        MemoryConfig        `toml:"memory"`
 }
 
 // ValidateConfig holds user-defined commands that centinela runs during validate.
@@ -66,12 +67,14 @@ func Load() (*Config, error) {
 }
 
 func defaultConfig() *Config {
-	return &Config{
+	cfg := &Config{
 		Gates: GatesConfig{
 			FileSizeEnabled: true,
 			I18nEnabled:     false,
 		},
 	}
+	applyMemoryDefaults(cfg)
+	return cfg
 }
 
 func applyDefaults(cfg *Config) {
@@ -83,4 +86,5 @@ func applyDefaults(cfg *Config) {
 	cfg.Workflow.PlanQuestionLimit = NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit)
 	cfg.Validate.DiffMode = NormalizeDiffMode(cfg.Validate.DiffMode)
 	cfg.Validate.DiffBase = NormalizeDiffBase(cfg.Validate.DiffBase)
+	applyMemoryDefaults(cfg)
 }
