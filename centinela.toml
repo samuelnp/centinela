@@ -10,3 +10,15 @@ commands = [
 
 [gates]
 file_size = true
+
+[gates.build]
+enabled = true
+command = "go build ./cmd/centinela"
+targets = [
+  { goos = "linux", goarch = "amd64" },
+  { goos = "linux", goarch = "arm64" },
+  { goos = "darwin", goarch = "amd64" },
+  { goos = "darwin", goarch = "arm64" },
+  { goos = "windows", goarch = "amd64" },
+  { goos = "windows", goarch = "arm64" },
+]
