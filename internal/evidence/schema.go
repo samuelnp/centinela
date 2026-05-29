@@ -28,14 +28,18 @@ type RoleEvidence struct {
 	Outputs     []string                   `json:"outputs"`
 	EdgeCases   []string                   `json:"edgeCases"`
 	MobileFirst *bool                      `json:"mobileFirst,omitempty"`
-	HandoffTo   string                     `json:"handoffTo"`
-	Extra       map[string]json.RawMessage `json:"-"`
+	// Coverage is the claimed per-package coverage percentage (e.g. 85.0 for
+	// 85%). Optional: a nil pointer means the role made no coverage claim and
+	// the coverage check is skipped. Typed to forbid free-form prose claims.
+	Coverage  *float64                   `json:"coverage,omitempty"`
+	HandoffTo string                     `json:"handoffTo"`
+	Extra     map[string]json.RawMessage `json:"-"`
 }
 
 // jsonKeyOrder is the canonical key order on disk. Used by MarshalJSON.
 var jsonKeyOrder = []string{
 	"_meta", "feature", "step", "role", "status", "generatedAt",
-	"inputs", "outputs", "edgeCases", "mobileFirst", "handoffTo",
+	"inputs", "outputs", "edgeCases", "mobileFirst", "coverage", "handoffTo",
 }
 
 // MarshalJSON emits a stable key order so two writes of the same evidence

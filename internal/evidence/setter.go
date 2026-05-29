@@ -42,6 +42,12 @@ func setTopLevel(r *RoleEvidence, field, value string) error {
 			return err
 		}
 		r.MobileFirst = &b
+	case "coverage":
+		f, err := parseCoverage(value)
+		if err != nil {
+			return err
+		}
+		r.Coverage = &f
 	case "inputs", "outputs", "edgeCases":
 		return fmt.Errorf("field %q is a list — use `centinela evidence append`", field)
 	default:
@@ -73,14 +79,4 @@ func setExtra(r *RoleEvidence, key, value string) error {
 	raw, _ := marshalNoEscape(value)
 	r.Extra[key] = raw
 	return nil
-}
-
-func parseBool(s string) (bool, error) {
-	switch strings.ToLower(strings.TrimSpace(s)) {
-	case "true", "1", "yes":
-		return true, nil
-	case "false", "0", "no":
-		return false, nil
-	}
-	return false, fmt.Errorf("cannot parse %q as bool", s)
 }

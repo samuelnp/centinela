@@ -22,6 +22,7 @@ rejected and rewritten.
   "outputs":     ["…repo-relative file paths the agent produced or modified…"],
   "edgeCases":   ["…short statements of cases handled (required for some roles)…"],
   "mobileFirst": true,
+  "coverage":    85.0,
   "handoffTo":   "<next role or 'complete'>"
 }
 ```
@@ -38,6 +39,15 @@ rejected and rewritten.
    Descriptive strings like `"Updated workflow"` will be rejected as
    `actionable outputs must be real files`.
 6. `mobileFirst` is omitted unless the role is `ux-ui-specialist`.
+7. `coverage` is an **optional** number — the per-package coverage percentage
+   the role claims (e.g. `85.0` for 85%). Omit it when the role makes no
+   coverage claim. When present, `centinela verify` / the `complete` gate
+   re-derives measured coverage and **hard-fails** if the claim exceeds
+   measured coverage beyond `verify.coverage_tolerance` (default 0.1%). A
+   nil/absent value skips the coverage check rather than failing it. Set it
+   with `centinela evidence set <feature> <role> coverage <value>` — it is
+   typed (a bare number, optionally suffixed `%`) to forbid free-form prose
+   claims.
 
 ## Per-role rules
 
