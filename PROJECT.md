@@ -5,7 +5,7 @@
 
 ## Elevator Pitch
 
-Centinela is a best-practices and engineering workflow enforcement tool that forces Claude to always plan, write code, write tests, validate, and document — in order — without skipping steps.
+Centinela is a harness-governance layer for AI coding agents: a best-practices and engineering workflow enforcement tool that sits on top of Claude Code / OpenCode and makes discipline *enforced* rather than *requested* — forcing the agent to always plan, write code, write tests, validate, and document, in order, without skipping steps.
 
 ## Problem Statement
 

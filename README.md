@@ -15,7 +15,7 @@
   <a href="https://github.com/samuelnp/centinela/stargazers"><img src="https://img.shields.io/github/stars/samuelnp/centinela?style=social" alt="stars"></a>
 </p>
 
-A development workflow enforcer for Claude Code and OpenCode projects. Centinela turns the "plan → code → tests → validate → docs" discipline from a suggestion into a mechanical constraint — enforced by agent integrations that run automatically in coding sessions.
+**A harness-governance layer for AI coding agents.** Centinela sits on top of Claude Code and OpenCode and makes your team's engineering discipline — `plan → code → tests → validate → docs` — *enforced* rather than *requested*. Every feature passes through guardrails, mechanical verification, and injected context automatically, so an agent's output looks like it came from a disciplined human team.
 
 ### 30-second tour
 
@@ -36,6 +36,7 @@ If an agent tries to write source code while the workflow is in the `plan` step,
 
 - [Demo](#demo)
 - [Why Centinela](#why-centinela)
+- [Centinela & Harness Engineering](#centinela--harness-engineering)
 - [When *not* to use Centinela](#when-not-to-use-centinela)
 - [How Centinela Works](#how-centinela-works)
 - [Latest Features](#latest-features)
@@ -71,6 +72,44 @@ AI coding agents are fast but undisciplined. Left to their own devices they skip
 - **Injecting context** into every agent session so the model always knows which feature is active and which step it is on
 
 The result: every feature ships with a written plan, a Gherkin spec, three test layers, and a passing gate suite — regardless of whether a human or an AI agent wrote it.
+
+---
+
+## Centinela & Harness Engineering
+
+"Harness engineering" is the discipline of building the infrastructure around an
+LLM that turns it into a reliable agent — the verification loops, guardrails,
+context management, and environment control. Its guiding principle:
+
+> Treat every agent failure as an engineering problem to fix permanently, not a
+> prompt to retry. Make correctness **enforced**, not **requested**.
+
+Centinela is **not an agent harness** — Claude Code and OpenCode are. Centinela
+is the *governance layer* that sits on top of them and enforces how the harness
+is used across a team. It owns the parts of harness engineering that decide
+whether shipped code is trustworthy, and stays out of the parts the host agent
+already does well:
+
+| Harness subsystem            | Owned by Centinela | How                                                                 |
+|------------------------------|:------------------:|---------------------------------------------------------------------|
+| Verification & guardrails    |        ★★★         | PreToolUse blocks out-of-step writes; validate gates (file size, i18n, your test suite); gatekeeper + production-readiness subagents |
+| Context engineering          |        ★★          | UserPromptSubmit injects the active feature, step, and required evidence; the plan advisor reads roadmap deps and prior edge-case lessons |
+| Environment control          |        ★★          | `centinela init` wires hooks and scaffolds the rules; `migrate` updates them incrementally to prevent known failure modes |
+| Tool integration layer       |         —          | delegated to Claude Code / OpenCode                                 |
+| Memory & state management    |         ★          | `.workflow/*.json` tracks per-feature step state                    |
+| The agent loop itself        |         —          | delegated to the host harness                                       |
+
+The three principles of harness engineering map directly onto what Centinela
+already does:
+
+- **Environment control** → CLAUDE.md hard-rules, scaffolded docs, and `migrate`
+  let you encode rules that prevent known failure modes — and keep them current.
+- **Mechanical verification** → required artifacts and gates make correctness
+  *checkable*: no plan file means no code, no tests means no validate.
+- **Graceful recovery** → the merge-steward, missing-artifact recovery, and the
+  plan advisor are designed for non-deterministic agent behavior.
+
+In short: bring your own harness; Centinela makes sure it's used with discipline.
 
 ---
 
