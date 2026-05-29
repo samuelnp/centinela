@@ -4,6 +4,10 @@
     {
       "name": "docs-migration-managed-docs",
       "dependsOn": []
+    },
+    {
+      "name": "governed-project-memory",
+      "dependsOn": []
     }
   ]
 }

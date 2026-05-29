@@ -13,6 +13,18 @@
         "overall": 9
       },
       "summary": "Bootstrap docs migration is clearly defined and low risk for Phase 0 execution."
+    },
+    {
+      "name": "governed-project-memory",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 10,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Clear user value and zero external dependencies; reuses existing artifact harvest and context-injection machinery. Detailed acceptance criteria and ledger schema are deferred to the plan step, but roadmap-level scope is crisp and the no-semantic-store constraint bounds effort."
     }
   ]
 }
