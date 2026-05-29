@@ -181,6 +181,7 @@ flowchart TB
 - **Stronger quality gates** including executable acceptance-test enforcement, validation-command coverage for acceptance tests, default 100-line source files, and audited G1 exceptions for rare 130-line cases.
 - **Managed migrations and generated docs** through `centinela migrate`, `centinela migrate docs`, `centinela migrate setup --agent claude|opencode|both`, `centinela docs validate`, and `centinela docs generate`.
 - **Cleaner workflow feedback** with compact `🛡️👁️` CLI output, status tags, and prompt-driven command mapping for roadmap, start, continue, validate, and docs flows.
+- **Claim verification** with `centinela verify <feature>` that independently re-derives ground truth for every evidence claim (tests pass, coverage, non-stub outputs, edge-case mapping) and hard-blocks `centinela complete` at the validate step when any hard claim fails.
 
 ---
 
@@ -441,6 +442,7 @@ centinela start <feature>       # Start a feature (required before any file writ
 centinela status <feature>      # Show current step and artifact status
 centinela status-all            # Show all active features
 centinela complete <feature>    # Mark step done and advance
+centinela verify <feature>      # Independently re-derive ground truth for evidence claims
 centinela roadmap               # Show roadmap phase and feature progress
 centinela roadmap validate      # Validate roadmap analysis and quality artifacts
 centinela validate              # Run gate checks manually
@@ -500,6 +502,18 @@ running apply commands.
 ## Gate Checks
 
 Gates are quality checks that must pass before a feature can ship. They run during `centinela validate` and automatically when completing the `validate` step.
+
+### Claim verification at the validate step
+
+When `centinela complete <feature>` advances through the `validate` step it runs claim verification as a HARD block. Any failing claim — tests that do not actually pass, a coverage figure that exceeds the measured result beyond tolerance, or an output file that contains only an empty stub — stops completion and names the failing claim. Edge-case mapping failures emit a warning and surface in the output but do not hard-block on their own.
+
+Run verification at any time with:
+
+```bash
+centinela verify <feature>
+```
+
+See the [`[verify]` configuration block](#centinelatoml-reference) to adjust the timeout and coverage tolerance.
 
 ### Built-in gates
 
@@ -632,6 +646,11 @@ max_lines = 130
 format  = "json"              # "json" | "gettext" | "none"
 dir     = "src/i18n/messages"
 locales = ["en"]
+
+# Claim verification — controls centinela verify and the complete-gate check
+[verify]
+verify_timeout     = 60    # seconds before a test command is killed during verification (default: 60)
+coverage_tolerance = 0.001 # maximum allowed gap between a claimed and measured coverage figure (default: 0.001 = 0.1%)
 ```
 
 ---
