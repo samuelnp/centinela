@@ -1,0 +1,42 @@
+{
+  "_meta": {
+    "cli_version": "0.6.6",
+    "written_at": "2026-05-30T08:09:58Z"
+  },
+  "feature": "governed-project-memory",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-05-30T08:09:58Z",
+  "inputs": [
+    "docs/plans/governed-project-memory.md",
+    "specs/governed-project-memory.feature",
+    ".workflow/governed-project-memory-senior-engineer.md",
+    ".workflow/governed-project-memory-edge-cases.md"
+  ],
+  "outputs": [
+    "tests/acceptance/governed_project_memory_test.go",
+    "tests/acceptance/governed_project_memory_b_test.go",
+    "tests/acceptance/governed_project_memory_c_test.go",
+    "tests/integration/governed_project_memory_integration_test.go",
+    "tests/integration/governed_project_memory_recall_test.go",
+    "internal/memory/capture_test.go",
+    "internal/memory/parse_test.go",
+    "internal/memory/recall_test.go",
+    "internal/config/memory_test.go",
+    "internal/planadvisor/memory_test.go",
+    "internal/ui/render_memory_test.go",
+    ".workflow/governed-project-memory-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Missing source artifact does not block completion (SC-06)",
+    "Malformed artifact yields no entry, no error (SC-07)",
+    "No Decisions section is a clean no-op (SC-04)",
+    "Idempotent re-capture dedupes on content hash (SC-05)",
+    "Empty ledger recall returns nothing, no error (SC-10)",
+    "Recall capped by count and bytes (SC-08/SC-11)",
+    "Disabled/nil config is a full no-op (SC-12)",
+    "Concurrent worktree completes do not clobber (SC-13)"
+  ],
+  "handoffTo": "validation-specialist"
+}
