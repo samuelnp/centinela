@@ -32,6 +32,7 @@ type GatesConfig struct {
 	FileSizeExceptions         []FileSizeException `toml:"file_size_exceptions"`
 	I18nEnabled                bool                `toml:"i18n"`
 	ProductionReadinessEnabled bool                `toml:"production_readiness"`
+	Build                      BuildGateConfig     `toml:"build"`
 }
 
 // I18nConfig describes how to check translations for G11.
@@ -90,4 +91,5 @@ func applyDefaults(cfg *Config) {
 	if cfg.Verify.CoverageTolerance <= 0 {
 		cfg.Verify.CoverageTolerance = 0.001
 	}
+	cfg.Gates.Build = NormalizeBuildGate(cfg.Gates.Build)
 }

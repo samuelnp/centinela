@@ -43,6 +43,10 @@ func RunWithFilter(cfg *config.Config, filter *gitdiff.Set) []Result {
 		results = append(results, checkI18nFiltered(cfg, filter))
 	}
 
+	if cfg.Gates.Build.Enabled {
+		results = append(results, checkBuild(cfg))
+	}
+
 	return results
 }
 
