@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/memory"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/verify"
 	"github.com/samuelnp/centinela/internal/workflow"
@@ -60,6 +61,10 @@ func runComplete(_ *cobra.Command, args []string) error {
 	if err := saveWorkflow(wf); err != nil {
 		return fmt.Errorf("cannot save workflow: %w", err)
 	}
+
+	// Harvest the just-completed step's artifact into the memory ledger.
+	// Capture is non-blocking: failures warn but never fail the advance.
+	memory.Capture(feature, current, cfg)
 
 	if !cfg.Workflow.DisableAutoCommit {
 		commitStep(feature, current, workflow.StepNumberFor(wf, current), len(wf.OrderedSteps()))

@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "cli_version": "0.6.6",
+    "written_at": "2026-05-30T08:16:52Z"
+  },
+  "feature": "governed-project-memory",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-05-30T08:16:52Z",
+  "inputs": [
+    "specs/governed-project-memory.feature",
+    "specs/*.feature (all existing)",
+    "PROJECT.md",
+    "internal/memory/*.go",
+    "internal/planadvisor/*.go",
+    "internal/config/memory.go",
+    "cmd/centinela/complete.go",
+    "internal/ui/render_memory.go"
+  ],
+  "outputs": [
+    ".workflow/governed-project-memory-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "G2 documentation gap: import edges internal/memory->internal/config and internal/planadvisor->internal/memory are acyclic but not named in PROJECT.md G2 rule — fixed in validate step"
+  ],
+  "handoffTo": "validation-specialist"
+}

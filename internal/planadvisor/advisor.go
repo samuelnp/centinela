@@ -15,7 +15,7 @@ func Directive(feature string, cfg *config.Config) string {
 	if mode == config.PlanAdvisorOff {
 		return ""
 	}
-	b := buildBundle(feature)
+	b := buildBundle(feature, cfg)
 	questions := selectQuestions(b, config.NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit), mode)
 	lines := []string{
 		fmt.Sprintf("CENTINELA PLAN ADVISOR: %q", feature),
