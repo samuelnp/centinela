@@ -21,7 +21,7 @@ jobs:
       matrix: {goos: [linux, darwin, windows], goarch: [amd64, arm64]}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Resolve release tag
@@ -44,7 +44,7 @@ jobs:
           echo "value=$TAG" >> "$GITHUB_OUTPUT"
       - name: Setup Go
         if: steps.tag.outputs.skip != 'true'
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
       - name: Build binary
@@ -62,7 +62,7 @@ jobs:
           go build -ldflags "-X main.Version=${TAG#v}" -o "dist/$NAME" ./cmd/centinela
       - name: Upload build artifact
         if: steps.tag.outputs.skip != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.goos }}-${{ matrix.goarch }}
           path: dist/*
@@ -72,7 +72,7 @@ jobs:
     needs: build-and-release
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true

@@ -23,7 +23,7 @@ Centinela is a harness-governance layer for AI coding agents: a best-practices a
 
 **Reference:** [architecture-overview.md](docs/architecture/architecture-overview.md)
 
-**G2 rule (layer boundaries):** `cmd/` may import `internal/*`. `internal/workflow` and `internal/gates` may import `internal/config` only. `internal/ui` may import `internal/workflow`, `internal/gates`, `internal/roadmap` (read-only, for rendering types). `internal/config` imports nothing internal. `internal/memory` (domain) may import `internal/config` only. `internal/planadvisor` may also import `internal/memory`.
+**G2 rule (layer boundaries):** `cmd/` may import `internal/*`. `internal/workflow` and `internal/gates` may import `internal/config` only. `internal/ui` may import `internal/workflow`, `internal/gates`, `internal/roadmap` (read-only, for rendering types). `internal/config` imports nothing internal. `internal/memory` (domain) may import `internal/config` only. `internal/planadvisor` may also import `internal/memory`. `internal/verify` may import `internal/config`, `internal/evidence`, `internal/orchestration`, and `internal/worktree` (read-only); it must not import `cmd/` or `internal/ui`.
 
 **G7 rule (outer layer):** `cmd/centinela/` is the outer layer. Commands must be thin orchestrators — no business logic, no validation rules, no file classification. All decisions belong in `internal/`.
 

@@ -220,6 +220,8 @@ flowchart TB
 - **Stronger quality gates** including executable acceptance-test enforcement, validation-command coverage for acceptance tests, default 100-line source files, and audited G1 exceptions for rare 130-line cases.
 - **Managed migrations and generated docs** through `centinela migrate`, `centinela migrate docs`, `centinela migrate setup --agent claude|opencode|both`, `centinela docs validate`, and `centinela docs generate`.
 - **Cleaner workflow feedback** with compact `🛡️👁️` CLI output, status tags, and prompt-driven command mapping for roadmap, start, continue, validate, and docs flows.
+- **Claim verification** with `centinela verify <feature>` that independently re-derives ground truth for every evidence claim (tests pass, coverage, non-stub outputs, edge-case mapping) and hard-blocks `centinela complete` at the validate step when any hard claim fails.
+- **Cross-platform build gate** (`G-Build: Cross-Compile`) that cross-compiles every configured release target during `centinela validate` and fails naming the broken `GOOS/GOARCH` pair, so platform build errors are caught locally before the release pipeline. Configured via `[gates.build]` with `enabled`, `command`, and a `targets` list of `{goos, goarch}` pairs; default disabled. A parity test keeps the target list in sync with the release matrix in `.github/workflows/release.yml`.
 
 ---
 
@@ -480,6 +482,7 @@ centinela start <feature>       # Start a feature (required before any file writ
 centinela status <feature>      # Show current step and artifact status
 centinela status-all            # Show all active features
 centinela complete <feature>    # Mark step done and advance
+centinela verify <feature>      # Independently re-derive ground truth for evidence claims
 centinela roadmap               # Show roadmap phase and feature progress
 centinela roadmap validate      # Validate roadmap analysis and quality artifacts
 centinela validate              # Run gate checks manually
@@ -540,12 +543,49 @@ running apply commands.
 
 Gates are quality checks that must pass before a feature can ship. They run during `centinela validate` and automatically when completing the `validate` step.
 
+### Claim verification at the validate step
+
+When `centinela complete <feature>` advances through the `validate` step it runs claim verification as a HARD block. Any failing claim — tests that do not actually pass, a coverage figure that exceeds the measured result beyond tolerance, or an output file that contains only an empty stub — stops completion and names the failing claim. Edge-case mapping failures emit a warning and surface in the output but do not hard-block on their own.
+
+Run verification at any time with:
+
+```bash
+centinela verify <feature>
+```
+
+See the [`[verify]` configuration block](#centinelatoml-reference) to adjust the timeout and coverage tolerance.
+
 ### Built-in gates
 
 | Gate | Rule | Config |
 |------|------|--------|
 | **G1: File Size** | Default max 100 lines, with optional justified exceptions up to 130 lines | `[gates] file_size = true` |
 | **G11: i18n** | All locale files have identical keys (no missing translations) | `[gates] i18n = true` |
+| **G-Build: Cross-Compile** | Cross-compiles every configured release target and fails naming the broken `GOOS/GOARCH` | `[gates] build = true` |
+
+#### Cross-compile build gate
+
+The `G-Build: Cross-Compile` gate runs each target in your `[gates.build] targets` list through the configured build command, sets `GOOS`, `GOARCH`, and `CGO_ENABLED=0` automatically, and collects any failures. If any target fails, the gate reports `Fail` with a detail line per broken platform. Default is **disabled**.
+
+```toml
+[gates]
+build = true
+
+[gates.build]
+command = "go build ./cmd/myapp"   # executed once per target; no shell expansion
+targets = [
+  { goos = "linux",   goarch = "amd64" },
+  { goos = "linux",   goarch = "arm64" },
+  { goos = "darwin",  goarch = "amd64" },
+  { goos = "darwin",  goarch = "arm64" },
+  { goos = "windows", goarch = "amd64" },
+  { goos = "windows", goarch = "arm64" },
+]
+```
+
+The `command` is argv-parsed (`strings.Fields`) and executed directly — never via a shell — so spaces in paths are safe and shell injection is not possible.
+
+A companion parity test (`TestBuildMatrixParity`) keeps `[gates.build] targets` in `centinela.toml` in sync with the release matrix in `.github/workflows/release.yml`. If either list drifts, `go test ./...` fails during `centinela validate` and names the missing targets.
 
 G11 supports two formats natively:
 
@@ -658,6 +698,19 @@ diff_base = "main"   # any git ref; merge-base with this branch defines the chan
 [gates]
 file_size = true   # G1: fail if any source file exceeds 100 lines by default
 i18n      = false  # G11: check translation key completeness
+build     = false  # G-Build: cross-compile every release target (default off)
+
+# Cross-compile build gate (required when gates.build = true)
+[gates.build]
+command = "go build ./cmd/myapp"   # build command; run once per target with GOOS/GOARCH/CGO_ENABLED=0 set
+targets = [
+  { goos = "linux",   goarch = "amd64" },
+  { goos = "linux",   goarch = "arm64" },
+  { goos = "darwin",  goarch = "amd64" },
+  { goos = "darwin",  goarch = "arm64" },
+  { goos = "windows", goarch = "amd64" },
+  { goos = "windows", goarch = "arm64" },
+]
 
 # Optional: explicit justified G1 exceptions for rare cases
 [[gates.file_size_exceptions]]
@@ -671,6 +724,11 @@ max_lines = 130
 format  = "json"              # "json" | "gettext" | "none"
 dir     = "src/i18n/messages"
 locales = ["en"]
+
+# Claim verification — controls centinela verify and the complete-gate check
+[verify]
+verify_timeout     = 60    # seconds before a test command is killed during verification (default: 60)
+coverage_tolerance = 0.001 # maximum allowed gap between a claimed and measured coverage figure (default: 0.001 = 0.1%)
 ```
 
 ---

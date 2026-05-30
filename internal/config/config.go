@@ -14,6 +14,7 @@ type Config struct {
 	Workflow      WorkflowConfig      `toml:"workflow"`
 	Orchestration OrchestrationConfig `toml:"orchestration"`
 	Validate      ValidateConfig      `toml:"validate"`
+	Verify        VerifyConfig        `toml:"verify"`
 	Gates         GatesConfig         `toml:"gates"`
 	I18n          I18nConfig          `toml:"i18n"`
 	Memory        MemoryConfig        `toml:"memory"`
@@ -32,6 +33,7 @@ type GatesConfig struct {
 	FileSizeExceptions         []FileSizeException `toml:"file_size_exceptions"`
 	I18nEnabled                bool                `toml:"i18n"`
 	ProductionReadinessEnabled bool                `toml:"production_readiness"`
+	Build                      BuildGateConfig     `toml:"build"`
 }
 
 // I18nConfig describes how to check translations for G11.
@@ -87,4 +89,11 @@ func applyDefaults(cfg *Config) {
 	cfg.Validate.DiffMode = NormalizeDiffMode(cfg.Validate.DiffMode)
 	cfg.Validate.DiffBase = NormalizeDiffBase(cfg.Validate.DiffBase)
 	applyMemoryDefaults(cfg)
+	if cfg.Verify.TimeoutSeconds <= 0 {
+		cfg.Verify.TimeoutSeconds = 60
+	}
+	if cfg.Verify.CoverageTolerance <= 0 {
+		cfg.Verify.CoverageTolerance = 0.001
+	}
+	cfg.Gates.Build = NormalizeBuildGate(cfg.Gates.Build)
 }

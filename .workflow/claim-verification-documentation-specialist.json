@@ -1,0 +1,36 @@
+{
+  "_meta": {
+    "cli_version": "0.5.0",
+    "written_at": "2026-05-29T08:39:58Z"
+  },
+  "feature": "claim-verification",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-29T08:45:00Z",
+  "inputs": [
+    "docs/architecture/documentation-generator-prompt.md",
+    "docs/architecture/evidence-contract.md",
+    "docs/features/claim-verification.md",
+    "docs/plans/claim-verification.md",
+    "specs/claim-verification.feature",
+    ".workflow/claim-verification-senior-engineer.md",
+    ".workflow/claim-verification-qa-senior.md",
+    ".workflow/claim-verification-gatekeeper.md",
+    ".workflow/claim-verification-validation-specialist.md",
+    "PROJECT.md",
+    "README.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/claim-verification.md",
+    "docs/project-docs/index.html",
+    "PROJECT.md",
+    "README.md"
+  ],
+  "edgeCases": [
+    "coverage tolerance boundary: claimed figure within 0.1% of measured passes; one tick above fails — documented in KB Examples and [verify] toml reference",
+    "CONFIG ERROR vs FAIL distinction: missing validate.commands produces a configuration error message, not a claim failure — documented in KB How it behaves",
+    "edge-case mapping is warn-only: unmapped edge cases do not hard-block centinela complete — clearly distinguished from hard-fail checks in KB and README gate section"
+  ],
+  "handoffTo": "complete"
+}

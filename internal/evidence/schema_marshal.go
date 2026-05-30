@@ -41,6 +41,9 @@ func (r *RoleEvidence) knownFieldsMap() map[string]json.RawMessage {
 	if r.MobileFirst != nil {
 		put("mobileFirst", r.MobileFirst)
 	}
+	if r.Coverage != nil {
+		put("coverage", r.Coverage)
+	}
 	put("feature", r.Feature)
 	put("step", r.Step)
 	put("role", r.Role)
