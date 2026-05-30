@@ -1,15 +1,15 @@
 {
   "feature": "governed-project-memory",
   "startedAt": "2026-05-29T09:24:03.8083Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-05-29T13:30:14Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-05-30T08:30:03Z"
     },
     "plan": {
       "status": "done",
