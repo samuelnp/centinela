@@ -15,6 +15,138 @@
           "name": "governed-project-memory"
         }
       ]
+    },
+    {
+      "name": "Phase 2: Close the Mechanical-Verification Gap",
+      "features": [
+        {
+          "name": "g2-import-graph-gate"
+        },
+        {
+          "name": "security-gate"
+        },
+        {
+          "name": "spec-traceability-gate"
+        },
+        {
+          "name": "custom-gate-sdk",
+          "dependsOn": ["g2-import-graph-gate"]
+        }
+      ]
+    },
+    {
+      "name": "Phase 3: Operability & DX",
+      "features": [
+        {
+          "name": "roadmap-doc-sync"
+        },
+        {
+          "name": "centinela-doctor"
+        }
+      ]
+    },
+    {
+      "name": "Phase 4: Instrument the Loop",
+      "features": [
+        {
+          "name": "governance-telemetry"
+        },
+        {
+          "name": "centinela-insights",
+          "dependsOn": ["governance-telemetry"]
+        },
+        {
+          "name": "failure-ledger-plan-advisor",
+          "dependsOn": ["governance-telemetry", "governed-project-memory"]
+        }
+      ]
+    },
+    {
+      "name": "Phase 5: Continuous Governance",
+      "features": [
+        {
+          "name": "audit-baseline-ratchet",
+          "dependsOn": ["g2-import-graph-gate"]
+        },
+        {
+          "name": "precommit-and-pr-gate",
+          "dependsOn": ["audit-baseline-ratchet"]
+        }
+      ]
+    },
+    {
+      "name": "Phase 6: Brownfield Onboarding",
+      "features": [
+        {
+          "name": "deep-codebase-analysis"
+        },
+        {
+          "name": "archetype-inference-project-synthesis",
+          "dependsOn": ["deep-codebase-analysis"]
+        },
+        {
+          "name": "spec-reconstruction",
+          "dependsOn": ["deep-codebase-analysis"]
+        },
+        {
+          "name": "brownfield-roadmap-generation",
+          "dependsOn": ["archetype-inference-project-synthesis", "spec-reconstruction"]
+        },
+        {
+          "name": "adoption-baseline",
+          "dependsOn": ["deep-codebase-analysis", "audit-baseline-ratchet"]
+        }
+      ]
+    },
+    {
+      "name": "Phase 7: Workflow Flexibility & Delivery",
+      "features": [
+        {
+          "name": "completion-delivery-prompt"
+        },
+        {
+          "name": "delivery-artifact-generation",
+          "dependsOn": ["completion-delivery-prompt"]
+        },
+        {
+          "name": "workflow-archetypes"
+        },
+        {
+          "name": "right-size-docs-step"
+        },
+        {
+          "name": "team-dashboard",
+          "dependsOn": ["governance-telemetry"]
+        },
+        {
+          "name": "cost-governance"
+        }
+      ]
+    },
+    {
+      "name": "Phase 8: Ecosystem",
+      "features": [
+        {
+          "name": "host-harness-adapters"
+        },
+        {
+          "name": "codex-support",
+          "dependsOn": ["host-harness-adapters"]
+        },
+        {
+          "name": "cross-project-memory",
+          "dependsOn": ["governed-project-memory"]
+        }
+      ]
+    },
+    {
+      "name": "Phase 9: Self-Improvement",
+      "features": [
+        {
+          "name": "adaptive-skill-synthesis",
+          "dependsOn": ["governance-telemetry", "centinela-insights"]
+        }
+      ]
     }
   ]
 }
