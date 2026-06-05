@@ -40,7 +40,7 @@ Feature: G2 Import-Graph Gate
     When `centinela validate` runs
     Then the gate result named `import_graph` is `Fail`
     And the output contains the violating edge formatted as:
-      "<importer_pkg> → <imported_pkg> (<importer_layer> may not import <imported_layer>)"
+      "<importer_pkg> -> <imported_pkg> (<importer_layer> may not import <imported_layer>)"
     And the exit code is 1
 
     Examples:

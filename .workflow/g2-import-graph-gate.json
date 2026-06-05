@@ -1,14 +1,14 @@
 {
   "feature": "g2-import-graph-gate",
   "startedAt": "2026-06-03T17:22:24.768351Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-05T14:23:16Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-05T15:19:47Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-05T15:34:55Z"
     }
   },
   "stepOrder": [

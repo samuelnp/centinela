@@ -1,5 +1,18 @@
 [
   {
+    "id": "5c1ccba03ee6b28f",
+    "feature": "g2-import-graph-gate",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: g2-import-graph-gate",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/g2-import-graph-gate-gatekeeper.md",
+    "createdAt": "2026-06-05T15:34:55Z"
+  },
+  {
     "id": "f028bbaaa8a64f5a",
     "feature": "g2-import-graph-gate",
     "step": "tests",
