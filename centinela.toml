@@ -5,6 +5,7 @@ use_worktrees = true
 [validate]
 commands = [
   "go test ./...",
+  "go test ./tests/acceptance/...",
   "./scripts/check-coverage.sh"
 ]
 
