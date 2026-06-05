@@ -17,7 +17,15 @@
       ]
     },
     {
-      "name": "Phase 2: Close the Mechanical-Verification Gap",
+      "name": "Phase 2: Configurable Model Routing",
+      "features": [
+        {
+          "name": "configurable-model-routing"
+        }
+      ]
+    },
+    {
+      "name": "Phase 3: Close the Mechanical-Verification Gap",
       "features": [
         {
           "name": "g2-import-graph-gate"
@@ -35,7 +43,7 @@
       ]
     },
     {
-      "name": "Phase 3: Operability & DX",
+      "name": "Phase 4: Operability & DX",
       "features": [
         {
           "name": "roadmap-doc-sync"
@@ -46,7 +54,7 @@
       ]
     },
     {
-      "name": "Phase 4: Instrument the Loop",
+      "name": "Phase 5: Instrument the Loop",
       "features": [
         {
           "name": "governance-telemetry"
@@ -62,7 +70,7 @@
       ]
     },
     {
-      "name": "Phase 5: Continuous Governance",
+      "name": "Phase 6: Continuous Governance",
       "features": [
         {
           "name": "audit-baseline-ratchet",
@@ -75,7 +83,7 @@
       ]
     },
     {
-      "name": "Phase 6: Brownfield Onboarding",
+      "name": "Phase 7: Brownfield Onboarding",
       "features": [
         {
           "name": "deep-codebase-analysis"
@@ -99,7 +107,7 @@
       ]
     },
     {
-      "name": "Phase 7: Workflow Flexibility & Delivery",
+      "name": "Phase 8: Workflow Flexibility & Delivery",
       "features": [
         {
           "name": "completion-delivery-prompt"
@@ -124,7 +132,7 @@
       ]
     },
     {
-      "name": "Phase 8: Ecosystem",
+      "name": "Phase 9: Ecosystem",
       "features": [
         {
           "name": "host-harness-adapters"
@@ -140,7 +148,7 @@
       ]
     },
     {
-      "name": "Phase 9: Self-Improvement",
+      "name": "Phase 10: Self-Improvement",
       "features": [
         {
           "name": "adaptive-skill-synthesis",
