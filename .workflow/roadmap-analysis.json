@@ -8,6 +8,146 @@
     {
       "name": "governed-project-memory",
       "dependsOn": []
+    },
+    {
+      "name": "configurable-model-routing",
+      "dependsOn": []
+    },
+    {
+      "name": "g2-import-graph-gate",
+      "dependsOn": []
+    },
+    {
+      "name": "security-gate",
+      "dependsOn": []
+    },
+    {
+      "name": "spec-traceability-gate",
+      "dependsOn": []
+    },
+    {
+      "name": "custom-gate-sdk",
+      "dependsOn": [
+        "g2-import-graph-gate"
+      ]
+    },
+    {
+      "name": "roadmap-doc-sync",
+      "dependsOn": []
+    },
+    {
+      "name": "centinela-doctor",
+      "dependsOn": []
+    },
+    {
+      "name": "governance-telemetry",
+      "dependsOn": []
+    },
+    {
+      "name": "centinela-insights",
+      "dependsOn": [
+        "governance-telemetry"
+      ]
+    },
+    {
+      "name": "failure-ledger-plan-advisor",
+      "dependsOn": [
+        "governance-telemetry",
+        "governed-project-memory"
+      ]
+    },
+    {
+      "name": "audit-baseline-ratchet",
+      "dependsOn": [
+        "g2-import-graph-gate"
+      ]
+    },
+    {
+      "name": "precommit-and-pr-gate",
+      "dependsOn": [
+        "audit-baseline-ratchet"
+      ]
+    },
+    {
+      "name": "deep-codebase-analysis",
+      "dependsOn": []
+    },
+    {
+      "name": "archetype-inference-project-synthesis",
+      "dependsOn": [
+        "deep-codebase-analysis"
+      ]
+    },
+    {
+      "name": "spec-reconstruction",
+      "dependsOn": [
+        "deep-codebase-analysis"
+      ]
+    },
+    {
+      "name": "brownfield-roadmap-generation",
+      "dependsOn": [
+        "archetype-inference-project-synthesis",
+        "spec-reconstruction"
+      ]
+    },
+    {
+      "name": "adoption-baseline",
+      "dependsOn": [
+        "deep-codebase-analysis",
+        "audit-baseline-ratchet"
+      ]
+    },
+    {
+      "name": "completion-delivery-prompt",
+      "dependsOn": []
+    },
+    {
+      "name": "delivery-artifact-generation",
+      "dependsOn": [
+        "completion-delivery-prompt"
+      ]
+    },
+    {
+      "name": "workflow-archetypes",
+      "dependsOn": []
+    },
+    {
+      "name": "right-size-docs-step",
+      "dependsOn": []
+    },
+    {
+      "name": "team-dashboard",
+      "dependsOn": [
+        "governance-telemetry"
+      ]
+    },
+    {
+      "name": "cost-governance",
+      "dependsOn": []
+    },
+    {
+      "name": "host-harness-adapters",
+      "dependsOn": []
+    },
+    {
+      "name": "codex-support",
+      "dependsOn": [
+        "host-harness-adapters"
+      ]
+    },
+    {
+      "name": "cross-project-memory",
+      "dependsOn": [
+        "governed-project-memory"
+      ]
+    },
+    {
+      "name": "adaptive-skill-synthesis",
+      "dependsOn": [
+        "governance-telemetry",
+        "centinela-insights"
+      ]
     }
   ]
 }
