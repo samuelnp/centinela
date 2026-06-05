@@ -27,6 +27,18 @@
       "summary": "High user value, no external dependencies, bounded by the no-semantic-store constraint; reuses existing artifact harvest and context-injection machinery."
     },
     {
+      "name": "configurable-model-routing",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Opens the previously-welded tier→model table and adds a per-role concrete-model override, both runner-keyed (claude|opencode|codex), so cross-provider operators can route reasoning/coding to the models they actually want while every unconfigured role keeps the built-in Anthropic default. Clear precedence rules and strong back-compat with the shipped tier knob; the runner-identity-at-emit-time fork (one ID vs all) and the union-typed models unmarshal are the larger decisions deferred to plan."
+    },
+    {
       "name": "g2-import-graph-gate",
       "scores": {
         "acceptanceCriteria": 9,
@@ -252,7 +264,7 @@
         "effortEstimation": 8,
         "overall": 9
       },
-      "summary": "First-class hotfix/refactor/spike tracks so diagnosis and bugfix work isn't forced through a feature-shaped plan\u2192docs pipeline; clear, frequently-felt need."
+      "summary": "First-class hotfix/refactor/spike tracks so diagnosis and bugfix work isn't forced through a feature-shaped plan→docs pipeline; clear, frequently-felt need."
     },
     {
       "name": "right-size-docs-step",
@@ -276,7 +288,7 @@
         "effortEstimation": 8,
         "overall": 9
       },
-      "summary": "Aggregate view across worktrees and contributors \u2014 feature/step ownership, gate health, roadmap burn-down; clear value built on telemetry. Visual/output surface scoped at the plan step."
+      "summary": "Aggregate view across worktrees and contributors — feature/step ownership, gate health, roadmap burn-down; clear value built on telemetry. Visual/output surface scoped at the plan step."
     },
     {
       "name": "cost-governance",

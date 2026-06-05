@@ -10,6 +10,10 @@
       "dependsOn": []
     },
     {
+      "name": "configurable-model-routing",
+      "dependsOn": []
+    },
+    {
       "name": "g2-import-graph-gate",
       "dependsOn": []
     },

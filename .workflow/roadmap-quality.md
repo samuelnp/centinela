@@ -6,6 +6,8 @@
 - Summary: Bootstrap docs migration is narrowly scoped, clearly defined, and ready for execution.
 - Feature: governed-project-memory
 - Summary: High user value, no external dependencies, bounded by the no-semantic-store constraint; reuses existing artifact harvest and context-injection machinery.
+- Feature: configurable-model-routing
+- Summary: Generalizes model selection into a runner-keyed tier-remap plus per-role concrete override, with full back-compat and zero-config defaults; runner-identity resolution deferred to plan.
 - Feature: g2-import-graph-gate
 - Summary: Turns the prose G2 layer rule into a checkable per-archetype allow/deny matrix by parsing the import graph; core governance value, well-bounded per-language parsers (go/packages, ts-morph, Python AST). Per-language parser breadth defers to the plan step.
 - Feature: security-gate

@@ -5,6 +5,8 @@
 - Dependencies: none
 - Feature: governed-project-memory
 - Dependencies: none — builds on existing artifact production and the UserPromptSubmit context-injection hook
+- Feature: configurable-model-routing
+- Dependencies: none — builds on the already-shipped configurable-subagent-models (not in the roadmap graph) and prepares the codex runner key for the future codex-support, but depends on neither.
 - Feature: g2-import-graph-gate
 - Dependencies: none — extends the existing mechanical-gate interface used by validate
 - Feature: security-gate
