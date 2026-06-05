@@ -34,6 +34,7 @@ type GatesConfig struct {
 	I18nEnabled                bool                `toml:"i18n"`
 	ProductionReadinessEnabled bool                `toml:"production_readiness"`
 	Build                      BuildGateConfig     `toml:"build"`
+	ImportGraph                ImportGraphConfig   `toml:"import_graph"`
 }
 
 // I18nConfig describes how to check translations for G11.
@@ -77,23 +78,4 @@ func defaultConfig() *Config {
 	}
 	applyMemoryDefaults(cfg)
 	return cfg
-}
-
-func applyDefaults(cfg *Config) {
-	if cfg.Gates.FileSizeEnabled == false && cfg.Gates.I18nEnabled == false {
-		cfg.Gates.FileSizeEnabled = true
-	}
-	cfg.Workflow.StepConfirmationMode = NormalizeStepConfirmationMode(cfg.Workflow.StepConfirmationMode)
-	cfg.Workflow.PlanAdvisorMode = NormalizePlanAdvisorMode(cfg.Workflow.PlanAdvisorMode)
-	cfg.Workflow.PlanQuestionLimit = NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit)
-	cfg.Validate.DiffMode = NormalizeDiffMode(cfg.Validate.DiffMode)
-	cfg.Validate.DiffBase = NormalizeDiffBase(cfg.Validate.DiffBase)
-	applyMemoryDefaults(cfg)
-	if cfg.Verify.TimeoutSeconds <= 0 {
-		cfg.Verify.TimeoutSeconds = 60
-	}
-	if cfg.Verify.CoverageTolerance <= 0 {
-		cfg.Verify.CoverageTolerance = 0.001
-	}
-	cfg.Gates.Build = NormalizeBuildGate(cfg.Gates.Build)
 }
