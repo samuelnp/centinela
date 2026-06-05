@@ -5,3 +5,55 @@
 - Dependencies: none
 - Feature: governed-project-memory
 - Dependencies: none — builds on existing artifact production and the UserPromptSubmit context-injection hook
+- Feature: g2-import-graph-gate
+- Dependencies: none — extends the existing mechanical-gate interface used by validate
+- Feature: security-gate
+- Dependencies: none — wraps existing scanners into the validate gate set
+- Feature: spec-traceability-gate
+- Dependencies: none — reads existing specs/ and tests/acceptance/ artifacts
+- Feature: custom-gate-sdk
+- Dependencies: g2-import-graph-gate — generalizes the gate interface the three Phase 2 gates establish
+- Feature: roadmap-doc-sync
+- Dependencies: none — operates on .workflow/roadmap.json and ROADMAP.md
+- Feature: centinela-doctor
+- Dependencies: none — extends the existing evidence-repair machinery
+- Feature: governance-telemetry
+- Dependencies: none — local, git-tracked append-only log consistent with the governed-memory design
+- Feature: centinela-insights
+- Dependencies: governance-telemetry — reads the event log
+- Feature: failure-ledger-plan-advisor
+- Dependencies: governance-telemetry, governed-project-memory
+- Feature: audit-baseline-ratchet
+- Dependencies: g2-import-graph-gate — needs the import-graph gate to scan against
+- Feature: precommit-and-pr-gate
+- Dependencies: audit-baseline-ratchet — runs the ratcheted gate set early
+- Feature: deep-codebase-analysis
+- Dependencies: none — read-only scan of the target repo
+- Feature: archetype-inference-project-synthesis
+- Dependencies: deep-codebase-analysis — consumes the inventory
+- Feature: spec-reconstruction
+- Dependencies: deep-codebase-analysis — reads modules and flows
+- Feature: brownfield-roadmap-generation
+- Dependencies: archetype-inference-project-synthesis, spec-reconstruction
+- Feature: adoption-baseline
+- Dependencies: deep-codebase-analysis, audit-baseline-ratchet
+- Feature: completion-delivery-prompt
+- Dependencies: none — uses gh and the existing merge-steward
+- Feature: delivery-artifact-generation
+- Dependencies: completion-delivery-prompt — composes the delivery outputs
+- Feature: workflow-archetypes
+- Dependencies: none — lightweight tracks beside the existing 5-step
+- Feature: right-size-docs-step
+- Dependencies: none — makes the existing docs step surface-aware
+- Feature: team-dashboard
+- Dependencies: governance-telemetry — aggregates the event log across worktrees and contributors
+- Feature: cost-governance
+- Dependencies: none — surfaces token/model-tier figures from the host harness
+- Feature: host-harness-adapters
+- Dependencies: none — abstracts the existing Claude/OpenCode integration points
+- Feature: codex-support
+- Dependencies: host-harness-adapters — implements an adapter for the new harness
+- Feature: cross-project-memory
+- Dependencies: governed-project-memory — extends the per-project memory model
+- Feature: adaptive-skill-synthesis
+- Dependencies: governance-telemetry, centinela-insights
