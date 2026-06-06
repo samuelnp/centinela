@@ -1,5 +1,18 @@
 [
   {
+    "id": "0cd0b9d5a3adf24f",
+    "feature": "security-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Malformed JSON (secrets) → Warn, never false Pass.** A scanner that ran but",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/security-gate-edge-cases.md",
+    "createdAt": "2026-06-06T18:53:48Z"
+  },
+  {
     "id": "480e173b8b7cd979",
     "feature": "configurable-model-routing",
     "step": "tests",
