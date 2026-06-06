@@ -1,7 +1,7 @@
 {
   "feature": "configurable-model-routing",
   "startedAt": "2026-06-05T20:32:25.699563Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -16,11 +16,11 @@
       "completedAt": "2026-06-06T11:46:44Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-06T13:36:58Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },
