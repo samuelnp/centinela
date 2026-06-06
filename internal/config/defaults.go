@@ -21,4 +21,5 @@ func applyDefaults(cfg *Config) {
 	}
 	cfg.Gates.Build = NormalizeBuildGate(cfg.Gates.Build)
 	cfg.Gates.ImportGraph = NormalizeImportGraph(cfg.Gates.ImportGraph)
+	cfg.Gates.Security = NormalizeSecurityGate(cfg.Gates.Security)
 }

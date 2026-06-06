@@ -35,6 +35,7 @@ type GatesConfig struct {
 	ProductionReadinessEnabled bool                `toml:"production_readiness"`
 	Build                      BuildGateConfig     `toml:"build"`
 	ImportGraph                ImportGraphConfig   `toml:"import_graph"`
+	Security                   SecurityGateConfig  `toml:"security"`
 }
 
 // I18nConfig describes how to check translations for G11.

@@ -38,5 +38,8 @@ func validateConfig(cfg *Config) error {
 	if err := validateOrchestrationModelMap(cfg); err != nil {
 		return err
 	}
+	if err := validateSecurityGate(cfg.Gates.Security); err != nil {
+		return err
+	}
 	return nil
 }
