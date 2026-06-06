@@ -51,6 +51,10 @@ func RunWithFilter(cfg *config.Config, filter *gitdiff.Set) []Result {
 		results = append(results, checkImportGraph(cfg, filter))
 	}
 
+	if cfg.Gates.Security.Enabled {
+		results = append(results, checkSecurity(cfg, filter)...)
+	}
+
 	return results
 }
 

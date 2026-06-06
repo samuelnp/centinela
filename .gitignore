@@ -17,3 +17,6 @@ vendor/
 .playwright-mcp/
 landing-*.png
 landing-*.jpeg
+
+# Local private notes — not committed
+ECOSYSTEM.md
