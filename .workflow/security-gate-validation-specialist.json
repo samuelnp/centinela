@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-06T19:00:31Z"
+  },
+  "feature": "security-gate",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-06T19:00:31Z",
+  "inputs": [
+    "docs/features/security-gate.md",
+    "specs/security-gate.feature",
+    ".workflow/security-gate-gatekeeper.md",
+    ".workflow/security-gate-qa-senior.md"
+  ],
+  "outputs": [
+    ".workflow/security-gate-validation-specialist.md"
+  ],
+  "edgeCases": [
+    "Coverage gate clears at a thin 95.1% margin against the 95% threshold; small future edits to internal/gates could drop it below. The live security-scanner timeout path (real binary exceeding the configured limit) is not exercised by a unit test, only reasoned through."
+  ],
+  "handoffTo": "documentation-specialist"
+}

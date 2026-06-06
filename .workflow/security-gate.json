@@ -1,14 +1,14 @@
 {
   "feature": "security-gate",
   "startedAt": "2026-06-06T17:55:32.620332Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-06T18:12:44Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-06T18:53:48Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-06T19:05:30Z"
     }
   },
   "stepOrder": [
