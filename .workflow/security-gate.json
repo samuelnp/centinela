@@ -1,15 +1,15 @@
 {
   "feature": "security-gate",
   "startedAt": "2026-06-06T17:55:32.620332Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-06T18:12:44Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-06T19:10:52Z"
     },
     "plan": {
       "status": "done",
