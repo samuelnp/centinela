@@ -1,0 +1,58 @@
+{
+  "_meta": {
+    "cli_version": "dev",
+    "written_at": "2026-06-06T13:24:22Z"
+  },
+  "feature": "configurable-model-routing",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-06T13:24:22Z",
+  "inputs": [
+    "docs/plans/configurable-model-routing.md",
+    "docs/features/configurable-model-routing.md",
+    "specs/configurable-model-routing.feature",
+    "internal/orchestration/model_routing.go",
+    "internal/orchestration/resolve.go",
+    "internal/orchestration/models.go",
+    "internal/config/orchestration.go",
+    "internal/config/orchestration_models.go",
+    "internal/config/orchestration_model_map.go",
+    "cmd/centinela/hook_orchestration.go",
+    "cmd/centinela/orchestration_annotate.go",
+    ".workflow/configurable-model-routing-senior-engineer.md"
+  ],
+  "outputs": [
+    ".workflow/configurable-model-routing-edge-cases.md",
+    "tests/unit/configurable_model_routing_resolve_unit_test.go",
+    "tests/unit/configurable_model_routing_parity_unit_test.go",
+    "tests/unit/configurable_subagent_models_resolve_unit_test.go",
+    "tests/integration/configurable_model_routing_integration_test.go",
+    "tests/acceptance/configurable_model_routing_test.go",
+    "tests/acceptance/configurable_model_routing_config_test.go",
+    "tests/acceptance/configurable_subagent_models_test.go",
+    "tests/acceptance/configurable_subagent_models_config_test.go",
+    "internal/orchestration/model_routing_test.go",
+    "internal/config/orchestration_model_map_test.go",
+    "internal/config/orchestration_models_union_test.go",
+    "internal/config/orchestration_routing_test.go",
+    "cmd/centinela/hook_orchestration_routing_test.go"
+  ],
+  "edgeCases": [
+    "Empty model_map/models tables behave identically to absent tables (all built-in defaults)",
+    "Casing/whitespace normalization on tier and runner keys (' Reasoning ', ' Opencode ')",
+    "Mixed forms in [orchestration.models]: one role a tier string, another a runner->model table",
+    "Role-level override beats a model_map entry for the same runner+tier (precedence rule 1 over 2)",
+    "Codex runner before codex-support: empty column -> rule-4 tier-name fallback, never a claude/opencode ID leak",
+    "Empty override string in a role table is ignored, falls through to the tier path (not '')",
+    "Invalid tier override string falls back to the role's default tier at resolve time",
+    "Nil models / nil model_map -> no panic, built-in defaults",
+    "Non-string model value or non-string/non-table role value in union unmarshal -> typed error",
+    "Malformed config (unknown runner/role/tier, empty model) fails loudly naming the offending key",
+    "Config-load failure is zero-config-safe in the hook (falls back to defaults, no abort)",
+    "Out-of-band roles (gatekeeper, merge-steward) are not emitted by the directive",
+    "Allow-list parity: config-leaf allowedRunnerKeys cannot drift from domain AllowedRunnerKeys()"
+  ],
+  "coverage": 93.2,
+  "handoffTo": "validation-specialist"
+}

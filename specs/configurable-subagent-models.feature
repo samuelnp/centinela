@@ -4,25 +4,28 @@ Feature: Configurable subagent model tiers
   So that I can right-size cost and latency without editing prompts
 
   # AC1 — configured tier is annotated on the emitted directive
+  # NOTE: configurable-model-routing changed the annotation to list every
+  # runner's resolved concrete model inline; the configured reasoning tier now
+  # resolves to claude-opus-4-7 on the claude runner.
   Scenario: Configured tier is reflected in the orchestration directive
     Given a centinela.toml with '[orchestration.models]' containing 'big-thinker = "reasoning"'
     When the orchestration hook emits the plan-step directive
-    Then the directive contains 'big-thinker (model: reasoning)'
+    Then the directive contains 'big-thinker (model: claude-opus-4-7 (claude)'
 
   # AC2 — unconfigured role uses its built-in default tier
   Scenario: Unconfigured role falls back to its default tier
     Given a centinela.toml with '[orchestration.models]' that does not mention 'documentation-specialist'
     When the orchestration hook emits the plan-step directive
-    Then the directive contains 'documentation-specialist (model: fast)'
+    Then the directive contains 'documentation-specialist (model: claude-haiku-4-5-20251001 (claude)'
 
   # AC3 — absent [orchestration.models] table: zero-config-safe
   Scenario: Absent orchestration.models table — all defaults apply
     Given a centinela.toml with no '[orchestration.models]' section
     When the orchestration hook emits the plan-step directive
     Then every step role is annotated with its default tier
-    And 'big-thinker (model: reasoning)' appears in the directive
-    And 'feature-specialist (model: balanced)' appears in the directive
-    And 'documentation-specialist (model: fast)' appears in the directive
+    And 'big-thinker (model: claude-opus-4-7 (claude)' appears in the directive
+    And 'feature-specialist (model: claude-sonnet-4-6 (claude)' appears in the directive
+    And 'documentation-specialist (model: claude-haiku-4-5-20251001 (claude)' appears in the directive
 
   # AC4 — invalid tier value fails config load with a precise error
   Scenario: Invalid tier value is rejected at config load time
@@ -39,13 +42,17 @@ Feature: Configurable subagent model tiers
     Then config loading fails
     And the error message names the offending key 'backend-wizard'
 
-  # AC6 — runner-agnostic emission: tier name + both-runner reference line
-  Scenario: Directive is runner-agnostic — emits tier name and both-runner reference
+  # AC6 — runner-agnostic emission: each annotation lists every runner's model
+  # NOTE: configurable-model-routing made the per-runner emission inline — each
+  # role annotation now labels every runner's resolved model explicitly, while
+  # the tier→model reference line is retained.
+  Scenario: Directive is runner-agnostic — each annotation lists every runner's model
     Given a centinela.toml with '[orchestration.models]' containing 'big-thinker = "reasoning"'
     When the orchestration hook emits the plan-step directive
-    Then the directive contains 'big-thinker (model: reasoning)'
+    Then the directive contains 'big-thinker (model: claude-opus-4-7 (claude)'
+    And the directive contains 'model: anthropic/claude-opus-4-7 (opencode)'
     And the directive contains a model reference line mapping 'reasoning' to both 'claude-opus-4-7' and 'anthropic/claude-opus-4-7'
-    And the directive does not contain a bare Claude-only model ID for any role annotation
+    And every role annotation labels each runner explicitly, never a bare unlabeled model ID
 
   # Edge case — empty [orchestration.models] table behaves like absent
   Scenario: Empty orchestration.models table — all defaults apply

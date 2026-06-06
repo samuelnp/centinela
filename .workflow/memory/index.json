@@ -1,5 +1,18 @@
 [
   {
+    "id": "480e173b8b7cd979",
+    "feature": "configurable-model-routing",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- `tests/unit/configurable_subagent_models_resolve_unit_test.go` — migrated all",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/configurable-model-routing-edge-cases.md",
+    "createdAt": "2026-06-06T13:36:58Z"
+  },
+  {
     "id": "5c1ccba03ee6b28f",
     "feature": "g2-import-graph-gate",
     "step": "validate",
@@ -11,6 +24,19 @@
     ],
     "sourceArtifact": ".workflow/g2-import-graph-gate-gatekeeper.md",
     "createdAt": "2026-06-05T15:34:55Z"
+  },
+  {
+    "id": "a861ca032b250c87",
+    "feature": "configurable-model-routing",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: configurable-model-routing",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/configurable-model-routing-gatekeeper.md",
+    "createdAt": "2026-06-06T17:27:14Z"
   },
   {
     "id": "f028bbaaa8a64f5a",

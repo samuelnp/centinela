@@ -35,5 +35,8 @@ func validateConfig(cfg *Config) error {
 	if err := validateOrchestrationModels(cfg); err != nil {
 		return err
 	}
+	if err := validateOrchestrationModelMap(cfg); err != nil {
+		return err
+	}
 	return nil
 }
