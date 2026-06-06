@@ -47,6 +47,10 @@ func RunWithFilter(cfg *config.Config, filter *gitdiff.Set) []Result {
 		results = append(results, checkBuild(cfg))
 	}
 
+	if cfg.Gates.ImportGraph.Enabled {
+		results = append(results, checkImportGraph(cfg, filter))
+	}
+
 	return results
 }
 

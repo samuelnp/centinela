@@ -23,7 +23,9 @@ Centinela is a harness-governance layer for AI coding agents: a best-practices a
 
 **Reference:** [architecture-overview.md](docs/architecture/architecture-overview.md)
 
-**G2 rule (layer boundaries):** `cmd/` may import `internal/*`. `internal/workflow` and `internal/gates` may import `internal/config` only. `internal/ui` may import `internal/workflow`, `internal/gates`, `internal/roadmap` (read-only, for rendering types). `internal/config` imports nothing internal. `internal/memory` (domain) may import `internal/config` only. `internal/planadvisor` may also import `internal/memory`. `internal/verify` may import `internal/config`, `internal/evidence`, `internal/orchestration`, and `internal/worktree` (read-only); it must not import `cmd/` or `internal/ui`.
+**G2 rule (layer boundaries):** `cmd/` may import `internal/*`. `internal/workflow` and `internal/gates` (domain) may import the leaf utility packages `internal/config`, `internal/gitdiff`, and `internal/orchestration`. `internal/ui` may import `internal/workflow`, `internal/gates`, `internal/roadmap` (read-only, for rendering types). `internal/config` imports nothing internal. `internal/memory` (domain) may import `internal/config` only. `internal/planadvisor` may also import `internal/memory`. `internal/verify` may import `internal/config`, `internal/evidence`, `internal/orchestration`, and `internal/worktree` (read-only); it must not import `cmd/` or `internal/ui`.
+
+This rule is mechanically enforced for the mapped layers by the **`import_graph`** gate (`[gates.import_graph]` in `centinela.toml`): it parses the Go import graph via `go list -json` and fails `centinela validate` on any import that crosses a forbidden layer boundary. Packages not yet assigned to a layer surface a non-failing warning rather than passing silently.
 
 **G7 rule (outer layer):** `cmd/centinela/` is the outer layer. Commands must be thin orchestrators — no business logic, no validation rules, no file classification. All decisions belong in `internal/`.
 

@@ -13,6 +13,19 @@
     "createdAt": "2026-06-06T13:36:58Z"
   },
   {
+    "id": "5c1ccba03ee6b28f",
+    "feature": "g2-import-graph-gate",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: g2-import-graph-gate",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/g2-import-graph-gate-gatekeeper.md",
+    "createdAt": "2026-06-05T15:34:55Z"
+  },
+  {
     "id": "a861ca032b250c87",
     "feature": "configurable-model-routing",
     "step": "validate",
@@ -24,5 +37,18 @@
     ],
     "sourceArtifact": ".workflow/configurable-model-routing-gatekeeper.md",
     "createdAt": "2026-06-06T17:27:14Z"
+  },
+  {
+    "id": "f028bbaaa8a64f5a",
+    "feature": "g2-import-graph-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Two exec-error branches remain uncovered (~unreachable).** The JSON-decode",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/g2-import-graph-gate-edge-cases.md",
+    "createdAt": "2026-06-05T15:19:47Z"
   }
 ]
