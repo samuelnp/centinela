@@ -9,18 +9,22 @@ import (
 	"github.com/samuelnp/centinela/internal/orchestration"
 )
 
-// annotateRolesHelper calls DefaultTierForRole + NormalizeTier exactly as the
-// cmd/centinela/orchestration_annotate.go helper does, in-process.
-func annotateRolesHelper(roles []orchestration.Role, models map[string]string) (names []string, tiers []orchestration.Tier) {
+// routingFromConfig (shared with configurable_model_routing_integration_test.go)
+// reconstructs the config-leaf → domain mapping that
+// cmd/centinela/hook_orchestration.go's orchestrationRouting performs.
+
+// annotateRolesHelper mirrors cmd/centinela/orchestration_annotate.go: it
+// resolves every runner's concrete model via the real domain resolver and
+// emits the per-runner annotation, so this test exercises production logic.
+func annotateRolesHelper(roles []orchestration.Role, models orchestration.RoleModels, modelMap orchestration.ModelMap) (names []string, tiers []orchestration.Tier) {
 	for _, role := range roles {
-		tier := orchestration.DefaultTierForRole(role)
-		if raw, ok := models[string(role)]; ok {
-			if norm, valid := orchestration.NormalizeTier(raw); valid {
-				tier = norm
-			}
+		parts := make([]string, 0, len(orchestration.AllowedRunnerKeys()))
+		for _, key := range orchestration.AllowedRunnerKeys() {
+			id, _ := orchestration.ResolveModel(role, models, modelMap, orchestration.Runner(key))
+			parts = append(parts, "model: "+id+" ("+key+")")
 		}
-		names = append(names, string(role)+" (model: "+string(tier)+")")
-		tiers = append(tiers, tier)
+		names = append(names, string(role)+" ("+strings.Join(parts, ", ")+")")
+		tiers = append(tiers, orchestration.RoleTier(role, models))
 	}
 	return names, tiers
 }
@@ -35,17 +39,16 @@ func TestAnnotateRoles_WithConfigOverride(t *testing.T) {
 	if err != nil {
 		t.Fatalf("config.Load: %v", err)
 	}
-	models := config.OrchestrationModels(cfg)
+	models, modelMap := routingFromConfig(cfg)
 	roles := []orchestration.Role{orchestration.RoleBigThinker, orchestration.RoleFeatureSpecial}
-	names, tiers := annotateRolesHelper(roles, models)
-	if !strings.Contains(names[0], "big-thinker (model: fast)") {
-		t.Errorf("expected big-thinker annotated with fast, got %q", names[0])
+	names, tiers := annotateRolesHelper(roles, models, modelMap)
+	if !strings.Contains(names[0], "big-thinker (model: claude-haiku-4-5-20251001 (claude)") {
+		t.Errorf("expected big-thinker annotated with fast→haiku, got %q", names[0])
 	}
-	if !strings.Contains(names[1], "feature-specialist (model: balanced)") {
-		t.Errorf("expected feature-specialist annotated with balanced (default), got %q", names[1])
+	if !strings.Contains(names[1], "feature-specialist (model: claude-sonnet-4-6 (claude)") {
+		t.Errorf("expected feature-specialist annotated with balanced default, got %q", names[1])
 	}
-	ref := orchestration.ModelReference(tiers)
-	if !strings.Contains(ref, "fast:") {
+	if ref := orchestration.ModelReference(tiers); !strings.Contains(ref, "fast:") {
 		t.Errorf("model reference should include fast tier, got: %s", ref)
 	}
 }
@@ -59,9 +62,9 @@ func TestAnnotateRoles_NoConfig_AllDefaults(t *testing.T) {
 	if err != nil {
 		t.Fatalf("config.Load without toml: %v", err)
 	}
-	models := config.OrchestrationModels(cfg)
+	models, modelMap := routingFromConfig(cfg)
 	roles := orchestration.RequiredRoles("plan")
-	names, _ := annotateRolesHelper(roles, models)
+	names, _ := annotateRolesHelper(roles, models, modelMap)
 	for _, name := range names {
 		if !strings.Contains(name, "(model: ") {
 			t.Errorf("expected every role annotated, got: %q", name)
