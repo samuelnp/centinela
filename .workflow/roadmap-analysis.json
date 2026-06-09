@@ -40,6 +40,35 @@
       "dependsOn": []
     },
     {
+      "name": "enforcement-profiles",
+      "dependsOn": []
+    },
+    {
+      "name": "model-capability-profiles",
+      "dependsOn": [
+        "enforcement-profiles",
+        "configurable-model-routing"
+      ]
+    },
+    {
+      "name": "deterministic-artifact-scaffolds",
+      "dependsOn": [
+        "enforcement-profiles"
+      ]
+    },
+    {
+      "name": "headless-governance",
+      "dependsOn": []
+    },
+    {
+      "name": "workflow-archetypes",
+      "dependsOn": []
+    },
+    {
+      "name": "right-size-docs-step",
+      "dependsOn": []
+    },
+    {
       "name": "governance-telemetry",
       "dependsOn": []
     },
@@ -54,6 +83,13 @@
       "dependsOn": [
         "governance-telemetry",
         "governed-project-memory"
+      ]
+    },
+    {
+      "name": "capability-calibration",
+      "dependsOn": [
+        "governance-telemetry",
+        "model-capability-profiles"
       ]
     },
     {
@@ -109,14 +145,6 @@
       ]
     },
     {
-      "name": "workflow-archetypes",
-      "dependsOn": []
-    },
-    {
-      "name": "right-size-docs-step",
-      "dependsOn": []
-    },
-    {
       "name": "team-dashboard",
       "dependsOn": [
         "governance-telemetry"
@@ -134,6 +162,13 @@
       "name": "codex-support",
       "dependsOn": [
         "host-harness-adapters"
+      ]
+    },
+    {
+      "name": "local-harness-support",
+      "dependsOn": [
+        "host-harness-adapters",
+        "model-capability-profiles"
       ]
     },
     {
