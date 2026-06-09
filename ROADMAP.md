@@ -5,6 +5,14 @@
 > permanently, not a prompt to retry — make correctness enforced, not requested.**
 > Each item below names the agent or team failure mode it permanently fixes.
 >
+> **Capability-spectrum principle.** Centinela must govern *any* model — from a
+> small local model running on a laptop to a frontier reasoning model. The
+> weaker the model, the more scaffolding it needs (step-gating, artifact
+> templates, confirmations); the stronger the model, the more enforcement
+> shifts to outcomes (gates + claim verification at delivery). What never
+> varies is independent mechanical verification: no model's claims are
+> trusted, ever. **Governance adapts; verification is constant.**
+>
 > Status is derived from workflow state — run `centinela roadmap` for the live view.
 > Phases are ordered by leverage and dependency; scheduling follows the
 > `dependsOn` graph, not the phase number.
@@ -22,17 +30,25 @@
   features via the existing context-injection hook. Governed (reviewable,
   deterministic, no semantic-store dependency), not fuzzy recall.
 
-## Phase 2: Close the Mechanical-Verification Gap
+## ✅ Phase 2: Configurable Model Routing
 
-> The flagship promise — separation of concerns / layer dependencies — is still
+- **configurable-model-routing** — runner-keyed tier→model remapping plus
+  per-role concrete-model overrides (`claude` | `opencode` | `codex`), so
+  operators route reasoning/coding work to the models they actually want while
+  every unconfigured role keeps the built-in default. The foundation the
+  capability-adaptive phase builds on.
+
+## Phase 3: Close the Mechanical-Verification Gap
+
+> The flagship promise — separation of concerns / layer dependencies — was
 > a *manual* code-review gate. Convert the remaining "requested" gates into
-> mechanically enforced ones.
+> mechanically enforced ones, then open the gate engine to teams' own rules.
 
-- **g2-import-graph-gate** — Mechanically enforce per-archetype layer-dependency
+- ✅ **g2-import-graph-gate** — Mechanically enforce per-archetype layer-dependency
   rules by parsing the import graph (Go `go/packages`, TS madge/ts-morph, Python
   AST). Turns the prose G2 rule in `PROJECT.md` into a checkable allow/deny matrix.
   *Fixes: agent silently introduces a forbidden cross-layer import that no gate catches.*
-- **security-gate** — Mechanical secret-scanning + dependency-vuln audit
+- ✅ **security-gate** — Mechanical secret-scanning + dependency-vuln audit
   (`gitleaks` / `osv-scanner` / `govulncheck`, configurable) wired into validate.
   *Fixes: agent commits a secret or pulls a vulnerable dependency; subagent review misses it.*
 - **spec-traceability-gate** — Verify every Gherkin scenario in `specs/*.feature`
@@ -40,11 +56,13 @@
   *Fixes: spec and acceptance tests drift apart; scenarios silently go unimplemented.*
 - **custom-gate-sdk** — Let teams define their own mechanical gates (project-specific
   rules) via config/plugin and run them inside `centinela validate` — without
-  forking Centinela. Generalizes the built-in gate interface so the three Phase 2
-  gates become reference implementations, not the ceiling.
+  forking Centinela. Generalizes the built-in gate interface so the built-in
+  gates become reference implementations, not the ceiling. This is the pivot
+  from "opinionated workflow tool" to "policy engine": Centinela's own rules
+  become the default profile, not the architecture.
   *Fixes: teams with bespoke rules have no enforced path short of forking, so those rules stay "requested, not enforced."* (depends on g2-import-graph-gate)
 
-## Phase 3: Operability & DX
+## Phase 4: Operability & DX
 
 > Reduce the friction of running and recovering Centinela itself — keep its own
 > artifacts honest and self-healing. Cheap, dependency-free wins that smooth
@@ -52,8 +70,8 @@
 
 - **roadmap-doc-sync** — Treat `.workflow/roadmap.json` as the source of truth and
   generate the human-readable `ROADMAP.md` from it, with a drift check that fails
-  if the two disagree. *(Dogfood note: this roadmap was hand-synced across both
-  files repeatedly while drafting it — exactly the toil this removes.)*
+  if the two disagree. *(Dogfood note: this roadmap has now drifted twice while
+  being maintained by hand — exactly the toil this removes.)*
   *Fixes: the machine roadmap and the human roadmap drift apart because they're maintained by hand.*
 - **centinela-doctor** — `centinela doctor`: one command that diagnoses (and, where
   safe, repairs) broken hook wiring, stale or orphaned `.workflow` state, abandoned
@@ -61,10 +79,67 @@
   repair` into a holistic health check.
   *Fixes: a broken or drifted install fails opaquely with no guided path back to a healthy state — the graceful-recovery gap.*
 
-## Phase 4: Instrument the Loop
+## Phase 5: Capability-Adaptive Governance
+
+> One-size enforcement fails at both ends of the model spectrum: it taxes a
+> frontier model with ceremony it no longer needs, and it under-scaffolds a
+> small local model that needs *more* rails, not fewer. Both failure modes end
+> the same way — the user disables governance. This phase makes the amount of
+> process a function of model capability, while verification stays constant
+> for everyone.
+
+- **enforcement-profiles** — Named governance strictness presets — `strict`
+  (full step-gating, per-step confirmation, mandatory artifact templates),
+  `guided` (today's default), `outcome` (work in any order; `complete`/merge
+  requires all gates + claim verification green) — selectable in
+  `centinela.toml` per project and overridable per feature. Decouples *how much
+  process is enforced* from *whether outcomes are verified*.
+  *Fixes: one-size enforcement either burdens a strong model with ceremony or under-scaffolds a weak one — both end in governance being switched off.*
+- **model-capability-profiles** — A registry mapping each configured model —
+  cloud or local — to a declared capability profile (instruction-following
+  reliability, tool-use reliability, context budget) that selects its default
+  enforcement profile and routing tier. Declarable in `centinela.toml` so any
+  Ollama / llama.cpp / OpenAI-compatible local model is as first-class as a
+  frontier model.
+  *Fixes: model assumptions are hardcoded for frontier cloud models; a local model has no place to declare what it can and cannot reliably do.* (depends on enforcement-profiles)
+- **deterministic-artifact-scaffolds** — Pre-generated artifact skeletons with
+  explicit fill-in slots (plan, spec, edge-case analysis) plus mechanical
+  generation wherever content is derivable from existing state — extending the
+  proven docs CLI-fallback pattern. Under the `strict` profile, weak models
+  fill constrained templates instead of inventing structure.
+  *Fixes: a low-capability model fails artifact contracts on shape rather than substance, burning retries; the dumbest models need rails that are physical, not prose instructions.* (depends on enforcement-profiles)
+- **headless-governance** — Full non-interactive parity: every confirmation
+  prompt gets a config/flag equivalent, and every run can emit a
+  machine-readable end-of-run verdict packet (gate results, verify results,
+  evidence index) as the reviewable output. The foundation for CI, Capataz
+  fleets, and reviewing agent work by evidence instead of by transcript.
+  *Fixes: prompts assume a human in a chat session; unattended runs stall on questions or silently bypass them.*
+
+## Phase 6: Right-Size the Workflow
+
+> The 5-step is feature-shaped and frontier-shaped. Real teams also do fixes,
+> refactors, and spikes — and capable models shouldn't pay full ceremony for
+> internal work, while weak models benefit from smaller bites.
+
+- **workflow-archetypes** — First-class lightweight tracks beside the 5-step:
+  `hotfix` (reproduce → fix → test → ship), `refactor` (characterize →
+  change → prove-equivalent), `spike` (timeboxed, no ship gate).
+  *Fixes: forcing a diagnosis/bugfix through a plan→docs pipeline it doesn't fit.*
+- **right-size-docs-step** — Make the `docs` step surface-aware, mirroring how the
+  `code` step requires `ux-ui-specialist` only for `surface: user-facing` features.
+  A user-facing feature still writes the plain-language KB guide (the one genuinely
+  valuable, reader- and memory-useful doc artifact); an internal refactor / bugfix /
+  chore instead emits a one-line changelog entry (via `delivery-artifact-generation`)
+  and skips the KB guide, the per-feature HTML portal regeneration, and the
+  documentation-specialist evidence ceremony. The 108 KB `index.html` portal moves
+  to merge/release-time regeneration rather than per-feature.
+  *Fixes: mandatory full docs ceremony — KB guide, HTML regen, evidence — runs on every feature including internal ones with no end-user story, burning tokens for zero reader value.*
+
+## Phase 7: Instrument the Loop
 
 > You can't "fix failures permanently" if you can't see them. Make Centinela
-> observe itself.
+> observe itself — including how each *model* actually performs under
+> governance.
 
 - **governance-telemetry** — Local, git-tracked append-only event log of every
   block, gate failure, verify rejection, and rework cycle (no external service,
@@ -75,8 +150,14 @@
 - **failure-ledger-plan-advisor** — Feed recurring gate failures from the ledger
   into the plan advisor so the next feature is pre-warned about the failure modes
   that actually bite this repo. (depends on governance-telemetry, governed-project-memory)
+- **capability-calibration** — Read per-model telemetry (block rate, gate
+  failures, verify rejections, rework cycles) and report whether each model is
+  over- or under-governed, recommending an enforcement-profile change backed by
+  evidence. Answers "how much scaffolding does *this* model need on *this*
+  repo" with measurement instead of vibes.
+  *Fixes: enforcement-profile assignment by intuition; a model that quietly needs tighter (or looser) governance is never recalibrated.* (depends on governance-telemetry, model-capability-profiles)
 
-## Phase 5: Continuous Governance
+## Phase 8: Continuous Governance
 
 > Governance currently evaporates at merge. Extend it beyond build-time.
 
@@ -88,7 +169,7 @@
   and post gate verdicts as PR review comments.
   *Fixes: violations discovered only at the end of the loop, maximizing rework cost.* (depends on audit-baseline-ratchet)
 
-## Phase 6: Brownfield Onboarding
+## Phase 9: Brownfield Onboarding
 
 > Centinela excels on greenfield projects, where it interviews the user and
 > generates a roadmap from a blank slate. On an existing codebase the truth
@@ -120,10 +201,10 @@
   while legacy debt is ratcheted down over time.
   *Fixes: a mature repo where day-one `validate` reports thousands of pre-existing violations, making the gates unusable on adoption.* (depends on deep-codebase-analysis, audit-baseline-ratchet)
 
-## Phase 7: Workflow Flexibility & Delivery
+## Phase 10: Delivery
 
-> The 5-step is feature-shaped. Real teams also do fixes, refactors, and spikes —
-> and need help getting completed work delivered.
+> Completed work should ship with its evidence — and the humans reviewing
+> agent output at scale review evidence, not transcripts.
 
 - **completion-delivery-prompt** — When a feature reaches completion (final step
   done), Centinela asks how to deliver it and acts on the choice: **(a)** commit,
@@ -137,25 +218,18 @@
   holds — the feature brief, plan, gatekeeper report, and verify results — so
   delivery output is consistent and traceable instead of hand-written each time.
   *Fixes: rich step evidence exists but the PR body and changelog are still written from scratch (or skipped).* (depends on completion-delivery-prompt)
-- **workflow-archetypes** — First-class lightweight tracks beside the 5-step:
-  `hotfix` (reproduce → fix → test → ship), `refactor` (characterize →
-  change → prove-equivalent), `spike` (timeboxed, no ship gate).
-  *Fixes: forcing a diagnosis/bugfix through a plan→docs pipeline it doesn't fit.*
-- **right-size-docs-step** — Make the `docs` step surface-aware, mirroring how the
-  `code` step requires `ux-ui-specialist` only for `surface: user-facing` features.
-  A user-facing feature still writes the plain-language KB guide (the one genuinely
-  valuable, reader- and memory-useful doc artifact); an internal refactor / bugfix /
-  chore instead emits a one-line changelog entry (via `delivery-artifact-generation`)
-  and skips the KB guide, the per-feature HTML portal regeneration, and the
-  documentation-specialist evidence ceremony. The 108 KB `index.html` portal moves
-  to merge/release-time regeneration rather than per-feature.
-  *Fixes: mandatory full docs ceremony — KB guide, HTML regen, evidence — runs on every feature including internal ones with no end-user story, burning tokens for zero reader value.* Aggregate view across worktrees and contributors: who owns
-  what feature/step, aggregate gate health, roadmap burn-down. (depends on governance-telemetry)
+- **team-dashboard** — Aggregate view across worktrees and contributors: who owns
+  what feature/step, aggregate gate health, roadmap burn-down.
+  *Fixes: multi-feature, multi-contributor state is invisible without polling each worktree by hand.* (depends on governance-telemetry)
 - **cost-governance** — Per-feature/per-step token and model-tier budgets surfaced
-  from the host harness, with a soft gate.
+  from the host harness, with a soft gate. For local models the budget unit is
+  wall-clock/compute rather than spend, but the runaway-step problem is identical.
   *Fixes: a runaway agent burning budget on one step with no visibility.*
 
-## Phase 8: Ecosystem
+## Phase 11: Ecosystem
+
+> Bring-your-own-harness is the moat: a vendor-neutral governance contract
+> across every harness and every model class, cloud or local.
 
 - **host-harness-adapters** — Extend the hook/parity pattern (today Claude +
   OpenCode) to Cursor, Aider, Windsurf, and Copilot Workspace. Best done after a
@@ -168,14 +242,20 @@
   `migrate`. Codex has a large and growing user base, so dual-support with Claude
   Code materially widens who can adopt Centinela.
   *Fixes: Codex users locked out of Centinela's governance because enforcement is wired only for Claude Code / OpenCode.* (depends on host-harness-adapters)
+- **local-harness-support** — First-class local-model targets: OpenCode backed by
+  Ollama, plus generic OpenAI-compatible endpoints (llama.cpp, vLLM, LM Studio).
+  Acceptance bar: a small local model completes a governed feature end-to-end
+  using the `strict` profile and deterministic scaffolds, with all gates and
+  claim verification passing.
+  *Fixes: local-model users — the fastest-growing segment that needs governance the most — can't adopt Centinela because integration and enforcement assume frontier cloud harnesses.* (depends on host-harness-adapters, model-capability-profiles)
 - **cross-project-memory** — Promote governed-memory lessons from per-repo to an
   org-shared ledger, so a failure fixed in one repo warns every repo. (depends on governed-project-memory)
 
-## Phase 9: Self-Improvement
+## Phase 12: Self-Improvement
 
 > Centinela applies its own founding principle to itself: a recurring friction
 > signal is an engineering problem to fix permanently — by generating automation.
-> Comes last: it depends on mature instrumentation from Phase 4.
+> Comes last: it depends on mature instrumentation from Phase 7.
 
 - **adaptive-skill-synthesis** — When telemetry shows a workflow isn't running as
   expected — e.g. the same feature/step requires too many manual validation

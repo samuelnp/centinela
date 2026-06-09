@@ -14,17 +14,31 @@
 - Feature: spec-traceability-gate
 - Dependencies: none — reads existing specs/ and tests/acceptance/ artifacts
 - Feature: custom-gate-sdk
-- Dependencies: g2-import-graph-gate — generalizes the gate interface the three Phase 2 gates establish
+- Dependencies: g2-import-graph-gate — generalizes the gate interface the built-in gates establish
 - Feature: roadmap-doc-sync
 - Dependencies: none — operates on .workflow/roadmap.json and ROADMAP.md
 - Feature: centinela-doctor
 - Dependencies: none — extends the existing evidence-repair machinery
+- Feature: enforcement-profiles
+- Dependencies: none — generalizes the existing workflow/step-confirmation configuration into named strictness presets
+- Feature: model-capability-profiles
+- Dependencies: enforcement-profiles, configurable-model-routing — extends the shipped runner-keyed routing table with per-model capability metadata that selects a default enforcement profile
+- Feature: deterministic-artifact-scaffolds
+- Dependencies: enforcement-profiles — scaffolds are mandated by the strict profile and extend the proven docs CLI-fallback pattern
+- Feature: headless-governance
+- Dependencies: none — adds config/flag equivalents to existing confirmation prompts and a machine-readable end-of-run verdict packet
+- Feature: workflow-archetypes
+- Dependencies: none — lightweight tracks beside the existing 5-step
+- Feature: right-size-docs-step
+- Dependencies: none — makes the existing docs step surface-aware
 - Feature: governance-telemetry
 - Dependencies: none — local, git-tracked append-only log consistent with the governed-memory design
 - Feature: centinela-insights
 - Dependencies: governance-telemetry — reads the event log
 - Feature: failure-ledger-plan-advisor
 - Dependencies: governance-telemetry, governed-project-memory
+- Feature: capability-calibration
+- Dependencies: governance-telemetry, model-capability-profiles — correlates the event log per model and recommends enforcement-profile changes
 - Feature: audit-baseline-ratchet
 - Dependencies: g2-import-graph-gate — needs the import-graph gate to scan against
 - Feature: precommit-and-pr-gate
@@ -43,10 +57,6 @@
 - Dependencies: none — uses gh and the existing merge-steward
 - Feature: delivery-artifact-generation
 - Dependencies: completion-delivery-prompt — composes the delivery outputs
-- Feature: workflow-archetypes
-- Dependencies: none — lightweight tracks beside the existing 5-step
-- Feature: right-size-docs-step
-- Dependencies: none — makes the existing docs step surface-aware
 - Feature: team-dashboard
 - Dependencies: governance-telemetry — aggregates the event log across worktrees and contributors
 - Feature: cost-governance
@@ -55,6 +65,8 @@
 - Dependencies: none — abstracts the existing Claude/OpenCode integration points
 - Feature: codex-support
 - Dependencies: host-harness-adapters — implements an adapter for the new harness
+- Feature: local-harness-support
+- Dependencies: host-harness-adapters, model-capability-profiles — wires local-model targets (Ollama, OpenAI-compatible endpoints) through the adapter contract with capability-profile-driven enforcement
 - Feature: cross-project-memory
 - Dependencies: governed-project-memory — extends the per-project memory model
 - Feature: adaptive-skill-synthesis
