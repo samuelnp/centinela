@@ -7,13 +7,13 @@ import (
 )
 
 // jsonKeyOrder mirrors internal/evidence.jsonKeyOrder. Duplicated rather
-// than imported to keep the hookpolicy layer dependency-thin (it must not
-// pull internal/evidence which already imports it for path helpers in
-// neighbouring builds). Drift is caught by format_evidence_test.go which
-// compares against the canonical order produced by the evidence package.
+// than imported to keep the hookpolicy layer dependency-thin: hookpolicy
+// must not pull in internal/evidence. Drift is caught by the key-order
+// parity test (TestEvidenceKeyOrderParity), which byte-compares this
+// formatter's output against canonical evidence.MarshalJSON output.
 var jsonKeyOrder = []string{
 	"_meta", "feature", "step", "role", "status", "generatedAt",
-	"inputs", "outputs", "edgeCases", "mobileFirst", "handoffTo",
+	"inputs", "outputs", "edgeCases", "mobileFirst", "coverage", "handoffTo",
 }
 
 // encodeOrderedEvidence serialises a parsed map back to JSON with the

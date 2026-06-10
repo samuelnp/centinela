@@ -13,8 +13,8 @@ import (
 func TestSC03_DecisionBulletsBecomeEntries(t *testing.T) {
 	dir := t.TempDir()
 	orig, _ := os.Getwd()
-	defer os.Chdir(orig) //nolint:errcheck
-	os.Chdir(dir)        //nolint:errcheck
+	defer os.Chdir(orig)               //nolint:errcheck
+	os.Chdir(dir)                      //nolint:errcheck
 	os.MkdirAll("docs/features", 0755) //nolint:errcheck
 
 	text := "## Decisions\n- use postgres\n- no embeddings\n- cap at 10\n"
@@ -31,8 +31,8 @@ func TestSC03_DecisionBulletsBecomeEntries(t *testing.T) {
 func TestSC04_NoBriefDecisionSection(t *testing.T) {
 	dir := t.TempDir()
 	orig, _ := os.Getwd()
-	defer os.Chdir(orig) //nolint:errcheck
-	os.Chdir(dir)        //nolint:errcheck
+	defer os.Chdir(orig)                                                               //nolint:errcheck
+	os.Chdir(dir)                                                                      //nolint:errcheck
 	os.MkdirAll("docs/features", 0755)                                                 //nolint:errcheck
 	os.WriteFile("docs/features/alpha.md", []byte("## Problem\nno decisions\n"), 0644) //nolint:errcheck
 
@@ -47,9 +47,9 @@ func TestSC04_NoBriefDecisionSection(t *testing.T) {
 func TestSC05_CaptureIdempotent(t *testing.T) {
 	dir := t.TempDir()
 	orig, _ := os.Getwd()
-	defer os.Chdir(orig) //nolint:errcheck
-	os.Chdir(dir)        //nolint:errcheck
-	os.MkdirAll(".workflow", 0755)                                               //nolint:errcheck
+	defer os.Chdir(orig)                                                          //nolint:errcheck
+	os.Chdir(dir)                                                                 //nolint:errcheck
+	os.MkdirAll(".workflow", 0755)                                                //nolint:errcheck
 	os.WriteFile(".workflow/alpha-edge-cases.md", []byte("- idempotent\n"), 0644) //nolint:errcheck
 
 	cfg := acptCfg()

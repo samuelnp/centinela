@@ -50,8 +50,10 @@ func runHookPrewrite(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 
-	cfg, _ := config.Load()
-	if cfg == nil {
+	cfg, err := config.Load()
+	if err != nil {
+		// Hooks must never break the host session: warn and use defaults.
+		fmt.Fprintln(os.Stderr, "config warning: "+err.Error())
 		cfg = &config.Config{}
 	}
 	wfs := loadActiveWorkflows()

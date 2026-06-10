@@ -25,11 +25,14 @@ func init() {
 
 func runHookOrchestration(_ *cobra.Command, _ []string) error {
 	io.ReadAll(os.Stdin) //nolint:errcheck
-	// Zero-config-safe: on a config error fall back to defaults rather than abort.
+	// Hooks must never break the host session: on a config error warn and
+	// fall back to defaults rather than abort.
 	models := orchestration.RoleModels{}
 	modelMap := orchestration.ModelMap{}
 	if cfg, err := config.Load(); err == nil {
 		models, modelMap = orchestrationRouting(cfg)
+	} else {
+		fmt.Println("config warning: " + err.Error())
 	}
 	for _, wf := range loadActiveWorkflows() {
 		if wf.OrchestrationMode != workflow.StrictOrchestrationMode {

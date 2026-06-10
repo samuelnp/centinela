@@ -6,7 +6,8 @@ use_worktrees = true
 commands = [
   "go test ./...",
   "go test ./tests/acceptance/...",
-  "./scripts/check-coverage.sh"
+  "./scripts/check-coverage.sh",
+  "./scripts/check-fmt.sh"
 ]
 
 [gates]

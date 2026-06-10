@@ -1,6 +1,7 @@
 package workflow
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
@@ -24,7 +25,14 @@ func ActiveWorkflows(dir string) []*Workflow {
 	for _, p := range entries {
 		base := strings.TrimSuffix(filepath.Base(p), ".json")
 		wf, err := Load(base)
-		if err != nil || wf.Feature != base {
+		if err != nil {
+			// The file exists (it came from the glob), so any Load error is
+			// a read/parse failure: warn instead of silently dropping the
+			// feature from the active list.
+			fmt.Fprintf(os.Stderr, "workflow warning: %v\n", err)
+			continue
+		}
+		if wf.Feature != base {
 			continue
 		}
 		if wf.CurrentStep == "" || wf.CurrentStep == "done" {

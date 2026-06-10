@@ -62,7 +62,7 @@ func TestLoadEntriesSkipsMalformed(t *testing.T) {
 	defer os.Chdir(orig) //nolint:errcheck
 	os.Chdir(dir)        //nolint:errcheck
 
-	os.MkdirAll(entriesDir, 0o755)             //nolint:errcheck
+	os.MkdirAll(entriesDir, 0o755)                                                      //nolint:errcheck
 	os.WriteFile(filepath.Join(entriesDir, "bad.md"), []byte("not frontmatter"), 0o644) //nolint:errcheck
 
 	e := newEntry("f", "tests", TypeLesson, "- valid", "src", []string{}, time.Now())

@@ -23,8 +23,10 @@ func init() {
 
 func runHookPlanAdvisor(_ *cobra.Command, _ []string) error {
 	io.ReadAll(os.Stdin) //nolint:errcheck
-	cfg, _ := config.Load()
-	if cfg == nil {
+	cfg, err := config.Load()
+	if err != nil {
+		// Hooks must never break the host session: warn and use defaults.
+		fmt.Println("config warning: " + err.Error())
 		cfg = &config.Config{}
 	}
 	for _, wf := range loadActiveWorkflows() {

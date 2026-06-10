@@ -22,8 +22,8 @@ func codeStepRepo(t *testing.T, toml string) (dir, bin string) {
 	os.MkdirAll(workflow.WorkflowDir, 0755) //nolint:errcheck
 	wf := workflow.New("myfeature")
 	wf.CurrentStep = "code"
-	workflow.Save(wf)                                      //nolint:errcheck
-	os.WriteFile("centinela.toml", []byte(toml), 0644)     //nolint:errcheck
+	workflow.Save(wf)                                  //nolint:errcheck
+	os.WriteFile("centinela.toml", []byte(toml), 0644) //nolint:errcheck
 	return d, bin
 }
 
