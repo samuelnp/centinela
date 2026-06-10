@@ -18,16 +18,16 @@ type Meta struct {
 // fields the current binary does not know about so a newer file can be
 // round-tripped through an older binary without data loss (AC7).
 type RoleEvidence struct {
-	Meta        *Meta                      `json:"_meta,omitempty"`
-	Feature     string                     `json:"feature"`
-	Step        string                     `json:"step"`
-	Role        string                     `json:"role"`
-	Status      string                     `json:"status"`
-	GeneratedAt string                     `json:"generatedAt"`
-	Inputs      []string                   `json:"inputs"`
-	Outputs     []string                   `json:"outputs"`
-	EdgeCases   []string                   `json:"edgeCases"`
-	MobileFirst *bool                      `json:"mobileFirst,omitempty"`
+	Meta        *Meta    `json:"_meta,omitempty"`
+	Feature     string   `json:"feature"`
+	Step        string   `json:"step"`
+	Role        string   `json:"role"`
+	Status      string   `json:"status"`
+	GeneratedAt string   `json:"generatedAt"`
+	Inputs      []string `json:"inputs"`
+	Outputs     []string `json:"outputs"`
+	EdgeCases   []string `json:"edgeCases"`
+	MobileFirst *bool    `json:"mobileFirst,omitempty"`
 	// Coverage is the claimed per-package coverage percentage (e.g. 85.0 for
 	// 85%). Optional: a nil pointer means the role made no coverage claim and
 	// the coverage check is skipped. Typed to forbid free-form prose claims.

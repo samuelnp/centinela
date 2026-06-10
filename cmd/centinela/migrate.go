@@ -33,6 +33,12 @@ func runMigrate(_ *cobra.Command, args []string) error {
 	if !isValidAgent(fullAgent) {
 		return fmt.Errorf("invalid --agent %q (use: claude|opencode|both)", fullAgent)
 	}
+	// User-facing command: a corrupted centinela.toml must fail loudly, and
+	// before any migration side effect is applied.
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
 	docsPlan, err := migration.BuildPlan(".")
 	if err != nil {
 		return err
@@ -64,7 +70,7 @@ func runMigrate(_ *cobra.Command, args []string) error {
 			return err
 		}
 	}
-	if cfg, _ := config.Load(); cfg != nil && cfg.Workflow.UseWorktrees {
+	if cfg.Workflow.UseWorktrees {
 		if err := syncWorktreeIgnores("."); err != nil {
 			return err
 		}

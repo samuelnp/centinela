@@ -7,13 +7,13 @@ import (
 
 // MergeOutcome captures the structured result of a merge attempt.
 type MergeOutcome struct {
-	Feature      string
-	Branch       string
-	TextConflict bool
-	ValidateFail bool
-	GitOutput    string
-	ValidateOut  string
-	WorktreeKept bool
+	Feature         string
+	Branch          string
+	TextConflict    bool
+	ValidateFail    bool
+	GitOutput       string
+	ValidateOut     string
+	WorktreeKept    bool
 	ConflictedPaths []string
 }
 

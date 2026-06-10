@@ -50,9 +50,9 @@ func countEntries(t *testing.T) int {
 func TestSC01_LessonCapturedOnTestsComplete(t *testing.T) {
 	dir := t.TempDir()
 	orig, _ := os.Getwd()
-	defer os.Chdir(orig) //nolint:errcheck
-	os.Chdir(dir)        //nolint:errcheck
-	os.MkdirAll(".workflow", 0755)                                                               //nolint:errcheck
+	defer os.Chdir(orig)                                                              //nolint:errcheck
+	os.Chdir(dir)                                                                     //nolint:errcheck
+	os.MkdirAll(".workflow", 0755)                                                    //nolint:errcheck
 	os.WriteFile(".workflow/alpha-edge-cases.md", []byte("- timeout lesson\n"), 0644) //nolint:errcheck
 
 	memory.Capture("alpha", "tests", acptCfg())
@@ -66,8 +66,8 @@ func TestSC01_LessonCapturedOnTestsComplete(t *testing.T) {
 func TestSC02_VerdictCapturedOnValidateComplete(t *testing.T) {
 	dir := t.TempDir()
 	orig, _ := os.Getwd()
-	defer os.Chdir(orig) //nolint:errcheck
-	os.Chdir(dir)        //nolint:errcheck
+	defer os.Chdir(orig)                                                                              //nolint:errcheck
+	os.Chdir(dir)                                                                                     //nolint:errcheck
 	os.MkdirAll(".workflow", 0755)                                                                    //nolint:errcheck
 	os.WriteFile(".workflow/alpha-gatekeeper.md", []byte("Status: SAFE\nAll checks passed.\n"), 0644) //nolint:errcheck
 

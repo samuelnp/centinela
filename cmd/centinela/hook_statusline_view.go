@@ -14,8 +14,11 @@ func buildStatusLineView(wfs []*workflow.Workflow) ui.StatusLineView {
 	if wf == nil {
 		return ui.StatusLineView{Primary: []string{"WF:none", "BLOCK:NO_WORKFLOW", "NEXT:start-feature"}}
 	}
-	cfg, _ := config.Load()
-	if cfg == nil {
+	// Deliberate silent fallback: the statusline is a single-line protocol
+	// surface that cannot carry a warning line; the context hook already
+	// surfaces the same config failure on every prompt.
+	cfg, err := config.Load()
+	if err != nil {
 		cfg = &config.Config{}
 	}
 	block, next := statusBlockAndNext(wf, cfg)

@@ -14,11 +14,11 @@ func checkMatrix(t *testing.T) matrix {
 func TestCheckEdges_AllowedAndForbidden(t *testing.T) {
 	m := checkMatrix(t)
 	pkgs := []pkg{
-		{Path: "internal/config", Imports: nil},                                  // leaf
-		{Path: "internal/gates", Imports: []string{"internal/config"}},           // domain->leaf OK
-		{Path: "internal/workflow", Imports: []string{"internal/gates"}},         // intra-domain OK
-		{Path: "cmd/centinela", Imports: []string{"internal/gates", "cmd/sub"}},  // cmd->domain OK + intra
-		{Path: "cmd/sub"},                                                        //
+		{Path: "internal/config", Imports: nil},                                 // leaf
+		{Path: "internal/gates", Imports: []string{"internal/config"}},          // domain->leaf OK
+		{Path: "internal/workflow", Imports: []string{"internal/gates"}},        // intra-domain OK
+		{Path: "cmd/centinela", Imports: []string{"internal/gates", "cmd/sub"}}, // cmd->domain OK + intra
+		{Path: "cmd/sub"}, //
 	}
 	v, unmapped := checkEdges(pkgs, m)
 	if len(v) != 0 {
@@ -72,4 +72,3 @@ func TestCheckEdges_SortedAndDeduped(t *testing.T) {
 		t.Fatalf("violations not sorted: %v", v)
 	}
 }
-

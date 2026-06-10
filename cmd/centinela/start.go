@@ -34,9 +34,9 @@ func runStart(_ *cobra.Command, args []string) error {
 		return fmt.Errorf("PROJECT.md not found — run the /centinela-setup skill to initialise your project")
 	}
 
-	cfg, _ := config.Load()
-	if cfg == nil {
-		cfg = &config.Config{}
+	cfg, err := config.Load()
+	if err != nil {
+		return err
 	}
 
 	wtPath, err := worktree.MaybeProvision(".", feature, cfg)

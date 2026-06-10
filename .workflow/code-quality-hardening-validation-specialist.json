@@ -1,0 +1,20 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-10T16:18:14Z"
+  },
+  "feature": "code-quality-hardening",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-10T16:18:14Z",
+  "inputs": [
+    ".workflow/code-quality-hardening-gatekeeper.md",
+    "centinela.toml"
+  ],
+  "outputs": [
+    ".workflow/code-quality-hardening-validation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

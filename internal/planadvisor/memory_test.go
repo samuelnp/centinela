@@ -42,8 +42,8 @@ func TestRecalledMemoryDisabled(t *testing.T) {
 func TestRecalledMemorySummaryFormat(t *testing.T) {
 	dir := t.TempDir()
 	orig, _ := os.Getwd()
-	defer os.Chdir(orig) //nolint:errcheck
-	os.Chdir(dir)        //nolint:errcheck
+	defer os.Chdir(orig)                           //nolint:errcheck
+	os.Chdir(dir)                                  //nolint:errcheck
 	os.MkdirAll(".workflow/memory/entries", 0o755) //nolint:errcheck
 
 	// Write an entry directly using the memory package.

@@ -16,8 +16,8 @@ func TestValidatePlan_CorrectNameMinimalContent_Passes(t *testing.T) {
 	defer os.Chdir(origDir) //nolint:errcheck
 	os.Chdir(dir)           //nolint:errcheck
 
-	os.MkdirAll(filepath.Join(dir, "docs/plans"), 0755) //nolint:errcheck
-	os.MkdirAll(filepath.Join(dir, "specs"), 0755)      //nolint:errcheck
+	os.MkdirAll(filepath.Join(dir, "docs/plans"), 0755)                     //nolint:errcheck
+	os.MkdirAll(filepath.Join(dir, "specs"), 0755)                          //nolint:errcheck
 	os.WriteFile("docs/plans/project-bootstrap.md", []byte("# Plan"), 0644) //nolint:errcheck
 	os.WriteFile("specs/a.feature", []byte("Feature: a"), 0644)             //nolint:errcheck
 

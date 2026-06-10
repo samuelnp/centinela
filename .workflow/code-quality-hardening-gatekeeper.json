@@ -1,0 +1,30 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-10T16:08:44Z"
+  },
+  "feature": "code-quality-hardening",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-10T16:08:44Z",
+  "inputs": [
+    "specs/code-quality-hardening.feature",
+    "specs/add-agent-evidence-contract.feature",
+    "specs/evidence-cli.feature",
+    "specs/merge-steward-auto-dispatch.feature",
+    ".workflow/code-quality-hardening-senior-engineer.md",
+    ".workflow/code-quality-hardening-qa-senior.md",
+    ".workflow/code-quality-hardening-edge-cases.md"
+  ],
+  "outputs": [
+    ".workflow/code-quality-hardening-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "Evidence key-order: coverage key inert for coverage-free docs; parity test pins duplication",
+    "Config-error policy: absent toml still defaults to success; only corrupt fails",
+    "Workflow Load: no pre-existing test asserts 'no workflow found' on parse/read error",
+    "Validate commands: membership check, not exact-list snapshot; appending check-fmt.sh safe"
+  ],
+  "handoffTo": "complete"
+}

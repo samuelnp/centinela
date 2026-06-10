@@ -10,9 +10,9 @@ func loadModelMapTOML(t *testing.T, body string) error {
 	t.Helper()
 	dir := t.TempDir()
 	orig, _ := os.Getwd()
-	t.Cleanup(func() { os.Chdir(orig) })            //nolint:errcheck
-	os.Chdir(dir)                                   //nolint:errcheck
-	os.WriteFile(Filename, []byte(body), 0644)      //nolint:errcheck
+	t.Cleanup(func() { os.Chdir(orig) })       //nolint:errcheck
+	os.Chdir(dir)                              //nolint:errcheck
+	os.WriteFile(Filename, []byte(body), 0644) //nolint:errcheck
 	_, err := Load()
 	return err
 }

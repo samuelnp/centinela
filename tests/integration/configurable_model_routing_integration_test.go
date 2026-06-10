@@ -25,8 +25,8 @@ func loadAt(t *testing.T, body string) *config.Config {
 	t.Helper()
 	d := t.TempDir()
 	orig, _ := os.Getwd()
-	t.Cleanup(func() { os.Chdir(orig) })       //nolint:errcheck
-	os.Chdir(d)                                //nolint:errcheck
+	t.Cleanup(func() { os.Chdir(orig) })               //nolint:errcheck
+	os.Chdir(d)                                        //nolint:errcheck
 	os.WriteFile("centinela.toml", []byte(body), 0644) //nolint:errcheck
 	cfg, err := config.Load()
 	if err != nil {

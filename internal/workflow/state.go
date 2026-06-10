@@ -2,7 +2,9 @@ package workflow
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"time"
@@ -35,15 +37,21 @@ func FilePath(feature string) string {
 	return filepath.Join(WorkflowDir, feature+".json")
 }
 
-// Load reads and parses a workflow file from disk.
+// Load reads and parses a workflow file from disk. Only a genuinely
+// missing state file reports absence; read and parse failures surface
+// with the state file path so they are never mistaken for "not started".
 func Load(feature string) (*Workflow, error) {
-	data, err := os.ReadFile(FilePath(feature))
+	path := FilePath(feature)
+	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("no workflow found for %q", feature)
+		if errors.Is(err, fs.ErrNotExist) {
+			return nil, fmt.Errorf("no workflow found for %q", feature)
+		}
+		return nil, fmt.Errorf("reading workflow file %s: %w", path, err)
 	}
 	var wf Workflow
 	if err := json.Unmarshal(data, &wf); err != nil {
-		return nil, fmt.Errorf("invalid workflow file: %w", err)
+		return nil, fmt.Errorf("invalid workflow file %s: %w", path, err)
 	}
 	return &wf, nil
 }
