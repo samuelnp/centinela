@@ -87,6 +87,17 @@
 > the same way — the user disables governance. This phase makes the amount of
 > process a function of model capability, while verification stays constant
 > for everyone.
+>
+> **Dogfood note (2026-06-10).** The `code-quality-hardening` fix (PR #23) was
+> built through the full five-step workflow with seven specialist subagents and
+> five manual confirmations — ~370K subagent tokens — for a ~250-line semantic
+> change across ten source files. The discipline paid off (subagents corrected
+> two reviewer claims, caught two missing spec scenarios, and independently
+> re-verified the highest-risk change), but the ceremony-to-change ratio on an
+> internal fix is exactly the cost `enforcement-profiles` (an `outcome` profile)
+> and `right-size-docs-step` exist to cut: same gates and claim verification, a
+> fraction of the round-trips. First-party evidence that this phase earns its
+> place.
 
 - **enforcement-profiles** — Named governance strictness presets — `strict`
   (full step-gating, per-step confirmation, mandatory artifact templates),
