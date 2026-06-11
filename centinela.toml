@@ -1,6 +1,9 @@
 [workflow]
 # Enable per-feature git worktrees at .worktrees/<feature>/ on `centinela start`.
 use_worktrees = true
+# Confirm only at the plan boundary (the highest-leverage review point);
+# later steps advance automatically — every gate still verifies mechanically.
+step_confirmation_mode = "after_plan"
 
 [validate]
 commands = [
