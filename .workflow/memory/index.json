@@ -52,6 +52,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "90ad78316f103f62",
+    "feature": "spec-traceability-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Scenario-name normalization (trim / collapse-spaces / strip one trailing",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/spec-traceability-gate-edge-cases.md",
+    "createdAt": "2026-06-11T16:10:32Z"
+  },
+  {
     "id": "a861ca032b250c87",
     "feature": "configurable-model-routing",
     "step": "validate",
