@@ -55,6 +55,10 @@ func RunWithFilter(cfg *config.Config, filter *gitdiff.Set) []Result {
 		results = append(results, checkSecurity(cfg, filter)...)
 	}
 
+	if cfg.Gates.SpecTraceability.Enabled {
+		results = append(results, checkSpecTraceability(cfg, filter))
+	}
+
 	return results
 }
 

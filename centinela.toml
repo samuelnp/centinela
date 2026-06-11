@@ -13,6 +13,14 @@ commands = [
 [gates]
 file_size = true
 
+# spec-traceability gate: every in-scope Gherkin scenario must map to an
+# acceptance test (// Acceptance: specs/<slug>.feature + // Scenario: <name>).
+# Shipped in warn mode so CI surfaces the legacy uncovered-scenario backlog
+# without blocking merge; ratchet to fail once the backlog is cleared.
+[gates.spec_traceability]
+enabled  = true
+severity = "warn"
+
 [gates.build]
 enabled = true
 command = "go build ./cmd/centinela"

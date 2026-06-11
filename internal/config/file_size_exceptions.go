@@ -41,5 +41,8 @@ func validateConfig(cfg *Config) error {
 	if err := validateSecurityGate(cfg.Gates.Security); err != nil {
 		return err
 	}
+	if err := validateSpecTraceability(cfg.Gates.SpecTraceability); err != nil {
+		return err
+	}
 	return nil
 }
