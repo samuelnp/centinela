@@ -13,6 +13,19 @@
     "createdAt": "2026-06-06T18:53:48Z"
   },
   {
+    "id": "32f04a9174b07dba",
+    "feature": "spec-traceability-gate",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: spec-traceability-gate",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/spec-traceability-gate-gatekeeper.md",
+    "createdAt": "2026-06-11T20:50:04Z"
+  },
+  {
     "id": "480e173b8b7cd979",
     "feature": "configurable-model-routing",
     "step": "tests",
