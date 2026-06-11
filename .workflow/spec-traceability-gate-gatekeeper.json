@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "cli_version": "dev",
+    "written_at": "2026-06-11T16:12:46Z"
+  },
+  "feature": "spec-traceability-gate",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-11T16:12:46Z",
+  "inputs": [
+    ".workflow/spec-traceability-gate-senior-engineer.md",
+    ".workflow/spec-traceability-gate-qa-senior.md",
+    ".workflow/spec-traceability-gate-edge-cases.md"
+  ],
+  "outputs": [
+    ".workflow/spec-traceability-gate-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}
