@@ -1,44 +1,22 @@
-# vhs demo tape for Centinela README
+# vhs demo tape for the Centinela README — simulated Claude Code session.
+# The visual content lives in assets/demo.sh; this tape just records it.
 # Render with: brew install vhs && vhs assets/demo.tape
 # Output:      assets/demo.gif
 
 Output assets/demo.gif
 
-Set Shell "zsh"
-Set FontSize 18
+Set Shell "bash"
+Set FontSize 16
 Set Width 1200
-Set Height 700
+Set Height 800
+Set Padding 16
 Set Theme "Catppuccin Mocha"
-Set TypingSpeed 50ms
-Set PlaybackSpeed 1.0
 
-# Pretend prompt
-Type "centinela init"
-Sleep 500ms
+Hide
+Type "bash assets/demo.sh"
 Enter
-Sleep 1500ms
+Sleep 400ms
+Show
 
-Type "centinela start landing-page"
-Sleep 500ms
-Enter
-Sleep 1500ms
-
-Type "# plan step — write docs/plans/landing-page.md + specs/landing-page.feature"
-Enter
-Sleep 1200ms
-
-Type "centinela complete landing-page"
-Sleep 500ms
-Enter
-Sleep 1500ms
-
-Type "# code step — agent writes the implementation, hook blocks wrong-step writes"
-Enter
-Sleep 1200ms
-
-Type "centinela validate"
-Sleep 500ms
-Enter
-Sleep 2000ms
-
-Sleep 1500ms
+# Script runtime is ~31s (typing + sleeps); record until it finishes.
+Sleep 33s
