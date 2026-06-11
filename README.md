@@ -55,10 +55,14 @@ If an agent tries to write source code while the workflow is in the `plan` step,
 ## Demo
 
 <p align="center">
-  <img src="./assets/demo.gif" alt="Centinela workflow demo" width="800">
+  <img src="./assets/demo.gif" alt="Centinela governing a Claude Code session" width="800">
 </p>
 
-> Recorded with [`vhs`](https://github.com/charmbracelet/vhs). To regenerate: `vhs assets/demo.tape`.
+> A simulated Claude Code session: the PreToolUse hook blocks the ungoverned write,
+> the agent starts the workflow, every file write is tagged with the active step,
+> and the gates verify before anything ships — enforced, not requested.
+>
+> Recorded with [`vhs`](https://github.com/charmbracelet/vhs). To regenerate: `vhs assets/demo.tape` (the session script lives in `assets/demo.sh`).
 
 ---
 
