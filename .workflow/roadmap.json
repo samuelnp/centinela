@@ -35,15 +35,25 @@
         },
         {
           "name": "spec-traceability-gate"
-        },
-        {
-          "name": "custom-gate-sdk",
-          "dependsOn": ["g2-import-graph-gate"]
         }
       ]
     },
     {
-      "name": "Phase 4: Operability & DX",
+      "name": "Phase 4: Loop Velocity",
+      "features": [
+        {
+          "name": "enforcement-profiles"
+        },
+        {
+          "name": "workflow-archetypes"
+        },
+        {
+          "name": "right-size-docs-step"
+        }
+      ]
+    },
+    {
+      "name": "Phase 5: Operability & DX",
       "features": [
         {
           "name": "roadmap-doc-sync"
@@ -54,11 +64,8 @@
       ]
     },
     {
-      "name": "Phase 5: Capability-Adaptive Governance",
+      "name": "Phase 6: Capability-Adaptive Governance",
       "features": [
-        {
-          "name": "enforcement-profiles"
-        },
         {
           "name": "model-capability-profiles",
           "dependsOn": ["enforcement-profiles", "configurable-model-routing"]
@@ -69,17 +76,6 @@
         },
         {
           "name": "headless-governance"
-        }
-      ]
-    },
-    {
-      "name": "Phase 6: Right-Size the Workflow",
-      "features": [
-        {
-          "name": "workflow-archetypes"
-        },
-        {
-          "name": "right-size-docs-step"
         }
       ]
     },
@@ -106,6 +102,10 @@
     {
       "name": "Phase 8: Continuous Governance",
       "features": [
+        {
+          "name": "custom-gate-sdk",
+          "dependsOn": ["g2-import-graph-gate"]
+        },
         {
           "name": "audit-baseline-ratchet",
           "dependsOn": ["g2-import-graph-gate"]
