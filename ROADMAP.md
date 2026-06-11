@@ -54,39 +54,16 @@
 - **spec-traceability-gate** — Verify every Gherkin scenario in `specs/*.feature`
   maps to an executed step definition in `tests/acceptance/`.
   *Fixes: spec and acceptance tests drift apart; scenarios silently go unimplemented.*
-- **custom-gate-sdk** — Let teams define their own mechanical gates (project-specific
-  rules) via config/plugin and run them inside `centinela validate` — without
-  forking Centinela. Generalizes the built-in gate interface so the built-in
-  gates become reference implementations, not the ceiling. This is the pivot
-  from "opinionated workflow tool" to "policy engine": Centinela's own rules
-  become the default profile, not the architecture.
-  *Fixes: teams with bespoke rules have no enforced path short of forking, so those rules stay "requested, not enforced."* (depends on g2-import-graph-gate)
+## Phase 4: Loop Velocity
 
-## Phase 4: Operability & DX
-
-> Reduce the friction of running and recovering Centinela itself — keep its own
-> artifacts honest and self-healing. Cheap, dependency-free wins that smooth
-> every later phase, so they come early.
-
-- **roadmap-doc-sync** — Treat `.workflow/roadmap.json` as the source of truth and
-  generate the human-readable `ROADMAP.md` from it, with a drift check that fails
-  if the two disagree. *(Dogfood note: this roadmap has now drifted twice while
-  being maintained by hand — exactly the toil this removes.)*
-  *Fixes: the machine roadmap and the human roadmap drift apart because they're maintained by hand.*
-- **centinela-doctor** — `centinela doctor`: one command that diagnoses (and, where
-  safe, repairs) broken hook wiring, stale or orphaned `.workflow` state, abandoned
-  worktrees, config drift, and roadmap drift — extending the existing `evidence
-  repair` into a holistic health check.
-  *Fixes: a broken or drifted install fails opaquely with no guided path back to a healthy state — the graceful-recovery gap.*
-
-## Phase 5: Capability-Adaptive Governance
-
-> One-size enforcement fails at both ends of the model spectrum: it taxes a
-> frontier model with ceremony it no longer needs, and it under-scaffolds a
-> small local model that needs *more* rails, not fewer. Both failure modes end
-> the same way — the user disables governance. This phase makes the amount of
-> process a function of model capability, while verification stays constant
-> for everyone.
+> **Pulled forward (2026-06-11).** The per-feature loop charges full ceremony —
+> seven sequential specialist roles, five manual confirmations, full docs
+> regeneration — regardless of feature size or surface. The 5-step is
+> feature-shaped and frontier-shaped; real work also includes fixes, refactors,
+> and spikes. These features cut the round-trips while keeping every gate and
+> claim verification intact, and they pay back on every remaining roadmap item —
+> so they ship before the long tail. Verification stays constant; only
+> *requested* process shrinks.
 >
 > **Dogfood note (2026-06-10).** The `code-quality-hardening` fix (PR #23) was
 > built through the full five-step workflow with seven specialist subagents and
@@ -106,6 +83,48 @@
   `centinela.toml` per project and overridable per feature. Decouples *how much
   process is enforced* from *whether outcomes are verified*.
   *Fixes: one-size enforcement either burdens a strong model with ceremony or under-scaffolds a weak one — both end in governance being switched off.*
+- **workflow-archetypes** — First-class lightweight tracks beside the 5-step:
+  `hotfix` (reproduce → fix → test → ship), `refactor` (characterize →
+  change → prove-equivalent), `spike` (timeboxed, no ship gate).
+  *Fixes: forcing a diagnosis/bugfix through a plan→docs pipeline it doesn't fit.*
+- **right-size-docs-step** — Make the `docs` step surface-aware, mirroring how the
+  `code` step requires `ux-ui-specialist` only for `surface: user-facing` features.
+  A user-facing feature still writes the plain-language KB guide (the one genuinely
+  valuable, reader- and memory-useful doc artifact); an internal refactor / bugfix /
+  chore instead emits a one-line changelog entry (via `delivery-artifact-generation`,
+  stubbed as a plain entry until that feature ships) and skips the KB guide, the
+  per-feature HTML portal regeneration, and the documentation-specialist evidence
+  ceremony. The 108 KB `index.html` portal moves to merge/release-time regeneration
+  rather than per-feature.
+  *Fixes: mandatory full docs ceremony — KB guide, HTML regen, evidence — runs on every feature including internal ones with no end-user story, burning tokens for zero reader value.*
+
+## Phase 5: Operability & DX
+
+> Reduce the friction of running and recovering Centinela itself — keep its own
+> artifacts honest and self-healing. Cheap, dependency-free wins that smooth
+> every later phase, so they come early.
+
+- **roadmap-doc-sync** — Treat `.workflow/roadmap.json` as the source of truth and
+  generate the human-readable `ROADMAP.md` from it, with a drift check that fails
+  if the two disagree. *(Dogfood note: this roadmap has now drifted twice while
+  being maintained by hand — exactly the toil this removes.)*
+  *Fixes: the machine roadmap and the human roadmap drift apart because they're maintained by hand.*
+- **centinela-doctor** — `centinela doctor`: one command that diagnoses (and, where
+  safe, repairs) broken hook wiring, stale or orphaned `.workflow` state, abandoned
+  worktrees, config drift, and roadmap drift — extending the existing `evidence
+  repair` into a holistic health check.
+  *Fixes: a broken or drifted install fails opaquely with no guided path back to a healthy state — the graceful-recovery gap.*
+
+## Phase 6: Capability-Adaptive Governance
+
+> One-size enforcement fails at both ends of the model spectrum: it taxes a
+> frontier model with ceremony it no longer needs, and it under-scaffolds a
+> small local model that needs *more* rails, not fewer. Both failure modes end
+> the same way — the user disables governance. Building on the
+> `enforcement-profiles` presets shipped in Phase 4, this phase makes the
+> amount of process a function of model capability, while verification stays
+> constant for everyone.
+
 - **model-capability-profiles** — A registry mapping each configured model —
   cloud or local — to a declared capability profile (instruction-following
   reliability, tool-use reliability, context budget) that selects its default
@@ -125,26 +144,6 @@
   evidence index) as the reviewable output. The foundation for CI, Capataz
   fleets, and reviewing agent work by evidence instead of by transcript.
   *Fixes: prompts assume a human in a chat session; unattended runs stall on questions or silently bypass them.*
-
-## Phase 6: Right-Size the Workflow
-
-> The 5-step is feature-shaped and frontier-shaped. Real teams also do fixes,
-> refactors, and spikes — and capable models shouldn't pay full ceremony for
-> internal work, while weak models benefit from smaller bites.
-
-- **workflow-archetypes** — First-class lightweight tracks beside the 5-step:
-  `hotfix` (reproduce → fix → test → ship), `refactor` (characterize →
-  change → prove-equivalent), `spike` (timeboxed, no ship gate).
-  *Fixes: forcing a diagnosis/bugfix through a plan→docs pipeline it doesn't fit.*
-- **right-size-docs-step** — Make the `docs` step surface-aware, mirroring how the
-  `code` step requires `ux-ui-specialist` only for `surface: user-facing` features.
-  A user-facing feature still writes the plain-language KB guide (the one genuinely
-  valuable, reader- and memory-useful doc artifact); an internal refactor / bugfix /
-  chore instead emits a one-line changelog entry (via `delivery-artifact-generation`)
-  and skips the KB guide, the per-feature HTML portal regeneration, and the
-  documentation-specialist evidence ceremony. The 108 KB `index.html` portal moves
-  to merge/release-time regeneration rather than per-feature.
-  *Fixes: mandatory full docs ceremony — KB guide, HTML regen, evidence — runs on every feature including internal ones with no end-user story, burning tokens for zero reader value.*
 
 ## Phase 7: Instrument the Loop
 
@@ -170,8 +169,16 @@
 
 ## Phase 8: Continuous Governance
 
-> Governance currently evaporates at merge. Extend it beyond build-time.
+> Governance currently evaporates at merge. Extend it beyond build-time —
+> and open the gate engine so teams bring their own rules.
 
+- **custom-gate-sdk** — Let teams define their own mechanical gates (project-specific
+  rules) via config/plugin and run them inside `centinela validate` — without
+  forking Centinela. Generalizes the built-in gate interface so the built-in
+  gates become reference implementations, not the ceiling. This is the pivot
+  from "opinionated workflow tool" to "policy engine": Centinela's own rules
+  become the default profile, not the architecture.
+  *Fixes: teams with bespoke rules have no enforced path short of forking, so those rules stay "requested, not enforced."* (depends on g2-import-graph-gate)
 - **audit-baseline-ratchet** — Whole-repo gate scan that records a baseline and
   *ratchets*: never lets new violations in, lets teams pay down old ones over time.
   Enables adoption on legacy codebases without a big-bang cleanup.
