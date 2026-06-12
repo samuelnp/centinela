@@ -1,0 +1,27 @@
+{
+  "_meta": {
+    "cli_version": "0.13.0",
+    "written_at": "2026-06-12T12:33:06Z"
+  },
+  "feature": "workflow-archetypes",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-12T12:33:06Z",
+  "inputs": [
+    "docs/features/workflow-archetypes.md",
+    "docs/plans/workflow-archetypes.md",
+    "specs/workflow-archetypes.feature",
+    ".workflow/workflow-archetypes-senior-engineer.md",
+    ".workflow/workflow-archetypes-qa-senior.md",
+    ".workflow/workflow-archetypes-gatekeeper.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/workflow-archetypes.md",
+    "docs/project-docs/kb/workflow-archetypes.html",
+    "docs/project-docs/index.html",
+    ".workflow/workflow-archetypes-documentation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

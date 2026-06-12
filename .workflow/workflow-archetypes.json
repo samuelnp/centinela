@@ -1,0 +1,37 @@
+{
+  "feature": "workflow-archetypes",
+  "startedAt": "2026-06-12T08:18:30.048391Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-12T08:48:40Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-12T12:35:11Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-12T08:37:17Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-12T12:17:49Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-12T12:32:40Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "enforcementProfile": "strict",
+  "worktreePath": ".worktrees/workflow-archetypes"
+}
