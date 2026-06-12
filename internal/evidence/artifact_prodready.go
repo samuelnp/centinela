@@ -11,7 +11,7 @@ func prodReadyBody(feature string) []byte {
 **Status:** PASS
 
 #### Files Reviewed
-- _List each file checked._
+- %s
 
 #### Findings
 | Check | File | Severity | Issue | Suggested Fix |
@@ -22,5 +22,5 @@ CRITICAL: 0, WARNING: 0
 
 #### Recommendation
 PASS: confirm the feature is production-ready.
-`, feature, today()))
+`, feature, today(), FillSlot("each file checked")))
 }

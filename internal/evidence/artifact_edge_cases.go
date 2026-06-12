@@ -9,10 +9,10 @@ func edgeCasesBody(feature string) []byte {
 
 ## Covered
 
-- _List each edge case the test suite exercises._
+- %s
 
 ## Residual Risks
 
-- _List anything intentionally out of scope, with mitigation notes._
-`, feature))
+- %s
+`, feature, FillSlot("each edge case the test suite exercises"), FillSlot("anything intentionally out of scope, with mitigation notes")))
 }

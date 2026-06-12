@@ -67,7 +67,7 @@ func writeEvidence(t *testing.T, f, s string, r Role, edge bool) {
 	inputs := `"inputs":["i"]`
 	outputs := `"outputs":["docs/project-docs/index.html"]`
 	if s == "plan" && (r == RoleBigThinker || r == RoleFeatureSpecial) {
-		inputs = `"inputs":["docs/features/` + f + `.md"]`
+		inputs = `"inputs":["docs/features/` + f + `.md","docs/plans/` + f + `.md"]`
 		os.MkdirAll("docs/plans", 0755)                              //nolint:errcheck
 		os.MkdirAll("specs", 0755)                                   //nolint:errcheck
 		os.WriteFile("docs/plans/"+f+".md", []byte("plan"), 0644)    //nolint:errcheck

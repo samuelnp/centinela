@@ -9,8 +9,12 @@ import (
 
 // DefaultCompanionTemplate returns the empty-but-structured markdown body the
 // init subcommand drops alongside a fresh JSON skeleton. Agents overwrite it
-// with their narrative; the validator only enforces existence.
+// with their narrative; the validator only enforces existence. Known roles get
+// a per-role FILL-slot skeleton; unknown roles fall back to a one-liner.
 func DefaultCompanionTemplate(feature string, role Role) string {
+	if body, ok := companionSkeleton(feature, role); ok {
+		return fmt.Sprintf("# %s — %s\n\n%s", feature, role, body)
+	}
 	return fmt.Sprintf("# %s — %s\n\n_Replace this with the role's narrative report._\n", feature, role)
 }
 

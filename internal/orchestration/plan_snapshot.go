@@ -11,7 +11,7 @@ func validatePlanSnapshotInputs(path, feature, step string, role Role, inputs []
 	if step != "plan" || !requiresPlanSnapshot(role) {
 		return nil
 	}
-	required := requiredPlanInputs(feature)
+	required := RequiredPlanInputs(feature)
 	provided := map[string]struct{}{}
 	for _, in := range inputs {
 		provided[normalizeFeatureDocPath(in)] = struct{}{}
@@ -32,9 +32,17 @@ func requiresPlanSnapshot(role Role) bool {
 	return role == RoleBigThinker || role == RoleFeatureSpecial
 }
 
-func requiredPlanInputs(feature string) []string {
+// RequiredPlanInputs returns the plan-snapshot input set the big-thinker and
+// feature-specialist must list: the feature's own brief, every docs/features/*.md,
+// and the feature's plan at docs/plans/<feature>.md — normalized and sorted (the
+// set the evidence contract documents as required). The validator and the
+// evidence init pre-fill share this so a pre-filled init validates by construction.
+func RequiredPlanInputs(feature string) []string {
 	seen := map[string]struct{}{}
-	required := []string{normalizeFeatureDocPath("docs/features/" + feature + ".md")}
+	required := []string{
+		normalizeFeatureDocPath("docs/features/" + feature + ".md"),
+		normalizeFeatureDocPath("docs/plans/" + feature + ".md"),
+	}
 	for _, p := range required {
 		seen[p] = struct{}{}
 	}
