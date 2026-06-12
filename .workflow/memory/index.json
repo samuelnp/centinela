@@ -65,6 +65,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "8fa7cc944cfb8890",
+    "feature": "enforcement-profiles",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Explicit knob beats profile default.** Risk: a profile silently overriding a",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/enforcement-profiles-edge-cases.md",
+    "createdAt": "2026-06-12T07:28:18Z"
+  },
+  {
     "id": "90ad78316f103f62",
     "feature": "spec-traceability-gate",
     "step": "tests",
