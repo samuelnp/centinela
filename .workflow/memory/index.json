@@ -169,6 +169,19 @@
     "createdAt": "2026-06-06T17:27:14Z"
   },
   {
+    "id": "bde7dae410e6773a",
+    "feature": "model-capability-profiles",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Back-compat: zero workflow + zero config → strict (byte-identical).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/model-capability-profiles-edge-cases.md",
+    "createdAt": "2026-06-12T16:22:21Z"
+  },
+  {
     "id": "cdb73eb2216f4196",
     "feature": "code-quality-hardening",
     "step": "validate",

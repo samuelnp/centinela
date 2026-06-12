@@ -34,6 +34,9 @@ func epRenders(wf *workflow.Workflow, cfg *config.Config) bool {
 func TestEP_OutcomeSuppressesReviewPrompt(t *testing.T) {
 	cfg := &config.Config{}
 	cfg.Workflow.EnforcementProfile = config.ProfileOutcome
+	// Mirror config.Load: an explicit global profile also sets the raw signal so
+	// EffectiveProfile's explicit-global tier engages (the new precedence).
+	cfg.Workflow.RawEnforcementProfile = config.ProfileOutcome
 	for _, step := range []string{"plan", "code", "tests", "validate", "docs"} {
 		if epRenders(&workflow.Workflow{CurrentStep: step}, cfg) {
 			t.Fatalf("outcome must suppress the review prompt at step %q", step)
@@ -45,6 +48,7 @@ func TestEP_OutcomeSuppressesReviewPrompt(t *testing.T) {
 func TestEP_ExplicitConfirmationOverridesProfile(t *testing.T) {
 	cfg := &config.Config{}
 	cfg.Workflow.EnforcementProfile = config.ProfileOutcome
+	cfg.Workflow.RawEnforcementProfile = config.ProfileOutcome
 	cfg.Workflow.RawStepConfirmationMode = config.ConfirmEveryStep
 	if !epRenders(&workflow.Workflow{CurrentStep: "code"}, cfg) {
 		t.Fatal("explicit every_step must win over outcome and render the prompt")
