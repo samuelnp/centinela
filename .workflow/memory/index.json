@@ -13,6 +13,19 @@
     "createdAt": "2026-06-06T18:53:48Z"
   },
   {
+    "id": "121a9c908809ba77",
+    "feature": "right-size-docs-step",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Default surface = internal (forward-only light path).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/right-size-docs-step-edge-cases.md",
+    "createdAt": "2026-06-12T15:06:05Z"
+  },
+  {
     "id": "28db0c5dc1738aef",
     "feature": "workflow-archetypes",
     "step": "validate",
