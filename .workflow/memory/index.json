@@ -65,6 +65,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "87cb212fb0271f08",
+    "feature": "enforcement-profiles",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: enforcement-profiles",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/enforcement-profiles-gatekeeper.md",
+    "createdAt": "2026-06-12T07:47:04Z"
+  },
+  {
     "id": "8fa7cc944cfb8890",
     "feature": "enforcement-profiles",
     "step": "tests",
