@@ -8,6 +8,8 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/samuelnp/centinela/internal/config"
 )
 
 // StepState holds the status and completion time of a single workflow step.
@@ -24,6 +26,10 @@ type Workflow struct {
 	Steps             map[string]StepState `json:"steps"`
 	StepOrder         []string             `json:"stepOrder,omitempty"`
 	OrchestrationMode string               `json:"orchestrationMode,omitempty"`
+	// EnforcementProfile pins the feature's profile at start. Empty on workflows
+	// created before this field existed — EffectiveProfile falls back to the
+	// global config / strict default for those.
+	EnforcementProfile string `json:"enforcementProfile,omitempty"`
 	// WorktreePath is the absolute path of the worktree this workflow runs
 	// in. Empty when the project uses a single-checkout flow.
 	WorktreePath string `json:"worktreePath,omitempty"`
@@ -65,7 +71,8 @@ func Save(wf *Workflow) error {
 	return os.WriteFile(FilePath(wf.Feature), data, 0644)
 }
 
-// New creates a fresh workflow starting at the "plan" step.
+// New creates a fresh workflow starting at the "plan" step under the strict
+// (back-compat default) profile.
 func New(feature string) *Workflow {
-	return NewWithOrder(feature, DefaultStepOrder)
+	return NewWithOrder(feature, DefaultStepOrder, config.ProfileStrict)
 }

@@ -45,7 +45,9 @@ func runComplete(_ *cobra.Command, args []string) error {
 
 	current := wf.CurrentStep
 
-	// Validate step requires all gates to pass before advancing.
+	// Validate step requires all gates to pass before advancing. Verification is
+	// CONSTANT across every profile — NO profile branch belongs here; profiles
+	// scale process, never proof.
 	if current == "validate" {
 		if err := executeValidation(); err != nil {
 			return err

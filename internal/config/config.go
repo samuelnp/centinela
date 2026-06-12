@@ -64,6 +64,14 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("parsing %s: %w", Filename, err)
 	}
 
+	// Capture the explicit-vs-defaulted signal before applyDefaults overwrites
+	// the empty step_confirmation_mode with every_step (see RawStepConfirmationMode).
+	cfg.Workflow.RawStepConfirmationMode = cfg.Workflow.StepConfirmationMode
+	// Reject an explicitly-set unknown profile against the raw decoded value,
+	// before applyDefaults normalizes it to strict (which would hide the error).
+	if err := validateEnforcementProfile(cfg.Workflow.EnforcementProfile); err != nil {
+		return nil, err
+	}
 	applyDefaults(&cfg)
 	if err := validateConfig(&cfg); err != nil {
 		return nil, err

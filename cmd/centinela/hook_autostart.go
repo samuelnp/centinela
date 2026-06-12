@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/autostart"
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
 
@@ -32,7 +33,11 @@ func runHookAutostart(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 	os.MkdirAll(workflow.WorkflowDir, 0755) //nolint:errcheck
-	if err := workflow.Save(workflow.NewWithOrder(feature, order)); err != nil {
+	profile := ""
+	if cfg, err := config.Load(); err == nil {
+		profile = cfg.Workflow.EnforcementProfile // inherit global; normalizes in NewWithOrder
+	}
+	if err := workflow.Save(workflow.NewWithOrder(feature, order, profile)); err != nil {
 		return nil
 	}
 	fmt.Printf("CENTINELA DIRECTIVE: auto-started workflow %q from prompt intent.\n", feature)
