@@ -9,6 +9,7 @@ func applyDefaults(cfg *Config) {
 	}
 	cfg.Workflow.StepConfirmationMode = NormalizeStepConfirmationMode(cfg.Workflow.StepConfirmationMode)
 	cfg.Workflow.PlanAdvisorMode = NormalizePlanAdvisorMode(cfg.Workflow.PlanAdvisorMode)
+	cfg.Workflow.EnforcementProfile = NormalizeEnforcementProfile(cfg.Workflow.EnforcementProfile)
 	cfg.Workflow.PlanQuestionLimit = NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit)
 	cfg.Validate.DiffMode = NormalizeDiffMode(cfg.Validate.DiffMode)
 	cfg.Validate.DiffBase = NormalizeDiffBase(cfg.Validate.DiffBase)

@@ -15,6 +15,7 @@ func RenderStatus(wf *workflow.Workflow) string {
 		"",
 		StyleBold.Render("Feature") + "  " + wf.Feature,
 		StyleBold.Render("Started") + "  " + wf.StartedAt.Format("2006-01-02"),
+		StyleBold.Render("Profile") + "  " + workflow.DisplayProfile(wf),
 	}
 	if wf.WorktreePath != "" {
 		rows = append(rows, StyleBold.Render("Worktree")+" "+wf.WorktreePath)
