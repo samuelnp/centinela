@@ -1,0 +1,55 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T16:17:01Z"
+  },
+  "feature": "model-capability-profiles",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-12T16:17:38Z",
+  "inputs": [
+    "docs/plans/model-capability-profiles.md",
+    "specs/model-capability-profiles.feature",
+    "internal/config/capability.go",
+    "internal/config/driver_model.go",
+    "internal/config/capability_validate.go",
+    "internal/workflow/profile.go",
+    "internal/workflow/start_resolve.go",
+    "internal/workflow/profile_provenance.go",
+    "internal/ui/render_status.go"
+  ],
+  "outputs": [
+    "tests/acceptance/model_capability_profiles_precedence_test.go",
+    "tests/acceptance/model_capability_profiles_resolution_test.go",
+    "tests/acceptance/model_capability_profiles_validation_test.go",
+    "tests/acceptance/model_capability_profiles_provenance_test.go",
+    "internal/config/capability_class_test.go",
+    "internal/config/capability_profile_test.go",
+    "internal/config/driver_model_test.go",
+    "internal/config/capability_validate_test.go",
+    "internal/config/capability_load_test.go",
+    "internal/workflow/profile_capability_test.go",
+    "internal/workflow/start_resolve_test.go",
+    "internal/workflow/profile_provenance_test.go",
+    "internal/ui/render_status_provenance_test.go",
+    ".workflow/model-capability-profiles-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Zero-config (no flag, no global, no driver) resolves to strict byte-identically",
+    "Unknown/typo'd driver model with no capability falls back to strict (safe)",
+    "Explicit --profile beats the capability default",
+    "Explicit global enforcement_profile beats capability and is honored but NOT pinned",
+    "capability_profiles remaps a class to any profile (frontier->guided)",
+    "Driver resolution precedence: --model flag > CENTINELA_MODEL env > config driver_model",
+    "Opaque/unknown model id is accepted and pins without error",
+    "Absent/empty capability tables and nil cfg are valid (no-op)",
+    "Model id matched by trim but case-sensitive; capability class normalized trim+lowercase",
+    "User [orchestration.capabilities] override beats the built-in model map",
+    "Bad capability config (unknown class/profile, empty model-id key) fails config.Load naming the offender",
+    "Status provenance strings locked (Unicode arrow U+2192) for all five tiers",
+    "Nil-guards on EffectiveProfile/ProfileProvenance/ResolveStart/DriverModelFrom"
+  ],
+  "handoffTo": "validation-specialist",
+  "coverage": "95.5"
+}

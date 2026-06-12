@@ -37,6 +37,11 @@ type Workflow struct {
 	// WorktreePath is the absolute path of the worktree this workflow runs
 	// in. Empty when the project uses a single-checkout flow.
 	WorktreePath string `json:"worktreePath,omitempty"`
+	// DriverModel is the model id pinned at start that keys this feature's default
+	// enforcement profile via the capability tier. Empty on workflows created
+	// before this field existed and when no driver model was configured —
+	// EffectiveProfile simply skips the capability tier for those.
+	DriverModel string `json:"driverModel,omitempty"`
 }
 
 // WorkflowDir is the directory where workflow JSON files are stored.
