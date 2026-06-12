@@ -67,6 +67,12 @@ Output format:
 #### Out-of-Scope
 - bullet list
 
+#### Deferred Findings
+- For every Out-of-Scope item that is a NEW discovery (a gap you found,
+  not a pre-agreed exclusion), run:
+  `centinela roadmap defer <slug> --summary "<one line>" --source <feature>/feature-specialist`
+- List the recorded slugs here, or state "none".
+
 #### Handoff
 - Next role: senior-engineer
 - Open clarifications: …

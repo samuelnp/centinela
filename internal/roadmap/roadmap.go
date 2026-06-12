@@ -11,8 +11,17 @@ const RoadmapFile = ".workflow/roadmap.json"
 
 // Feature is a single deliverable within a phase.
 type Feature struct {
-	Name      string   `json:"name"`
-	DependsOn []string `json:"dependsOn,omitempty"`
+	Name       string   `json:"name"`
+	DependsOn  []string `json:"dependsOn,omitempty"`
+	Summary    string   `json:"summary,omitempty"`    // deferred-finding one-liner
+	Source     *Source  `json:"source,omitempty"`     // {feature, role} provenance
+	DeferredAt string   `json:"deferredAt,omitempty"` // RFC3339 capture time
+}
+
+// Source records the provenance of a deferred Backlog finding.
+type Source struct {
+	Feature string `json:"feature,omitempty"`
+	Role    string `json:"role,omitempty"`
 }
 
 // Phase groups related features under a milestone.

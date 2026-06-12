@@ -66,6 +66,12 @@ For each finding:
 - **Risk:** <what could break>
 - **Suggestion:** <how to fix or mitigate>
 
+#### Deferred Findings
+- For every finding deferred rather than blocked-on (a remediation left
+  for later), run:
+  `centinela roadmap defer <slug> --summary "<one line>" --source <feature>/gatekeeper`
+- List the recorded slugs here, or state "none".
+
 #### Recommendation
 - SAFE: No conflicts detected. Proceed with implementation.
 - WARNING: Potential conflicts found. Document risks and proceed with caution.

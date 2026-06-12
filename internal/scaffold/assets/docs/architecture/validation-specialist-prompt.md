@@ -66,6 +66,12 @@ Output format:
 #### Synthesis
 - One paragraph combining the sub-report outcomes into a single decision.
 
+#### Deferred Findings
+- For every validation gap or warning you are deferring rather than
+  resolving now, run:
+  `centinela roadmap defer <slug> --summary "<one line>" --source <feature>/validation-specialist`
+- List the recorded slugs here, or state "none".
+
 #### Decision
 - PASS  → run `centinela complete <FEATURE_NAME>`
 - WARNING → document warnings, proceed
