@@ -51,7 +51,9 @@
     "internal/scaffold/assets/docs/architecture/edge-case-tester-prompt.md",
     "internal/scaffold/assets/docs/architecture/ux-ui-specialist-prompt.md",
     "internal/scaffold/assets/docs/architecture/validation-specialist-prompt.md",
-    "internal/scaffold/assets/docs/architecture/gatekeeper-prompt.md"
+    "internal/scaffold/assets/docs/architecture/gatekeeper-prompt.md",
+    "internal/roadmap/promote_preflight.go",
+    "internal/roadmap/mapkeys.go"
   ],
   "edgeCases": [
     "Raw-preserving read-modify-write keeps unknown fields (legacyDependsOn, customField) on untouched entries",
@@ -60,7 +62,11 @@
     "Promote score validation (range then overall>=9) runs before any write; all rejection paths leave files unchanged",
     "promote without --scores prints evaluator context and writes nothing; unknown phase lists known phases",
     "Emptied Backlog phase kept (not dropped) after promote; renders no section when empty",
-    "Source flag auto-resolves from worktree CWD via DetectFeatureFromCwd; omitted entirely at repo root"
+    "Source flag auto-resolves from worktree CWD via DetectFeatureFromCwd; omitted entirely at repo root",
+    "Fix: promote pre-flights both artifact JSON+MD files before writing roadmap.json; missing/corrupt artifact leaves all five files byte-identical (no half-promoted state)",
+    "Fix: appendToPhase refuses a slug already present in the target phase, preventing duplicate entries from hand-edited/merge-artifact roadmaps",
+    "Fix: writeArtifact and rawDoc.render emit map-backed non-feature keys in sorted order (sortedKeys) for deterministic, churn-free output",
+    "Fix: --scores \"\" (explicitly empty) is now a usage error via cobra Changed; only an unset --scores enters the evaluator/print-context path"
   ],
   "handoffTo": "qa-senior"
 }

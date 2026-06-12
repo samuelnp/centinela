@@ -60,9 +60,32 @@
 - `--source` auto-resolution lives in the cmd layer (calls `worktree.DetectFeatureFromCwd`) so
   `internal/roadmap` keeps no worktree import edge; `Defer` takes an already-resolved `*Source`.
 
+#### Fix Pass (tests step)
+The edge-case-tester surfaced four in-scope defects; all fixed before tests were written against them.
+1. **Promote partial-write on missing artifacts (High).** `Promote` (`internal/roadmap/promote.go`)
+   now mutates roadmap.json only in-memory, then calls `preflightArtifacts()`
+   (`internal/roadmap/promote_preflight.go`) to confirm both artifact JSON files exist+parse and both
+   `.md` companions exist BEFORE the first `writeRawRoadmap` byte. Any failure leaves all five files
+   byte-identical (no half-promoted state).
+2. **Duplicate entry on slug collision (Medium).** `appendToPhase` (`internal/roadmap/rawmove.go`)
+   scans the target phase and refuses with a clear error when the slug already exists there, instead
+   of appending a second entry.
+3. **Nondeterministic key order (Medium).** `writeArtifact` (`internal/roadmap/artifactio.go`) and
+   `rawDoc.render` (`internal/roadmap/rawrender.go`) now emit map-backed non-feature keys via
+   `sortedKeys` (`internal/roadmap/mapkeys.go`) in sorted order — chosen over original-order
+   preservation because the source is a `map[string]json.RawMessage` with no retained order; sorting
+   is the cheapest deterministic choice. Feature-array order is preserved (slice, append-only).
+4. **`--scores ""` silent evaluator path (Low).** `runRoadmapPromote`
+   (`cmd/centinela/roadmap_promote.go`) uses `cmd.Flags().Changed("scores")` to distinguish unset
+   from explicitly-empty; an explicit `--scores ""` is now a usage error (exit 1).
+
 #### Deferred Findings
-- none. No out-of-scope discoveries surfaced during implementation; all smoke scenarios passed, so
-  dogfooding the new command was available but not needed.
+- `rawio-reformat-diff-churn` (source: deferred-findings-roadmap-capture/senior-engineer) — the first
+  defer/promote re-renders untouched phases of roadmap.json, producing spurious git diff churn. Known
+  trade-off (writer is deterministic/idempotent thereafter); deferred to the worktree Backlog via the
+  `roadmap defer` command. The two edge-case-tester-deferred bugs
+  (`promote-partial-write-on-missing-artifacts`, `promote-duplicate-entry-on-slug-collision`) were
+  fixed in-feature and removed from the Backlog.
 
 #### Handoff
 - Next role: qa-senior

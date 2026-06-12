@@ -32,9 +32,11 @@ func (d *rawDoc) render() ([]byte, error) {
 		buf.WriteByte('\n')
 	}
 	buf.WriteString("  ]")
-	for k, v := range d.rest {
+	// Sort non-phases keys: Go map iteration is randomized, so sorting keeps
+	// untouched top-level keys in a stable order across writes (no diff churn).
+	for _, k := range sortedKeys(d.rest) {
 		key, _ := json.Marshal(k)
-		out, err := indentValue(v, "  ")
+		out, err := indentValue(d.rest[k], "  ")
 		if err != nil {
 			return nil, err
 		}

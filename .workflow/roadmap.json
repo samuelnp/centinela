@@ -71,11 +71,16 @@
       "features": [
         {
           "name": "model-capability-profiles",
-          "dependsOn": ["enforcement-profiles", "configurable-model-routing"]
+          "dependsOn": [
+            "enforcement-profiles",
+            "configurable-model-routing"
+          ]
         },
         {
           "name": "deterministic-artifact-scaffolds",
-          "dependsOn": ["enforcement-profiles"]
+          "dependsOn": [
+            "enforcement-profiles"
+          ]
         },
         {
           "name": "headless-governance"
@@ -90,15 +95,23 @@
         },
         {
           "name": "centinela-insights",
-          "dependsOn": ["governance-telemetry"]
+          "dependsOn": [
+            "governance-telemetry"
+          ]
         },
         {
           "name": "failure-ledger-plan-advisor",
-          "dependsOn": ["governance-telemetry", "governed-project-memory"]
+          "dependsOn": [
+            "governance-telemetry",
+            "governed-project-memory"
+          ]
         },
         {
           "name": "capability-calibration",
-          "dependsOn": ["governance-telemetry", "model-capability-profiles"]
+          "dependsOn": [
+            "governance-telemetry",
+            "model-capability-profiles"
+          ]
         }
       ]
     },
@@ -107,15 +120,21 @@
       "features": [
         {
           "name": "custom-gate-sdk",
-          "dependsOn": ["g2-import-graph-gate"]
+          "dependsOn": [
+            "g2-import-graph-gate"
+          ]
         },
         {
           "name": "audit-baseline-ratchet",
-          "dependsOn": ["g2-import-graph-gate"]
+          "dependsOn": [
+            "g2-import-graph-gate"
+          ]
         },
         {
           "name": "precommit-and-pr-gate",
-          "dependsOn": ["audit-baseline-ratchet"]
+          "dependsOn": [
+            "audit-baseline-ratchet"
+          ]
         }
       ]
     },
@@ -127,19 +146,29 @@
         },
         {
           "name": "archetype-inference-project-synthesis",
-          "dependsOn": ["deep-codebase-analysis"]
+          "dependsOn": [
+            "deep-codebase-analysis"
+          ]
         },
         {
           "name": "spec-reconstruction",
-          "dependsOn": ["deep-codebase-analysis"]
+          "dependsOn": [
+            "deep-codebase-analysis"
+          ]
         },
         {
           "name": "brownfield-roadmap-generation",
-          "dependsOn": ["archetype-inference-project-synthesis", "spec-reconstruction"]
+          "dependsOn": [
+            "archetype-inference-project-synthesis",
+            "spec-reconstruction"
+          ]
         },
         {
           "name": "adoption-baseline",
-          "dependsOn": ["deep-codebase-analysis", "audit-baseline-ratchet"]
+          "dependsOn": [
+            "deep-codebase-analysis",
+            "audit-baseline-ratchet"
+          ]
         }
       ]
     },
@@ -151,11 +180,15 @@
         },
         {
           "name": "delivery-artifact-generation",
-          "dependsOn": ["completion-delivery-prompt"]
+          "dependsOn": [
+            "completion-delivery-prompt"
+          ]
         },
         {
           "name": "team-dashboard",
-          "dependsOn": ["governance-telemetry"]
+          "dependsOn": [
+            "governance-telemetry"
+          ]
         },
         {
           "name": "cost-governance"
@@ -170,15 +203,22 @@
         },
         {
           "name": "codex-support",
-          "dependsOn": ["host-harness-adapters"]
+          "dependsOn": [
+            "host-harness-adapters"
+          ]
         },
         {
           "name": "local-harness-support",
-          "dependsOn": ["host-harness-adapters", "model-capability-profiles"]
+          "dependsOn": [
+            "host-harness-adapters",
+            "model-capability-profiles"
+          ]
         },
         {
           "name": "cross-project-memory",
-          "dependsOn": ["governed-project-memory"]
+          "dependsOn": [
+            "governed-project-memory"
+          ]
         }
       ]
     },
@@ -187,8 +227,17 @@
       "features": [
         {
           "name": "adaptive-skill-synthesis",
-          "dependsOn": ["governance-telemetry", "centinela-insights"]
+          "dependsOn": [
+            "governance-telemetry",
+            "centinela-insights"
+          ]
         }
+      ]
+    },
+    {
+      "name": "Backlog",
+      "features": [
+        {"name":"rawio-reformat-diff-churn","summary":"First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn","source":{"feature":"deferred-findings-roadmap-capture","role":"senior-engineer"},"deferredAt":"2026-06-12T16:29:13Z"}
       ]
     }
   ]

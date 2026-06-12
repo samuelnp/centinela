@@ -58,11 +58,17 @@ func Promote(path string, req PromoteRequest) (*BacklogFinding, error) {
 	if err := json.Unmarshal(raw, &finding); err != nil {
 		return nil, err
 	}
+	// Pre-flight: appendToPhase mutates only in-memory (sets dirty), and the
+	// artifact files are validated, BEFORE the first byte hits disk. Any failure
+	// here leaves all five files byte-identical (no half-promoted state).
 	if err := doc.appendToPhase(req.Phase, req.Slug); err != nil {
-		return nil, err // unknown phase — nothing written yet
+		return nil, err // unknown phase / duplicate in target — nothing written yet
 	}
 	if err := doc.removeBacklogFeature(backlogIdx, req.Slug); err != nil {
 		return nil, err
+	}
+	if err := preflightArtifacts(); err != nil {
+		return nil, err // missing/corrupt artifact — nothing written yet
 	}
 	summary := strings.TrimSpace(req.Summary)
 	if summary == "" {

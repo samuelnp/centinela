@@ -29,11 +29,13 @@ func writeArtifact(path string, top map[string]json.RawMessage) error {
 		buf.WriteString(out)
 		return nil
 	}
-	for k, v := range top {
+	// Emit non-"features" keys in sorted order: Go map iteration is randomized,
+	// so sorting guarantees byte-identical output across runs (no diff churn).
+	for _, k := range sortedKeys(top) {
 		if k == "features" {
 			continue
 		}
-		if err := emit(k, v); err != nil {
+		if err := emit(k, top[k]); err != nil {
 			return err
 		}
 	}

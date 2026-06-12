@@ -27,12 +27,19 @@ func init() {
 	roadmapCmd.AddCommand(roadmapPromoteCmd)
 }
 
-func runRoadmapPromote(_ *cobra.Command, args []string) error {
+func runRoadmapPromote(cmd *cobra.Command, args []string) error {
 	slug := args[0]
 	if promotePhase == "" {
 		return fmt.Errorf("--phase is required")
 	}
-	if promoteScores == "" {
+	// Distinguish an unset --scores (evaluator/print-context path) from an
+	// explicitly-empty --scores="" (a usage error): cobra's Changed reports
+	// whether the flag was provided at all, regardless of its value.
+	scoresSet := cmd.Flags().Changed("scores")
+	if scoresSet && promoteScores == "" {
+		return fmt.Errorf("--scores was set but empty; provide six comma-separated integers (ac,uv,dc,dep,ee,overall) or omit --scores for the evaluator context")
+	}
+	if !scoresSet {
 		return printEvaluatorContext(slug)
 	}
 	return promoteScored(slug)

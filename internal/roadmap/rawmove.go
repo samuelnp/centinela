@@ -60,6 +60,11 @@ func (d *rawDoc) appendToPhase(target, slug string) error {
 		if isBacklogPhaseName(p.Name) || p.Name != target {
 			continue
 		}
+		for _, f := range p.Features {
+			if name, _ := featureName(f); name == slug {
+				return fmt.Errorf("%q already exists in phase %q; refusing to add a duplicate", slug, target)
+			}
+		}
 		entry, err := compactBytes(Feature{Name: slug, DependsOn: []string{}})
 		if err != nil {
 			return err
