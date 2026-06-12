@@ -65,6 +65,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "832f5df786047c53",
+    "feature": "deferred-findings-roadmap-capture",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Case:** Empty summary (defer) / **Impact:** Low / **Likelihood:** Medium / **Why:** Agents might pass empty flag; validated before any write, correct exit 1.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/deferred-findings-roadmap-capture-edge-cases.md",
+    "createdAt": "2026-06-12T17:42:35Z"
+  },
+  {
     "id": "87cb212fb0271f08",
     "feature": "enforcement-profiles",
     "step": "validate",
