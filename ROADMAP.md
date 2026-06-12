@@ -117,6 +117,17 @@
   worktrees, config drift, and roadmap drift — extending the existing `evidence
   repair` into a holistic health check.
   *Fixes: a broken or drifted install fails opaquely with no guided path back to a healthy state — the graceful-recovery gap.*
+- **deferred-findings-roadmap-capture** — When plan-step agents (big-thinker,
+  feature-specialist) detect something outside the current feature's scope, or
+  code/tests-step agents (senior-engineer, qa-senior) surface findings they won't
+  fix immediately, route that information into the roadmap instead of losing it:
+  a `centinela roadmap` capture path that appends the finding to the roadmap
+  together with the analysis/quality entries `roadmap validate` demands, plus
+  contract updates in the four role prompts (and their scaffold mirrors) making
+  the capture mandatory whenever such a finding exists. Exact capture surface
+  (dedicated backlog phase vs deferred-findings ledger promoted at triage)
+  is decided at plan.
+  *Fixes: out-of-scope discoveries and deferred fixes live only in per-feature prose artifacts (Out-of-Scope, Residual Risks, Outstanding TODOs) and evaporate — they never reach the roadmap, the single planning source of truth.*
 
 ## Phase 6: Capability-Adaptive Governance
 

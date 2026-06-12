@@ -111,6 +111,18 @@
       "summary": "Holistic, dependency-free health check across stale evidence, orphaned worktrees, config and roadmap drift; clear graceful-recovery value extending evidence repair."
     },
     {
+      "name": "deferred-findings-roadmap-capture",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Makes deferred-finding capture a first-class governed output: a roadmap CLI path that appends out-of-scope detections (big-thinker, feature-specialist) and deferred fixes (senior-engineer, qa-senior) to the roadmap with the analysis/quality entries validate demands, plus prompt-contract updates in the four role prompts and their scaffold mirrors. Dogfood-validated pain: today these findings live only in per-feature prose (Out-of-Scope, Residual Risks, Outstanding TODOs) and evaporate. Exact capture surface (backlog phase vs ledger) deferred to plan."
+    },
+    {
       "name": "enforcement-profiles",
       "scores": {
         "acceptanceCriteria": 9,

@@ -19,6 +19,8 @@
 - Dependencies: none — operates on .workflow/roadmap.json and ROADMAP.md
 - Feature: centinela-doctor
 - Dependencies: none — extends the existing evidence-repair machinery
+- Feature: deferred-findings-roadmap-capture
+- Dependencies: none — extends the existing roadmap CLI and the four role prompts plus their scaffold mirrors; complements roadmap-doc-sync (regeneration picks up deferred entries) without requiring it
 - Feature: enforcement-profiles
 - Dependencies: none — generalizes the existing workflow/step-confirmation configuration into named strictness presets
 - Feature: model-capability-profiles

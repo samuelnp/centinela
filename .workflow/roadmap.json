@@ -60,6 +60,9 @@
         },
         {
           "name": "centinela-doctor"
+        },
+        {
+          "name": "deferred-findings-roadmap-capture"
         }
       ]
     },
