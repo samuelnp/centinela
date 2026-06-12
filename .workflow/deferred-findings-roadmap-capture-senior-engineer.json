@@ -53,7 +53,8 @@
     "internal/scaffold/assets/docs/architecture/validation-specialist-prompt.md",
     "internal/scaffold/assets/docs/architecture/gatekeeper-prompt.md",
     "internal/roadmap/promote_preflight.go",
-    "internal/roadmap/mapkeys.go"
+    "internal/roadmap/mapkeys.go",
+    "internal/roadmap/summary_backlog_test.go"
   ],
   "edgeCases": [
     "Raw-preserving read-modify-write keeps unknown fields (legacyDependsOn, customField) on untouched entries",
@@ -66,7 +67,8 @@
     "Fix: promote pre-flights both artifact JSON+MD files before writing roadmap.json; missing/corrupt artifact leaves all five files byte-identical (no half-promoted state)",
     "Fix: appendToPhase refuses a slug already present in the target phase, preventing duplicate entries from hand-edited/merge-artifact roadmaps",
     "Fix: writeArtifact and rawDoc.render emit map-backed non-feature keys in sorted order (sortedKeys) for deterministic, churn-free output",
-    "Fix: --scores \"\" (explicitly empty) is now a usage error via cobra Changed; only an unset --scores enters the evaluator/print-context path"
+    "Fix: --scores \"\" (explicitly empty) is now a usage error via cobra Changed; only an unset --scores enters the evaluator/print-context path",
+    "backlog excluded from summary completion counts"
   ],
   "handoffTo": "qa-senior"
 }

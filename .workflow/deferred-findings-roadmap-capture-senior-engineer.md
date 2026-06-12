@@ -79,6 +79,34 @@ The edge-case-tester surfaced four in-scope defects; all fixed before tests were
    (`cmd/centinela/roadmap_promote.go`) uses `cmd.Flags().Changed("scores")` to distinguish unset
    from explicitly-empty; an explicit `--scores ""` is now a usage error (exit 1).
 
+#### Fix Pass 2 (validate step)
+The gatekeeper found an exemption leak (deferred as
+`session-rehydration-backlog-complete-flag`) that conflicts with
+`session-context-rehydration.feature` and `roadmap-parallel-readiness.feature`.
+
+**Root cause:** `(*Roadmap).Summary()` (`internal/roadmap/roadmap.go:80`) iterated
+over ALL phases including the Backlog phase. Backlog entries are deferred
+findings, not schedulable features, so with every real feature done and any open
+Backlog entry, the consumer in `cmd/centinela/hook_session.go:34`
+(`hasIncomplete := planned > 0 || inProgress > 0`) computed `planned > 0` from the
+Backlog count and the "Roadmap complete" rehydration line never fired.
+
+**Fix:** `Summary()` now skips Backlog phases via the existing
+`isBacklogPhaseName` predicate, so the done/planned/in-progress counts exclude
+deferred findings — consistent with the already-fixed render-side phase skip
+(`rawrender.go`) and the `NonBacklogFeatureSet` exemption point. The single
+predicate now drives every exemption point as designed.
+
+**Regression test:** `internal/roadmap/summary_backlog_test.go` —
+`TestSummaryExcludesBacklog` (all real features done + non-empty Backlog →
+planned/inProgress both 0, done counts only schedulable features) and
+`TestSummaryIncompleteWithBacklog` (an incomplete real feature + Backlog entries
+→ still incomplete; Backlog never masks an open feature).
+
+Gates: `go test ./...` 1506 pass; coverage 95.0% ≥ 95.0%; `check-fmt.sh` clean;
+`go vet ./...` clean. The fixed `session-rehydration-backlog-complete-flag` entry
+was removed from the worktree Backlog; `rawio-reformat-diff-churn` remains.
+
 #### Deferred Findings
 - `rawio-reformat-diff-churn` (source: deferred-findings-roadmap-capture/senior-engineer) — the first
   defer/promote re-renders untouched phases of roadmap.json, producing spurious git diff churn. Known
