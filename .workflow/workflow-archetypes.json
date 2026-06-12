@@ -1,15 +1,15 @@
 {
   "feature": "workflow-archetypes",
   "startedAt": "2026-06-12T08:18:30.048391Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-12T08:48:40Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-12T12:35:11Z"
     },
     "plan": {
       "status": "done",
