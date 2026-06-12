@@ -13,6 +13,19 @@
     "createdAt": "2026-06-06T18:53:48Z"
   },
   {
+    "id": "28db0c5dc1738aef",
+    "feature": "workflow-archetypes",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: workflow-archetypes",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/workflow-archetypes-gatekeeper.md",
+    "createdAt": "2026-06-12T12:32:40Z"
+  },
+  {
     "id": "32f04a9174b07dba",
     "feature": "spec-traceability-gate",
     "step": "validate",

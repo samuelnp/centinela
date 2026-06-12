@@ -1,14 +1,14 @@
 {
   "feature": "workflow-archetypes",
   "startedAt": "2026-06-12T08:18:30.048391Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-12T08:48:40Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-12T12:17:49Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-12T12:32:40Z"
     }
   },
   "stepOrder": [
