@@ -1,0 +1,1 @@
+- feat: `centinela roadmap defer`/`promote` capture out-of-scope findings into a validate-exempt Backlog phase, with a mandatory Deferred Findings contract in all eight role prompts
