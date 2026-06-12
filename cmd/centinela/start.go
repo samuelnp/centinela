@@ -21,9 +21,11 @@ var startCmd = &cobra.Command{
 }
 
 var startProfile string
+var startArchetype string
 
 func init() {
 	startCmd.Flags().StringVar(&startProfile, "profile", "", "enforcement profile (strict, guided, outcome)")
+	startCmd.Flags().StringVar(&startArchetype, "archetype", "", "workflow archetype (canonical, hotfix, refactor, spike)")
 	rootCmd.AddCommand(startCmd)
 }
 
@@ -58,7 +60,7 @@ func runStart(_ *cobra.Command, args []string) error {
 		return fmt.Errorf("workflow for %q already exists — use 'status' to check progress", feature)
 	}
 
-	order, err := workflowOrderForFeature(feature)
+	order, archetype, err := resolveArchetypeOrder(feature, startArchetype)
 	if err != nil {
 		return err
 	}
@@ -74,6 +76,7 @@ func runStart(_ *cobra.Command, args []string) error {
 		profile = cfg.Workflow.EnforcementProfile
 	}
 	wf := workflow.NewWithOrder(feature, order, profile)
+	wf.Archetype = archetype
 	wf.WorktreePath = wtPath
 	if err := workflow.Save(wf); err != nil {
 		return fmt.Errorf("cannot save workflow: %w", err)
@@ -81,7 +84,7 @@ func runStart(_ *cobra.Command, args []string) error {
 
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Workflow started for %q.", feature)))
 	fmt.Println(ui.StyleMuted.Render("Steps: " + stepArrow(order)))
-	fmt.Println(ui.RenderStep("Current step", "plan"))
+	fmt.Println(ui.RenderStep("Current step", order[0]))
 	return nil
 }
 
