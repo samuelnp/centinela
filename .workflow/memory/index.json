@@ -195,6 +195,19 @@
     "createdAt": "2026-06-12T17:00:44Z"
   },
   {
+    "id": "ccfcd939f5d569ec",
+    "feature": "deterministic-artifact-scaffolds",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Plan-role pre-fill (big-thinker, feature-specialist) includes the feature brief, every `docs/features/*.md`, AND the plan path `docs/plans/\u003cfeature\u003e.md` — verbatim `orchestration.RequiredPlanInputs(feature)`.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/deterministic-artifact-scaffolds-edge-cases.md",
+    "createdAt": "2026-06-12T18:16:47Z"
+  },
+  {
     "id": "cdb73eb2216f4196",
     "feature": "code-quality-hardening",
     "step": "validate",
