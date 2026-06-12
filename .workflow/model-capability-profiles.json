@@ -1,14 +1,14 @@
 {
   "feature": "model-capability-profiles",
   "startedAt": "2026-06-12T15:29:23.583041Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-12T16:04:50Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-12T16:22:21Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-12T17:00:44Z"
     }
   },
   "stepOrder": [
