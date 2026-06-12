@@ -1,0 +1,29 @@
+### Gatekeeper Report: right-size-docs-step
+
+**Date:** 2026-06-12
+**Status:** SAFE
+
+#### Analyzed Specs
+- `specs/right-size-docs-step.feature` (this feature) — 10 scenarios: surface-aware docs role gating (1,2), user-facing KB contract preserved (3,4), internal changelog contract (5,6,7), merge-time portal regen best-effort (8,9), default surface = internal (10).
+- `specs/improve-docs-llm-hybrid-ui.feature` — governs the documentation-generator prompt/HTML portal this feature edits. No behavioral conflict: only an additive "Surface-aware docs step" section was appended to the prompt doc; portal generation (`docgen.Generate`) is unchanged.
+- `specs/merge-steward-auto-dispatch.feature` — governs `centinela merge`, which this feature extends with a portal-regen seam. Materially relevant; verified the regression guard ("Clean merge does not dispatch the Steward") still holds.
+- Surveyed all `specs/*.feature` for docs/surface/changelog/merge references; no other spec asserts the always-on docs bundle or the docs-role requirement that this feature gates.
+
+#### Findings
+
+No conflicts detected. Verified, per the six focus checks:
+
+1. **User-facing docs path preserved (behavior preservation) — CONFIRMED.** `validateDocsOutput` branches on `IsUserFacingFeature`; the user-facing branch (`validateDocsUserFacing`) keeps the exact prior contract (index.html + KB `.md` + KB `.html`) with identical error wording. `RequiredRolesForFeature("docs", user-facing)` still includes `documentation-specialist`. `RequiredRoles("docs")` itself is unchanged (still returns the docs role unconditionally). The 7 fixture updates each only add a `surface: user-facing` brief so the test keeps exercising the full bundle — no assertion was weakened (KB-missing errors, `RequiredRoles("docs") == 1`, `MISSING_DOCS_OUTPUT`, docs-role directive all preserved). Integrity intact.
+
+2. **Default-surface forward-only — CONFIRMED.** Internal is the default; `IsUserFacingFeature` returns false for a no-surface brief and a missing brief. Only features built after this ships take the light path. Big-thinker survey found 0 existing briefs declare `user-facing`; no merged feature's docs are retroactively invalidated.
+
+3. **Scaffold-mirror parity (CRITICAL) — CONFIRMED.** `diff docs/architecture/documentation-generator-prompt.md internal/scaffold/assets/docs/architecture/documentation-generator-prompt.md` is EMPTY (identical); both copies got the same +15-line addition. The parity acceptance test (`TestScaffoldArchitectureMirrorParity`) now iterates EVERY `*.md` in `docs/architecture` against its mirror with an explicit allowlist; `documentation-generator-prompt.md` is NOT allowlisted, so it is byte-compared — and the test passes.
+
+4. **KindChangelog additive — CONFIRMED.** Appended to the end of `KindsAllowed()` and a new `case` in `RenderTemplate` (default case unchanged). No test snapshots an exact allowed-kinds set/length; the existing `artifact_test.go` loops generically over `KindsAllowed()`, so it absorbs the new kind. No breakage.
+
+5. **merge.go docsPortalRegen seam — CONFIRMED best-effort.** The regen call runs only on the clean-merge path, AFTER the Steward-dispatch decision and `ClearPending`; on error it prints `notice: portal regen skipped: <err>` and continues. It cannot dispatch the Steward nor fail a merge. `TestRunMergeCleanInvokesPortalRegen` (invoked once) and `TestRunMergeCleanToleratesPortalRegenFailure` (failure tolerated + notice) pass; the merge-steward regression guard is unaffected.
+
+6. **verify/gates/complete.go/code-step gating untouched — CONFIRMED.** `git diff --stat main...HEAD -- internal/verify internal/gates cmd/centinela/complete.go` is EMPTY. Code-step ux-ui gating in `policy.go` (lines 45-46, `step == "code" && IsUserFacingFeature → RoleUXUISpecialist`) is intact, and `policy_user_facing_test.go` is preserved.
+
+#### Recommendation
+- **SAFE** — User-facing docs path is byte-equivalent in behavior, the scaffold mirror is identical and guarded by a passing parity test, the change is forward-only with zero affected briefs, the merge regen seam cannot fail a merge, and verify/gates/complete/code-gating are provably untouched. Full `centinela validate` passes (G1, cross-compile, spec-traceability 10/10, full test suite, acceptance, coverage 95.4%, fmt).

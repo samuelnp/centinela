@@ -65,6 +65,19 @@
     "createdAt": "2026-06-12T12:17:49Z"
   },
   {
+    "id": "47f88ed9b2258fb7",
+    "feature": "right-size-docs-step",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: right-size-docs-step",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/right-size-docs-step-gatekeeper.md",
+    "createdAt": "2026-06-12T15:18:51Z"
+  },
+  {
     "id": "480e173b8b7cd979",
     "feature": "configurable-model-routing",
     "step": "tests",
