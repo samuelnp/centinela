@@ -1,10 +1,10 @@
 {
   "feature": "deferred-findings-roadmap-capture",
   "startedAt": "2026-06-12T08:59:19.122765Z",
-  "currentStep": "plan",
+  "currentStep": "code",
   "steps": {
     "code": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "docs": {
@@ -12,8 +12,8 @@
       "completedAt": null
     },
     "plan": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-12T15:43:34Z"
     },
     "tests": {
       "status": "pending",
