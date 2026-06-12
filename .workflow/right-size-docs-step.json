@@ -1,0 +1,38 @@
+{
+  "feature": "right-size-docs-step",
+  "startedAt": "2026-06-12T13:06:10.420348Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-12T14:30:37Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "enforcementProfile": "strict",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/right-size-docs-step"
+}
