@@ -13,6 +13,9 @@ const RoadmapFile = ".workflow/roadmap.json"
 type Feature struct {
 	Name      string   `json:"name"`
 	DependsOn []string `json:"dependsOn,omitempty"`
+	// Archetype optionally pins the workflow track for this feature; an explicit
+	// --archetype flag at start overrides it. Empty resolves to canonical.
+	Archetype string `json:"archetype,omitempty"`
 }
 
 // Phase groups related features under a milestone.

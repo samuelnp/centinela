@@ -13,6 +13,19 @@
     "createdAt": "2026-06-06T18:53:48Z"
   },
   {
+    "id": "28db0c5dc1738aef",
+    "feature": "workflow-archetypes",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: workflow-archetypes",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/workflow-archetypes-gatekeeper.md",
+    "createdAt": "2026-06-12T12:32:40Z"
+  },
+  {
     "id": "32f04a9174b07dba",
     "feature": "spec-traceability-gate",
     "step": "validate",
@@ -24,6 +37,19 @@
     ],
     "sourceArtifact": ".workflow/spec-traceability-gate-gatekeeper.md",
     "createdAt": "2026-06-11T20:50:04Z"
+  },
+  {
+    "id": "3f4e5f634549b2ed",
+    "feature": "workflow-archetypes",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Spike order has no validate step (ungated by absence, not a bypass).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/workflow-archetypes-edge-cases.md",
+    "createdAt": "2026-06-12T12:17:49Z"
   },
   {
     "id": "480e173b8b7cd979",
