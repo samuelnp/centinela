@@ -52,6 +52,19 @@
     "createdAt": "2026-06-11T20:50:04Z"
   },
   {
+    "id": "37b620e38200efd5",
+    "feature": "deterministic-artifact-scaffolds",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: deterministic-artifact-scaffolds",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/deterministic-artifact-scaffolds-gatekeeper.md",
+    "createdAt": "2026-06-12T18:32:28Z"
+  },
+  {
     "id": "3f4e5f634549b2ed",
     "feature": "workflow-archetypes",
     "step": "tests",

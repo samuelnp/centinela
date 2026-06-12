@@ -1,14 +1,14 @@
 {
   "feature": "deterministic-artifact-scaffolds",
   "startedAt": "2026-06-12T17:22:21.65465Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-12T17:59:02Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-12T18:16:47Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-12T18:32:28Z"
     }
   },
   "stepOrder": [

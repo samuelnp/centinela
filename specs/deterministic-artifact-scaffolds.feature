@@ -122,7 +122,7 @@ Feature: Deterministic artifact scaffolds
   Scenario: Gatekeeper artifact Analyzed Specs is an empty list when no specs exist
     Given no "specs/*.feature" files exist
     When I run "centinela artifact new demo gatekeeper"
-    Then the "Analyzed Specs" section is an empty list with no "<FILL:" placeholder rows
+    Then the "Analyzed Specs" section lists no real spec paths and shows a single "<FILL:" prompt row
 
   Scenario: Artifact bodies use FILL slots for substance sections
     When I run "centinela artifact new demo gatekeeper"
