@@ -28,7 +28,7 @@ func TestCompleteTransitionsToDone(t *testing.T) {
 	os.MkdirAll("tests/unit", 0755)                                                                                                                 //nolint:errcheck
 	os.MkdirAll("tests/acceptance", 0755)                                                                                                           //nolint:errcheck
 	os.WriteFile("docs/plans/f.md", []byte("# p"), 0644)                                                                                            //nolint:errcheck
-	os.WriteFile("docs/features/f.md", []byte("# b"), 0644)                                                                                         //nolint:errcheck
+	os.WriteFile("docs/features/f.md", []byte("# b\nsurface: user-facing\n"), 0644)                                                                 //nolint:errcheck
 	os.WriteFile("specs/f.feature", []byte("Feature: x"), 0644)                                                                                     //nolint:errcheck
 	os.WriteFile("tests/unit/x_test.go", []byte("package unit"), 0644)                                                                              //nolint:errcheck
 	os.WriteFile("tests/acceptance/x_test.go", []byte("package acc\n\nimport \"testing\"\n\nfunc TestAcc(t *testing.T) { t.Log(\"ok\") }\n"), 0644) //nolint:errcheck
