@@ -13,6 +13,19 @@
     "createdAt": "2026-06-06T18:53:48Z"
   },
   {
+    "id": "20f5e09524c45465",
+    "feature": "deferred-findings-roadmap-capture",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: deferred-findings-roadmap-capture",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/deferred-findings-roadmap-capture-gatekeeper.md",
+    "createdAt": "2026-06-12T18:12:27Z"
+  },
+  {
     "id": "32f04a9174b07dba",
     "feature": "spec-traceability-gate",
     "step": "validate",
