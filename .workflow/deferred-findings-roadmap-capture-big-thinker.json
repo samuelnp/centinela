@@ -1,13 +1,13 @@
 {
   "_meta": {
-    "cli_version": "0.13.0",
-    "written_at": "2026-06-12T12:18:56Z"
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T15:26:23Z"
   },
   "feature": "deferred-findings-roadmap-capture",
   "step": "plan",
   "role": "big-thinker",
   "status": "done",
-  "generatedAt": "2026-06-12T12:18:56Z",
+  "generatedAt": "2026-06-12T15:26:23Z",
   "inputs": [
     "docs/features/adapt-opencode-support.md",
     "docs/features/add-agent-evidence-contract.md",
@@ -93,11 +93,12 @@
     ".workflow/deferred-findings-roadmap-capture-big-thinker.md"
   ],
   "edgeCases": [
-    "Stale worktree roadmap.json copy at defer time accepts a slug root already has; promote re-checks at root and fails cleanly",
-    "Same-slug add/add conflict across two concurrent worktrees; surfaced to Merge Steward as the desired signal",
-    "Promote read-modify-write must not drop unknown JSON fields like legacy dependsOn in roadmap-analysis.json",
-    "Promote into a non-existent phase name; v1 errors and lists known phases rather than forking phase taxonomy",
-    "Junk or empty --summary on defer; CLI enforces non-empty summary and report must list recorded slugs"
+    "Concurrent defer from two worktrees appends to the same Backlog.features array → git merge conflict; one-entry-per-line formatting makes it a trivial union (operator-accepted risk)",
+    "Validate-exemption must not leak to non-backlog features: a real feature still requires analysis+quality coverage; only Backlog-phase features are exempt",
+    "centinela start on an unpromoted backlog slug is refused with a 'promote it first' error",
+    "promote without --scores prints the roadmap-quality-evaluator context and writes NOTHING to disk",
+    "promote re-checks the slug against the root roadmap (not in Backlog / already a real feature) before any write",
+    "Raw-JSON read-modify-write preserves unknown fields and byte-stable formatting of untouched entries in roadmap/analysis/quality"
   ],
   "handoffTo": "feature-specialist"
 }

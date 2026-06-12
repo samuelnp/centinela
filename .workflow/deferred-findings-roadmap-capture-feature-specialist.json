@@ -1,13 +1,13 @@
 {
   "_meta": {
-    "cli_version": "0.13.0",
-    "written_at": "2026-06-12T12:21:47Z"
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T15:30:27Z"
   },
   "feature": "deferred-findings-roadmap-capture",
   "step": "plan",
   "role": "feature-specialist",
   "status": "done",
-  "generatedAt": "2026-06-12T12:21:47Z",
+  "generatedAt": "2026-06-12T15:30:27Z",
   "inputs": [
     "docs/features/adapt-opencode-support.md",
     "docs/features/add-agent-evidence-contract.md",
@@ -93,13 +93,28 @@
     ".workflow/deferred-findings-roadmap-capture-feature-specialist.md"
   ],
   "edgeCases": [
-    "Slug collision vs ledger: defer rejects writing when .workflow/deferred/<slug>.json already exists",
-    "Slug collision vs roadmap.json: defer rejects a slug that names an existing roadmap feature",
-    "Empty summary rejected: defer with --summary empty string exits non-zero before any file write",
-    "Promote with overall score < 9 rejected before any write: all three artifact files remain unchanged",
-    "Promote into non-existent phase rejected: output lists known phases; roadmap.json unchanged",
-    "Stale root roadmap at promote: slug already in roadmap.json causes promote to fail cleanly after re-check",
-    "Raw-JSON preservation: unknown fields (e.g. legacy dependsOn) in analysis/quality survive promote unmodified"
+    "defer with empty summary is rejected before any write (zero writes)",
+    "defer slug collision against Backlog entry rejected",
+    "defer slug collision against non-Backlog feature rejected",
+    "defer invalid slug rejected with format message (zero writes)",
+    "defer auto-resolves source from worktree CWD when --source omitted",
+    "defer outside worktree with no --source: source field absent (omitempty)",
+    "defer appends to existing Backlog without touching prior entries (byte-stability)",
+    "Backlog section absent from roadmap output when phase missing or empty",
+    "Backlog features excluded from roadmap ready output",
+    "roadmap validate passes with Backlog entries having no analysis/quality coverage",
+    "roadmap validate still fails for non-Backlog feature missing coverage (exemption does not leak)",
+    "phase named 'Pre-Backlog Work' is NOT exempt from validate (isBacklogPhaseName is exact)",
+    "centinela start refuses Backlog feature with promote-first error",
+    "promote without --scores prints evaluator context and writes nothing (zero writes, exit 0)",
+    "promote with valid --scores: entry moved Backlog→phase; summary kept in quality; source/deferredAt stripped from feature; provenance bullets written",
+    "promote preserves unknown JSON fields on untouched entries (raw-preserving I/O)",
+    "promote overall < 9 rejected before any write",
+    "promote any dimension outside 1-10 rejected before any write",
+    "promote into non-existent phase rejected; known phases listed",
+    "promote slug not in Backlog rejected cleanly (zero writes)",
+    "promote malformed --scores CSV (wrong count) rejected before any write",
+    "all eight role prompts and scaffold mirrors contain Deferred Findings section byte-identically"
   ],
   "handoffTo": "senior-engineer"
 }

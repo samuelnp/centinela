@@ -3,74 +3,85 @@
 
 #### Behavior Summary
 
-`centinela roadmap defer <slug>` writes a one-file-per-finding ledger entry under `.workflow/deferred/<slug>.json` — a JSON record containing the slug, a non-empty summary, an optional source (feature + role), status `open`, and a `createdAt` timestamp. When run inside a worktree, the active feature is auto-detected from the shell CWD via `worktree.DetectFeatureFromCwd`; outside a worktree the source is optional. Defer validates the slug against the ledger (no duplicate files) and against `roadmap.json` feature names (no shadowing), then writes atomically. `centinela roadmap` renders a "Deferred findings" section — count plus open slug list — whenever the ledger has open entries; the section is hidden when the count is zero. `centinela roadmap defer --list` prints a machine-readable listing of all open entries. `centinela roadmap promote <slug>` performs a four-stage triage operation at the root checkout: score validation (each dimension 1–10, overall ≥ 9) before any disk write, re-check that the slug is not already in `roadmap.json`, raw-JSON-preserving append to all three roadmap artifacts (roadmap.json + roadmap-analysis.json + roadmap-quality.json) via temp-file + rename, ledger status update to `promoted` with a `promotedAt` field, and a post-write `roadmap validate` run that surfaces any artifact inconsistency before the next `centinela start`. Finally, the four role prompts (big-thinker, feature-specialist, senior-engineer, qa-senior) and their byte-identical scaffold mirrors each gain a mandatory "Deferred Findings" section that requires agents to run `centinela roadmap defer` for every out-of-scope or not-fixed-now finding and to list the resulting slugs (or "none") in the report.
+`centinela roadmap defer <slug> --summary <text> [--source <feature>/<role>]` appends a finding to a `Backlog` phase in `.workflow/roadmap.json` (creating the phase if absent, always as the last phase) via raw-preserving read-modify-write. The `Feature` struct gains three `omitempty` fields — `summary`, `source` (`{feature, role}`), and `deferredAt` (RFC3339) — that serialize as absent on non-Backlog entries, producing zero diff churn on existing content. The `Backlog` phase name is matched case-insensitively and trimmed by an `isBacklogPhaseName` helper that mirrors the existing `isBootstrapPhaseName` predicate. Slug validation (kebab-case rule) is duplicated in `internal/roadmap` with a `// mirrors worktree.ValidateFeatureSlug` comment, keeping the G2 import graph edge-free.
+
+`roadmap validate` (ValidateAnalysis + ValidateQuality) exempts Backlog features via `NonBacklogFeatureSet` replacing the current `roadmapFeatureSet` call in `analysis.go` and `quality.go`. `DeriveReadiness` (and therefore `ReadySet`, `RenderRoadmap`, and unmet-dep enumeration) skips Backlog features. `workflowOrderForFeature` in `cmd/centinela/start_guard.go` refuses a Backlog slug with a "promote it first" error before any step-order logic runs.
+
+`centinela roadmap promote <slug> --phase <name> [--scores ac,uv,dc,dep,ee,overall]`: without `--scores`, prints the roadmap-quality-evaluator context block (finding name/summary/source, target phase, threshold 9, six-dimension schema, the literal re-invocation line, one-line instruction to run a quality-evaluator pass) and exits 0 with zero writes. With `--scores` (exactly six comma-separated ints, each 1-10, overall >= 9), validates before any write, then: removes the entry from the Backlog array; appends `{name, dependsOn:[]}` (metadata stripped) to the target phase; appends name-only entry to `roadmap-analysis.json`; appends scored+summary entry to `roadmap-quality.json`; appends provenance bullets to `roadmap-analysis.md` and `roadmap-quality.md`; runs validate last. All writes via temp-file+rename. Prints ROADMAP.md sync reminder on success.
+
+`centinela roadmap` renders a Backlog section (slug + summary, one entry per line) after the phase overview, only when the Backlog phase is present and non-empty. The phase overview loop skips Backlog entries (they are excluded from `DeriveReadiness`).
+
+All eight role prompts (big-thinker, feature-specialist, senior-engineer, qa-senior, edge-case-tester, ux-ui-specialist, validation-specialist, gatekeeper) and their byte-identical scaffold mirrors under `internal/scaffold/assets/docs/architecture/` gain a required `#### Deferred Findings` section anchored near each role's existing deferred-prose section.
 
 #### Gherkin Scenarios
 
-All scenarios are in `specs/deferred-findings-roadmap-capture.feature`.
+See `specs/deferred-findings-roadmap-capture.feature`. Summary by slice:
 
-- **Happy-path defer creates a ledger entry with required fields** — Given active workflow and clean ledger/roadmap; When defer runs with slug + summary + source; Then `.workflow/deferred/<slug>.json` is created with all five required fields (slug, summary, source, status `open`, createdAt) and exit 0.
-- **Defer rejects a slug that already exists in the ledger** — Given an existing open ledger entry; When defer is re-run for the same slug; Then non-zero exit, collision message, file unchanged.
-- **Defer rejects a slug that matches an existing roadmap feature name** — Given roadmap.json has the named feature; When defer uses the same slug; Then non-zero exit, "already a roadmap feature" message, no file created.
-- **Defer with an empty summary is rejected before any file is written** — Given clean ledger; When `--summary ""` is passed; Then non-zero exit, no file created.
-- **Defer with an invalid slug is rejected** — Given a slug containing spaces or special chars; When defer runs; Then non-zero exit with slug format error.
-- **Source flag is optional; when inside a worktree the feature is auto-detected** — Given CWD inside `.worktrees/auto-source-feat`; When defer runs without `--source`; Then exit 0 and `source.feature` populated from CWD detection.
-- **Source flag is required when run outside any worktree and CWD detection yields nothing** — Given CWD is repo root; When defer runs without `--source`; Then exit 0 with source omitted.
-- **Deferred findings count and list are shown in centinela roadmap output** — Given two open ledger entries; When `centinela roadmap` runs; Then both slugs and count are present in output.
-- **Deferred findings section is hidden when there are no open entries** — Given empty ledger; When `centinela roadmap` runs; Then no deferred section in output.
-- **defer --list prints all open ledger entries as machine-readable JSON** — Given two open and one promoted entry; When `--list` runs; Then open-only entries appear, promoted entry absent, exit 0.
-- **Happy-path promote appends to all three roadmap artifacts** — Given open ledger entry and valid scores ≥ 9; When promote runs; Then all three artifacts updated, ROADMAP.md reminder printed, `roadmap validate` passes.
-- **Promote preserves unknown JSON fields in analysis and quality artifacts** — Given analysis has legacy `dependsOn` field; When promote appends a new entry; Then existing `dependsOn` fields are byte-stable.
-- **Promote marks the ledger entry status as promoted** — Given successful promote; Then ledger file has `status: promoted` and non-empty `promotedAt`.
-- **Promote with overall score below 9 is rejected before any write** — Given scores summing to overall 7; When promote runs; Then non-zero exit, score error, all three artifacts unchanged.
-- **Promote into a non-existent phase is rejected with known phases listed** — Given unknown `--phase`; When promote runs; Then non-zero exit, known-phases enumerated in output, roadmap.json unchanged.
-- **Promote a slug already present as a roadmap feature is rejected cleanly** — Given stale open ledger entry whose slug root roadmap already carries; When promote runs; Then non-zero exit, artifacts unchanged.
-- **centinela roadmap validate passes after a successful promotion** — Given successful promotion; When `roadmap validate` runs; Then exit 0.
-- **Four role prompts and their scaffold mirrors contain the Deferred Findings obligation byte-identically** — Given the four source prompt files and four scaffold mirrors; When each pair is compared; Then all pairs are byte-identical and every file contains `centinela roadmap defer` and a "Deferred Findings" heading.
+- **Slice 1 — defer**: 8 scenarios (happy path creates Backlog with correct fields; appends to existing Backlog without disturbing prior entries; rejects empty summary; rejects slug collision in Backlog phase; rejects slug collision in non-Backlog phase; rejects invalid slug; auto-resolves `--source` from worktree CWD; omits source field when outside a worktree).
+- **Slice 2 — rendering + exemptions**: 7 scenarios (Backlog section present; Backlog section absent when phase missing; Backlog section absent when phase empty; Backlog features absent from `roadmap ready`; validate passes with Backlog entries having no analysis/quality; validate still fails for uncovered non-Backlog feature; phase named "Pre-Backlog Work" is not exempt from validate).
+- **Slice 2 — start guard**: 1 scenario (start refuses Backlog slug with promote-first error).
+- **Slice 3 — promote evaluator path**: 1 scenario (no `--scores` prints evaluator context and writes nothing).
+- **Slice 3 — promote scored path**: 2 scenarios (happy path moves entry + appends artifacts + provenance bullets + validate green; raw-preserving I/O preserves unknown fields).
+- **Slice 3 — promote rejections**: 5 scenarios (overall < 9; dimension outside 1-10; unknown phase; slug not in Backlog; malformed CSV wrong count).
+- **Slice 4 — prompt contract**: 1 scenario (all eight pairs byte-identical; all sixteen files contain Deferred Findings section + `centinela roadmap defer` text).
 
-#### UX States
+Total: **25 scenarios**.
 
-| State | Trigger | Surface |
-|-------|---------|---------|
-| Ledger entry created | `centinela roadmap defer <slug> --summary <text>` succeeds | stdout confirmation line + exit 0; `.workflow/deferred/<slug>.json` written |
-| Slug collision (ledger) | Slug already exists in `.workflow/deferred/` | stderr error "already exists / collision"; exit non-zero; no file change |
-| Slug collision (roadmap) | Slug matches a `roadmap.json` feature name | stderr error "already a roadmap feature"; exit non-zero; no file created |
-| Empty summary rejected | `--summary ""` passed | stderr "summary required / empty"; exit non-zero; no file written |
-| Invalid slug rejected | Slug fails kebab-case validation | stderr names bad slug and required format; exit non-zero |
-| Source auto-detected | CWD inside `.worktrees/<feature>`; `--source` omitted | `source.feature` field populated silently; exit 0 |
-| Source omitted at root | CWD not inside any worktree; `--source` omitted | `source` field absent/null in ledger file; exit 0 |
-| Deferred section visible | `centinela roadmap` run with >= 1 open ledger entry | Deferred findings panel in stdout showing count + slug list |
-| Deferred section hidden | `centinela roadmap` run with 0 open entries | No deferred panel in stdout |
-| Listing open findings | `centinela roadmap defer --list` | Machine-readable JSON/structured listing of open entries; exit 0 |
-| Promote success | All scores valid, phase exists, slug not in roadmap | Three artifacts updated; ledger status -> promoted; ROADMAP.md reminder; `validate` passes; exit 0 |
-| Score below threshold | promote `--scores` overall < 9 | stderr score error; zero writes; exit non-zero |
-| Unknown phase | promote `--phase` names a phase not in roadmap.json | stderr lists known phases; zero writes; exit non-zero |
-| Slug already promoted | promote targets a slug already in roadmap.json | stderr "already a roadmap feature"; zero writes; exit non-zero |
-| Prompt contract satisfied | Agent report lists deferred slugs or "none" after running defer | Human-readable evidence in `.workflow/<feature>-<role>.md`; machine-verifiable via prompt text |
+#### UX States Table
+
+| Surface | Input / condition | Output | Exit code |
+|---------|-------------------|--------|-----------|
+| `roadmap defer <slug> --summary <text>` | Valid slug, no collision, valid summary | Backlog entry appended; roadmap.json updated | 0 |
+| `roadmap defer <slug>` (in worktree) | No `--source`; CWD inside `.worktrees/<feat>` | Entry appended; `source.feature` auto-populated from CWD | 0 |
+| `roadmap defer <slug>` (outside worktree) | No `--source`; CWD not in `.worktrees/` | Entry appended; `source` field absent | 0 |
+| `roadmap defer <slug> --summary ""` | Empty summary | Error: summary required/empty; zero writes | non-zero |
+| `roadmap defer <slug>` | Slug collision in Backlog or any other phase | Error: slug collision; zero writes | non-zero |
+| `roadmap defer "bad slug!"` | Invalid slug format | Error: invalid slug + required format; zero writes | non-zero |
+| `centinela roadmap` | Backlog phase present and non-empty | Phase overview + Backlog section (slug + summary per entry) | 0 |
+| `centinela roadmap` | Backlog phase absent or empty | Phase overview only; no Backlog section | 0 |
+| `centinela roadmap ready` | Backlog features present | Backlog features excluded from ready list | 0 |
+| `centinela roadmap validate` | Backlog entries with no analysis/quality coverage | Passes (exempted) | 0 |
+| `centinela roadmap validate` | Non-Backlog feature missing analysis/quality | Fails; names the missing feature | non-zero |
+| `centinela start <backlog-slug>` | Slug is in Backlog phase | Error: promote it first; zero workflow created | non-zero |
+| `roadmap promote <slug> --phase <name>` | No `--scores`; slug in Backlog | Evaluator context printed (name/summary/source/phase/threshold/schema/re-invocation line); zero writes | 0 |
+| `roadmap promote <slug> --phase <name> --scores ...` | All scores 1-10, overall >= 9; phase exists | Entry moved; analysis/quality/provenance appended; validate passes; ROADMAP.md reminder printed | 0 |
+| `roadmap promote <slug> --phase <name> --scores ...` | overall < 9 | Error: overall must be >= 9; zero writes | non-zero |
+| `roadmap promote <slug> --phase <name> --scores ...` | Any dimension outside 1-10 | Error: each score must be 1-10; zero writes | non-zero |
+| `roadmap promote <slug> --phase "nonexistent" --scores ...` | Unknown phase | Error: unknown phase + list of known non-Backlog phases; zero writes | non-zero |
+| `roadmap promote <slug> --phase <name> --scores ...` | Slug not in Backlog | Error: not a Backlog finding; zero writes | non-zero |
+| `roadmap promote <slug> --phase <name> --scores 9,9,9` | Wrong count (not six) | Error: --scores requires exactly six comma-separated integers; zero writes | non-zero |
 
 #### Out-of-Scope
 
-- No auto-prioritization or auto-scheduling — phase, scores, and summary must be supplied explicitly at promote time.
-- No validator hard-gate on "did the agent defer everything it should have" — the contract is prompt-level and unverifiable by the gate.
-- No change to gates or claim-verification; no evidence-schema changes (slugs live in report prose, not evidence JSON).
-- No retroactive backfill of the 397-entry legacy memory corpus or old Residual Risks sections.
-- No ROADMAP.md (human file) auto-sync — that is `roadmap-doc-sync`'s responsibility; v1 prints a reminder.
-- No dedupe/similarity detection between findings — exact slug collision only.
-- No `defer` obligation wired into ux-ui-specialist, validation-specialist, or gatekeeper prompts — fast-follow.
-- No `defer dismiss` command — reserved for v1+; `dismissed` status is defined in the data shape but not written by any v1 command.
-- No evidence-schema field for deferred slugs (slugs referenced in report prose only).
-- No find-or-create-phase behavior on promote — v1 requires an existing phase name.
+- `defer dismiss` / status lifecycle: a Backlog entry is "present until promoted"; removal is by hand-editing roadmap.json.
+- Auto-prioritization or auto-scheduling of Backlog entries.
+- Validator hard-gate on "did the agent defer everything it should have" (unverifiable; contract is prompt-level).
+- ROADMAP.md auto-sync after promote (promote prints a reminder; actual sync is `roadmap-doc-sync`'s job).
+- Dedupe/similarity detection (exact slug match only).
+- Retroactive backfill of legacy Residual Risks or the 397-entry memory corpus.
+- Evidence-schema field for deferred slugs (post-v1).
+- `defer --list` as a separate subcommand (Backlog is visible via `centinela roadmap`).
 
-#### Handoff
+#### Resolved Clarifications
 
-- **Next role:** senior-engineer
+1. **CSV `--scores` shape (carried from round 1).** Six comma-separated integers in the order `ac,uv,dc,dep,ee,overall` matching `QualityScores` field declaration order: `acceptanceCriteria, userValue, definitionClarity, dependencies, effortEstimation, overall`. Exactly six values required; wrong count is a distinct error.
 
-- **Open clarifications (resolved):**
+2. **Parity coverage now covers all eight pairs (carried, now confirmed).** `TestExtractAgentSharedBlocks_ScaffoldMirrorParity` in `tests/acceptance/extract_agent_shared_blocks_acceptance_test.go` already lists all eight prompts byte-for-byte. No extension needed.
 
-  1. **`--source` default inside a worktree:** Reuse existing mechanism. `worktree.DetectFeatureFromCwd(os.Getwd())` already returns the feature slug when the binary is invoked from inside `.worktrees/<feature>/`. `loadActiveWorkflows()` in `cmd/centinela/hook_workflows.go` already calls this to scope the active workflow. The `roadmap defer` command should call `DetectFeatureFromCwd` the same way: if a feature slug is detected, populate `source.feature` from it and derive `source.role` from `--source` if provided or leave the role blank; if no worktree is detected, omit the source field entirely. The `--source` flag remains optional in all cases — requiring it outside a worktree would block agents running at the repo root. Rationale: reuse avoids duplicating CWD-resolution logic; `--source` as an explicit override still works in both contexts.
+3. **Slug validation duplicated in `internal/roadmap` (carried from round 1).** `defer_validate.go` duplicates the kebab-case rule with `// mirrors worktree.ValidateFeatureSlug`; no import edge from roadmap → worktree.
 
-  2. **`--scores` flag shape on promote:** Use a **single CSV flag** `--scores ac,uv,dc,dep,ee,overall` (six integers, 1–10 each). Rationale: one flag keeps the command concise for agent use (less surface area to mistype); the dimension names are positional and already documented in the quality schema (`accessibility_comprehension`, `uniqueness_value`, `delivery_complexity`, `dependency_risk`, `engineering_excellence`, `overall`). Six separate flags (`--ac`, `--uv`, etc.) would require agents to know six distinct flag names and produce a much longer invocation. The CSV form matches how the quality spec already expresses scores as a vector. A prompt-driven quality-evaluator subagent invocation is out of scope (plan §3 Out: no auto-prioritization).
+4. **`--source` auto-resolution via `worktree.DetectFeatureFromCwd` (carried from round 1).** `DetectFeatureFromCwd(os.Getwd())` walks parents for `.worktrees/<feature>` segment; resolves symlinks. Outside a worktree, `source` is omitted entirely (omitempty). Inside a worktree, `source.feature` is set from the slug; `source.role` remains blank.
 
-  3. **Scaffold parity tests for the four prompt files:** `TestExtractAgentSharedBlocks_ScaffoldMirrorParity` in `tests/acceptance/extract_agent_shared_blocks_acceptance_test.go` already covers all four files: `big-thinker-prompt.md`, `feature-specialist-prompt.md`, `senior-engineer-prompt.md`, and `qa-senior-prompt.md` are in the `promptsReferencingInvocation` slice (lines 20-27 of that file), and all are asserted byte-identical against their mirrors in `internal/scaffold/assets/docs/architecture/`. The test does NOT need extending for these four files. The senior-engineer only needs to update both source and mirror in the same commit.
+5. **Exact evaluator-context print format (NEW — resolved by code inspection).** Rendered via a `ui` helper using `renderSystemPanel("ROADMAP", "QUALITY EVALUATOR CONTEXT", toneInfo, body)` (matching `render_roadmap_checkpoint.go` pattern), routed through an i18n key. Body contains: (a) finding `name`; (b) `summary`; (c) `source` (if present); (d) target `--phase`; (e) threshold `9`; (f) six-dimension schema with field names and range 1-10; (g) literal re-invocation line: `centinela roadmap promote <slug> --phase "<phase>" --scores ac,uv,dc,dep,ee,overall`; (h) one-line instruction to run a quality-evaluator pass then re-invoke with `--scores`. Exits 0, writes nothing.
 
-  4. **Where slug validation should live (G2 import-graph gate):** Duplicate the ~10-line check in `internal/roadmap/deferred_validate.go` with a comment pointing to `worktree.ValidateFeatureSlug`. Rationale: the G2 gate defines `internal/roadmap` as an unmapped package (neither `leaf`, `domain`, nor `cmd` in `centinela.toml [gates.import_graph]`). `internal/worktree` is also unmapped. Importing `worktree` from `roadmap` is not formally prohibited today, but it introduces a cross-package dependency for a trivial regexp check — the slug pattern (`^[a-z0-9]+(-[a-z0-9]+)*$`) is self-contained and carries no behavioral logic. Duplicating with a `// mirrors worktree.ValidateFeatureSlug` comment is the lowest-risk option: zero new import edge, G2 stays at Warn, and the comment documents the canonical source so a future "extract to shared/slug" fast-follow is obvious.
+6. **Backlog rendering shape (NEW — resolved by code inspection).** Rendered inside the same `renderSystemPanel` call as the phase overview in `RenderRoadmap`. After the last normal-phase section, a "Backlog" bold header is appended, then each entry as `  ○ <slug>  <summary>` (using `IconPending` and `StyleMuted` for the summary — no readiness state applies). Section entirely absent when Backlog phase is missing or empty.
+
+7. **Promote metadata-stripping confirmation (NEW — resolved).** `summary` moves to the quality-entry's `summary` field. `source` and `deferredAt` are dropped from the roadmap `Feature` entry but are recorded verbatim in provenance bullets appended to `roadmap-analysis.md` and `roadmap-quality.md` — e.g. "Promoted from Backlog: source=deferred-findings-roadmap-capture/senior-engineer, deferredAt=2026-06-12T09:00:00Z". Analysis/quality `.md` are the correct provenance home.
+
+8. **One-entry-per-line array formatting (NEW — resolved).** `internal/roadmap/rawio.go` emits the `Backlog.features` array with one JSON object per line; other phases' formatting is untouched. A golden-file round-trip test asserts byte-stability of non-Backlog entries and that the Backlog array is one-entry-per-line.
+
+9. **Backlog phase placement does not perturb bootstrap (NEW — resolved).** `HasBootstrapPhase`/`BootstrapFeatures` use `isBootstrapPhaseName` (prefix "phase 0" + "bootstrap") which is disjoint from `isBacklogPhaseName`. Appending Backlog last does not shift Phase 0. `DeriveReadiness` skips Backlog entirely once the predicate is applied.
+
+#### Handoff → senior-engineer
+
+Implementation order follows the four slices in docs/plans/deferred-findings-roadmap-capture.md §8. Cobra wiring note: `roadmapCmd` currently uses `RunE` as a leaf command — senior-engineer should verify whether adding `defer` and `promote` as subcommands of `roadmapCmd` requires converting it to a group command (removing `RunE` and adding `roadmap` as a subcommand alias), or whether cobra supports both `RunE` and child subcommands on the same command.
