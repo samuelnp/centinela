@@ -76,12 +76,15 @@
 > fraction of the round-trips. First-party evidence that this phase earns its
 > place.
 
-- **enforcement-profiles** — Named governance strictness presets — `strict`
-  (full step-gating, per-step confirmation, mandatory artifact templates),
-  `guided` (today's default), `outcome` (work in any order; `complete`/merge
-  requires all gates + claim verification green) — selectable in
-  `centinela.toml` per project and overridable per feature. Decouples *how much
-  process is enforced* from *whether outcomes are verified*.
+- **enforcement-profiles** ✅ — Named governance strictness presets — `strict`
+  (the back-compat default: full step-gating, per-step confirmation, mandatory
+  subagent evidence — exactly today's behavior), `guided` (a lighter opt-in:
+  step-gating on, but no mandatory subagent ceremony and review only after
+  planning), `outcome` (work in any order, prompts suppressed; `complete`/merge
+  still requires all gates + claim verification green) — selectable in
+  `centinela.toml` per project and overridable per feature with
+  `centinela start --profile`. Decouples *how much process is enforced* from
+  *whether outcomes are verified*; the latter is constant across all profiles.
   *Fixes: one-size enforcement either burdens a strong model with ceremony or under-scaffolds a weak one — both end in governance being switched off.*
 - **workflow-archetypes** — First-class lightweight tracks beside the 5-step:
   `hotfix` (reproduce → fix → test → ship), `refactor` (characterize →
