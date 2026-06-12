@@ -20,6 +20,8 @@
 - Summary: Makes roadmap.json the source of truth and generates ROADMAP.md with a drift check; dogfood-validated pain (this roadmap has now drifted twice while hand-synced), tightly scoped.
 - Feature: centinela-doctor
 - Summary: Holistic, dependency-free health check across stale evidence, orphaned worktrees, config and roadmap drift; clear graceful-recovery value extending evidence repair.
+- Feature: deferred-findings-roadmap-capture
+- Summary: Makes deferred-finding capture a first-class governed output: a roadmap CLI path that appends out-of-scope detections (big-thinker, feature-specialist) and deferred fixes (senior-engineer, qa-senior) to the roadmap with the analysis/quality entries validate demands, plus prompt-contract updates in the four role prompts and their scaffold mirrors. Dogfood-validated pain: today these findings live only in per-feature prose (Out-of-Scope, Residual Risks, Outstanding TODOs) and evaporate. Exact capture surface (backlog phase vs ledger) deferred to plan.
 - Feature: enforcement-profiles
 - Summary: Named strictness presets (strict/guided/outcome) decouple how much process is enforced from whether outcomes are verified — the keystone for governing the full model-capability spectrum without users disabling governance at either end. Preset semantics and config precedence detailed at plan.
 - Feature: model-capability-profiles

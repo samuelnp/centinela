@@ -18,6 +18,8 @@ func RenderTemplate(kind ArtifactKind, feature string) ([]string, [][]byte, erro
 		return single(artifactPath(feature, "production-readiness.md"), prodReadyBody(feature))
 	case KindDocumentationSpecialist:
 		return docsSpecialistPair(feature)
+	case KindChangelog:
+		return single(artifactPath(feature, "changelog.md"), changelogBody(feature))
 	default:
 		return nil, nil, fmt.Errorf("unsupported artifact kind %q", kind)
 	}

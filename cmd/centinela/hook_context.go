@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/orchestration"
 	"github.com/samuelnp/centinela/internal/roadmap"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/workflow"
@@ -69,8 +70,14 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 		if wf.CurrentStep != "docs" {
 			continue
 		}
-		if _, err := os.Stat("docs/project-docs/index.html"); os.IsNotExist(err) {
-			fmt.Println(ui.RenderDocumentationNeeded(wf.Feature))
+		if orchestration.IsUserFacingFeature(wf.Feature) {
+			if _, err := os.Stat("docs/project-docs/index.html"); os.IsNotExist(err) {
+				fmt.Println(ui.RenderDocumentationNeeded(wf.Feature))
+			}
+			continue
+		}
+		if _, err := os.Stat(".workflow/" + wf.Feature + "-changelog.md"); os.IsNotExist(err) {
+			fmt.Println(ui.RenderChangelogNeeded(wf.Feature))
 		}
 	}
 	return nil

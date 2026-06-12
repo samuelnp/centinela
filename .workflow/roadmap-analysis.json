@@ -40,6 +40,10 @@
       "dependsOn": []
     },
     {
+      "name": "deferred-findings-roadmap-capture",
+      "dependsOn": []
+    },
+    {
       "name": "enforcement-profiles",
       "dependsOn": []
     },

@@ -1,0 +1,32 @@
+{
+  "_meta": {
+    "cli_version": "0.14.0",
+    "written_at": "2026-06-12T14:32:03Z"
+  },
+  "feature": "right-size-docs-step",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-12T14:32:03Z",
+  "inputs": [
+    "docs/plans/right-size-docs-step.md",
+    "specs/right-size-docs-step.feature",
+    ".workflow/right-size-docs-step-big-thinker.md",
+    ".workflow/right-size-docs-step-feature-specialist.md"
+  ],
+  "outputs": [
+    "internal/orchestration/policy.go",
+    "internal/workflow/validate_docs.go",
+    "internal/evidence/artifact.go",
+    "internal/evidence/artifact_templates.go",
+    "internal/evidence/artifact_changelog.go",
+    "cmd/centinela/merge.go",
+    "cmd/centinela/hook_statusline_rules.go",
+    "cmd/centinela/hook_context.go",
+    "internal/ui/render_review.go",
+    "docs/architecture/documentation-generator-prompt.md",
+    "internal/scaffold/assets/docs/architecture/documentation-generator-prompt.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}
