@@ -1,0 +1,45 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T15:54:51Z"
+  },
+  "feature": "model-capability-profiles",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-12T15:55:51Z",
+  "inputs": [
+    "docs/plans/model-capability-profiles.md",
+    "specs/model-capability-profiles.feature",
+    "internal/config/orchestration.go",
+    "internal/config/config.go",
+    "internal/config/enforcement_profile.go",
+    "internal/config/workflow_config.go",
+    "internal/config/file_size_exceptions.go",
+    "internal/workflow/profile.go",
+    "internal/workflow/state.go",
+    "internal/workflow/order.go",
+    "cmd/centinela/start.go",
+    "cmd/centinela/hook_autostart.go",
+    "internal/ui/render_status.go"
+  ],
+  "outputs": [
+    "internal/config/capability.go",
+    "internal/config/driver_model.go",
+    "internal/config/capability_validate.go",
+    "internal/workflow/start_resolve.go",
+    "internal/workflow/profile_provenance.go",
+    "internal/workflow/profile.go",
+    "internal/workflow/state.go",
+    "internal/config/orchestration.go",
+    "internal/config/config.go",
+    "internal/config/workflow_config.go",
+    "internal/config/file_size_exceptions.go",
+    "cmd/centinela/start.go",
+    "cmd/centinela/hook_autostart.go",
+    "cmd/centinela/status_model.go",
+    "internal/ui/render_status.go"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}

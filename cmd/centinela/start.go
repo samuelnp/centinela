@@ -22,10 +22,12 @@ var startCmd = &cobra.Command{
 
 var startProfile string
 var startArchetype string
+var startModel string
 
 func init() {
 	startCmd.Flags().StringVar(&startProfile, "profile", "", "enforcement profile (strict, guided, outcome)")
 	startCmd.Flags().StringVar(&startArchetype, "archetype", "", "workflow archetype (canonical, hotfix, refactor, spike)")
+	startCmd.Flags().StringVar(&startModel, "model", "", "driver model id for capability-based profile default")
 	rootCmd.AddCommand(startCmd)
 }
 
@@ -69,13 +71,13 @@ func runStart(_ *cobra.Command, args []string) error {
 		return fmt.Errorf("cannot create %s: %w", workflow.WorkflowDir, err)
 	}
 
-	// Pin the profile at start: an explicit --profile wins, else inherit the
-	// global config value (both normalize through NewWithOrder).
-	profile := startProfile
-	if profile == "" {
-		profile = cfg.Workflow.EnforcementProfile
-	}
-	wf := workflow.NewWithOrder(feature, order, profile)
+	// Resolve the start-time decision: the effective profile governs orchestration
+	// evidence at creation, but only an EXPLICIT profile is pinned — an empty pin
+	// lets runtime EffectiveProfile re-derive through the capability/global tiers.
+	decision := workflow.ResolveStart(startProfile, startModel, cfg)
+	wf := workflow.NewWithOrder(feature, order, decision.EffectiveProfile)
+	wf.EnforcementProfile = decision.PinnedProfile
+	wf.DriverModel = decision.DriverModel
 	wf.Archetype = archetype
 	wf.WorktreePath = wtPath
 	if err := workflow.Save(wf); err != nil {

@@ -67,6 +67,10 @@ func Load() (*Config, error) {
 	// Capture the explicit-vs-defaulted signal before applyDefaults overwrites
 	// the empty step_confirmation_mode with every_step (see RawStepConfirmationMode).
 	cfg.Workflow.RawStepConfirmationMode = cfg.Workflow.StepConfirmationMode
+	// Same explicit-vs-defaulted capture for the enforcement profile: record the
+	// raw value before applyDefaults normalizes the empty knob to strict, so the
+	// capability tier can engage only when no global profile was explicitly set.
+	cfg.Workflow.RawEnforcementProfile = cfg.Workflow.EnforcementProfile
 	// Reject an explicitly-set unknown profile against the raw decoded value,
 	// before applyDefaults normalizes it to strict (which would hide the error).
 	if err := validateEnforcementProfile(cfg.Workflow.EnforcementProfile); err != nil {

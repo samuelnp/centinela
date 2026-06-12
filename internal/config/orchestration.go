@@ -6,9 +6,12 @@ import (
 )
 
 type OrchestrationConfig struct {
-	UIPaths  []string                     `toml:"ui_paths"`
-	Models   map[string]RoleModelValue    `toml:"models"`
-	ModelMap map[string]map[string]string `toml:"model_map"`
+	UIPaths            []string                     `toml:"ui_paths"`
+	Models             map[string]RoleModelValue    `toml:"models"`
+	ModelMap           map[string]map[string]string `toml:"model_map"`
+	Capabilities       map[string]string            `toml:"capabilities"`        // model id → capability class
+	CapabilityProfiles map[string]string            `toml:"capability_profiles"` // class → enforcement profile
+	DriverModel        string                       `toml:"driver_model"`        // workflow's default-profile key
 }
 
 // RoleModelValue is the union value of an [orchestration.models].<role> entry:

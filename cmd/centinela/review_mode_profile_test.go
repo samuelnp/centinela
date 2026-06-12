@@ -11,6 +11,9 @@ func cfgRaw(raw, profile string) *config.Config {
 	c := &config.Config{}
 	c.Workflow.RawStepConfirmationMode = raw
 	c.Workflow.EnforcementProfile = profile
+	// Mirror config.Load: an explicitly-set global profile also sets the raw
+	// enforcement-profile signal so EffectiveProfile's explicit-global tier engages.
+	c.Workflow.RawEnforcementProfile = profile
 	return c
 }
 

@@ -33,11 +33,13 @@ func runHookAutostart(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 	os.MkdirAll(workflow.WorkflowDir, 0755) //nolint:errcheck
-	profile := ""
-	if cfg, err := config.Load(); err == nil {
-		profile = cfg.Workflow.EnforcementProfile // inherit global; normalizes in NewWithOrder
-	}
-	if err := workflow.Save(workflow.NewWithOrder(feature, order, profile)); err != nil {
+	cfg, _ := config.Load()
+	// No flags in the hook path: env/config still resolve inside ResolveStart.
+	decision := workflow.ResolveStart("", "", cfg)
+	wf := workflow.NewWithOrder(feature, order, decision.EffectiveProfile)
+	wf.EnforcementProfile = decision.PinnedProfile
+	wf.DriverModel = decision.DriverModel
+	if err := workflow.Save(wf); err != nil {
 		return nil
 	}
 	fmt.Printf("CENTINELA DIRECTIVE: auto-started workflow %q from prompt intent.\n", feature)
