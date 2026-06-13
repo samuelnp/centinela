@@ -52,6 +52,19 @@
     "createdAt": "2026-06-11T20:50:04Z"
   },
   {
+    "id": "37b620e38200efd5",
+    "feature": "deterministic-artifact-scaffolds",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: deterministic-artifact-scaffolds",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/deterministic-artifact-scaffolds-gatekeeper.md",
+    "createdAt": "2026-06-12T18:32:28Z"
+  },
+  {
     "id": "3f4e5f634549b2ed",
     "feature": "workflow-archetypes",
     "step": "tests",
@@ -193,6 +206,19 @@
     ],
     "sourceArtifact": ".workflow/model-capability-profiles-gatekeeper.md",
     "createdAt": "2026-06-12T17:00:44Z"
+  },
+  {
+    "id": "ccfcd939f5d569ec",
+    "feature": "deterministic-artifact-scaffolds",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Plan-role pre-fill (big-thinker, feature-specialist) includes the feature brief, every `docs/features/*.md`, AND the plan path `docs/plans/\u003cfeature\u003e.md` — verbatim `orchestration.RequiredPlanInputs(feature)`.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/deterministic-artifact-scaffolds-edge-cases.md",
+    "createdAt": "2026-06-12T18:16:47Z"
   },
   {
     "id": "cdb73eb2216f4196",

@@ -6,7 +6,8 @@ import (
 )
 
 // RenderTemplate returns the (path, body) pairs the writer should drop for a
-// given kind. Pure — does no I/O. Most kinds emit one file; the
+// given kind. Most kinds are pure; the gatekeeper kind globs specs/*.feature to
+// pre-fill its Analyzed Specs list (filesystem read). The
 // documentation-specialist kind emits a JSON+MD pair.
 func RenderTemplate(kind ArtifactKind, feature string) ([]string, [][]byte, error) {
 	switch kind {
