@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T17:47:57Z"
+  },
+  "feature": "deterministic-artifact-scaffolds",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-12T17:49:02Z",
+  "inputs": [
+    "docs/plans/deterministic-artifact-scaffolds.md",
+    "specs/deterministic-artifact-scaffolds.feature",
+    "internal/orchestration/plan_snapshot.go",
+    "cmd/centinela/evidence_init.go",
+    "internal/evidence/companion.go",
+    "internal/evidence/schema_init.go",
+    "internal/evidence/artifact_templates.go",
+    "internal/evidence/artifact_gatekeeper.go",
+    "internal/evidence/artifact_edge_cases.go",
+    "internal/evidence/artifact_prodready.go",
+    "internal/evidence/artifact_changelog.go",
+    "internal/evidence/artifact_docs.go"
+  ],
+  "outputs": [
+    "internal/orchestration/plan_snapshot.go",
+    "internal/evidence/plan_inputs.go",
+    "cmd/centinela/evidence_init.go",
+    "internal/evidence/fill.go",
+    "internal/evidence/companion_skeletons.go",
+    "internal/evidence/companion.go",
+    "internal/evidence/artifact_derive.go",
+    "internal/evidence/artifact_gatekeeper.go",
+    "internal/evidence/artifact_edge_cases.go",
+    "internal/evidence/artifact_prodready.go",
+    "internal/evidence/artifact_changelog.go",
+    "internal/evidence/artifact_templates.go"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}

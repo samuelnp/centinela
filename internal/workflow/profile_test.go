@@ -9,10 +9,14 @@ import (
 func cfgWithProfile(p string) *config.Config {
 	c := &config.Config{}
 	c.Workflow.EnforcementProfile = p
+	// Mirror config.Load: an explicitly-set global profile also sets the raw
+	// signal so the explicit-global precedence tier engages (an empty raw value
+	// means "unset", which must fall through to the capability/strict tiers).
+	c.Workflow.RawEnforcementProfile = p
 	return c
 }
 
-// Precedence: per-feature override > global config > strict default.
+// Precedence: per-feature override > explicit global > strict default.
 func TestEffectiveProfile_Precedence(t *testing.T) {
 	wf := &Workflow{EnforcementProfile: config.ProfileOutcome}
 	if got := EffectiveProfile(wf, cfgWithProfile(config.ProfileGuided)); got != config.ProfileOutcome {
@@ -20,7 +24,7 @@ func TestEffectiveProfile_Precedence(t *testing.T) {
 	}
 	bare := &Workflow{}
 	if got := EffectiveProfile(bare, cfgWithProfile(config.ProfileGuided)); got != config.ProfileGuided {
-		t.Fatalf("global config must win when no per-feature value, got %q", got)
+		t.Fatalf("explicit global config must win when no per-feature value, got %q", got)
 	}
 	if got := EffectiveProfile(bare, &config.Config{}); got != config.ProfileStrict {
 		t.Fatalf("unconfigured must default to strict, got %q", got)

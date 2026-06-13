@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T18:28:39Z"
+  },
+  "feature": "deterministic-artifact-scaffolds",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-12T18:28:39Z",
+  "inputs": [
+    "docs/plans/deterministic-artifact-scaffolds.md",
+    "specs/deterministic-artifact-scaffolds.feature",
+    ".workflow/deterministic-artifact-scaffolds-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/deterministic-artifact-scaffolds-validation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

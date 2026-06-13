@@ -1,9 +1,14 @@
 package roadmap
 
-import "fmt"
+import (
+	"fmt"
 
-// ValidateDependencies checks that all dependsOn references name known features
-// and that no dependency cycle exists. Returns nil when the roadmap has no deps.
+	"github.com/samuelnp/centinela/internal/workflow"
+)
+
+// ValidateDependencies checks that all dependsOn references name known features,
+// that every feature archetype is supported, and that no dependency cycle
+// exists. Returns nil when the roadmap has no deps.
 func ValidateDependencies(r *Roadmap) error {
 	if r == nil {
 		return nil
@@ -12,6 +17,9 @@ func ValidateDependencies(r *Roadmap) error {
 	deps := map[string][]string{}
 	for _, phase := range r.Phases {
 		for _, f := range phase.Features {
+			if err := workflow.ValidateArchetype(f.Archetype); err != nil {
+				return fmt.Errorf("feature %s: %w", f.Name, err)
+			}
 			for _, dep := range f.DependsOn {
 				if !names[dep] {
 					return fmt.Errorf(

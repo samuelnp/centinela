@@ -29,6 +29,9 @@ func runHookPlanAdvisor(_ *cobra.Command, _ []string) error {
 		fmt.Println("config warning: " + err.Error())
 		cfg = &config.Config{}
 	}
+	if config.IsHeadless(cfg) {
+		return nil
+	}
 	for _, wf := range loadActiveWorkflows() {
 		if wf.CurrentStep != "plan" {
 			continue

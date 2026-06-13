@@ -4,13 +4,52 @@
     "feature": "security-gate",
     "step": "tests",
     "type": "lesson",
-    "title": "- **Malformed JSON (secrets) → Warn, never false Pass.** A scanner that ran but",
+    "title": "- **Malformed JSON (secrets) \u2192 Warn, never false Pass.** A scanner that ran but",
     "tags": [
       "edge-cases",
       "lesson"
     ],
     "sourceArtifact": ".workflow/security-gate-edge-cases.md",
     "createdAt": "2026-06-06T18:53:48Z"
+  },
+  {
+    "id": "121a9c908809ba77",
+    "feature": "right-size-docs-step",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Default surface = internal (forward-only light path).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/right-size-docs-step-edge-cases.md",
+    "createdAt": "2026-06-12T15:06:05Z"
+  },
+  {
+    "id": "125e619f45601e1d",
+    "feature": "governance-telemetry",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Disabled is a no-op** \u2014 `[telemetry] enabled=false` writes no file, no dir (`TestGT_DisabledNoOp`).",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/governance-telemetry-edge-cases.md",
+    "createdAt": "2026-06-13T13:30:03Z"
+  },
+  {
+    "id": "1ba2b232333b5a26",
+    "feature": "governance-telemetry",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: governance-telemetry",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/governance-telemetry-gatekeeper.md",
+    "createdAt": "2026-06-13T13:46:56Z"
   },
   {
     "id": "20f5e09524c45465",
@@ -26,6 +65,19 @@
     "createdAt": "2026-06-12T18:12:27Z"
   },
   {
+    "id": "28db0c5dc1738aef",
+    "feature": "workflow-archetypes",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: workflow-archetypes",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/workflow-archetypes-gatekeeper.md",
+    "createdAt": "2026-06-12T12:32:40Z"
+  },
+  {
     "id": "32f04a9174b07dba",
     "feature": "spec-traceability-gate",
     "step": "validate",
@@ -39,11 +91,50 @@
     "createdAt": "2026-06-11T20:50:04Z"
   },
   {
+    "id": "37b620e38200efd5",
+    "feature": "deterministic-artifact-scaffolds",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: deterministic-artifact-scaffolds",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/deterministic-artifact-scaffolds-gatekeeper.md",
+    "createdAt": "2026-06-12T18:32:28Z"
+  },
+  {
+    "id": "3f4e5f634549b2ed",
+    "feature": "workflow-archetypes",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Spike order has no validate step (ungated by absence, not a bypass).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/workflow-archetypes-edge-cases.md",
+    "createdAt": "2026-06-12T12:17:49Z"
+  },
+  {
+    "id": "47f88ed9b2258fb7",
+    "feature": "right-size-docs-step",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: right-size-docs-step",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/right-size-docs-step-gatekeeper.md",
+    "createdAt": "2026-06-12T15:18:51Z"
+  },
+  {
     "id": "480e173b8b7cd979",
     "feature": "configurable-model-routing",
     "step": "tests",
     "type": "lesson",
-    "title": "- `tests/unit/configurable_subagent_models_resolve_unit_test.go` — migrated all",
+    "title": "- `tests/unit/configurable_subagent_models_resolve_unit_test.go` \u2014 migrated all",
     "tags": [
       "edge-cases",
       "lesson"
@@ -130,6 +221,19 @@
     "createdAt": "2026-06-11T16:10:32Z"
   },
   {
+    "id": "939bc20a9b1a7ea6",
+    "feature": "headless-governance",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: headless-governance",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/headless-governance-gatekeeper.md",
+    "createdAt": "2026-06-13T09:53:34Z"
+  },
+  {
     "id": "a861ca032b250c87",
     "feature": "configurable-model-routing",
     "step": "validate",
@@ -141,6 +245,45 @@
     ],
     "sourceArtifact": ".workflow/configurable-model-routing-gatekeeper.md",
     "createdAt": "2026-06-06T17:27:14Z"
+  },
+  {
+    "id": "bde7dae410e6773a",
+    "feature": "model-capability-profiles",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Back-compat: zero workflow + zero config \u2192 strict (byte-identical).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/model-capability-profiles-edge-cases.md",
+    "createdAt": "2026-06-12T16:22:21Z"
+  },
+  {
+    "id": "c4d216e0c87de8c1",
+    "feature": "model-capability-profiles",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report: model-capability-profiles",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/model-capability-profiles-gatekeeper.md",
+    "createdAt": "2026-06-12T17:00:44Z"
+  },
+  {
+    "id": "ccfcd939f5d569ec",
+    "feature": "deterministic-artifact-scaffolds",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Plan-role pre-fill (big-thinker, feature-specialist) includes the feature brief, every `docs/features/*.md`, AND the plan path `docs/plans/<feature>.md` \u2014 verbatim `orchestration.RequiredPlanInputs(feature)`.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/deterministic-artifact-scaffolds-edge-cases.md",
+    "createdAt": "2026-06-12T18:16:47Z"
   },
   {
     "id": "cdb73eb2216f4196",
@@ -156,11 +299,24 @@
     "createdAt": "2026-06-10T16:25:22Z"
   },
   {
+    "id": "ec28b0c94d081af3",
+    "feature": "headless-governance",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Env authoritative over config.** `CENTINELA_HEADLESS=1`/`true` forces headless ON even when `[headless] enabled=false`; `0`/`false` forces it OFF even when `enabled=true` and `detect_ci=true`. The env value, when non-empty, short-circuits both config tiers.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/headless-governance-edge-cases.md",
+    "createdAt": "2026-06-13T09:31:40Z"
+  },
+  {
     "id": "ee609a7719ed7ecb",
     "feature": "code-quality-hardening",
     "step": "tests",
     "type": "lesson",
-    "title": "- **gofmt always exits 0** — `gofmt -l` lists offenders but returns 0, so a",
+    "title": "- **gofmt always exits 0** \u2014 `gofmt -l` lists offenders but returns 0, so a",
     "tags": [
       "edge-cases",
       "lesson"

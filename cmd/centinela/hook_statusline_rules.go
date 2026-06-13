@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/orchestration"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
 
@@ -38,8 +39,12 @@ func statusBlockAndNext(wf *workflow.Workflow, cfg *config.Config) (string, stri
 		return "none", "run-validate"
 	}
 	if wf.CurrentStep == "docs" {
-		if !fileExists("docs/project-docs/index.html") {
-			return "MISSING_DOCS_OUTPUT", "run-documentation-specialist"
+		if orchestration.IsUserFacingFeature(wf.Feature) {
+			if !fileExists("docs/project-docs/index.html") {
+				return "MISSING_DOCS_OUTPUT", "run-documentation-specialist"
+			}
+		} else if !fileExists(".workflow/" + wf.Feature + "-changelog.md") {
+			return "MISSING_DOCS_OUTPUT", "write-changelog"
 		}
 		if err := workflow.ValidateArtifacts(wf.Feature, "docs", cfg); err != nil {
 			return "MISSING_DOCS_EVIDENCE", "write-docs-evidence"

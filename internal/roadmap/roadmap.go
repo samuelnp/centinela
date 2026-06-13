@@ -11,11 +11,14 @@ const RoadmapFile = ".workflow/roadmap.json"
 
 // Feature is a single deliverable within a phase.
 type Feature struct {
-	Name       string   `json:"name"`
-	DependsOn  []string `json:"dependsOn,omitempty"`
-	Summary    string   `json:"summary,omitempty"`    // deferred-finding one-liner
-	Source     *Source  `json:"source,omitempty"`     // {feature, role} provenance
-	DeferredAt string   `json:"deferredAt,omitempty"` // RFC3339 capture time
+	Name      string   `json:"name"`
+	DependsOn []string `json:"dependsOn,omitempty"`
+	// Archetype optionally pins the workflow track for this feature; an explicit
+	// --archetype flag at start overrides it. Empty resolves to canonical.
+	Archetype  string  `json:"archetype,omitempty"`
+	Summary    string  `json:"summary,omitempty"`    // deferred-finding one-liner
+	Source     *Source `json:"source,omitempty"`     // {feature, role} provenance
+	DeferredAt string  `json:"deferredAt,omitempty"` // RFC3339 capture time
 }
 
 // Source records the provenance of a deferred Backlog finding.

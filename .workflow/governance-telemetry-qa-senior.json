@@ -1,0 +1,43 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-13T13:29:14Z"
+  },
+  "feature": "governance-telemetry",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-13T12:10:00Z",
+  "inputs": [
+    "docs/plans/governance-telemetry.md",
+    "specs/governance-telemetry.feature",
+    "internal/telemetry/event.go",
+    "internal/telemetry/record.go",
+    "internal/telemetry/constructors.go",
+    "internal/telemetry/read.go",
+    "internal/config/telemetry.go",
+    "cmd/centinela/telemetry_emit.go"
+  ],
+  "outputs": [
+    "tests/acceptance/governance_telemetry_events_test.go",
+    "tests/acceptance/governance_telemetry_block_test.go",
+    "tests/acceptance/governance_telemetry_config_test.go",
+    "tests/acceptance/governance_telemetry_read_test.go",
+    "tests/acceptance/governance_telemetry_rework_test.go",
+    "internal/telemetry/record_test.go",
+    ".workflow/governance-telemetry-edge-cases.md"
+  ],
+  "edgeCases": [
+    "disabled-no-op",
+    "default-on-opt-out",
+    "non-blocking-on-io-error",
+    "lenient-read-skips-corrupt-line",
+    "missing-log-returns-empty",
+    "schema-and-rfc3339-on-every-event",
+    "block-need-init-vs-out-of-step",
+    "gate-failure-has-no-feature",
+    "append-only-ordering",
+    "rework-derivable-from-complete-rejected"
+  ],
+  "handoffTo": "validation-specialist"
+}

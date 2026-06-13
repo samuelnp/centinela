@@ -13,6 +13,10 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	defer os.Chdir(o)              //nolint:errcheck
 	os.Chdir(d)                    //nolint:errcheck
 	os.MkdirAll(".workflow", 0755) //nolint:errcheck
+	// Declare the feature user-facing so the docs step keeps requiring the
+	// documentation-specialist role (the internal path drops it).
+	os.MkdirAll("docs/features", 0755)                                         //nolint:errcheck
+	os.WriteFile("docs/features/f.md", []byte("surface: user-facing\n"), 0644) //nolint:errcheck
 	if len(RequiredRoles("plan")) != 2 || len(RequiredRoles("code")) != 1 || len(RequiredRoles("docs")) != 1 || len(RequiredRoles("validate")) != 1 {
 		t.Fatal("unexpected role mapping")
 	}
@@ -63,7 +67,7 @@ func writeEvidence(t *testing.T, f, s string, r Role, edge bool) {
 	inputs := `"inputs":["i"]`
 	outputs := `"outputs":["docs/project-docs/index.html"]`
 	if s == "plan" && (r == RoleBigThinker || r == RoleFeatureSpecial) {
-		inputs = `"inputs":["docs/features/` + f + `.md"]`
+		inputs = `"inputs":["docs/features/` + f + `.md","docs/plans/` + f + `.md"]`
 		os.MkdirAll("docs/plans", 0755)                              //nolint:errcheck
 		os.MkdirAll("specs", 0755)                                   //nolint:errcheck
 		os.WriteFile("docs/plans/"+f+".md", []byte("plan"), 0644)    //nolint:errcheck

@@ -1,0 +1,20 @@
+{
+  "_meta": {
+    "cli_version": "0.13.0",
+    "written_at": "2026-06-12T12:22:50Z"
+  },
+  "feature": "workflow-archetypes",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-12T12:22:50Z",
+  "inputs": [
+    ".workflow/workflow-archetypes-senior-engineer.md",
+    ".workflow/workflow-archetypes-edge-cases.md"
+  ],
+  "outputs": [
+    ".workflow/workflow-archetypes-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

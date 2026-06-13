@@ -32,7 +32,10 @@ func TestRunStart_ProfileFlagPersisted(t *testing.T) {
 	}
 }
 
-// With no --profile, start inherits the global config profile.
+// With no --profile, start honors the global config profile — but does NOT pin
+// it. An explicit global is left unpinned so it resolves live through
+// EffectiveProfile and stays distinguishable from a per-feature pin in status
+// provenance ("global" vs "--profile"). The live resolution still yields guided.
 func TestRunStart_InheritsGlobalProfile(t *testing.T) {
 	old := startProfile
 	defer func() { startProfile = old }()
@@ -45,7 +48,14 @@ func TestRunStart_InheritsGlobalProfile(t *testing.T) {
 		t.Fatalf("runStart: %v", err)
 	}
 	wf, _ := workflow.Load("feat2")
-	if wf.EnforcementProfile != config.ProfileGuided {
-		t.Fatalf("should inherit global guided, got %q", wf.EnforcementProfile)
+	if wf.EnforcementProfile != "" {
+		t.Fatalf("explicit global must not be pinned, got %q", wf.EnforcementProfile)
+	}
+	cfg, err := config.Load()
+	if err != nil {
+		t.Fatalf("load config: %v", err)
+	}
+	if got := workflow.EffectiveProfile(wf, cfg); got != config.ProfileGuided {
+		t.Fatalf("effective profile should resolve global guided, got %q", got)
 	}
 }

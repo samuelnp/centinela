@@ -30,9 +30,18 @@ type Workflow struct {
 	// created before this field existed — EffectiveProfile falls back to the
 	// global config / strict default for those.
 	EnforcementProfile string `json:"enforcementProfile,omitempty"`
+	// Archetype pins the feature's workflow track at start (canonical, hotfix,
+	// refactor, spike). Empty on workflows created before this field existed —
+	// DisplayArchetype falls back to canonical for those.
+	Archetype string `json:"archetype,omitempty"`
 	// WorktreePath is the absolute path of the worktree this workflow runs
 	// in. Empty when the project uses a single-checkout flow.
 	WorktreePath string `json:"worktreePath,omitempty"`
+	// DriverModel is the model id pinned at start that keys this feature's default
+	// enforcement profile via the capability tier. Empty on workflows created
+	// before this field existed and when no driver model was configured —
+	// EffectiveProfile simply skips the capability tier for those.
+	DriverModel string `json:"driverModel,omitempty"`
 }
 
 // WorkflowDir is the directory where workflow JSON files are stored.
