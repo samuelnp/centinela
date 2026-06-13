@@ -26,6 +26,19 @@
     "createdAt": "2026-06-12T15:06:05Z"
   },
   {
+    "id": "125e619f45601e1d",
+    "feature": "governance-telemetry",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Disabled is a no-op** — `[telemetry] enabled=false` writes no file, no dir (`TestGT_DisabledNoOp`).",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/governance-telemetry-edge-cases.md",
+    "createdAt": "2026-06-13T13:30:03Z"
+  },
+  {
     "id": "28db0c5dc1738aef",
     "feature": "workflow-archetypes",
     "step": "validate",
