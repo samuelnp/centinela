@@ -7,8 +7,8 @@ import (
 
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/memory"
+	"github.com/samuelnp/centinela/internal/telemetry"
 	"github.com/samuelnp/centinela/internal/ui"
-	"github.com/samuelnp/centinela/internal/verify"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
 
@@ -50,9 +50,11 @@ func runComplete(_ *cobra.Command, args []string) error {
 	// scale process, never proof.
 	if current == "validate" {
 		if err := executeValidation(); err != nil {
+			telemetry.RecordCompleteRejected(cfg, feature, current, "gates")
 			return err
 		}
 		if err := runClaimVerification(feature, current, cfg); err != nil {
+			telemetry.RecordCompleteRejected(cfg, feature, current, "verify")
 			return err
 		}
 	}
@@ -67,6 +69,7 @@ func runComplete(_ *cobra.Command, args []string) error {
 	// Harvest the just-completed step's artifact into the memory ledger.
 	// Capture is non-blocking: failures warn but never fail the advance.
 	memory.Capture(feature, current, cfg)
+	telemetry.RecordStepAdvanced(cfg, feature, current)
 
 	if !cfg.Workflow.DisableAutoCommit {
 		commitStep(feature, current, workflow.StepNumberFor(wf, current), len(wf.OrderedSteps()))
@@ -80,21 +83,6 @@ func runComplete(_ *cobra.Command, args []string) error {
 	}
 	if warn := workflow.ProductionReadinessWarning(feature, cfg); warn != "" {
 		fmt.Println(ui.RenderProductionReadinessWarning(feature))
-	}
-	return nil
-}
-
-// runClaimVerification re-derives ground truth for the step's evidence claims
-// and hard-blocks completion on any failing claim. Warnings (e.g. the heuristic
-// edge-case-to-test mapping) are surfaced but do not block.
-func runClaimVerification(feature, step string, cfg *config.Config) error {
-	res := verify.Verify(feature, step, cfg, verify.Deps{
-		Root:   verifyRoot(),
-		Runner: verify.NewExecRunner(),
-	})
-	fmt.Println(ui.RenderVerification(res))
-	if res.HasFailures() {
-		return fmt.Errorf("claim verification failed for %q — evidence diverges from ground truth", feature)
 	}
 	return nil
 }

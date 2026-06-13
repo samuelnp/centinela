@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "cli_version": "dev",
+    "written_at": "2026-06-13T11:44:19Z"
+  },
+  "feature": "governance-telemetry",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-13T11:45:30Z",
+  "inputs": [
+    "docs/plans/governance-telemetry.md",
+    "docs/features/governance-telemetry.md",
+    "specs/governance-telemetry.feature",
+    ".workflow/governance-telemetry-big-thinker.md",
+    ".workflow/governance-telemetry-feature-specialist.md",
+    "cmd/centinela/hook_prewrite.go",
+    "internal/config/memory.go",
+    "internal/verify/result.go",
+    "internal/gates/gates.go"
+  ],
+  "outputs": [
+    "internal/config/telemetry.go",
+    "internal/telemetry/event.go",
+    "internal/telemetry/record.go",
+    "internal/telemetry/constructors.go",
+    "internal/telemetry/read.go",
+    "cmd/centinela/telemetry_emit.go",
+    "cmd/centinela/complete_verify.go",
+    "cmd/centinela/hook_prewrite.go",
+    "cmd/centinela/validate.go",
+    "cmd/centinela/complete.go",
+    "internal/config/config.go",
+    ".gitignore"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}
