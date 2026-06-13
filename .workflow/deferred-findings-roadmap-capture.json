@@ -1,0 +1,37 @@
+{
+  "feature": "deferred-findings-roadmap-capture",
+  "startedAt": "2026-06-12T08:59:19.122765Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-12T16:04:16Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-12T18:18:56Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-12T15:43:34Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-12T17:42:35Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-12T18:12:27Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "enforcementProfile": "strict",
+  "worktreePath": ".worktrees/deferred-findings-roadmap-capture"
+}

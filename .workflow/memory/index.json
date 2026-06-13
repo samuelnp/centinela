@@ -4,7 +4,7 @@
     "feature": "security-gate",
     "step": "tests",
     "type": "lesson",
-    "title": "- **Malformed JSON (secrets) → Warn, never false Pass.** A scanner that ran but",
+    "title": "- **Malformed JSON (secrets) \u2192 Warn, never false Pass.** A scanner that ran but",
     "tags": [
       "edge-cases",
       "lesson"
@@ -30,7 +30,7 @@
     "feature": "governance-telemetry",
     "step": "tests",
     "type": "lesson",
-    "title": "- **Disabled is a no-op** — `[telemetry] enabled=false` writes no file, no dir (`TestGT_DisabledNoOp`).",
+    "title": "- **Disabled is a no-op** \u2014 `[telemetry] enabled=false` writes no file, no dir (`TestGT_DisabledNoOp`).",
     "tags": [
       "edge-cases",
       "lesson"
@@ -50,6 +50,19 @@
     ],
     "sourceArtifact": ".workflow/governance-telemetry-gatekeeper.md",
     "createdAt": "2026-06-13T13:46:56Z"
+  },
+  {
+    "id": "20f5e09524c45465",
+    "feature": "deferred-findings-roadmap-capture",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: deferred-findings-roadmap-capture",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/deferred-findings-roadmap-capture-gatekeeper.md",
+    "createdAt": "2026-06-12T18:12:27Z"
   },
   {
     "id": "28db0c5dc1738aef",
@@ -121,7 +134,7 @@
     "feature": "configurable-model-routing",
     "step": "tests",
     "type": "lesson",
-    "title": "- `tests/unit/configurable_subagent_models_resolve_unit_test.go` — migrated all",
+    "title": "- `tests/unit/configurable_subagent_models_resolve_unit_test.go` \u2014 migrated all",
     "tags": [
       "edge-cases",
       "lesson"
@@ -154,6 +167,19 @@
     ],
     "sourceArtifact": ".workflow/security-gate-gatekeeper.md",
     "createdAt": "2026-06-06T19:05:30Z"
+  },
+  {
+    "id": "832f5df786047c53",
+    "feature": "deferred-findings-roadmap-capture",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Case:** Empty summary (defer) / **Impact:** Low / **Likelihood:** Medium / **Why:** Agents might pass empty flag; validated before any write, correct exit 1.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/deferred-findings-roadmap-capture-edge-cases.md",
+    "createdAt": "2026-06-12T17:42:35Z"
   },
   {
     "id": "87cb212fb0271f08",
@@ -225,7 +251,7 @@
     "feature": "model-capability-profiles",
     "step": "tests",
     "type": "lesson",
-    "title": "- **Back-compat: zero workflow + zero config → strict (byte-identical).**",
+    "title": "- **Back-compat: zero workflow + zero config \u2192 strict (byte-identical).**",
     "tags": [
       "edge-cases",
       "lesson"
@@ -251,7 +277,7 @@
     "feature": "deterministic-artifact-scaffolds",
     "step": "tests",
     "type": "lesson",
-    "title": "- Plan-role pre-fill (big-thinker, feature-specialist) includes the feature brief, every `docs/features/*.md`, AND the plan path `docs/plans/\u003cfeature\u003e.md` — verbatim `orchestration.RequiredPlanInputs(feature)`.",
+    "title": "- Plan-role pre-fill (big-thinker, feature-specialist) includes the feature brief, every `docs/features/*.md`, AND the plan path `docs/plans/<feature>.md` \u2014 verbatim `orchestration.RequiredPlanInputs(feature)`.",
     "tags": [
       "edge-cases",
       "lesson"
@@ -290,7 +316,7 @@
     "feature": "code-quality-hardening",
     "step": "tests",
     "type": "lesson",
-    "title": "- **gofmt always exits 0** — `gofmt -l` lists offenders but returns 0, so a",
+    "title": "- **gofmt always exits 0** \u2014 `gofmt -l` lists offenders but returns 0, so a",
     "tags": [
       "edge-cases",
       "lesson"

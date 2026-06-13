@@ -67,6 +67,12 @@ Output format:
 #### State Coverage (loading | empty | error | success)
 - one bullet per state: present? + note
 
+#### Deferred Findings
+- For every UX/accessibility issue you are flagging but deferring rather
+  than fixing now, run:
+  `centinela roadmap defer <slug> --summary "<one line>" --source <feature>/ux-ui-specialist`
+- List the recorded slugs here, or state "none".
+
 #### Handoff: qa-senior
 ```
 

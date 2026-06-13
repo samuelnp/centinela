@@ -1,0 +1,45 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T17:43:25Z"
+  },
+  "feature": "deferred-findings-roadmap-capture",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-12T17:43:25Z",
+  "inputs": [
+    "specs/deferred-findings-roadmap-capture.feature",
+    "internal/roadmap/roadmap.go",
+    "internal/roadmap/backlog.go",
+    "internal/roadmap/analysis.go",
+    "internal/roadmap/readiness.go",
+    "internal/roadmap/defer.go",
+    "internal/roadmap/promote.go",
+    "internal/roadmap/firstincomplete.go",
+    "internal/roadmapcheckpoint/checkpoint.go",
+    "internal/roadmapcheckpoint/artifacts.go",
+    "internal/ui/render_roadmap.go",
+    "internal/ui/render_backlog.go",
+    "cmd/centinela/start_guard.go",
+    "cmd/centinela/hook_session.go",
+    "cmd/centinela/hook_setup.go",
+    "specs/roadmap-checkpoint-prompt.feature",
+    "specs/roadmap-parallel-readiness.feature",
+    "specs/session-context-rehydration.feature",
+    "specs/roadmap-quality-overall-threshold.feature",
+    "specs/roadmap-senior-pm-analysis.feature"
+  ],
+  "outputs": [
+    ".workflow/deferred-findings-roadmap-capture-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "Summary() includes Backlog entries as planned — session rehydration never shows roadmap-complete when Backlog exists",
+    "roadmap-checkpoint marker staleness: defer/promote touch roadmap.json — mtime bump is in RequiredArtifacts so marker goes stale on every defer",
+    "roadmap validate exemption: NonBacklogFeatureSet is the single source of truth — Backlog entries not counted; verified no existing spec asserts validate covers ALL phases",
+    "DeriveReadiness and ReadySet already skip Backlog phase — no conflict with roadmap-parallel-readiness spec",
+    "start guard: IsBacklogFeature check fires before analysis/quality/dep checks — Backlog slugs rejected immediately with promote-first error",
+    "All 8 prompt file pairs identical to scaffold mirrors; all 16 files contain Deferred Findings section"
+  ],
+  "handoffTo": "complete"
+}

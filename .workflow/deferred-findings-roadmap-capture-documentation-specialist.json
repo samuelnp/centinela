@@ -1,0 +1,30 @@
+{
+  "_meta": {
+    "cli_version": "dev",
+    "written_at": "2026-06-12T18:15:20Z"
+  },
+  "feature": "deferred-findings-roadmap-capture",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-12T18:15:20Z",
+  "inputs": [
+    "docs/features/deferred-findings-roadmap-capture.md",
+    "docs/plans/deferred-findings-roadmap-capture.md",
+    "specs/deferred-findings-roadmap-capture.feature",
+    "PROJECT.md",
+    "ROADMAP.md",
+    "docs/project-docs/kb/spec-traceability-gate.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/deferred-findings-roadmap-capture.md",
+    "docs/project-docs/index.html",
+    ".workflow/deferred-findings-roadmap-capture-documentation-specialist.md"
+  ],
+  "edgeCases": [
+    "plain-language constraint: 25 spec scenarios rewritten as 13 user-facing behavior bullets; all Given/When/Then DSL and internal engineering terms (roadmapFeatureSet, isBacklogPhaseName, raw-preserving I/O) translated to observable user behavior",
+    "scenario grouping: six promote-rejection scenarios collapsed into one bullet; three Backlog-visibility scenarios collapsed into one; validate-exemption scenarios separated by boundary (Backlog vs similarly-named non-Backlog phase)",
+    "docs validate required /tmp/centinela-dfrc build from worktree source: installed binary (0.15.0) predates Backlog-exemption logic; validate passed cleanly with the worktree-built binary"
+  ],
+  "handoffTo": "complete"
+}

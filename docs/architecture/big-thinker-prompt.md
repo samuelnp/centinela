@@ -69,6 +69,12 @@ Output format:
 - Step 1: …
 - Step 2: …
 
+#### Deferred Findings
+- For every Scope "Out" item that is a NEW discovery (not a deliberate
+  exclusion of an already-known concern), run:
+  `centinela roadmap defer <slug> --summary "<one line>" --source <feature>/big-thinker`
+- List the recorded slugs here, or state "none".
+
 #### Handoff
 - Next role: feature-specialist
 - Outstanding questions: …

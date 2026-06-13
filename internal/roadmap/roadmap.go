@@ -15,7 +15,10 @@ type Feature struct {
 	DependsOn []string `json:"dependsOn,omitempty"`
 	// Archetype optionally pins the workflow track for this feature; an explicit
 	// --archetype flag at start overrides it. Empty resolves to canonical.
-	Archetype string `json:"archetype,omitempty"`
+	Archetype  string  `json:"archetype,omitempty"`
+	Summary    string  `json:"summary,omitempty"`    // deferred-finding one-liner
+	Source     *Source `json:"source,omitempty"`     // {feature, role} provenance
+	DeferredAt string  `json:"deferredAt,omitempty"` // RFC3339 capture time
 }
 
 // Phase groups related features under a milestone.
@@ -70,9 +73,14 @@ func FeatureStatus(name string) string {
 	return "in-progress"
 }
 
-// Summary returns counts of features by status across all phases.
+// Summary returns counts of features by status across all schedulable phases.
+// Backlog entries are deferred findings, not schedulable features, so they are
+// excluded from every count (consistent with the render-side phase skip).
 func (r *Roadmap) Summary() (planned, inProgress, done int) {
 	for _, phase := range r.Phases {
+		if isBacklogPhaseName(phase.Name) {
+			continue
+		}
 		for _, f := range phase.Features {
 			switch FeatureStatus(f.Name) {
 			case "done":

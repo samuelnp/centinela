@@ -64,6 +64,9 @@ func RenderRoadmap(r *roadmap.Roadmap) string {
 	}
 	var sections []string
 	for _, phase := range r.Phases {
+		if roadmap.IsBacklogPhaseName(phase.Name) {
+			continue // Backlog findings render in their own section below
+		}
 		lines := []string{StyleBold.Render(phase.Name)}
 		for _, f := range phase.Features {
 			fr := idx[f.Name]
@@ -72,6 +75,9 @@ func RenderRoadmap(r *roadmap.Roadmap) string {
 				StyleMuted.Render("  "+annotation))
 		}
 		sections = append(sections, strings.Join(lines, "\n"))
+	}
+	if backlog := renderBacklogSection(r); backlog != "" {
+		sections = append(sections, backlog)
 	}
 	body := strings.Join(sections, "\n\n")
 	return renderSystemPanel("ROADMAP", "PHASE OVERVIEW", toneInfo, body)

@@ -55,6 +55,11 @@ func workflowOrderForFeature(feature string) ([]string, error) {
 	if err != nil {
 		return nil, roadmapStartError(err)
 	}
+	if roadmap.IsBacklogFeature(r, feature) {
+		return nil, fmt.Errorf(
+			"cannot start %q — it is a Backlog finding; promote it first with "+
+				"centinela roadmap promote %s --phase <name>", feature, feature)
+	}
 	if err := roadmap.ValidateAnalysis(r); err != nil {
 		return nil, fmt.Errorf("greenfield project requires roadmap senior PM analysis: %w", err)
 	}

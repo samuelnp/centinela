@@ -69,6 +69,12 @@ Output format:
 #### Acceptance Wiring
 - centinela.toml validate.commands snippet showing acceptance run
 
+#### Deferred Findings
+- For every Coverage Gap or residual risk left unaddressed (a test or
+  scenario deferred rather than written now), run:
+  `centinela roadmap defer <slug> --summary "<one line>" --source <feature>/qa-senior`
+- List the recorded slugs here, or state "none".
+
 #### Handoff
 - Next role: validation-specialist
 - Edge-case report: produced separately by edge-case-tester subagent
