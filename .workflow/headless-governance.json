@@ -1,15 +1,15 @@
 {
   "feature": "headless-governance",
   "startedAt": "2026-06-13T08:44:00.348062Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-13T09:15:16Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-13T09:53:59Z"
     },
     "plan": {
       "status": "done",
