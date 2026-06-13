@@ -169,6 +169,19 @@
     "createdAt": "2026-06-11T16:10:32Z"
   },
   {
+    "id": "939bc20a9b1a7ea6",
+    "feature": "headless-governance",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: headless-governance",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/headless-governance-gatekeeper.md",
+    "createdAt": "2026-06-13T09:53:34Z"
+  },
+  {
     "id": "a861ca032b250c87",
     "feature": "configurable-model-routing",
     "step": "validate",
