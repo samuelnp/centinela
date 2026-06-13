@@ -9,6 +9,9 @@ func shouldRenderReviewPrompt(wf *workflow.Workflow, cfg *config.Config) bool {
 	if wf == nil || wf.CurrentStep == "done" {
 		return false
 	}
+	if config.IsHeadless(cfg) {
+		return false
+	}
 	mode := effectiveConfirmationMode(wf, cfg)
 	if mode == config.ConfirmAuto {
 		return false

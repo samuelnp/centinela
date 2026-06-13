@@ -18,6 +18,7 @@ type Config struct {
 	Gates         GatesConfig         `toml:"gates"`
 	I18n          I18nConfig          `toml:"i18n"`
 	Memory        MemoryConfig        `toml:"memory"`
+	Headless      HeadlessConfig      `toml:"headless"`
 }
 
 // ValidateConfig holds user-defined commands that centinela runs during validate.
