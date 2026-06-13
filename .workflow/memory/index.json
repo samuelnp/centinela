@@ -39,6 +39,19 @@
     "createdAt": "2026-06-13T13:30:03Z"
   },
   {
+    "id": "1ba2b232333b5a26",
+    "feature": "governance-telemetry",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: governance-telemetry",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/governance-telemetry-gatekeeper.md",
+    "createdAt": "2026-06-13T13:46:56Z"
+  },
+  {
     "id": "28db0c5dc1738aef",
     "feature": "workflow-archetypes",
     "step": "validate",
