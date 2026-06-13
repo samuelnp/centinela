@@ -21,12 +21,6 @@ type Feature struct {
 	DeferredAt string  `json:"deferredAt,omitempty"` // RFC3339 capture time
 }
 
-// Source records the provenance of a deferred Backlog finding.
-type Source struct {
-	Feature string `json:"feature,omitempty"`
-	Role    string `json:"role,omitempty"`
-}
-
 // Phase groups related features under a milestone.
 type Phase struct {
 	Name     string    `json:"name"`
