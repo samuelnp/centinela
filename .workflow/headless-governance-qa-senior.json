@@ -1,0 +1,53 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-13T09:24:48Z"
+  },
+  "feature": "headless-governance",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-13T09:25:42Z",
+  "inputs": [
+    "docs/plans/headless-governance.md",
+    "specs/headless-governance.feature",
+    "internal/config/headless.go",
+    "cmd/centinela/hook_context_review_mode.go",
+    "cmd/centinela/hook_plan_advisor.go",
+    "internal/verdict/assemble.go",
+    "cmd/centinela/verdict.go"
+  ],
+  "outputs": [
+    "tests/acceptance/headless_governance_resolve_test.go",
+    "tests/acceptance/headless_governance_hooks_test.go",
+    "tests/acceptance/headless_governance_verdict_helper_test.go",
+    "tests/acceptance/headless_governance_verdict_summary_test.go",
+    "tests/acceptance/headless_governance_verdict_detail_test.go",
+    "tests/acceptance/headless_governance_command_test.go",
+    "internal/config/headless_test.go",
+    "internal/config/headless_load_test.go",
+    "cmd/centinela/review_mode_headless_test.go",
+    "cmd/centinela/plan_advisor_headless_test.go",
+    "cmd/centinela/verdict_cmd_test.go",
+    "internal/verdict/helpers_test.go",
+    "internal/verdict/assemble_test.go",
+    "internal/verdict/golden_test.go",
+    "internal/verdict/mappers_test.go",
+    "internal/verdict/evidence_index_test.go",
+    ".workflow/headless-governance-edge-cases.md"
+  ],
+  "edgeCases": [
+    "env authoritative over config (1/true on, 0/false off)",
+    "detect_ci opt-in is back-compat (CI present + detect_ci off is not headless)",
+    "zero-config and nil config default to not-headless",
+    "headless wins over explicit every_step in review-prompt decider",
+    "plan-advisor short-circuits silent under headless",
+    "verdict fail still emits JSON to stdout before sentinel error",
+    "deterministic golden JSON (injected Now, no maps, evidence sorted by role)",
+    "gate statuses lowercased, verify statuses stay UPPERCASE",
+    "empty evidence index is a non-nil empty slice",
+    "warnings tallied but never fail the verdict"
+  ],
+  "coverage": 95.5,
+  "handoffTo": "validation-specialist"
+}

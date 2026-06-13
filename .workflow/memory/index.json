@@ -169,6 +169,19 @@
     "createdAt": "2026-06-11T16:10:32Z"
   },
   {
+    "id": "939bc20a9b1a7ea6",
+    "feature": "headless-governance",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: headless-governance",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/headless-governance-gatekeeper.md",
+    "createdAt": "2026-06-13T09:53:34Z"
+  },
+  {
     "id": "a861ca032b250c87",
     "feature": "configurable-model-routing",
     "step": "validate",
@@ -232,6 +245,19 @@
     ],
     "sourceArtifact": ".workflow/code-quality-hardening-gatekeeper.md",
     "createdAt": "2026-06-10T16:25:22Z"
+  },
+  {
+    "id": "ec28b0c94d081af3",
+    "feature": "headless-governance",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Env authoritative over config.** `CENTINELA_HEADLESS=1`/`true` forces headless ON even when `[headless] enabled=false`; `0`/`false` forces it OFF even when `enabled=true` and `detect_ci=true`. The env value, when non-empty, short-circuits both config tiers.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/headless-governance-edge-cases.md",
+    "createdAt": "2026-06-13T09:31:40Z"
   },
   {
     "id": "ee609a7719ed7ecb",
