@@ -59,6 +59,7 @@ func executeValidationWithFlag(flag config.FlagOverride) error {
 	allPassed := true
 	fmt.Println(ui.StyleBold.Render("Built-in Gates " + header))
 	results := gates.RunWithFilter(cfg, filter)
+	emitGateFailures(cfg, results)
 	for _, r := range results {
 		fmt.Println(ui.RenderGateResult(r))
 	}

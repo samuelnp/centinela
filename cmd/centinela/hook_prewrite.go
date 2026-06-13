@@ -10,6 +10,7 @@ import (
 
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/hookpolicy"
+	"github.com/samuelnp/centinela/internal/telemetry"
 	"github.com/samuelnp/centinela/internal/ui"
 )
 
@@ -63,10 +64,12 @@ func runHookPrewrite(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 	if d.NeedInit {
+		telemetry.RecordBlock(cfg, "", "", string(d.FileType), filePath, "need-init")
 		fmt.Fprintln(os.Stderr, ui.RenderBlocked(string(d.FileType), "", "—", filePath))
 		fmt.Fprintln(os.Stderr, ui.StyleMuted.Render("Run: centinela start <feature>"))
 		exitPrewrite(2)
 	}
+	telemetry.RecordBlock(cfg, d.Feature, d.Step, string(d.FileType), filePath, "out-of-step")
 	fmt.Fprintln(os.Stderr, ui.RenderBlocked(string(d.FileType), d.Step, d.Feature, filePath))
 	exitPrewrite(2)
 	return nil

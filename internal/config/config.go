@@ -18,6 +18,7 @@ type Config struct {
 	Gates         GatesConfig         `toml:"gates"`
 	I18n          I18nConfig          `toml:"i18n"`
 	Memory        MemoryConfig        `toml:"memory"`
+	Telemetry     TelemetryConfig     `toml:"telemetry"`
 	Headless      HeadlessConfig      `toml:"headless"`
 }
 
