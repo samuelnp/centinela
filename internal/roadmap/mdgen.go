@@ -6,7 +6,7 @@ import "strings"
 // It iterates only ordered slices (Phases, Features, DependsOn) — never a Go
 // map — so output is byte-stable across platforms. The result uses LF line
 // endings and ends with exactly one trailing newline.
-func RenderMarkdown(r *Roadmap) ([]byte, error) {
+func RenderMarkdown(r *Roadmap) []byte {
 	var lines []string
 	lines = append(lines, "# Roadmap", "")
 	if r.Intro != "" {
@@ -19,7 +19,7 @@ func RenderMarkdown(r *Roadmap) ([]byte, error) {
 	}
 	// Collapse the trailing blank line into the single EOF newline.
 	out := strings.TrimRight(strings.Join(lines, "\n"), "\n")
-	return []byte(out + "\n"), nil
+	return []byte(out + "\n")
 }
 
 // renderBlockquote renders a prose string as a Markdown blockquote: each line is

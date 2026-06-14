@@ -28,12 +28,7 @@ func checkRoadmapDrift(cfg *config.Config, _ *gitdiff.Set) Result {
 		r.Message = "roadmap_drift: cannot load " + roadmap.RoadmapFile + ": " + err.Error()
 		return r
 	}
-	want, err := roadmap.RenderMarkdown(rm)
-	if err != nil {
-		r.Status = Fail
-		r.Message = "roadmap_drift: render failed: " + err.Error()
-		return r
-	}
+	want := roadmap.RenderMarkdown(rm)
 	got, err := os.ReadFile(roadmapMarkdownFile)
 	if err != nil {
 		if os.IsNotExist(err) {

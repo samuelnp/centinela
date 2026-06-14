@@ -29,10 +29,7 @@ func runRoadmapGenerate(_ *cobra.Command, _ []string) error {
 	if err != nil {
 		return roadmapCommandError(err)
 	}
-	data, err := roadmap.RenderMarkdown(r)
-	if err != nil {
-		return err
-	}
+	data := roadmap.RenderMarkdown(r)
 	if err := os.WriteFile(roadmapMarkdownFile, data, 0644); err != nil {
 		return err
 	}
