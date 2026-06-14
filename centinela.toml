@@ -70,3 +70,9 @@ allow = ["leaf"]
 name  = "cmd"
 paths = ["cmd/**"]
 allow = ["domain", "leaf"]
+
+# Claim verification re-runs the full `go test ./...` suite to confirm the
+# tests-pass claim. This repo's acceptance + cross-compile tests legitimately
+# take ~75s, so the default 60s timeout is too short. Raise it with margin.
+[verify]
+verify_timeout = 240

@@ -1,14 +1,14 @@
 {
   "feature": "roadmap-doc-sync",
   "startedAt": "2026-06-13T17:08:25.218406Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-14T08:49:08Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-14T09:18:31Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-14T10:23:15Z"
     }
   },
   "stepOrder": [

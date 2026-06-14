@@ -1,0 +1,112 @@
+# Gatekeeper Report: roadmap-doc-sync
+
+**Date:** 2026-06-14
+**Status:** WARNING
+
+Adversarial gate review of `roadmap-doc-sync` at workflow step **validate (4/5)**.
+Branch HEAD: `chore(workflow): roadmap-doc-sync — tests complete [3/5]`.
+All checks run from the worktree against the worktree-built binary `/tmp/cent-rds`.
+Working tree carries one **uncommitted** edit (PROJECT.md G2) — see Finding 1.
+
+---
+
+## Gate Keepers Checklist
+
+- [x] **All source files ≤100 lines** (incl. `_test.go` in internal/ & cmd/)
+- [x] **No cross-layer import violations** (mechanically; see caveat in Finding 1)
+- [x] **`centinela validate --full` passes** — all built-in gates Pass/Warn, all validate commands ✓
+- [x] **No business logic in the outer layer** — `roadmap_generate.go` is a thin orchestrator
+- [N/A] **i18n** — disabled for this project (English-only)
+- [x] **Determinism / core promise** — idempotent; drift detection (in-sync / hand-edit / missing / warn-vs-fail) all verified empirically
+- [x] **Coverage ≥95%** — gate passes at 95.1%; new feature code at 100% function coverage
+- [x] **Tests real & executed** — 31 acceptance tests map to 31 scenarios; `go test ./...` green (1866 tests); spot-checked assertions are real
+- [x] **Gatekeeper report** present (this file)
+- [N/A] **Production readiness** — gate not enabled
+
+---
+
+## Mechanical Verification
+
+### 1. File size (≤100 lines)
+`find internal cmd -name '*.go' | xargs wc -l | awk '$1>100'` → **no output**. Every Go source and test file under both directories is ≤100 lines. PASS.
+
+### 2. Cross-layer imports
+- Generator (`internal/roadmap/mdgen*.go`, `types.go`) imports **only `strings`** (stdlib). No `cmd/` or `internal/ui` import anywhere in `internal/roadmap`. PASS.
+- `internal/gates/roadmap_drift.go` imports `internal/config`, `internal/gitdiff`, **`internal/roadmap`** — the new read-only edge.
+- `cmd/centinela/roadmap_generate.go` imports `internal/roadmap` (allowed: cmd may import internal/*).
+- `import_graph` gate result: **⚠ (warn, non-blocking)** — pre-existing "unmapped packages" warning. `internal/roadmap` is **not** mapped to any layer in `centinela.toml` (config identical to main), and was already unmapped + already imported by `internal/ui` on main. The new `gates→roadmap` edge therefore does **not** newly cause the warning.
+- **Caveat (Finding 1):** because `internal/roadmap` is unmapped, `checkEdges` (import_graph_check.go:40 — `if !ok || to == "" ...: continue`) silently **skips** any edge into it. The `gates→roadmap` edge is thus **not mechanically enforced** as read-only; it rides on documentation + code review only, same as the existing `ui→roadmap` edge.
+
+### 3. `centinela validate --full`
+```
+✓ G1: File Size            All files under 100 lines.
+✓ G-Build: Cross-Compile   All 6 release targets compile.
+⚠ import_graph             Packages match no configured layer  (pre-existing)
+⚠ spec-traceability-gate   Scenarios without acceptance coverage (pre-existing)
+✓ roadmap_drift            ROADMAP.md is in sync.
+✓ go test ./...
+✓ go test ./tests/acceptance/...
+✓ ./scripts/check-coverage.sh
+✓ ./scripts/check-fmt.sh
+→ "All gates passed."
+```
+Both ⚠ are repo-wide pre-existing (84 specs on main under the same `severity="warn"` traceability gate; roadmap unmapped on main). **Verified roadmap-doc-sync is NOT newly responsible:** all 31 of its scenarios have matching `// Acceptance: + // Scenario:` test comments (diff of spec scenario names vs test comments = empty), and the new packages introduce no *failing* edge. PASS.
+
+### 4. No business logic in outer layer
+`cmd/centinela/roadmap_generate.go` (38 lines): `roadmap.Load()` → `roadmap.RenderMarkdown()` → `os.WriteFile()`. All formatting lives in `internal/roadmap`. Thin orchestrator. PASS (G7 honored).
+
+### 5. i18n
+Disabled for this project (English-only). N/A.
+
+### 6. Determinism / correctness of the core promise (empirically verified with /tmp/cent-rds)
+- **Idempotent:** ran `roadmap generate` against the committed tree → output **byte-identical** to the committed `ROADMAP.md` ("Files are identical"). Committed file already in sync with generator.
+- **(a) In-sync passes:** `roadmap_drift  ROADMAP.md is in sync.` ✓
+- **(b) Hand-edit drift:** edited line 5 → `⚠ roadmap_drift  ROADMAP.md drifted at line 5 — run \`centinela roadmap generate\`.` — correct **first differing line** + remediation.
+- **(c) Missing ROADMAP.md:** removed file → `⚠ roadmap_drift  ROADMAP.md is missing — run \`centinela roadmap generate\`.` — treated as drift.
+- **(d) Severity warn vs fail:** under `warn` drift renders `⚠` and validate exits 0 (non-blocking); under `fail` drift renders `✗` and validate exits non-zero (blocking). `AllPassed` treats only `Fail` as blocking — consistent.
+- **Status glyphs:** generated `ROADMAP.md` contains **no per-feature live status glyph**; the only glyphs present (`## ✅ Phase 0/1/2`) are authored **phase-name** glyphs passed through verbatim. Correct.
+- Generator iterates ordered slices only (no map ranging), LF endings, single trailing newline.
+
+### 7. Coverage
+`./scripts/check-coverage.sh` → **coverage gate passed: 95.1% >= 95.0%**.
+Margin is thin (0.1%), so I checked it is **not** a rounding pass on the new code: every new function is at **100%**:
+- `mdgen.go` / `mdgen_feature.go` / `mdgen_phase.go`: all 100.0%
+- `gates/roadmap_drift.go` (checkRoadmapDrift, driftResult, firstDifferingLine): 100.0%
+- `config/roadmap_drift.go` (Normalize/validate): 100.0%
+- `cmd/.../roadmap_generate.go` (init, runRoadmapGenerate): 100.0%
+
+Per-package totals sit just under 95% (roadmap 93.5%, gates 94.2%, cmd 94.0%, config 99.0%) due to **pre-existing** uncovered error paths (`roadmap.go` Load 88.9% / Save 83.3%), not new code. The repo aggregate gate clears with genuine margin on the feature surface. PASS.
+
+### 8. Tests real & executed
+- `go test ./...` → **1866 passed** across 26 packages. Green.
+- **31** acceptance test functions across 6 files in `tests/acceptance/roadmap_doc_sync_*.go`, each carrying `// Acceptance: specs/roadmap-doc-sync.feature` + a verbatim `// Scenario:` header — matching all **31** spec scenarios 1:1.
+- Spot-checks (real assertions, not trivially-true):
+  - `roadmap_doc_sync_drift_test.go`: builds the real binary, generates, hand-edits, asserts on **both** message content (`"line"`, `"roadmap generate"`, `"in sync"`) **and exit code** (warn→0, fail→non-zero, regen→0).
+  - `roadmap_doc_sync_render_test.go`: asserts exact byte sequences (e.g. `"- **x** — d\n  *Fixes: f*"`) and negative cases (no dangling em-dash, no `Fixes` line, no `depends on` for empty slice).
+  - `roadmap_drift_line_test.go`: table test for `firstDifferingLine` covering identical / first / middle / missing-trailing / extra-trailing / both-empty — and a read-error case (ROADMAP.md as a directory → Fail, no panic).
+
+---
+
+## Analyzed Specs
+- `specs/roadmap-doc-sync.feature` (31 scenarios) — the feature under review.
+- Cross-checked against the existing 84 specs on `main` for the import_graph / spec-traceability warning baseline.
+
+## Findings
+
+- **Affected spec:** PROJECT.md (G2 layer rule) / repo invariant
+  **Risk (Finding 1 — should resolve before commit):** The brief states "PROJECT.md G2 updated to document the `internal/gates → internal/roadmap` read-only edge," but at **HEAD this edit is NOT committed** (`git diff main...HEAD -- PROJECT.md` is empty). The edit exists only as an **uncommitted working-tree change** to PROJECT.md line 26. During testing I briefly discarded it and **restored it** (the working tree now again carries the intended edit text). It must be **committed as part of this feature** or the documented justification for the new `gates→roadmap` edge ships missing.
+  Secondary: the edge is documentation-only — `import_graph` cannot enforce "read-only" while `internal/roadmap` stays unmapped (same gap as the pre-existing `ui→roadmap` edge). Not a regression, but the new edge widens the un-enforced surface.
+  **Suggestion:** Ensure the PROJECT.md G2 paragraph (restored to working tree) is staged and committed in the validate/docs commit. Optionally map `internal/roadmap` as a leaf layer in `centinela.toml` to make both `ui→roadmap` and `gates→roadmap` mechanically read-only — track as a follow-up (do not gate this feature on it).
+
+- **Affected spec:** repo-wide (import_graph, spec-traceability)
+  **Risk:** Two ⚠ warnings persist in `validate --full`.
+  **Suggestion:** None required — both are pre-existing, repo-wide, `severity="warn"` (non-blocking), and verified NOT newly caused by this feature (roadmap was unmapped on main; all 31 roadmap-doc-sync scenarios are covered).
+
+## Deferred Findings
+- none
+
+## Recommendation
+**WARNING** — The feature is functionally correct and well-tested: all 8 checklist items pass mechanically, the core drift/idempotency promise is verified empirically, coverage is a genuine (not rounding) pass with new code at 100%, and the two validate warnings are pre-existing and not regressions. The single actionable concern is **administrative**: the PROJECT.md G2 documentation justifying the new `gates→roadmap` import edge is **uncommitted** at HEAD and must be committed with this feature. No code defects, no layer violation, no test theater, no coverage gaming found. Safe to proceed once the G2 edit is committed.
+
+---
+**VERDICT: WARNING**
