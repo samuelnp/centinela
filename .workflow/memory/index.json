@@ -247,6 +247,19 @@
     "createdAt": "2026-06-13T09:53:34Z"
   },
   {
+    "id": "9c696670fd9fa78c",
+    "feature": "centinela-doctor",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report: centinela-doctor",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/centinela-doctor-gatekeeper.md",
+    "createdAt": "2026-06-14T15:39:24Z"
+  },
+  {
     "id": "a861ca032b250c87",
     "feature": "configurable-model-routing",
     "step": "validate",
