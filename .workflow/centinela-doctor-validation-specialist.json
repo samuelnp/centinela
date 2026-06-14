@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "cli_version": "0.21.1",
+    "written_at": "2026-06-14T15:32:08Z"
+  },
+  "feature": "centinela-doctor",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-14T15:32:08Z",
+  "inputs": [
+    ".workflow/centinela-doctor-gatekeeper.md",
+    ".workflow/centinela-doctor-qa-senior.md",
+    "centinela.toml"
+  ],
+  "outputs": [
+    ".workflow/centinela-doctor-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "Gatekeeper SAFE; all gates pass (G1, build, roadmap_drift, coverage 95.2%, fmt); import_graph & spec-traceability warns pre-existing",
+    "Empirically verified: glyph detect->fix->idempotent; orphaned tmp removed; abandoned worktree/.workflow REPORTED not deleted by --fix; exit 0 WARN / 1 ERROR",
+    "1970 tests green; all 38 scenarios mapped; internal/doctor 96-97.5% colocated coverage"
+  ],
+  "handoffTo": "documentation-specialist"
+}

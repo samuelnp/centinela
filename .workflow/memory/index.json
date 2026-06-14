@@ -52,6 +52,19 @@
     "createdAt": "2026-06-13T13:46:56Z"
   },
   {
+    "id": "1e0e5be8163572ed",
+    "feature": "centinela-doctor",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **No `.claude/` directory** → hooks check WARN (\"run `centinela setup`\"), no",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/centinela-doctor-edge-cases.md",
+    "createdAt": "2026-06-14T15:11:10Z"
+  },
+  {
     "id": "20f5e09524c45465",
     "feature": "deferred-findings-roadmap-capture",
     "step": "validate",
@@ -232,6 +245,19 @@
     ],
     "sourceArtifact": ".workflow/headless-governance-gatekeeper.md",
     "createdAt": "2026-06-13T09:53:34Z"
+  },
+  {
+    "id": "9c696670fd9fa78c",
+    "feature": "centinela-doctor",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report: centinela-doctor",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/centinela-doctor-gatekeeper.md",
+    "createdAt": "2026-06-14T15:39:24Z"
   },
   {
     "id": "a861ca032b250c87",
