@@ -181,3 +181,4 @@
 ## Backlog
 
 - **rawio-reformat-diff-churn** — First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn *(deferred 2026-06-12T16:29:13Z · deferred-findings-roadmap-capture/senior-engineer)*
+- **roadmap-import-graph-layer-mapping** — Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2 *(deferred 2026-06-14T10:30:31Z · roadmap-doc-sync/gatekeeper)*

@@ -1,5 +1,4 @@
 {
-  "intro": "Centinela is a harness-governance layer for AI coding agents. Its guiding\nprinciple: **treat every agent failure as an engineering problem to fix\npermanently, not a prompt to retry — make correctness enforced, not requested.**\nEach item below names the agent or team failure mode it permanently fixes.\n\n**Capability-spectrum principle.** Centinela must govern *any* model — from a\nsmall local model running on a laptop to a frontier reasoning model. The\nweaker the model, the more scaffolding it needs (step-gating, artifact\ntemplates, confirmations); the stronger the model, the more enforcement\nshifts to outcomes (gates + claim verification at delivery). What never\nvaries is independent mechanical verification: no model's claims are\ntrusted, ever. **Governance adapts; verification is constant.**\n\nStatus is derived from workflow state — run `centinela roadmap` for the live view.\nPhases are ordered by leverage and dependency; scheduling follows the\n`dependsOn` graph, not the phase number.",
   "phases": [
     {
       "name": "✅ Phase 0: Bootstrap",
@@ -312,16 +311,10 @@
     {
       "name": "Backlog",
       "features": [
-        {
-          "name": "rawio-reformat-diff-churn",
-          "summary": "First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn",
-          "source": {
-            "feature": "deferred-findings-roadmap-capture",
-            "role": "senior-engineer"
-          },
-          "deferredAt": "2026-06-12T16:29:13Z"
-        }
+        {"name":"rawio-reformat-diff-churn","summary":"First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn","source":{"feature":"deferred-findings-roadmap-capture","role":"senior-engineer"},"deferredAt":"2026-06-12T16:29:13Z"},
+        {"name":"roadmap-import-graph-layer-mapping","summary":"Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2","source":{"feature":"roadmap-doc-sync","role":"gatekeeper"},"deferredAt":"2026-06-14T10:30:31Z"}
       ]
     }
-  ]
+  ],
+  "intro": "Centinela is a harness-governance layer for AI coding agents. Its guiding\nprinciple: **treat every agent failure as an engineering problem to fix\npermanently, not a prompt to retry — make correctness enforced, not requested.**\nEach item below names the agent or team failure mode it permanently fixes.\n\n**Capability-spectrum principle.** Centinela must govern *any* model — from a\nsmall local model running on a laptop to a frontier reasoning model. The\nweaker the model, the more scaffolding it needs (step-gating, artifact\ntemplates, confirmations); the stronger the model, the more enforcement\nshifts to outcomes (gates + claim verification at delivery). What never\nvaries is independent mechanical verification: no model's claims are\ntrusted, ever. **Governance adapts; verification is constant.**\n\nStatus is derived from workflow state — run `centinela roadmap` for the live view.\nPhases are ordered by leverage and dependency; scheduling follows the\n`dependsOn` graph, not the phase number."
 }
