@@ -24,4 +24,5 @@ func applyDefaults(cfg *Config) {
 	cfg.Gates.ImportGraph = NormalizeImportGraph(cfg.Gates.ImportGraph)
 	cfg.Gates.Security = NormalizeSecurityGate(cfg.Gates.Security)
 	cfg.Gates.SpecTraceability = NormalizeSpecTraceability(cfg.Gates.SpecTraceability)
+	cfg.Gates.RoadmapDrift = NormalizeRoadmapDrift(cfg.Gates.RoadmapDrift)
 }

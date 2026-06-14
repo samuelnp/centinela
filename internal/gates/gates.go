@@ -59,6 +59,10 @@ func RunWithFilter(cfg *config.Config, filter *gitdiff.Set) []Result {
 		results = append(results, checkSpecTraceability(cfg, filter))
 	}
 
+	if cfg.Gates.RoadmapDrift.Enabled {
+		results = append(results, checkRoadmapDrift(cfg, filter))
+	}
+
 	return results
 }
 

@@ -39,6 +39,7 @@ type GatesConfig struct {
 	ImportGraph                ImportGraphConfig      `toml:"import_graph"`
 	Security                   SecurityGateConfig     `toml:"security"`
 	SpecTraceability           SpecTraceabilityConfig `toml:"spec_traceability"`
+	RoadmapDrift               RoadmapDriftConfig     `toml:"roadmap_drift"`
 }
 
 // I18nConfig describes how to check translations for G11.

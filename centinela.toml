@@ -24,6 +24,14 @@ file_size = true
 enabled  = true
 severity = "warn"
 
+# roadmap-drift gate: ROADMAP.md is generated from .workflow/roadmap.json via
+# `centinela roadmap generate`; this gate byte-compares the on-disk file with
+# generator output and reports drift. Shipped in warn mode for safe adoption;
+# ratchet to fail once ROADMAP.md is regenerated and clean.
+[gates.roadmap_drift]
+enabled  = true
+severity = "warn"
+
 [gates.build]
 enabled = true
 command = "go build ./cmd/centinela"
