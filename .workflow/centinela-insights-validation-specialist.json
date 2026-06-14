@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "cli_version": "0.21.2",
+    "written_at": "2026-06-14T20:46:26Z"
+  },
+  "feature": "centinela-insights",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-14T20:46:26Z",
+  "inputs": [
+    ".workflow/centinela-insights-gatekeeper.md",
+    ".workflow/centinela-insights-qa-senior.md"
+  ],
+  "outputs": [
+    ".workflow/centinela-insights-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "Gatekeeper SAFE; all gates pass (G1, build, roadmap_drift, coverage 95.2%, fmt); internal/insights mapped to aggregator layer, no new import_graph fail",
+    "Metrics empirically verified (steps-to-green 1.50/1.00/2.00/n-a, rework exclusions, tie-breaking, --json byte-stable, empty/malformed-log resilience)",
+    "2045 tests green; 36 scenarios mapped; internal/insights 100% colocated coverage"
+  ],
+  "handoffTo": "documentation-specialist"
+}
