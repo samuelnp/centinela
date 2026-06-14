@@ -52,6 +52,19 @@
     "createdAt": "2026-06-13T13:46:56Z"
   },
   {
+    "id": "1e0e5be8163572ed",
+    "feature": "centinela-doctor",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **No `.claude/` directory** → hooks check WARN (\"run `centinela setup`\"), no",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/centinela-doctor-edge-cases.md",
+    "createdAt": "2026-06-14T15:11:10Z"
+  },
+  {
     "id": "20f5e09524c45465",
     "feature": "deferred-findings-roadmap-capture",
     "step": "validate",
