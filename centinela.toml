@@ -71,10 +71,14 @@ allow = ["leaf"]
 # read-only and is itself imported only by cmd/. It is mapped here allowing the
 # encoded domain + leaf layers; its edges to still-unmapped packages
 # (roadmap/evidence/worktree/setup) surface as the existing non-failing warning,
-# consistent with the conservative matrix policy above. See PROJECT.md G2 prose.
+# consistent with the conservative matrix policy above. internal/insights joins
+# this layer: a read-only analytics aggregator over the telemetry log, imported
+# only by cmd/. Its sole edge is to internal/telemetry (a config-only leaf,
+# unmapped like the other domain reads), so it adds no new failing edge — the
+# unmapped-telemetry warning is the existing non-failing kind. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**"]
+paths = ["internal/doctor/**", "internal/insights/**"]
 allow = ["domain", "leaf"]
 
 [[gates.import_graph.layers]]
