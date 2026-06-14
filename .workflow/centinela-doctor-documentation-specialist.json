@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "cli_version": "0.21.1",
+    "written_at": "2026-06-14T15:39:50Z"
+  },
+  "feature": "centinela-doctor",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-14T15:39:50Z",
+  "inputs": [
+    ".workflow/centinela-doctor-changelog.md",
+    "docs/features/centinela-doctor.md",
+    "docs/plans/centinela-doctor.md"
+  ],
+  "outputs": [
+    ".workflow/centinela-doctor-changelog.md"
+  ],
+  "edgeCases": [
+    "Internal-surface docs: one-line changelog + regenerated project-docs HTML"
+  ],
+  "handoffTo": "complete"
+}

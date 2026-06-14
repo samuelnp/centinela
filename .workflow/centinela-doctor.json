@@ -1,15 +1,15 @@
 {
   "feature": "centinela-doctor",
   "startedAt": "2026-06-14T11:14:19.078079Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-14T14:35:30Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-14T15:41:19Z"
     },
     "plan": {
       "status": "done",
