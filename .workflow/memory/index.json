@@ -104,6 +104,19 @@
     "createdAt": "2026-06-11T20:50:04Z"
   },
   {
+    "id": "36cc32f1a77b0cd5",
+    "feature": "centinela-insights",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Missing telemetry log** → clean \"no telemetry yet\", exit 0, no stack trace.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/centinela-insights-edge-cases.md",
+    "createdAt": "2026-06-14T20:25:40Z"
+  },
+  {
     "id": "37b620e38200efd5",
     "feature": "deterministic-artifact-scaffolds",
     "step": "validate",
