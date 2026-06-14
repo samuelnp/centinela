@@ -17,15 +17,15 @@
 > Phases are ordered by leverage and dependency; scheduling follows the
 > `dependsOn` graph, not the phase number.
 
-## ✅ Phase 0: Bootstrap
+## Phase 0: Bootstrap
 
 - **docs-migration-managed-docs** — managed, incrementally upgradable scaffolded docs via `centinela migrate`.
 
-## ✅ Phase 1: Harness Capabilities
+## Phase 1: Harness Capabilities
 
 - **governed-project-memory** — a structured, git-tracked memory ledger that harvests Centinela's own artifacts (edge-case lessons, gate verdicts, decisions) at step boundaries and recalls the relevant slice into later features via the existing context-injection hook. Governed (reviewable, deterministic, no semantic-store dependency), not fuzzy recall.
 
-## ✅ Phase 2: Configurable Model Routing
+## Phase 2: Configurable Model Routing
 
 - **configurable-model-routing** — runner-keyed tier→model remapping plus per-role concrete-model overrides (`claude` | `opencode` | `codex`), so operators route reasoning/coding work to the models they actually want while every unconfigured role keeps the built-in default. The foundation the capability-adaptive phase builds on.
 
