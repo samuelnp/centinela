@@ -24,6 +24,14 @@ file_size = true
 enabled  = true
 severity = "warn"
 
+# roadmap-drift gate: ROADMAP.md is generated from .workflow/roadmap.json via
+# `centinela roadmap generate`; this gate byte-compares the on-disk file with
+# generator output and reports drift. Shipped in warn mode for safe adoption;
+# ratchet to fail once ROADMAP.md is regenerated and clean.
+[gates.roadmap_drift]
+enabled  = true
+severity = "warn"
+
 [gates.build]
 enabled = true
 command = "go build ./cmd/centinela"
@@ -62,3 +70,9 @@ allow = ["leaf"]
 name  = "cmd"
 paths = ["cmd/**"]
 allow = ["domain", "leaf"]
+
+# Claim verification re-runs the full `go test ./...` suite to confirm the
+# tests-pass claim. This repo's acceptance + cross-compile tests legitimately
+# take ~75s, so the default 60s timeout is too short. Raise it with margin.
+[verify]
+verify_timeout = 240

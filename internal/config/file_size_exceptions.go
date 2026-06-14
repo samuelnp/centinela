@@ -47,5 +47,8 @@ func validateConfig(cfg *Config) error {
 	if err := validateSpecTraceability(cfg.Gates.SpecTraceability); err != nil {
 		return err
 	}
+	if err := validateRoadmapDrift(cfg.Gates.RoadmapDrift); err != nil {
+		return err
+	}
 	return nil
 }

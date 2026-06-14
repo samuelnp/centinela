@@ -9,28 +9,8 @@ import (
 
 const RoadmapFile = ".workflow/roadmap.json"
 
-// Feature is a single deliverable within a phase.
-type Feature struct {
-	Name      string   `json:"name"`
-	DependsOn []string `json:"dependsOn,omitempty"`
-	// Archetype optionally pins the workflow track for this feature; an explicit
-	// --archetype flag at start overrides it. Empty resolves to canonical.
-	Archetype  string  `json:"archetype,omitempty"`
-	Summary    string  `json:"summary,omitempty"`    // deferred-finding one-liner
-	Source     *Source `json:"source,omitempty"`     // {feature, role} provenance
-	DeferredAt string  `json:"deferredAt,omitempty"` // RFC3339 capture time
-}
-
-// Phase groups related features under a milestone.
-type Phase struct {
-	Name     string    `json:"name"`
-	Features []Feature `json:"features"`
-}
-
-// Roadmap holds the full project plan.
-type Roadmap struct {
-	Phases []Phase `json:"phases"`
-}
+// Feature, Phase and Roadmap struct definitions live in types.go to keep this
+// file within the ≤100-line budget after the prose fields were added.
 
 // Load reads roadmap.json from disk.
 func Load() (*Roadmap, error) {
