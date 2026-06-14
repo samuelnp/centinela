@@ -1,0 +1,37 @@
+{
+  "feature": "roadmap-doc-sync",
+  "startedAt": "2026-06-13T17:08:25.218406Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-14T08:33:43Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/roadmap-doc-sync"
+}
