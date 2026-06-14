@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "cli_version": "0.21.2",
+    "written_at": "2026-06-14T20:24:11Z"
+  },
+  "feature": "centinela-insights",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-14T20:24:11Z",
+  "inputs": [
+    "specs/centinela-insights.feature",
+    "docs/plans/centinela-insights.md",
+    "internal/insights/steps.go",
+    "internal/insights/gates.go",
+    "internal/insights/rework.go",
+    "internal/insights/compute.go",
+    "internal/insights/report.go",
+    "internal/insights/blocks.go"
+  ],
+  "outputs": [
+    "internal/insights/gates_test.go",
+    "internal/insights/compute_test.go",
+    "internal/insights/blocks_test.go",
+    "internal/insights/steps_test.go",
+    "internal/insights/rework_test.go",
+    "internal/insights/report_test.go",
+    "internal/ui/render_insights_test.go",
+    "cmd/centinela/insights_test.go",
+    "tests/acceptance/centinela_insights_blocks_test.go",
+    "tests/acceptance/centinela_insights_steps_test.go",
+    "tests/acceptance/centinela_insights_helper_test.go",
+    "tests/acceptance/centinela_insights_json_test.go",
+    "tests/acceptance/centinela_insights_meta_test.go",
+    "tests/acceptance/centinela_insights_determinism_test.go",
+    "tests/acceptance/centinela_insights_rework_test.go",
+    "tests/acceptance/centinela_insights_empty_test.go",
+    "tests/acceptance/centinela_insights_gates_test.go",
+    "tests/integration/insights_test.go",
+    ".workflow/centinela-insights-edge-cases.md"
+  ],
+  "edgeCases": [
+    "All 36 spec scenarios mapped 1:1 to acceptance tests; spec-traceability lists no insights gaps",
+    "internal/insights 100% coverage; total 95.2%; colocated unit tests build []telemetry.Event fixtures + temp events.jsonl (hermetic, deterministic)",
+    "Verified metric math (rework sum, mean steps-to-green 1.00/2.00/n/a), tie-breaking, --top truncation, --json stable shape, empty/malformed-log resilience",
+    "2045 tests pass; gofmt/vet clean; every internal/cmd _test.go <=100 lines; validate --full all gates pass"
+  ],
+  "handoffTo": "validation-specialist"
+}

@@ -1,0 +1,1 @@
+- feat: `centinela insights` reports governance analytics from the telemetry log — most-triggered blocks, most-failed gates, features with the most rework (gate-failure + verify-rejection + complete-rejected), and mean steps-to-green — with `--top N` and `--json`; turns roadmap/governance prioritization from anecdote into evidence.

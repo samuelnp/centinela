@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "cli_version": "0.21.2",
+    "written_at": "2026-06-14T20:54:15Z"
+  },
+  "feature": "centinela-insights",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-14T20:54:15Z",
+  "inputs": [
+    ".workflow/centinela-insights-changelog.md",
+    "docs/features/centinela-insights.md",
+    "docs/plans/centinela-insights.md"
+  ],
+  "outputs": [
+    ".workflow/centinela-insights-changelog.md"
+  ],
+  "edgeCases": [
+    "Internal-surface docs: one-line changelog + regenerated project-docs HTML"
+  ],
+  "handoffTo": "complete"
+}
