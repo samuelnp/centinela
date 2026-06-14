@@ -1,15 +1,15 @@
 {
   "feature": "centinela-insights",
   "startedAt": "2026-06-14T16:10:53.479134Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-14T19:21:54Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-14T20:56:03Z"
     },
     "plan": {
       "status": "done",
