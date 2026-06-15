@@ -27,6 +27,7 @@ type Event struct {
 	Timestamp  string     `json:"timestamp"` // RFC3339 UTC
 	Feature    string     `json:"feature,omitempty"`
 	Step       string     `json:"step,omitempty"`
+	Model      string     `json:"model,omitempty"`      // driver model id, stamped at emit (back-compat: old lines → "")
 	Reason     string     `json:"reason,omitempty"`     // block: need-init|out-of-step ; complete-rejected: gates|verify
 	FileType   string     `json:"fileType,omitempty"`   // block
 	TargetPath string     `json:"targetPath,omitempty"` // block

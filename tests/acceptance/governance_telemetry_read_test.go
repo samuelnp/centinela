@@ -24,9 +24,9 @@ func gtWriteRaw(t *testing.T, lines string) {
 func TestGT_AccumulateInOrder(t *testing.T) {
 	gtChdir(t)
 	cfg := gtCfg(true)
-	telemetry.RecordBlock(cfg, "f", "plan", "tests", "/p/tests/a_test.go", "out-of-step")
-	telemetry.RecordGateFailure(cfg, "G", "m")
-	telemetry.RecordStepAdvanced(cfg, "f", "validate")
+	telemetry.RecordBlock(cfg, "f", "plan", "tests", "/p/tests/a_test.go", "out-of-step", "")
+	telemetry.RecordGateFailure(cfg, "G", "m", "")
+	telemetry.RecordStepAdvanced(cfg, "f", "validate", "")
 	evs := gtEvents(t)
 	if len(evs) != 3 || evs[0].Type != telemetry.TypeBlock ||
 		evs[1].Type != telemetry.TypeGateFailure || evs[2].Type != telemetry.TypeStepAdvanced {
@@ -38,8 +38,8 @@ func TestGT_AccumulateInOrder(t *testing.T) {
 func TestGT_TwoSequentialIntact(t *testing.T) {
 	gtChdir(t)
 	cfg := gtCfg(true)
-	telemetry.RecordStepAdvanced(cfg, "f", "plan")
-	telemetry.RecordStepAdvanced(cfg, "f", "code")
+	telemetry.RecordStepAdvanced(cfg, "f", "plan", "")
+	telemetry.RecordStepAdvanced(cfg, "f", "code", "")
 	evs := gtEvents(t)
 	if len(evs) != 2 || evs[0].Step != "plan" || evs[1].Step != "code" {
 		t.Fatalf("both sequential records must land intact: %+v", evs)
@@ -53,7 +53,7 @@ func TestGT_IOErrorDoesNotFail(t *testing.T) {
 	if err := os.WriteFile(".workflow", []byte("x"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	telemetry.RecordGateFailure(gtCfg(true), "G", "m") // must return without panic
+	telemetry.RecordGateFailure(gtCfg(true), "G", "m", "") // must return without panic
 	if _, err := os.Stat(".workflow/telemetry/events.jsonl"); err == nil {
 		t.Fatal("no events file should exist after an I/O error")
 	}

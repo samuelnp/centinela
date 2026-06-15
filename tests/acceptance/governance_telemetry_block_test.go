@@ -11,7 +11,7 @@ import (
 // Scenario: Out-of-step write appends a block event with full context
 func TestGT_BlockOutOfStep(t *testing.T) {
 	gtChdir(t)
-	telemetry.RecordBlock(gtCfg(true), "feat", "plan", "tests", "/p/tests/x_test.go", "out-of-step")
+	telemetry.RecordBlock(gtCfg(true), "feat", "plan", "tests", "/p/tests/x_test.go", "out-of-step", "")
 	evs := gtEvents(t)
 	if len(evs) != 1 {
 		t.Fatalf("want 1 event, got %d", len(evs))
@@ -27,7 +27,7 @@ func TestGT_BlockOutOfStep(t *testing.T) {
 // Scenario: Write with no active workflow appends a need-init block event
 func TestGT_BlockNeedInit(t *testing.T) {
 	gtChdir(t)
-	telemetry.RecordBlock(gtCfg(true), "", "", "code", "/p/internal/y.go", "need-init")
+	telemetry.RecordBlock(gtCfg(true), "", "", "code", "/p/internal/y.go", "need-init", "")
 	evs := gtEvents(t)
 	if len(evs) != 1 {
 		t.Fatalf("want 1 event, got %d", len(evs))

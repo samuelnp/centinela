@@ -12,9 +12,9 @@ import (
 func TestGT_ReworkDerivable(t *testing.T) {
 	gtChdir(t)
 	cfg := gtCfg(true)
-	telemetry.RecordCompleteRejected(cfg, "f", "validate", "gates")
-	telemetry.RecordCompleteRejected(cfg, "f", "validate", "verify")
-	telemetry.RecordStepAdvanced(cfg, "f", "validate")
+	telemetry.RecordCompleteRejected(cfg, "f", "validate", "gates", "")
+	telemetry.RecordCompleteRejected(cfg, "f", "validate", "verify", "")
+	telemetry.RecordStepAdvanced(cfg, "f", "validate", "")
 	rejects := 0
 	for _, e := range gtEvents(t) {
 		if e.Type == telemetry.TypeStepAdvanced && e.Step == "validate" {

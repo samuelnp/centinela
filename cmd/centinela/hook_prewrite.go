@@ -63,13 +63,14 @@ func runHookPrewrite(_ *cobra.Command, _ []string) error {
 	if d.Allow {
 		return nil
 	}
+	model := resolveEmitModelFrom(wfs, cfg)
 	if d.NeedInit {
-		telemetry.RecordBlock(cfg, "", "", string(d.FileType), filePath, "need-init")
+		telemetry.RecordBlock(cfg, "", "", string(d.FileType), filePath, "need-init", model)
 		fmt.Fprintln(os.Stderr, ui.RenderBlocked(string(d.FileType), "", "—", filePath))
 		fmt.Fprintln(os.Stderr, ui.StyleMuted.Render("Run: centinela start <feature>"))
 		exitPrewrite(2)
 	}
-	telemetry.RecordBlock(cfg, d.Feature, d.Step, string(d.FileType), filePath, "out-of-step")
+	telemetry.RecordBlock(cfg, d.Feature, d.Step, string(d.FileType), filePath, "out-of-step", model)
 	fmt.Fprintln(os.Stderr, ui.RenderBlocked(string(d.FileType), d.Step, d.Feature, filePath))
 	exitPrewrite(2)
 	return nil
