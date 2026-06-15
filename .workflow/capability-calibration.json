@@ -1,14 +1,14 @@
 {
   "feature": "capability-calibration",
   "startedAt": "2026-06-15T07:46:13.907641Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-15T11:15:59Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-15T12:04:37Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-15T12:31:34Z"
     }
   },
   "stepOrder": [

@@ -208,6 +208,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "8054a47cf854d7f8",
+    "feature": "capability-calibration",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report: capability-calibration",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/capability-calibration-gatekeeper.md",
+    "createdAt": "2026-06-15T12:31:34Z"
+  },
+  {
     "id": "80628eab3542aadc",
     "feature": "capability-calibration",
     "step": "tests",
