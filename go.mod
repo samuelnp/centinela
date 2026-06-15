@@ -1,6 +1,6 @@
 module github.com/samuelnp/centinela
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/BurntSushi/toml v1.6.0
@@ -8,7 +8,7 @@ require (
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/mattn/go-isatty v0.0.20
 	github.com/spf13/cobra v1.8.0
-	golang.org/x/sys v0.36.0
+	golang.org/x/sys v0.46.0
 )
 
 require (
