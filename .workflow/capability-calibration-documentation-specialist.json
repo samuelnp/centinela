@@ -1,0 +1,23 @@
+{
+  "_meta": {
+    "cli_version": "0.22.0",
+    "written_at": "2026-06-15T12:31:52Z"
+  },
+  "feature": "capability-calibration",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-15T12:31:52Z",
+  "inputs": [
+    ".workflow/capability-calibration-changelog.md",
+    "docs/features/capability-calibration.md",
+    "docs/plans/capability-calibration.md"
+  ],
+  "outputs": [
+    ".workflow/capability-calibration-changelog.md"
+  ],
+  "edgeCases": [
+    "Internal-surface docs: one-line changelog + regenerated project-docs HTML"
+  ],
+  "handoffTo": "complete"
+}

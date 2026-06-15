@@ -1,0 +1,1 @@
+- feat: `centinela calibrate` reads per-model telemetry (now stamped with the driver model) and reports whether each model is over- or under-governed — friction = rework/advances vs its capability-class profile — recommending an evidence-backed enforcement-profile change (tighten/loosen/keep); `--json`. Telemetry events gain an optional `model` field.
