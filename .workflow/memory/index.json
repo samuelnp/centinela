@@ -208,6 +208,32 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "8054a47cf854d7f8",
+    "feature": "capability-calibration",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report: capability-calibration",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/capability-calibration-gatekeeper.md",
+    "createdAt": "2026-06-15T12:31:34Z"
+  },
+  {
+    "id": "80628eab3542aadc",
+    "feature": "capability-calibration",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Division-by-zero / NaN guard** — a model with rework but zero `step-advanced`",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/capability-calibration-edge-cases.md",
+    "createdAt": "2026-06-15T12:04:37Z"
+  },
+  {
     "id": "832f5df786047c53",
     "feature": "deferred-findings-roadmap-capture",
     "step": "tests",

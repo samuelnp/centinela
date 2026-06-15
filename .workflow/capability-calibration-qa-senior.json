@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "cli_version": "0.22.0",
+    "written_at": "2026-06-15T12:03:06Z"
+  },
+  "feature": "capability-calibration",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-15T12:03:06Z",
+  "inputs": [
+    "specs/capability-calibration.feature",
+    "docs/plans/capability-calibration.md",
+    "internal/calibration/friction.go",
+    "internal/calibration/classify.go",
+    "internal/calibration/report.go",
+    "internal/calibration/calibrate.go"
+  ],
+  "outputs": [
+    "internal/calibration/strictness_test.go",
+    "internal/calibration/friction_test.go",
+    "internal/calibration/calibrate_test.go",
+    "internal/calibration/classify_test.go",
+    "internal/telemetry/model_field_test.go",
+    "cmd/centinela/telemetry_model_test.go",
+    "cmd/centinela/calibrate_test.go",
+    "internal/ui/render_calibration_test.go",
+    "tests/acceptance/capability_calibration_json_test.go",
+    "tests/acceptance/capability_calibration_stamping_test.go",
+    "tests/acceptance/capability_calibration_multi_test.go",
+    "tests/acceptance/capability_calibration_classify_test.go",
+    "tests/acceptance/capability_calibration_helper_test.go",
+    "tests/acceptance/capability_calibration_empty_test.go",
+    "tests/acceptance/capability_calibration_boundary_test.go",
+    "tests/acceptance/capability_calibration_guard_test.go",
+    "tests/acceptance/capability_calibration_determinism_test.go",
+    "tests/acceptance/capability_calibration_helper2_test.go",
+    "tests/integration/calibration_roundtrip_test.go",
+    ".workflow/capability-calibration-edge-cases.md"
+  ],
+  "edgeCases": [
+    "All 27 spec scenarios mapped 1:1 to acceptance tests; spec-traceability lists no calibration gaps",
+    "internal/calibration 100% coverage; total 95.2%; tests hermetic (in-test []Event + temp events.jsonl/centinela.toml)",
+    "Verified classify rule incl. boundary inclusivity (Rate=1.0/0.25), maxed-profile clamps, <3-advances Keep, zero-advance guard, Model field round-trip + omitempty + legacy",
+    "2104 tests pass; gofmt/vet clean; every internal/cmd _test.go <=100 lines; validate --full all gates pass"
+  ],
+  "handoffTo": "validation-specialist"
+}

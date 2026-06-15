@@ -76,9 +76,12 @@ allow = ["leaf"]
 # only by cmd/. Its sole edge is to internal/telemetry (a config-only leaf,
 # unmapped like the other domain reads), so it adds no new failing edge — the
 # unmapped-telemetry warning is the existing non-failing kind. See PROJECT.md G2.
+# internal/calibration also joins this layer: a read-only per-model calibration
+# analyzer over telemetry, importing the telemetry + config leaves only and
+# imported solely by cmd/ (its Report type by internal/ui for rendering).
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**", "internal/insights/**"]
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**"]
 allow = ["domain", "leaf"]
 
 [[gates.import_graph.layers]]
