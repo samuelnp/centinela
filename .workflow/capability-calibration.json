@@ -1,7 +1,7 @@
 {
   "feature": "capability-calibration",
   "startedAt": "2026-06-15T07:46:13.907641Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -16,11 +16,11 @@
       "completedAt": "2026-06-15T10:44:25Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-15T12:04:37Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },
