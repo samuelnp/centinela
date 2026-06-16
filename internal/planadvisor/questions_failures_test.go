@@ -39,7 +39,8 @@ func hasFailureQuestion(qs []question, gate string) bool {
 }
 
 func TestSelectQuestionsIncludesPreWarningAtThreshold(t *testing.T) {
-	b := bundle{Feature: "f", Failures: []insights.Count{{Key: "g1-file-size", Count: 2}}}
+	// At exactly the threshold (3) the pre-warning question fires.
+	b := bundle{Feature: "f", Failures: []insights.Count{{Key: "g1-file-size", Count: 3}}}
 	qs := selectQuestions(b, 99, "always")
 	if !hasFailureQuestion(qs, "g1-file-size") {
 		t.Fatalf("expected pre-warning question naming g1-file-size, got %+v", qs)
@@ -47,10 +48,11 @@ func TestSelectQuestionsIncludesPreWarningAtThreshold(t *testing.T) {
 }
 
 func TestSelectQuestionsOmitsPreWarningBelowThreshold(t *testing.T) {
-	b := bundle{Feature: "f", Failures: []insights.Count{{Key: "g1-file-size", Count: 1}}}
+	// Just below the threshold (count 2 < 3) stays quiet — boundary case.
+	b := bundle{Feature: "f", Failures: []insights.Count{{Key: "g1-file-size", Count: 2}}}
 	qs := selectQuestions(b, 99, "always")
 	if hasFailureQuestion(qs, "g1-file-size") {
-		t.Fatalf("count 1 must not produce a pre-warning question, got %+v", qs)
+		t.Fatalf("count 2 (below threshold 3) must not produce a pre-warning question, got %+v", qs)
 	}
 	// And no failures at all stays silent too.
 	if hasFailureQuestion(selectQuestions(bundle{Feature: "f"}, 99, "always"), "g1-file-size") {

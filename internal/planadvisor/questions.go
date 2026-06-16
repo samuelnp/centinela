@@ -2,6 +2,11 @@ package planadvisor
 
 import "strings"
 
+// failureQuestionThreshold is the minimum recurrence count a gate must reach in
+// the ledger before the advisor raises a pre-warning planning question. Below
+// this floor the failure is treated as noise and stays out of the question set.
+const failureQuestionThreshold = 3
+
 type question struct {
 	Lens string
 	Text string
@@ -28,7 +33,7 @@ func selectQuestions(b bundle, limit int, mode string) []question {
 		{"feature-specialist", "What should loading, empty, and error states communicate to the user?", c.UserFacing && (force || !c.UXStates)},
 		{"big-thinker", "What constraints or non-negotiables should shape the design and rollout?", force || !c.Constraints},
 		{"big-thinker", "What regressions, tradeoffs, or failure modes should we plan around now?", force || !c.Risks},
-		{"feature-specialist", "The ledger shows recurring gate failures (worst: " + worstGate(b) + "). What plan choices prevent that gate from biting this feature?", topFailureCount(b) >= 2},
+		{"feature-specialist", "The ledger shows recurring gate failures (worst: " + worstGate(b) + "). What plan choices prevent that gate from biting this feature?", topFailureCount(b) >= failureQuestionThreshold},
 	}
 	out := []question{}
 	for _, q := range all {

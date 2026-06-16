@@ -240,12 +240,12 @@ func TestFL_PreWarningQuestionNamesGate(t *testing.T) {
 // Scenario: A gate below the recurrence threshold produces no pre-warning question
 func TestFL_BelowThresholdNoQuestion(t *testing.T) {
 	bin := flBuildBinary(t)
-	ledger := `{"type":"gate-failure","gate":"g1-file-size"}
-{"type":"gate-failure","gate":"coverage"}
-`
+	// Every gate fails at most 2 times — below the recurrence threshold of 3.
+	ledger := strings.Repeat(`{"type":"gate-failure","gate":"g1-file-size"}`+"\n", 2) +
+		strings.Repeat(`{"type":"gate-failure","gate":"coverage"}`+"\n", 2)
 	out := flRun(t, bin, flRepo(t, flFullBrief, ledger, ""))
 	if strings.Contains(out, "worst:") {
-		t.Fatalf("a single failure per gate (count 1) must not produce a pre-warning question:\n%s", out)
+		t.Fatalf("gates at count 2 (below threshold 3) must not produce a pre-warning question:\n%s", out)
 	}
 }
 

@@ -53,9 +53,10 @@ the failure slice is empty and output is **byte-identical to today**.
    `NormalizePlanAdvisorFailureTopN` (clamp `<=0` → 3, cap at 5 to keep the
    summary block concise — Risk "noise" + edge case "many distinct gates").
    **No separate recurrence threshold knob:** the pre-warning question fires when
-   the top gate's count `>= 2` (a hardcoded "recurred" floor — a single failure
-   is not yet a pattern; AC-2). A 2nd config knob for the threshold is **out of
-   v1 scope** (deferred; the constant is the right default and avoids knob bloat).
+   the top gate's count `>= 3` (the `failureQuestionThreshold` constant — one or
+   two failures is not yet a pattern; matches the spec; AC-2). A 2nd config knob
+   for the threshold is **out of v1 scope** (deferred; the constant is the right
+   default and avoids knob bloat).
    The question cap reuses the existing `plan_question_limit` via the unchanged
    `selectQuestions(..., limit, ...)` loop (AC-2).
 
@@ -96,7 +97,7 @@ the failure slice is empty and output is **byte-identical to today**.
 
 **In:** `insights.Gates` export; `planadvisor/failures.go` read (telemetry-gated,
 read-only); `bundle.Failures`; one "Recurring gate failures" summary line; one
-pre-warning question (lens `feature-specialist`) gated on top-count `>= 2` and
+pre-warning question (lens `feature-specialist`) gated on top-count `>= 3` and
 the existing question cap; `plan_advisor_failure_top_n` knob (default 3, cap 5);
 byte-identical empty-state behaviour.
 **Out (deferred):** a configurable recurrence threshold knob; time-window /
@@ -114,7 +115,7 @@ New / edited source files (each ≤100 lines):
 | `internal/planadvisor/failures.go` | NEW. `recurringFailures(cfg, topN) []insights.Count` (telemetry-gated read) + `failureTopN(cfg) int` (calls `config.NormalizePlanAdvisorFailureTopN`) | ~35 |
 | `internal/planadvisor/context.go` | add `Failures []insights.Count` to `bundle`; set it in `buildBundle` | ~30 |
 | `internal/planadvisor/context_summary.go` | add a "Recurring gate failures" line builder appended in `contextLines` (renders `gate (×N)` joined, top-N) | ~98 (currently 86) |
-| `internal/planadvisor/questions.go` | add ONE candidate: `{"feature-specialist", "The ledger shows recurring gate failures (worst: <gate> ×N). What plan choices prevent that gate from biting again?", topFailureCount(b) >= 2}` ; helper `topFailureCount(b)`/`worstGate(b)` | ~95 (currently 50) |
+| `internal/planadvisor/questions.go` | add ONE candidate: `{"feature-specialist", "The ledger shows recurring gate failures (worst: <gate> ×N). What plan choices prevent that gate from biting again?", topFailureCount(b) >= 3}` ; helper `topFailureCount(b)`/`worstGate(b)` | ~95 (currently 50) |
 | `internal/config/workflow_config.go` | add `PlanAdvisorFailureTopN int \`toml:"plan_advisor_failure_top_n"\`` | ~31 |
 | `internal/config/plan_advisor.go` | add `DefaultPlanAdvisorFailureTopN = 3`, `MaxPlanAdvisorFailureTopN = 5`, `NormalizePlanAdvisorFailureTopN(n) int` | ~40 |
 | `internal/config/defaults.go` | normalize `PlanAdvisorFailureTopN` in `applyDefaults` | +1 line |
@@ -123,7 +124,7 @@ Notes:
 - **Summary line format (AC-1):** `- recurring gate failures: g1-file-size (×8), import-graph (×3)` — gate name then `(×count)`, ordered by the inherited rank, truncated to top-N. Empty `Failures` ⇒ no line appended (AC-3 byte-identical).
 - **Question text (AC-2):** names the single worst gate + its count; tagged
   `feature-specialist`; flows through the existing `selectQuestions` cap loop so
-  `plan_question_limit` bounds it. `Ask` is `topFailureCount(b) >= 2`, so a
+  `plan_question_limit` bounds it. `Ask` is `topFailureCount(b) >= failureQuestionThreshold` (3), so a
   single isolated failure (count 1) stays quiet (Risk "noise").
 - If `questions.go` or `context_summary.go` approach the 100-line budget after
   edits, split the new helpers into a tiny `failures_view.go` in planadvisor
@@ -147,7 +148,7 @@ by `tests/` tier files — add coverage next to the code), each ≤100 lines:
   present + exactly formatted when `Failures` non-empty, and **absent** when
   empty (AC-3 byte-identical guard).
 - `internal/planadvisor/questions_test.go` — assert the pre-warning question
-  fires at count `>= 2`, names the worst gate, is silent at count `1` and on
+  fires at count `>= 3`, names the worst gate, is silent at counts `1`/`2` and on
   empty `Failures`, and respects `plan_question_limit` (AC-2).
 - `internal/config/plan_advisor_test.go` — `NormalizePlanAdvisorFailureTopN`
   clamps `<=0`→3 and caps `>5`→5; defaults applied.
@@ -185,7 +186,7 @@ the gate is enabled.
 Documentation-specialist `.md` + `.json`; regenerate
 `docs/project-docs/index.html`; changelog artifact
 `.workflow/failure-ledger-plan-advisor-changelog.md` (create early). Document:
-the new "Recurring gate failures" advisor signal, the `>= 2` recurrence floor,
+the new "Recurring gate failures" advisor signal, the `>= 3` recurrence floor,
 the `plan_advisor_failure_top_n` knob (default 3, cap 5), and the read-only /
 telemetry-gated guarantee. Add a PROJECT.md G2 one-line note that the plan
 advisor reads `internal/insights` + `internal/telemetry` read-only.
