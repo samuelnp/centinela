@@ -1,14 +1,14 @@
 {
   "feature": "custom-gate-sdk",
   "startedAt": "2026-06-16T18:06:53.968467Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-16T19:05:34Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-16T19:27:54Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-16T20:16:26Z"
     }
   },
   "stepOrder": [
