@@ -91,6 +91,19 @@
     "createdAt": "2026-06-12T18:12:27Z"
   },
   {
+    "id": "211d4da2362ca083",
+    "feature": "audit-baseline-ratchet",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Record on a repo with violations** → baseline captures every Fail-gate",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/audit-baseline-ratchet-edge-cases.md",
+    "createdAt": "2026-06-16T12:24:01Z"
+  },
+  {
     "id": "28db0c5dc1738aef",
     "feature": "workflow-archetypes",
     "step": "validate",

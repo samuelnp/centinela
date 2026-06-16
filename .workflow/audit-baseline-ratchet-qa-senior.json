@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "cli_version": "0.25.0",
+    "written_at": "2026-06-16T12:23:36Z"
+  },
+  "feature": "audit-baseline-ratchet",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-16T12:23:36Z",
+  "inputs": [
+    "docs/plans/audit-baseline-ratchet.md",
+    "specs/audit-baseline-ratchet.feature",
+    "internal/audit/fingerprint.go"
+  ],
+  "outputs": [
+    "tests/unit/audit_baseline_ratchet_unit_test.go",
+    "tests/integration/audit_baseline_ratchet_integration_test.go",
+    "tests/acceptance/audit_baseline_ratchet_test.go",
+    "internal/audit/fingerprint_test.go",
+    "internal/audit/ratchet_test.go",
+    "internal/config/audit_baseline_test.go",
+    ".workflow/audit-baseline-ratchet-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Record captures all Fail violations (full scan)",
+    "No-change audit tolerates all baselined; exit 0",
+    "New violation blocks (exit 1), names new only",
+    "Fix never fails; re-record prunes (ratchet tightens)",
+    "Fingerprint stable across line-count growth",
+    "Missing baseline → Skip, non-blocking",
+    "Save creates missing parent dir",
+    "Deterministic byte-identical re-record",
+    "Config gating: off/warn never blocks; severity Fail/Warn; custom path",
+    "Participation: empty=all, allowlist intersects",
+    "Stale scheme → Warn; corrupt baseline → Fail",
+    "Only Fail violations baselined (Warn/Skip excluded)"
+  ],
+  "handoffTo": "validation-specialist"
+}
