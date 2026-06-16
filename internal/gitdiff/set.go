@@ -41,6 +41,20 @@ func (s *Set) Len() int {
 	return len(s.paths)
 }
 
+// Paths returns the changed paths as a slice (slash-normalized). Order is
+// unspecified. Consumed by diff-aware custom gates to hand the changed-file
+// list to the child command via CENTINELA_CHANGED_FILES.
+func (s *Set) Paths() []string {
+	if s == nil {
+		return nil
+	}
+	out := make([]string, 0, len(s.paths))
+	for p := range s.paths {
+		out = append(out, p)
+	}
+	return out
+}
+
 // HasPrefix reports whether any path in the set begins with the given
 // prefix (matched on slash-normalized paths). Used by G11 to test
 // whether any locale file changed without enumerating the dir.

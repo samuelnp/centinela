@@ -63,6 +63,10 @@ func RunWithFilter(cfg *config.Config, filter *gitdiff.Set) []Result {
 		results = append(results, checkRoadmapDrift(cfg, filter))
 	}
 
+	if len(cfg.Gates.CustomGates) > 0 {
+		results = append(results, customGates(cfg, filter)...)
+	}
+
 	return results
 }
 
