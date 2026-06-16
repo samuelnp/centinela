@@ -14,15 +14,23 @@ var defaultParticipants = []string{
 }
 
 // participatingGates returns the set of gate Names whose violations the ratchet
-// tracks: the default detail-emitting set, intersected with target_gates when
-// that allowlist is non-empty. An empty allowlist means "all defaults".
+// tracks: the default detail-emitting set plus every configured custom gate
+// (custom gates are detail-emitting by construction), intersected with
+// target_gates when that allowlist is non-empty. An empty allowlist means
+// "all defaults + all custom gates".
 func participatingGates(cfg *config.Config) map[string]bool {
 	allow := allowSet(cfg.Gates.AuditBaseline.TargetGates)
-	out := make(map[string]bool, len(defaultParticipants))
-	for _, name := range defaultParticipants {
+	out := make(map[string]bool, len(defaultParticipants)+len(cfg.Gates.CustomGates))
+	add := func(name string) {
 		if allow == nil || allow[name] {
 			out[name] = true
 		}
+	}
+	for _, name := range defaultParticipants {
+		add(name)
+	}
+	for _, g := range cfg.Gates.CustomGates {
+		add(g.Name)
 	}
 	return out
 }

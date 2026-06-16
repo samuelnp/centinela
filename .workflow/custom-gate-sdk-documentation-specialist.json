@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "cli_version": "0.25.0",
+    "written_at": "2026-06-16T20:17:15Z"
+  },
+  "feature": "custom-gate-sdk",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-16T20:17:15Z",
+  "inputs": [
+    ".workflow/custom-gate-sdk-changelog.md",
+    "docs/features/custom-gate-sdk.md",
+    "docs/plans/custom-gate-sdk.md"
+  ],
+  "outputs": [
+    ".workflow/custom-gate-sdk-changelog.md",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

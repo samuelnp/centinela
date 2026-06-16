@@ -53,5 +53,8 @@ func validateConfig(cfg *Config) error {
 	if err := validateAuditBaseline(cfg.Gates.AuditBaseline); err != nil {
 		return err
 	}
+	if err := validateCustomGates(cfg.Gates.CustomGates); err != nil {
+		return err
+	}
 	return nil
 }

@@ -338,6 +338,19 @@
     "createdAt": "2026-06-13T09:53:34Z"
   },
   {
+    "id": "981d6cea48994066",
+    "feature": "custom-gate-sdk",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: custom-gate-sdk",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/custom-gate-sdk-gatekeeper.md",
+    "createdAt": "2026-06-16T20:16:26Z"
+  },
+  {
     "id": "9c696670fd9fa78c",
     "feature": "centinela-doctor",
     "step": "validate",
@@ -492,5 +505,18 @@
     ],
     "sourceArtifact": ".workflow/g2-import-graph-gate-edge-cases.md",
     "createdAt": "2026-06-05T15:19:47Z"
+  },
+  {
+    "id": "fd962adabbaacf20",
+    "feature": "custom-gate-sdk",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Exit 0 → Pass**, non-zero → Fail; gate named in the report",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/custom-gate-sdk-edge-cases.md",
+    "createdAt": "2026-06-16T19:27:54Z"
   }
 ]

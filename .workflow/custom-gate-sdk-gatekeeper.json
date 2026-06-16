@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "cli_version": "0.25.0",
+    "written_at": "2026-06-16T19:28:26Z"
+  },
+  "feature": "custom-gate-sdk",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-16T19:28:26Z",
+  "inputs": [
+    "specs/custom-gate-sdk.feature",
+    "specs/audit-baseline-ratchet.feature",
+    "internal/gates/custom_command.go,internal/gates/custom_command_exec.go,internal/config/custom_gate.go,internal/audit/participation.go,internal/gitdiff/set.go,internal/gates/gates.go"
+  ],
+  "outputs": [
+    ".workflow/custom-gate-sdk-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "validation-specialist"
+}
