@@ -50,5 +50,8 @@ func validateConfig(cfg *Config) error {
 	if err := validateRoadmapDrift(cfg.Gates.RoadmapDrift); err != nil {
 		return err
 	}
+	if err := validateAuditBaseline(cfg.Gates.AuditBaseline); err != nil {
+		return err
+	}
 	return nil
 }

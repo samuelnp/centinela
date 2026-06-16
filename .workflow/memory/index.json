@@ -91,6 +91,19 @@
     "createdAt": "2026-06-12T18:12:27Z"
   },
   {
+    "id": "211d4da2362ca083",
+    "feature": "audit-baseline-ratchet",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Record on a repo with violations** → baseline captures every Fail-gate",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/audit-baseline-ratchet-edge-cases.md",
+    "createdAt": "2026-06-16T12:24:01Z"
+  },
+  {
     "id": "28db0c5dc1738aef",
     "feature": "workflow-archetypes",
     "step": "validate",
@@ -427,6 +440,19 @@
     ],
     "sourceArtifact": ".workflow/code-quality-hardening-gatekeeper.md",
     "createdAt": "2026-06-10T16:25:22Z"
+  },
+  {
+    "id": "dfb681078078fa80",
+    "feature": "audit-baseline-ratchet",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: audit-baseline-ratchet",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/audit-baseline-ratchet-gatekeeper.md",
+    "createdAt": "2026-06-16T17:01:01Z"
   },
   {
     "id": "ec28b0c94d081af3",
