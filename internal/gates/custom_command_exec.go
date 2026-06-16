@@ -38,6 +38,11 @@ func runCustom(command string, timeout time.Duration, changed []string) (output 
 	var buf bytes.Buffer
 	cmd.Stdout = &buf
 	cmd.Stderr = &buf
+	// On timeout, CommandContext kills the shell, but a grandchild (e.g. `sleep`)
+	// can inherit the output pipe and keep Run blocked until it exits. WaitDelay
+	// makes Wait force-close the pipes and return promptly after the kill, so a
+	// hung command never stalls validate past the timeout.
+	cmd.WaitDelay = time.Second
 
 	err := cmd.Run()
 	output = strings.TrimSpace(buf.String())
