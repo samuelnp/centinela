@@ -11,6 +11,7 @@ func applyDefaults(cfg *Config) {
 	cfg.Workflow.PlanAdvisorMode = NormalizePlanAdvisorMode(cfg.Workflow.PlanAdvisorMode)
 	cfg.Workflow.EnforcementProfile = NormalizeEnforcementProfile(cfg.Workflow.EnforcementProfile)
 	cfg.Workflow.PlanQuestionLimit = NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit)
+	cfg.Workflow.PlanAdvisorFailureTopN = NormalizePlanAdvisorFailureTopN(cfg.Workflow.PlanAdvisorFailureTopN)
 	cfg.Validate.DiffMode = NormalizeDiffMode(cfg.Validate.DiffMode)
 	cfg.Validate.DiffBase = NormalizeDiffBase(cfg.Validate.DiffBase)
 	applyMemoryDefaults(cfg)

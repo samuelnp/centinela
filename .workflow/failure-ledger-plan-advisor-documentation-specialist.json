@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "cli_version": "0.23.0",
+    "written_at": "2026-06-16T10:12:29Z"
+  },
+  "feature": "failure-ledger-plan-advisor",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-16T10:12:29Z",
+  "inputs": [
+    ".workflow/failure-ledger-plan-advisor-changelog.md",
+    "docs/features/failure-ledger-plan-advisor.md",
+    "docs/plans/failure-ledger-plan-advisor.md"
+  ],
+  "outputs": [
+    ".workflow/failure-ledger-plan-advisor-changelog.md",
+    "docs/project-docs/index.html"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

@@ -1,0 +1,1 @@
+- feat: the plan advisor now reads recurring gate failures from the telemetry ledger and surfaces the top-N (config `plan_advisor_failure_top_n`, default 3) as a "recurring gate failures" context line plus a pre-warning planning question when a gate has recurred ≥3 times — quiet by default when the ledger is empty/disabled.
