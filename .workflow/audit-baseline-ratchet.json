@@ -1,14 +1,14 @@
 {
   "feature": "audit-baseline-ratchet",
   "startedAt": "2026-06-16T11:30:40.478984Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-16T11:58:20Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-16T12:24:01Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-16T17:01:01Z"
     }
   },
   "stepOrder": [

@@ -442,6 +442,19 @@
     "createdAt": "2026-06-10T16:25:22Z"
   },
   {
+    "id": "dfb681078078fa80",
+    "feature": "audit-baseline-ratchet",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: audit-baseline-ratchet",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/audit-baseline-ratchet-gatekeeper.md",
+    "createdAt": "2026-06-16T17:01:01Z"
+  },
+  {
     "id": "ec28b0c94d081af3",
     "feature": "headless-governance",
     "step": "tests",
