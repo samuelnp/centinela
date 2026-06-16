@@ -40,6 +40,7 @@ type GatesConfig struct {
 	Security                   SecurityGateConfig     `toml:"security"`
 	SpecTraceability           SpecTraceabilityConfig `toml:"spec_traceability"`
 	RoadmapDrift               RoadmapDriftConfig     `toml:"roadmap_drift"`
+	AuditBaseline              AuditBaselineConfig    `toml:"audit_baseline"`
 }
 
 // I18nConfig describes how to check translations for G11.

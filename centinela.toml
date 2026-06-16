@@ -79,9 +79,14 @@ allow = ["leaf"]
 # internal/calibration also joins this layer: a read-only per-model calibration
 # analyzer over telemetry, importing the telemetry + config leaves only and
 # imported solely by cmd/ (its Report type by internal/ui for rendering).
+# internal/audit also joins this layer: a read-only baseline/ratchet aggregator
+# over gate results (internal/gates, domain) + config (leaf) + an on-disk
+# baseline artifact, imported only by cmd/ (its Diff type by internal/ui). Its
+# edges (audit→gates domain, audit→config leaf) are both allowed here; gates
+# never imports audit, so there is no cycle. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**"]
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**"]
 allow = ["domain", "leaf"]
 
 [[gates.import_graph.layers]]

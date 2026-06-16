@@ -26,4 +26,5 @@ func applyDefaults(cfg *Config) {
 	cfg.Gates.Security = NormalizeSecurityGate(cfg.Gates.Security)
 	cfg.Gates.SpecTraceability = NormalizeSpecTraceability(cfg.Gates.SpecTraceability)
 	cfg.Gates.RoadmapDrift = NormalizeRoadmapDrift(cfg.Gates.RoadmapDrift)
+	cfg.Gates.AuditBaseline = NormalizeAuditBaseline(cfg.Gates.AuditBaseline)
 }
