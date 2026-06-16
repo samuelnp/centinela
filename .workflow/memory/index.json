@@ -208,6 +208,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "6f2c47e7d891ec8f",
+    "feature": "failure-ledger-plan-advisor",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Missing ledger file** → `recurringFailures` returns empty; no summary line,",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/failure-ledger-plan-advisor-edge-cases.md",
+    "createdAt": "2026-06-16T09:45:15Z"
+  },
+  {
     "id": "8054a47cf854d7f8",
     "feature": "capability-calibration",
     "step": "validate",
