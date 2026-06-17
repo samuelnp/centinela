@@ -58,7 +58,7 @@ enabled = true
 
 [[gates.import_graph.layers]]
 name  = "leaf"
-paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**"]
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**"]
 allow = []
 
 [[gates.import_graph.layers]]
