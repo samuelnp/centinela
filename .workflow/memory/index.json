@@ -104,6 +104,19 @@
     "createdAt": "2026-06-16T12:24:01Z"
   },
   {
+    "id": "2437037d66852dc1",
+    "feature": "precommit-and-pr-gate",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: precommit-and-pr-gate",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/precommit-and-pr-gate-gatekeeper.md",
+    "createdAt": "2026-06-17T11:24:02Z"
+  },
+  {
     "id": "28db0c5dc1738aef",
     "feature": "workflow-archetypes",
     "step": "validate",

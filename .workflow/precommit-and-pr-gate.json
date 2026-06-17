@@ -1,14 +1,14 @@
 {
   "feature": "precommit-and-pr-gate",
   "startedAt": "2026-06-16T21:17:50.663923Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-17T08:00:07Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-17T10:58:22Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-17T11:24:02Z"
     }
   },
   "stepOrder": [
