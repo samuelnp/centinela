@@ -429,6 +429,19 @@
     "createdAt": "2026-06-14T09:18:31Z"
   },
   {
+    "id": "ca11202efb09c8a9",
+    "feature": "precommit-and-pr-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Staged fail-gate violation** (oversized staged `.go`) → `centinela precommit`",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/precommit-and-pr-gate-edge-cases.md",
+    "createdAt": "2026-06-17T10:58:22Z"
+  },
+  {
     "id": "ccfcd939f5d569ec",
     "feature": "deterministic-artifact-scaffolds",
     "step": "tests",
