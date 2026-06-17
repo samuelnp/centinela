@@ -4,3 +4,73 @@
 - Threshold: 9
 - Feature: docs-migration-managed-docs
 - Summary: Bootstrap docs migration is narrowly scoped, clearly defined, and ready for execution.
+- Feature: governed-project-memory
+- Summary: High user value, no external dependencies, bounded by the no-semantic-store constraint; reuses existing artifact harvest and context-injection machinery.
+- Feature: configurable-model-routing
+- Summary: Generalizes model selection into a runner-keyed tier-remap plus per-role concrete override, with full back-compat and zero-config defaults; runner-identity resolution deferred to plan.
+- Feature: g2-import-graph-gate
+- Summary: Turns the prose G2 layer rule into a checkable per-archetype allow/deny matrix by parsing the import graph; core governance value, well-bounded per-language parsers (go/packages, ts-morph, Python AST). Per-language parser breadth defers to the plan step.
+- Feature: security-gate
+- Summary: Wires secret-scanning and dependency-vuln audit (gitleaks/osv-scanner/govulncheck) into validate; high security value, clear tool integration, configurable scanners scoped at plan.
+- Feature: spec-traceability-gate
+- Summary: Closes spec-vs-acceptance drift by verifying every Gherkin scenario maps to an executed step definition; crisp, mechanically checkable, low external surface.
+- Feature: custom-gate-sdk
+- Summary: Lets teams add bespoke mechanical gates via config/plugin without forking; the pivot from opinionated workflow tool to policy engine — built-in gates become the default profile, not the ceiling. Plugin boundary and config schema deferred to the plan step.
+- Feature: roadmap-doc-sync
+- Summary: Makes roadmap.json the source of truth and generates ROADMAP.md with a drift check; dogfood-validated pain (this roadmap has now drifted twice while hand-synced), tightly scoped.
+- Feature: centinela-doctor
+- Summary: Holistic, dependency-free health check across stale evidence, orphaned worktrees, config and roadmap drift; clear graceful-recovery value extending evidence repair.
+- Feature: deferred-findings-roadmap-capture
+- Summary: Makes deferred-finding capture a first-class governed output: a roadmap CLI path that appends out-of-scope detections (big-thinker, feature-specialist) and deferred fixes (senior-engineer, qa-senior) to the roadmap with the analysis/quality entries validate demands, plus prompt-contract updates in the four role prompts and their scaffold mirrors. Dogfood-validated pain: today these findings live only in per-feature prose (Out-of-Scope, Residual Risks, Outstanding TODOs) and evaporate. Exact capture surface (backlog phase vs ledger) deferred to plan.
+- Feature: enforcement-profiles
+- Summary: Named strictness presets (strict/guided/outcome) decouple how much process is enforced from whether outcomes are verified — the keystone for governing the full model-capability spectrum without users disabling governance at either end. Preset semantics and config precedence detailed at plan.
+- Feature: model-capability-profiles
+- Summary: Maps any configured model — cloud or local — to a declared capability profile that selects its default enforcement profile and routing tier; extends the shipped runner-keyed routing so an Ollama model is as first-class as a frontier model. Profile fields and defaults scoped at plan.
+- Feature: deterministic-artifact-scaffolds
+- Summary: Pre-generated artifact skeletons with explicit fill-in slots plus mechanical fallbacks where content is derivable, so low-capability models satisfy artifact shape by construction and spend their tokens on substance; extends the proven docs CLI-fallback pattern.
+- Feature: headless-governance
+- Summary: Non-interactive parity for every confirmation prompt plus a machine-readable end-of-run verdict packet (gates, verify, evidence index); makes unattended, CI, and fleet execution a first-class consumer of governance instead of a workaround.
+- Feature: workflow-archetypes
+- Summary: First-class hotfix/refactor/spike tracks so diagnosis and bugfix work isn't forced through a feature-shaped plan→docs pipeline; clear, frequently-felt need.
+- Feature: right-size-docs-step
+- Summary: Makes the docs step surface-aware (KB guide for user-facing, one-line changelog for internal), cutting wasted full-docs ceremony on internal work; mirrors the proven ux-ui surface gating.
+- Feature: governance-telemetry
+- Summary: Foundational instrumentation: a local append-only event log of blocks, gate failures, verify rejections, and rework with no external service; unblocks the entire insights/dashboard/calibration line.
+- Feature: centinela-insights
+- Summary: Reports most-triggered blocks, most-failed gates, rework-heavy features, and mean steps-to-green; clear value (evidence over anecdote), bounded once telemetry exists.
+- Feature: failure-ledger-plan-advisor
+- Summary: Feeds recurring gate failures from the ledger into the plan advisor so the next feature is pre-warned; high learning-loop value, builds directly on two existing capabilities.
+- Feature: capability-calibration
+- Summary: Reads per-model telemetry (blocks, gate failures, verify rejections, rework) and reports whether each model is over- or under-governed, recommending an evidence-backed enforcement-profile change; replaces vibes-based strictness with measured reliability.
+- Feature: audit-baseline-ratchet
+- Summary: Whole-repo gate scan with a recorded baseline that ratchets down over time; solves the 'disable the gate because zero is unreachable' failure, enabling legacy adoption.
+- Feature: precommit-and-pr-gate
+- Summary: Runs mechanical gates as a fast pre-commit hook and posts verdicts as PR comments; shifts violation discovery left, clear value once the ratchet exists.
+- Feature: deep-codebase-analysis
+- Summary: centinela analyze produces a machine-readable inventory (languages, framework, build/test, locales, layout, import graph); the foundation every brownfield feature reads from.
+- Feature: archetype-inference-project-synthesis
+- Summary: Infers best-fit archetype and drafts a complete PROJECT.md from the analysis for user confirmation; removes the hand-authoring/guesswork barrier for brownfield adoption.
+- Feature: spec-reconstruction
+- Summary: Generates specs/*.feature and docs/features briefs documenting behavior the system already exhibits; gives spec-first gates an anchor on legacy code. LLM-output acceptance bar refined at plan.
+- Feature: brownfield-roadmap-generation
+- Summary: Generates a roadmap separating already-built capability from net-new gaps so existing work isn't re-planned; clear value, well-sequenced after analysis and spec reconstruction.
+- Feature: adoption-baseline
+- Summary: Records pre-existing violations as an accepted baseline on brownfield init so day-one validate isn't drowned by legacy findings; makes gates usable on mature repos.
+- Feature: completion-delivery-prompt
+- Summary: On feature completion, offers valid delivery options (PR via gh or local merge-steward) based on remote presence and never acts without confirmation; closes the 'completed work stalls' gap.
+- Feature: delivery-artifact-generation
+- Summary: Composes PR description and changelog/release notes from evidence Centinela already holds; consistent, traceable delivery instead of hand-written or skipped.
+- Feature: team-dashboard
+- Summary: Aggregate view across worktrees and contributors — feature/step ownership, gate health, roadmap burn-down; clear value built on telemetry. Visual/output surface scoped at the plan step.
+- Feature: cost-governance
+- Summary: Per-feature/per-step token and model-tier budgets with a soft gate; gives visibility into a runaway agent burning budget on one step. For local models the unit is wall-clock/compute rather than spend. Harness figure-sourcing detailed at plan.
+- Feature: host-harness-adapters
+- Summary: Generalizes harness integration behind an adapter so new harnesses plug in cleanly; clear extensibility value grounded in the two existing integrations.
+- Feature: codex-support
+- Summary: Adds a concrete harness via the adapter contract; well-defined once the adapter abstraction exists, scope bounded by the adapter interface.
+- Feature: local-harness-support
+- Summary: First-class local-model targets (OpenCode+Ollama, generic OpenAI-compatible endpoints) with a concrete acceptance bar: a small local model completes a governed feature end-to-end under the strict profile with scaffolds, gates, and claim verification passing; widens adoption to the segment that needs governance most.
+- Feature: cross-project-memory
+- Summary: Extends governed memory across projects so lessons travel; clear value building on the existing per-project memory design, sharing/scoping boundaries scoped at plan.
+- Feature: adaptive-skill-synthesis
+- Summary: When telemetry shows a workflow isn't running as intended, synthesize/adjust skills so the harness absorbs repeated toil; high self-improvement value, appropriately last given its dependencies. Synthesis mechanics refined at plan.

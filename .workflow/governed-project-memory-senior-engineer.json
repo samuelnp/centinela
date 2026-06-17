@@ -1,0 +1,43 @@
+{
+  "_meta": {
+    "cli_version": "0.5.0",
+    "written_at": "2026-05-29T13:26:18Z"
+  },
+  "feature": "governed-project-memory",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-05-29T13:26:18Z",
+  "inputs": [
+    "docs/plans/governed-project-memory.md",
+    "docs/features/governed-project-memory.md",
+    "specs/governed-project-memory.feature",
+    ".workflow/governed-project-memory-feature-specialist.md",
+    ".workflow/governed-project-memory-big-thinker.md"
+  ],
+  "outputs": [
+    "internal/memory/entry.go",
+    "internal/memory/serialize.go",
+    "internal/memory/dedupe.go",
+    "internal/memory/parse.go",
+    "internal/memory/capture.go",
+    "internal/memory/index.go",
+    "internal/memory/recall.go",
+    "internal/memory/rank.go",
+    "internal/config/memory.go",
+    "cmd/centinela/complete.go",
+    "internal/planadvisor/context.go",
+    "internal/planadvisor/memory.go",
+    "internal/planadvisor/context_summary.go",
+    "internal/ui/render_memory.go",
+    "internal/config/config.go"
+  ],
+  "edgeCases": [
+    "Missing/malformed source artifact: capture warns to stderr and returns without writing entries; never blocks complete (SC-04/06/07).",
+    "Idempotent capture via content-hash filenames + O_EXCL write-if-absent; concurrent worktree writes are per-entry files (SC-05/13).",
+    "Empty ledger or memory disabled: Recall returns nil, no memory block injected, no error (SC-10/12).",
+    "Recall caps by recall_max_entries and recall_max_bytes after deterministic ranking (SC-08/11)."
+  ],
+  "handoffTo": "qa-senior",
+  "summary": "Implemented governed project-memory ledger: domain package internal/memory plus config gate, thin capture wiring in complete.go, plan-advisor recall injection, and pure UI memory render block. go build and go vet clean; all files <=100 lines."
+}

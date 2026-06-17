@@ -12,7 +12,427 @@
         "effortEstimation": 9,
         "overall": 9
       },
-      "summary": "Bootstrap docs migration is clearly defined and low risk for Phase 0 execution."
+      "summary": "Bootstrap docs migration is narrowly scoped, clearly defined, and ready for execution."
+    },
+    {
+      "name": "governed-project-memory",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 10,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "High user value, no external dependencies, bounded by the no-semantic-store constraint; reuses existing artifact harvest and context-injection machinery."
+    },
+    {
+      "name": "configurable-model-routing",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Opens the previously-welded tier→model table and adds a per-role concrete-model override, both runner-keyed (claude|opencode|codex), so cross-provider operators can route reasoning/coding to the models they actually want while every unconfigured role keeps the built-in Anthropic default. Clear precedence rules and strong back-compat with the shipped tier knob; the runner-identity-at-emit-time fork (one ID vs all) and the union-typed models unmarshal are the larger decisions deferred to plan."
+    },
+    {
+      "name": "g2-import-graph-gate",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 10,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Turns the prose G2 layer rule into a checkable per-archetype allow/deny matrix by parsing the import graph; core governance value, well-bounded per-language parsers (go/packages, ts-morph, Python AST). Per-language parser breadth defers to the plan step."
+    },
+    {
+      "name": "security-gate",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 10,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Wires secret-scanning and dependency-vuln audit (gitleaks/osv-scanner/govulncheck) into validate; high security value, clear tool integration, configurable scanners scoped at plan."
+    },
+    {
+      "name": "spec-traceability-gate",
+      "scores": {
+        "acceptanceCriteria": 10,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Closes spec-vs-acceptance drift by verifying every Gherkin scenario maps to an executed step definition; crisp, mechanically checkable, low external surface."
+    },
+    {
+      "name": "custom-gate-sdk",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 10,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Lets teams add bespoke mechanical gates via config/plugin without forking; the pivot from opinionated workflow tool to policy engine — built-in gates become the default profile, not the ceiling. Plugin boundary and config schema are larger-effort decisions deferred to the plan step."
+    },
+    {
+      "name": "roadmap-doc-sync",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 10,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 10
+      },
+      "summary": "Makes roadmap.json the source of truth and generates ROADMAP.md with a drift check; dogfood-validated pain (this roadmap has now drifted twice while hand-synced), tightly scoped."
+    },
+    {
+      "name": "centinela-doctor",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Holistic, dependency-free health check across stale evidence, orphaned worktrees, config and roadmap drift; clear graceful-recovery value extending evidence repair."
+    },
+    {
+      "name": "deferred-findings-roadmap-capture",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Makes deferred-finding capture a first-class governed output: a roadmap CLI path that appends out-of-scope detections (big-thinker, feature-specialist) and deferred fixes (senior-engineer, qa-senior) to the roadmap with the analysis/quality entries validate demands, plus prompt-contract updates in the four role prompts and their scaffold mirrors. Dogfood-validated pain: today these findings live only in per-feature prose (Out-of-Scope, Residual Risks, Outstanding TODOs) and evaporate. Exact capture surface (backlog phase vs ledger) deferred to plan."
+    },
+    {
+      "name": "enforcement-profiles",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 10,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Named strictness presets (strict/guided/outcome) decouple how much process is enforced from whether outcomes are verified — the keystone for governing the full model-capability spectrum without users disabling governance at either end. Preset semantics and config precedence detailed at plan."
+    },
+    {
+      "name": "model-capability-profiles",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Maps any configured model — cloud or local — to a declared capability profile that selects its default enforcement profile and routing tier; extends the shipped runner-keyed routing so an Ollama model is as first-class as a frontier model. Profile fields and defaults scoped at plan."
+    },
+    {
+      "name": "deterministic-artifact-scaffolds",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Pre-generated artifact skeletons with explicit fill-in slots plus mechanical fallbacks where content is derivable, so low-capability models satisfy artifact shape by construction and spend their tokens on substance; extends the proven docs CLI-fallback pattern."
+    },
+    {
+      "name": "headless-governance",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Non-interactive parity for every confirmation prompt plus a machine-readable end-of-run verdict packet (gates, verify, evidence index); makes unattended, CI, and fleet execution a first-class consumer of governance instead of a workaround."
+    },
+    {
+      "name": "workflow-archetypes",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "First-class hotfix/refactor/spike tracks so diagnosis and bugfix work isn't forced through a feature-shaped plan→docs pipeline; clear, frequently-felt need."
+    },
+    {
+      "name": "right-size-docs-step",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Makes the docs step surface-aware (KB guide for user-facing, one-line changelog for internal), cutting wasted full-docs ceremony on internal work; mirrors the proven ux-ui surface gating."
+    },
+    {
+      "name": "governance-telemetry",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 10
+      },
+      "summary": "Foundational instrumentation: a local append-only event log of blocks, gate failures, verify rejections, and rework with no external service; unblocks the entire insights/dashboard/calibration line."
+    },
+    {
+      "name": "centinela-insights",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Reports most-triggered blocks, most-failed gates, rework-heavy features, and mean steps-to-green; clear value (evidence over anecdote), bounded once telemetry exists."
+    },
+    {
+      "name": "failure-ledger-plan-advisor",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Feeds recurring gate failures from the ledger into the plan advisor so the next feature is pre-warned; high learning-loop value, builds directly on two existing capabilities."
+    },
+    {
+      "name": "capability-calibration",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Reads per-model telemetry (blocks, gate failures, verify rejections, rework) and reports whether each model is over- or under-governed, recommending an evidence-backed enforcement-profile change; replaces vibes-based strictness with measured reliability."
+    },
+    {
+      "name": "audit-baseline-ratchet",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Whole-repo gate scan with a recorded baseline that ratchets down over time; solves the 'disable the gate because zero is unreachable' failure, enabling legacy adoption."
+    },
+    {
+      "name": "precommit-and-pr-gate",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Runs mechanical gates as a fast pre-commit hook and posts verdicts as PR comments; shifts violation discovery left, clear value once the ratchet exists."
+    },
+    {
+      "name": "deep-codebase-analysis",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 10,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "centinela analyze produces a machine-readable inventory (languages, framework, build/test, locales, layout, import graph); the foundation every brownfield feature reads from."
+    },
+    {
+      "name": "archetype-inference-project-synthesis",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Infers best-fit archetype and drafts a complete PROJECT.md from the analysis for user confirmation; removes the hand-authoring/guesswork barrier for brownfield adoption."
+    },
+    {
+      "name": "spec-reconstruction",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Generates specs/*.feature and docs/features briefs documenting behavior the system already exhibits; gives spec-first gates an anchor on legacy code. LLM-output acceptance bar refined at plan."
+    },
+    {
+      "name": "brownfield-roadmap-generation",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Generates a roadmap separating already-built capability from net-new gaps so existing work isn't re-planned; clear value, well-sequenced after analysis and spec reconstruction."
+    },
+    {
+      "name": "adoption-baseline",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Records pre-existing violations as an accepted baseline on brownfield init so day-one validate isn't drowned by legacy findings; makes gates usable on mature repos."
+    },
+    {
+      "name": "completion-delivery-prompt",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 10,
+        "dependencies": 10,
+        "effortEstimation": 9,
+        "overall": 10
+      },
+      "summary": "On feature completion, offers valid delivery options (PR via gh or local merge-steward) based on remote presence and never acts without confirmation; closes the 'completed work stalls' gap."
+    },
+    {
+      "name": "delivery-artifact-generation",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 9,
+        "overall": 9
+      },
+      "summary": "Composes PR description and changelog/release notes from evidence Centinela already holds; consistent, traceable delivery instead of hand-written or skipped."
+    },
+    {
+      "name": "team-dashboard",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Aggregate view across worktrees and contributors — feature/step ownership, gate health, roadmap burn-down; clear value built on telemetry. Visual/output surface scoped at the plan step."
+    },
+    {
+      "name": "cost-governance",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Per-feature/per-step token and model-tier budgets with a soft gate; gives visibility into a runaway agent burning budget on one step. For local models the unit is wall-clock/compute rather than spend. Harness figure-sourcing detailed at plan."
+    },
+    {
+      "name": "host-harness-adapters",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 10,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Generalizes harness integration behind an adapter so new harnesses plug in cleanly; clear extensibility value grounded in the two existing integrations."
+    },
+    {
+      "name": "codex-support",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Adds a concrete harness via the adapter contract; well-defined once the adapter abstraction exists, scope bounded by the adapter interface."
+    },
+    {
+      "name": "local-harness-support",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 10,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "First-class local-model targets (OpenCode+Ollama, generic OpenAI-compatible endpoints) with a concrete acceptance bar: a small local model completes a governed feature end-to-end under the strict profile with scaffolds, gates, and claim verification passing; widens adoption to the segment that needs governance most."
+    },
+    {
+      "name": "cross-project-memory",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "Extends governed memory across projects so lessons travel; clear value building on the existing per-project memory design, sharing/scoping boundaries scoped at plan."
+    },
+    {
+      "name": "adaptive-skill-synthesis",
+      "scores": {
+        "acceptanceCriteria": 9,
+        "userValue": 9,
+        "definitionClarity": 9,
+        "dependencies": 9,
+        "effortEstimation": 8,
+        "overall": 9
+      },
+      "summary": "When telemetry shows a workflow isn't running as intended, synthesize/adjust skills so the harness absorbs repeated toil; high self-improvement value, appropriately last given its dependencies. Synthesis mechanics refined at plan."
     }
   ]
 }

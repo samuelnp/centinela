@@ -7,9 +7,9 @@ import (
 
 func TestRenderKBIndex_WrittenAndPlaceholder(t *testing.T) {
 	d := &Data{
-		Title:   "Centinela",
-		Specs:   []string{"specs/alpha.feature", "specs/beta.feature"},
-		States:  []FeatureState{{Feature: "alpha", Status: "done"}, {Feature: "beta", Status: "in-progress"}},
+		Title:  "Centinela",
+		Specs:  []string{"specs/alpha.feature", "specs/beta.feature"},
+		States: []FeatureState{{Feature: "alpha", Status: "done"}, {Feature: "beta", Status: "in-progress"}},
 		KB: []KBPage{{
 			Feature: "alpha", Summary: "Plain summary.", Status: "done",
 			WhatItDoes: "x", WhenToUse: "y", HowItBehaves: "z",

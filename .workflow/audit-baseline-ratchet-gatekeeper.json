@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "cli_version": "0.25.0",
+    "written_at": "2026-06-16T16:31:55Z"
+  },
+  "feature": "audit-baseline-ratchet",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-16T16:31:55Z",
+  "inputs": [
+    "specs/audit-baseline-ratchet.feature",
+    "specs/g2-import-graph-gate.feature",
+    "specs/security-gate.feature",
+    "specs/spec-traceability-gate.feature",
+    "specs/enforcement-profiles.feature",
+    "internal/audit/",
+    "internal/config/audit_baseline.go",
+    "cmd/centinela/audit.go",
+    "cmd/centinela/audit_baseline.go",
+    "cmd/centinela/validate_audit.go",
+    "centinela.toml"
+  ],
+  "outputs": [
+    ".workflow/audit-baseline-ratchet-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "validation-specialist"
+}

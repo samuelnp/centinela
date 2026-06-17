@@ -1,0 +1,6 @@
+# Orchestration Evidence: documentation-specialist
+
+- Feature: `security-gate`
+- Step: docs
+- Outcome: Wrote the end-user knowledge-base entry `docs/project-docs/kb/security-gate.md` (audience: end-user, status: done) covering the opt-in `[gates.security]` gate in plain language — secret scanning with gitleaks (a finding hard-blocks `centinela validate`), dependency-vulnerability auditing with govulncheck/osv-scanner (findings warn but do not block), missing scanners skipped with a clear message, gate off by default, allowlist for false positives, and diff-aware-local / full-scan-CI behavior. The required contract sections (What it does / When you'd use it / How it behaves) are all present, plus an Examples section showing the `[gates.security]` TOML config and sample `G-Secrets`/`G-Vuln` output. Ran `centinela docs generate --out docs/project-docs/index.html` (exit 0), which rendered `kb/security-gate.html` (7.4K), refreshed `kb/index.html`, and regenerated the main `docs/project-docs/index.html` (121.1K); all reference the security-gate page. No source code was touched. Roadmap/status: feature remains in the `docs` step pending orchestrator review; `centinela complete` intentionally not run.
+- Handoff: complete

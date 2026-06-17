@@ -15,7 +15,7 @@
   <a href="https://github.com/samuelnp/centinela/stargazers"><img src="https://img.shields.io/github/stars/samuelnp/centinela?style=social" alt="stars"></a>
 </p>
 
-A development workflow enforcer for Claude Code and OpenCode projects. Centinela turns the "plan → code → tests → validate → docs" discipline from a suggestion into a mechanical constraint — enforced by agent integrations that run automatically in coding sessions.
+**A harness-governance layer for AI coding agents.** Centinela sits on top of Claude Code and OpenCode and makes your team's engineering discipline — `plan → code → tests → validate → docs` — *enforced* rather than *requested*. Every feature passes through guardrails, mechanical verification, and injected context automatically, so an agent's output looks like it came from a disciplined human team.
 
 ### 30-second tour
 
@@ -36,6 +36,7 @@ If an agent tries to write source code while the workflow is in the `plan` step,
 
 - [Demo](#demo)
 - [Why Centinela](#why-centinela)
+- [Centinela & Harness Engineering](#centinela--harness-engineering)
 - [When *not* to use Centinela](#when-not-to-use-centinela)
 - [How Centinela Works](#how-centinela-works)
 - [Latest Features](#latest-features)
@@ -54,10 +55,14 @@ If an agent tries to write source code while the workflow is in the `plan` step,
 ## Demo
 
 <p align="center">
-  <img src="./assets/demo.gif" alt="Centinela workflow demo" width="800">
+  <img src="./assets/demo.gif" alt="Centinela governing a Claude Code session" width="800">
 </p>
 
-> Recorded with [`vhs`](https://github.com/charmbracelet/vhs). To regenerate: `vhs assets/demo.tape`.
+> A simulated Claude Code session: the PreToolUse hook blocks the ungoverned write,
+> the agent starts the workflow, every file write is tagged with the active step,
+> and the gates verify before anything ships — enforced, not requested.
+>
+> Recorded with [`vhs`](https://github.com/charmbracelet/vhs). To regenerate: `vhs assets/demo.tape` (the session script lives in `assets/demo.sh`).
 
 ---
 
@@ -71,6 +76,44 @@ AI coding agents are fast but undisciplined. Left to their own devices they skip
 - **Injecting context** into every agent session so the model always knows which feature is active and which step it is on
 
 The result: every feature ships with a written plan, a Gherkin spec, three test layers, and a passing gate suite — regardless of whether a human or an AI agent wrote it.
+
+---
+
+## Centinela & Harness Engineering
+
+"Harness engineering" is the discipline of building the infrastructure around an
+LLM that turns it into a reliable agent — the verification loops, guardrails,
+context management, and environment control. Its guiding principle:
+
+> Treat every agent failure as an engineering problem to fix permanently, not a
+> prompt to retry. Make correctness **enforced**, not **requested**.
+
+Centinela is **not an agent harness** — Claude Code and OpenCode are. Centinela
+is the *governance layer* that sits on top of them and enforces how the harness
+is used across a team. It owns the parts of harness engineering that decide
+whether shipped code is trustworthy, and stays out of the parts the host agent
+already does well:
+
+| Harness subsystem            | Owned by Centinela | How                                                                 |
+|------------------------------|:------------------:|---------------------------------------------------------------------|
+| Verification & guardrails    |        ★★★         | PreToolUse blocks out-of-step writes; validate gates (file size, i18n, your test suite); gatekeeper + production-readiness subagents |
+| Context engineering          |        ★★          | UserPromptSubmit injects the active feature, step, and required evidence; the plan advisor reads roadmap deps and prior edge-case lessons |
+| Environment control          |        ★★          | `centinela init` wires hooks and scaffolds the rules; `migrate` updates them incrementally to prevent known failure modes |
+| Tool integration layer       |         —          | delegated to Claude Code / OpenCode                                 |
+| Memory & state management    |         ★          | `.workflow/*.json` tracks per-feature step state                    |
+| The agent loop itself        |         —          | delegated to the host harness                                       |
+
+The three principles of harness engineering map directly onto what Centinela
+already does:
+
+- **Environment control** → CLAUDE.md hard-rules, scaffolded docs, and `migrate`
+  let you encode rules that prevent known failure modes — and keep them current.
+- **Mechanical verification** → required artifacts and gates make correctness
+  *checkable*: no plan file means no code, no tests means no validate.
+- **Graceful recovery** → the merge-steward, missing-artifact recovery, and the
+  plan advisor are designed for non-deterministic agent behavior.
+
+In short: bring your own harness; Centinela makes sure it's used with discipline.
 
 ---
 
@@ -182,6 +225,7 @@ flowchart TB
 - **Managed migrations and generated docs** through `centinela migrate`, `centinela migrate docs`, `centinela migrate setup --agent claude|opencode|both`, `centinela docs validate`, and `centinela docs generate`.
 - **Cleaner workflow feedback** with compact `🛡️👁️` CLI output, status tags, and prompt-driven command mapping for roadmap, start, continue, validate, and docs flows.
 - **Claim verification** with `centinela verify <feature>` that independently re-derives ground truth for every evidence claim (tests pass, coverage, non-stub outputs, edge-case mapping) and hard-blocks `centinela complete` at the validate step when any hard claim fails.
+- **Cross-platform build gate** (`G-Build: Cross-Compile`) that cross-compiles every configured release target during `centinela validate` and fails naming the broken `GOOS/GOARCH` pair, so platform build errors are caught locally before the release pipeline. Configured via `[gates.build]` with `enabled`, `command`, and a `targets` list of `{goos, goarch}` pairs; default disabled. A parity test keeps the target list in sync with the release matrix in `.github/workflows/release.yml`.
 
 ---
 
@@ -520,7 +564,60 @@ See the [`[verify]` configuration block](#centinelatoml-reference) to adjust the
 | Gate | Rule | Config |
 |------|------|--------|
 | **G1: File Size** | Default max 100 lines, with optional justified exceptions up to 130 lines | `[gates] file_size = true` |
+| **G2: Layer Boundaries** | Parses the Go import graph and fails on any import that violates your declared per-layer allow-matrix | `[gates.import_graph]` |
 | **G11: i18n** | All locale files have identical keys (no missing translations) | `[gates] i18n = true` |
+| **G-Build: Cross-Compile** | Cross-compiles every configured release target and fails naming the broken `GOOS/GOARCH` | `[gates] build = true` |
+
+#### Cross-compile build gate
+
+The `G-Build: Cross-Compile` gate runs each target in your `[gates.build] targets` list through the configured build command, sets `GOOS`, `GOARCH`, and `CGO_ENABLED=0` automatically, and collects any failures. If any target fails, the gate reports `Fail` with a detail line per broken platform. Default is **disabled**.
+
+```toml
+[gates]
+build = true
+
+[gates.build]
+command = "go build ./cmd/myapp"   # executed once per target; no shell expansion
+targets = [
+  { goos = "linux",   goarch = "amd64" },
+  { goos = "linux",   goarch = "arm64" },
+  { goos = "darwin",  goarch = "amd64" },
+  { goos = "darwin",  goarch = "arm64" },
+  { goos = "windows", goarch = "amd64" },
+  { goos = "windows", goarch = "arm64" },
+]
+```
+
+The `command` is argv-parsed (`strings.Fields`) and executed directly — never via a shell — so spaces in paths are safe and shell injection is not possible.
+
+#### Layer-boundary (import-graph) gate
+
+The `G2: Layer Boundaries` gate turns your architecture's layer rules into a mechanical check. It parses the Go import graph with `go list -json` (no extra dependency) and fails `centinela validate` when a package imports another package its layer is not allowed to import — for example a leaf `config` package reaching up into `ui`. You declare the matrix in `centinela.toml`: each layer has a name, path globs, and the list of layers it may import. Standard-library and third-party imports are ignored; a package that matches no configured layer produces a non-failing **warning** (so the matrix can be adopted incrementally) rather than passing silently. Default is **disabled**.
+
+```toml
+[gates.import_graph]
+enabled = true
+# module = "github.com/you/yourapp"   # optional; defaults to `go list -m`
+
+[[gates.import_graph.layers]]
+name  = "leaf"
+paths = ["internal/config/**"]
+allow = []                            # a leaf layer imports no other layer
+
+[[gates.import_graph.layers]]
+name  = "domain"
+paths = ["internal/service/**"]
+allow = ["leaf"]
+
+[[gates.import_graph.layers]]
+name  = "cmd"
+paths = ["cmd/**"]
+allow = ["domain", "leaf"]
+```
+
+A forbidden edge is reported as `internal/config -> internal/ui (leaf may not import domain)`. Same-layer and self imports are always allowed.
+
+A companion parity test (`TestBuildMatrixParity`) keeps `[gates.build] targets` in `centinela.toml` in sync with the release matrix in `.github/workflows/release.yml`. If either list drifts, `go test ./...` fails during `centinela validate` and names the missing targets.
 
 G11 supports two formats natively:
 
@@ -633,6 +730,19 @@ diff_base = "main"   # any git ref; merge-base with this branch defines the chan
 [gates]
 file_size = true   # G1: fail if any source file exceeds 100 lines by default
 i18n      = false  # G11: check translation key completeness
+build     = false  # G-Build: cross-compile every release target (default off)
+
+# Cross-compile build gate (required when gates.build = true)
+[gates.build]
+command = "go build ./cmd/myapp"   # build command; run once per target with GOOS/GOARCH/CGO_ENABLED=0 set
+targets = [
+  { goos = "linux",   goarch = "amd64" },
+  { goos = "linux",   goarch = "arm64" },
+  { goos = "darwin",  goarch = "amd64" },
+  { goos = "darwin",  goarch = "arm64" },
+  { goos = "windows", goarch = "amd64" },
+  { goos = "windows", goarch = "arm64" },
+]
 
 # Optional: explicit justified G1 exceptions for rare cases
 [[gates.file_size_exceptions]]

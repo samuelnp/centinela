@@ -11,10 +11,10 @@ import (
 
 // RunOutcome captures everything a claim check needs from one command run.
 type RunOutcome struct {
-	ExitCode  int
-	Output    string
-	TimedOut  bool
-	StartErr  error // command could not start (e.g. binary not on PATH)
+	ExitCode int
+	Output   string
+	TimedOut bool
+	StartErr error // command could not start (e.g. binary not on PATH)
 }
 
 // CommandRunner runs a shell command in dir, bounded by timeout. Injected so

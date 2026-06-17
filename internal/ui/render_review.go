@@ -39,3 +39,16 @@ func RenderDocumentationNeeded(feature string) string {
 	)
 	return renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body)
 }
+
+// RenderChangelogNeeded reminds the agent that an internal feature's docs step
+// requires only a one-line changelog entry, not the full knowledge-base bundle.
+func RenderChangelogNeeded(feature string) string {
+	body := lipgloss.JoinVertical(lipgloss.Left,
+		StyleYellow.Render("⚠ Changelog entry missing: "+feature),
+		"",
+		"Internal docs step requires only a one-line changelog.",
+		StyleMuted.Render("Run: centinela artifact new "+feature+" changelog"),
+		StyleMuted.Render("Then write: .workflow/"+feature+"-changelog.md"),
+	)
+	return renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body)
+}

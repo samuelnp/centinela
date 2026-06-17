@@ -47,6 +47,6 @@ func writePlanEvidence(feature string, role orchestration.Role, edge bool) {
 		edgeCases = `["e"]`
 		output = `"outputs":["specs/` + feature + `.feature"]`
 	}
-	data := `{"feature":"` + feature + `","step":"plan","role":"` + string(role) + `","status":"done","generatedAt":"` + time.Now().UTC().Format(time.RFC3339) + `","inputs":["docs/features/` + feature + `.md"],` + output + `,"edgeCases":` + edgeCases + `,"handoffTo":"orchestrator"}`
+	data := `{"feature":"` + feature + `","step":"plan","role":"` + string(role) + `","status":"done","generatedAt":"` + time.Now().UTC().Format(time.RFC3339) + `","inputs":["docs/features/` + feature + `.md","docs/plans/` + feature + `.md"],` + output + `,"edgeCases":` + edgeCases + `,"handoffTo":"orchestrator"}`
 	os.WriteFile(orchestration.JSONPath(feature, role), []byte(data), 0644) //nolint:errcheck
 }

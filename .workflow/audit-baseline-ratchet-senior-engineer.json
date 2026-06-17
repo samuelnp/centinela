@@ -1,0 +1,34 @@
+{
+  "_meta": {
+    "cli_version": "0.25.0",
+    "written_at": "2026-06-16T11:57:47Z"
+  },
+  "feature": "audit-baseline-ratchet",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-16T11:57:47Z",
+  "inputs": [
+    "docs/plans/audit-baseline-ratchet.md",
+    "docs/features/audit-baseline-ratchet.md",
+    "internal/gates/gates.go",
+    "internal/config/roadmap_drift.go"
+  ],
+  "outputs": [
+    "internal/audit/fingerprint.go",
+    "internal/audit/baseline.go",
+    "internal/audit/record.go",
+    "internal/audit/ratchet.go",
+    "internal/audit/participation.go",
+    "internal/audit/gate.go",
+    "internal/config/audit_baseline.go",
+    "internal/ui/render_audit.go",
+    "cmd/centinela/audit.go",
+    "cmd/centinela/audit_baseline.go",
+    "cmd/centinela/audit_render.go",
+    "cmd/centinela/validate_audit.go",
+    "centinela.toml"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}

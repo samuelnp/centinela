@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T16:57:01Z"
+  },
+  "feature": "model-capability-profiles",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-12T16:57:01Z",
+  "inputs": [
+    "docs/plans/model-capability-profiles.md",
+    "specs/model-capability-profiles.feature",
+    ".workflow/model-capability-profiles-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/model-capability-profiles-validation-specialist.md",
+    ".workflow/model-capability-profiles-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

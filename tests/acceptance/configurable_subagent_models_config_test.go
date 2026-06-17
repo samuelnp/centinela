@@ -50,10 +50,12 @@ func TestOrchestrationHook_NormalizedTierAccepted(t *testing.T) {
 	if err != nil {
 		t.Fatalf("hook failed with normalized tier: %v\n%s", err, out)
 	}
-	if !strings.Contains(out, "feature-specialist (model: reasoning)") {
+	// 'Reasoning' normalizes to the reasoning tier → claude-opus-4-7 for claude.
+	if !strings.Contains(out, "feature-specialist (model: claude-opus-4-7 (claude)") {
 		t.Errorf("expected Reasoning normalized to reasoning; got:\n%s", out)
 	}
-	if !strings.Contains(out, "big-thinker (model: fast)") {
+	// ' fast ' normalizes to the fast tier → claude-haiku for claude.
+	if !strings.Contains(out, "big-thinker (model: claude-haiku-4-5-20251001 (claude)") {
 		t.Errorf("expected ' fast ' normalized to fast; got:\n%s", out)
 	}
 }

@@ -17,18 +17,18 @@ func TestValidateFeatureSlug_Accepts(t *testing.T) {
 
 func TestValidateFeatureSlug_RejectsUnsafe(t *testing.T) {
 	bad := []string{
-		"",                 // empty
-		"Alpha",            // uppercase
-		"alpha_beta",       // underscore
-		"alpha beta",       // space
-		"alpha/beta",       // path separator
-		"alpha/../beta",    // path traversal
-		"alpha;rm -rf /",   // shell injection
-		"-alpha",           // leading hyphen
-		"alpha-",           // trailing hyphen
-		"alpha--beta",      // double hyphen
-		".alpha",           // dotfile
-		"αlpha",            // non-ASCII
+		"",               // empty
+		"Alpha",          // uppercase
+		"alpha_beta",     // underscore
+		"alpha beta",     // space
+		"alpha/beta",     // path separator
+		"alpha/../beta",  // path traversal
+		"alpha;rm -rf /", // shell injection
+		"-alpha",         // leading hyphen
+		"alpha-",         // trailing hyphen
+		"alpha--beta",    // double hyphen
+		".alpha",         // dotfile
+		"αlpha",          // non-ASCII
 	}
 	for _, s := range bad {
 		if err := worktree.ValidateFeatureSlug(s); err == nil {

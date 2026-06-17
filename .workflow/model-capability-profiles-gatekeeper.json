@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T16:49:49Z"
+  },
+  "feature": "model-capability-profiles",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-12T16:49:49Z",
+  "inputs": [
+    "specs/model-capability-profiles.feature",
+    "specs/enforcement-profiles.feature",
+    "specs/configurable-model-routing.feature",
+    "internal/workflow/profile.go",
+    "internal/workflow/start_resolve.go",
+    "internal/config/orchestration.go",
+    "internal/config/config.go",
+    "internal/config/capability.go"
+  ],
+  "outputs": [
+    ".workflow/model-capability-profiles-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

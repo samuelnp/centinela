@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-10T16:26:06Z"
+  },
+  "feature": "code-quality-hardening",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-10T16:26:06Z",
+  "inputs": [
+    "docs/features/code-quality-hardening.md",
+    "docs/plans/code-quality-hardening.md",
+    "specs/code-quality-hardening.feature",
+    ".workflow/code-quality-hardening-senior-engineer.md",
+    ".workflow/code-quality-hardening-qa-senior.md"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/code-quality-hardening.md",
+    "docs/project-docs/kb/code-quality-hardening.html",
+    "docs/project-docs/index.html",
+    ".workflow/code-quality-hardening-documentation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

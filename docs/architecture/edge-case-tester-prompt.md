@@ -45,6 +45,12 @@ Output format:
 
 #### Residual Risks
 - Risks still not covered and mitigation suggestions.
+
+#### Deferred Findings
+- For every Residual Risk you are deferring rather than covering with a
+  test now, run:
+  `centinela roadmap defer <slug> --summary "<one line>" --source <feature>/edge-case-tester`
+- List the recorded slugs here, or state "none".
 ```
 
 ## Required Artifact

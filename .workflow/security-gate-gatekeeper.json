@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-06T18:57:11Z"
+  },
+  "feature": "security-gate",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-06T18:57:11Z",
+  "inputs": [
+    "specs/security-gate.feature",
+    "docs/features/security-gate.md",
+    "docs/plans/security-gate.md",
+    "internal/gates/gates.go",
+    "internal/gates/security.go",
+    "internal/config/config.go",
+    "internal/config/security_gate.go",
+    "internal/config/defaults.go",
+    "specs/g2-import-graph-gate.feature",
+    "specs/cross-platform-build-gate.feature",
+    "specs/diff-aware-gatekeeper.feature"
+  ],
+  "outputs": [
+    ".workflow/security-gate-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "Both scanner families absent yields two Skips with distinct no-scanners signal, not false Pass",
+    "New gate-result names G-Secrets/G-Vuln do not collide with existing G-Build/G1/G11 names",
+    "Security field is additive to GatesConfig; existing build/import_graph/file_size configs unchanged"
+  ],
+  "handoffTo": "validation-specialist"
+}

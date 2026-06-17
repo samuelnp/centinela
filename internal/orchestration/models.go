@@ -56,6 +56,12 @@ func AllowedTiers() []Tier {
 	return []Tier{TierReasoning, TierBalanced, TierFast}
 }
 
+// AllowedRunnerKeys returns the runner keys config may key model overrides on,
+// in stable order. RunnerUnknown is internal and never a valid config key.
+func AllowedRunnerKeys() []string {
+	return []string{string(RunnerClaude), string(RunnerOpenCode), string(RunnerCodex)}
+}
+
 // AllowedRoleSlugs returns the role slugs config may key on: the 7 step roles
 // plus the out-of-band roles that carry a documented default tier.
 func AllowedRoleSlugs() []string {

@@ -1,0 +1,39 @@
+{
+  "_meta": {
+    "cli_version": "0.5.0",
+    "written_at": "2026-05-29T13:11:28Z"
+  },
+  "feature": "cross-platform-build-gate",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-05-29T12:00:00Z",
+  "inputs": [
+    "specs/cross-platform-build-gate.feature",
+    "specs/claim-verification.feature",
+    "specs/diff-aware-gatekeeper.feature",
+    "internal/gates/build.go",
+    "internal/gates/build_runner.go",
+    "internal/gates/gates.go",
+    "internal/config/build_gate.go",
+    "internal/config/config.go",
+    "internal/config/verify_config.go",
+    "internal/gates/build_matrix_parity_test.go",
+    "centinela.toml",
+    ".github/workflows/release.yml",
+    "tests/integration/cross_platform_build_gate_integration_test.go",
+    "tests/acceptance/cross_platform_build_gate_test.go",
+    "PROJECT.md"
+  ],
+  "outputs": [
+    ".workflow/cross-platform-build-gate-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "config.go rebase merge preserves BOTH Verify defaults and NormalizeBuildGate — no clobber",
+    "Build gate default-disabled; projects omitting [gates.build] parse and skip cleanly",
+    "RunWithFilter appends checkBuild only when enabled; G1/G11 filter behavior unchanged",
+    "TestBuildMatrixParity: centinela.toml 6 targets match release.yml matrix",
+    "Scaffold drift pre-existing/allowlisted; evidence-contract.md in sync; branch touched no drifting doc"
+  ],
+  "handoffTo": "validation-specialist"
+}

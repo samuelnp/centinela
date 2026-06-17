@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-13T09:11:24Z"
+  },
+  "feature": "headless-governance",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-13T09:12:18Z",
+  "inputs": [
+    "docs/plans/headless-governance.md",
+    "specs/headless-governance.feature",
+    "internal/config/config.go",
+    "internal/gates/gates.go",
+    "internal/verify/verify.go",
+    "internal/verify/result.go",
+    "internal/workflow/profile.go",
+    "internal/workflow/archetype.go",
+    "internal/evidence/io.go",
+    "internal/evidence/roles.go",
+    "internal/orchestration/policy.go",
+    "cmd/centinela/verify.go",
+    "cmd/centinela/hook_context_review_mode.go",
+    "cmd/centinela/hook_plan_advisor.go",
+    "cmd/centinela/main.go"
+  ],
+  "outputs": [
+    "internal/config/headless.go",
+    "internal/config/config.go",
+    "internal/verdict/packet.go",
+    "internal/verdict/mappers.go",
+    "internal/verdict/assemble.go",
+    "internal/verdict/evidence_index.go",
+    "cmd/centinela/verdict.go",
+    "cmd/centinela/hook_context_review_mode.go",
+    "cmd/centinela/hook_plan_advisor.go"
+  ],
+  "edgeCases": [],
+  "handoffTo": "qa-senior"
+}

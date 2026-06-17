@@ -23,6 +23,12 @@ func contextLines(b bundle) []string {
 	if len(b.QualityNotes) > 0 {
 		lines = append(lines, "- roadmap quality notes: "+strings.Join(b.QualityNotes, "; "))
 	}
+	if len(b.Memory) > 0 {
+		lines = append(lines, "- 🛡️👁️ MEMORY (recalled facts): "+strings.Join(b.Memory, "; "))
+	}
+	if len(b.Failures) > 0 {
+		lines = append(lines, "- recurring gate failures: "+failureSummary(b.Failures))
+	}
 	return lines
 }
 

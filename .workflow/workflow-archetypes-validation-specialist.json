@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "cli_version": "0.13.0",
+    "written_at": "2026-06-12T12:24:33Z"
+  },
+  "feature": "workflow-archetypes",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-12T12:24:33Z",
+  "inputs": [
+    ".workflow/workflow-archetypes-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/workflow-archetypes-validation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

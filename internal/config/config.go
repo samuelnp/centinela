@@ -17,6 +17,11 @@ type Config struct {
 	Verify        VerifyConfig        `toml:"verify"`
 	Gates         GatesConfig         `toml:"gates"`
 	I18n          I18nConfig          `toml:"i18n"`
+	Memory        MemoryConfig        `toml:"memory"`
+	Telemetry     TelemetryConfig     `toml:"telemetry"`
+	Headless      HeadlessConfig      `toml:"headless"`
+	Precommit     PrecommitConfig     `toml:"precommit"`
+	PrGate        PrGateConfig        `toml:"pr_gate"`
 }
 
 // ValidateConfig holds user-defined commands that centinela runs during validate.
@@ -24,14 +29,6 @@ type ValidateConfig struct {
 	Commands []string `toml:"commands"`
 	DiffMode string   `toml:"diff_mode"`
 	DiffBase string   `toml:"diff_base"`
-}
-
-// GatesConfig controls which built-in gates are active.
-type GatesConfig struct {
-	FileSizeEnabled            bool                `toml:"file_size"`
-	FileSizeExceptions         []FileSizeException `toml:"file_size_exceptions"`
-	I18nEnabled                bool                `toml:"i18n"`
-	ProductionReadinessEnabled bool                `toml:"production_readiness"`
 }
 
 // I18nConfig describes how to check translations for G11.
@@ -59,6 +56,18 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("parsing %s: %w", Filename, err)
 	}
 
+	// Capture the explicit-vs-defaulted signal before applyDefaults overwrites
+	// the empty step_confirmation_mode with every_step (see RawStepConfirmationMode).
+	cfg.Workflow.RawStepConfirmationMode = cfg.Workflow.StepConfirmationMode
+	// Same explicit-vs-defaulted capture for the enforcement profile: record the
+	// raw value before applyDefaults normalizes the empty knob to strict, so the
+	// capability tier can engage only when no global profile was explicitly set.
+	cfg.Workflow.RawEnforcementProfile = cfg.Workflow.EnforcementProfile
+	// Reject an explicitly-set unknown profile against the raw decoded value,
+	// before applyDefaults normalizes it to strict (which would hide the error).
+	if err := validateEnforcementProfile(cfg.Workflow.EnforcementProfile); err != nil {
+		return nil, err
+	}
 	applyDefaults(&cfg)
 	if err := validateConfig(&cfg); err != nil {
 		return nil, err
@@ -67,27 +76,12 @@ func Load() (*Config, error) {
 }
 
 func defaultConfig() *Config {
-	return &Config{
+	cfg := &Config{
 		Gates: GatesConfig{
 			FileSizeEnabled: true,
 			I18nEnabled:     false,
 		},
 	}
-}
-
-func applyDefaults(cfg *Config) {
-	if cfg.Gates.FileSizeEnabled == false && cfg.Gates.I18nEnabled == false {
-		cfg.Gates.FileSizeEnabled = true
-	}
-	cfg.Workflow.StepConfirmationMode = NormalizeStepConfirmationMode(cfg.Workflow.StepConfirmationMode)
-	cfg.Workflow.PlanAdvisorMode = NormalizePlanAdvisorMode(cfg.Workflow.PlanAdvisorMode)
-	cfg.Workflow.PlanQuestionLimit = NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit)
-	cfg.Validate.DiffMode = NormalizeDiffMode(cfg.Validate.DiffMode)
-	cfg.Validate.DiffBase = NormalizeDiffBase(cfg.Validate.DiffBase)
-	if cfg.Verify.TimeoutSeconds <= 0 {
-		cfg.Verify.TimeoutSeconds = 60
-	}
-	if cfg.Verify.CoverageTolerance <= 0 {
-		cfg.Verify.CoverageTolerance = 0.001
-	}
+	applyMemoryDefaults(cfg)
+	return cfg
 }

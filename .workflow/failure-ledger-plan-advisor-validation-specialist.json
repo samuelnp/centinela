@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "cli_version": "0.23.0",
+    "written_at": "2026-06-16T10:01:04Z"
+  },
+  "feature": "failure-ledger-plan-advisor",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-16T10:01:04Z",
+  "inputs": [
+    ".workflow/failure-ledger-plan-advisor-gatekeeper.md",
+    "docs/plans/failure-ledger-plan-advisor.md",
+    "specs/failure-ledger-plan-advisor.feature"
+  ],
+  "outputs": [
+    ".workflow/failure-ledger-plan-advisor-gatekeeper.md",
+    ".workflow/failure-ledger-plan-advisor-edge-cases.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-05T14:15:41Z"
+  },
+  "feature": "g2-import-graph-gate",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-05T14:15:41Z",
+  "inputs": [
+    ".workflow/g2-import-graph-gate-big-thinker.md",
+    ".workflow/g2-import-graph-gate-feature-specialist.md",
+    "docs/plans/g2-import-graph-gate.md",
+    "specs/g2-import-graph-gate.feature",
+    "PROJECT.md"
+  ],
+  "outputs": [
+    "internal/config/import_graph.go",
+    "internal/config/config.go",
+    "internal/config/defaults.go",
+    "internal/gates/import_graph.go",
+    "internal/gates/import_graph_load.go",
+    "internal/gates/import_graph_matrix.go",
+    "internal/gates/import_graph_check.go",
+    "internal/gates/import_graph_glob.go",
+    "internal/gates/gates.go"
+  ],
+  "edgeCases": [
+    "Load failure (uncompilable code / import cycle) -> Fail with go list error, never false Pass",
+    "Edge into an unmapped package is ignored; unmapped pkg surfaces separately as Warn",
+    "Same-layer and self imports always allowed; test imports fold into package layer",
+    "stdlib/third-party imports dropped via segment-boundary module prefix check",
+    "Diff filter ignored: whole-module load so out-of-diff violations still Fail",
+    "Duplicate layer names union their paths and allow-sets (e.g. domain twice)"
+  ],
+  "handoffTo": "qa-senior"
+}

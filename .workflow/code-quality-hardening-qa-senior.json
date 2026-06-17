@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-10T15:29:59Z"
+  },
+  "feature": "code-quality-hardening",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-10T15:29:59Z",
+  "inputs": [
+    "docs/plans/code-quality-hardening.md",
+    "specs/code-quality-hardening.feature",
+    ".workflow/code-quality-hardening-senior-engineer.md"
+  ],
+  "outputs": [
+    ".workflow/code-quality-hardening-edge-cases.md",
+    "internal/hookpolicy/format_evidence_parity_test.go",
+    "internal/workflow/state_load_missing_test.go",
+    "internal/workflow/state_load_corrupt_test.go",
+    "internal/workflow/state_load_unreadable_test.go",
+    "internal/workflow/active_warn_test.go",
+    "cmd/centinela/start_corrupt_config_test.go",
+    "cmd/centinela/hook_context_corrupt_config_test.go",
+    "tests/integration/code_quality_hardening_test.go",
+    "tests/acceptance/code_quality_hardening_test.go"
+  ],
+  "edgeCases": [
+    "gofmt exits 0 so check-fmt.sh forces exit 1 on non-empty gofmt -l output",
+    "unreadable-state chmod 000 fixture skips when os.Geteuid()==0 (root) and restores 0644",
+    "missing vs unreadable vs invalid-JSON state are three distinct Load outcomes, asserted separately",
+    "coverage key position invariant: between mobileFirst and handoffTo, byte-compared vs evidence.MarshalJSON",
+    "context hook never breaks the session on bad config: returns nil and injects config warning line",
+    "statusline hook cannot carry a warning line; deferred by design, context hook covers visibility",
+    "ActiveWorkflows warns on stderr for corrupt state instead of silently dropping the feature"
+  ],
+  "handoffTo": "validation-specialist"
+}

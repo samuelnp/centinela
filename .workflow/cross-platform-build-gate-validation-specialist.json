@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "cli_version": "dev",
+    "written_at": "2026-05-29T13:14:46Z"
+  },
+  "feature": "cross-platform-build-gate",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-05-29T13:14:46Z",
+  "inputs": [
+    "docs/plans/cross-platform-build-gate.md",
+    "specs/cross-platform-build-gate.feature",
+    ".workflow/cross-platform-build-gate-gatekeeper.md",
+    ".workflow/cross-platform-build-gate-qa-senior.md"
+  ],
+  "outputs": [
+    ".workflow/cross-platform-build-gate-validation-specialist.md",
+    ".workflow/cross-platform-build-gate-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "build gate disabled by default — consumer projects with no [gates.build] block are unaffected"
+  ],
+  "handoffTo": "documentation-specialist"
+}

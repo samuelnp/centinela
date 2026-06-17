@@ -1,0 +1,65 @@
+### Gatekeeper Report: spec-traceability-gate
+
+**Date:** 2026-06-10
+**Status:** SAFE
+
+#### Analyzed Specs
+
+All 75 `specs/*.feature` scanned. Materially relevant to this change:
+
+- `specs/g2-import-graph-gate.feature` — the architectural template this gate is
+  modeled on (config leaf + Normalize + validate + diff-aware filter). Describes
+  the import-graph gate's own behavior; no scenario pins the global gate set or
+  the number/order of `RunWithFilter` results, so the appended gate does not
+  contradict it.
+- `specs/enforce-acceptance-tests-real-and-executed.feature` — conceptually
+  adjacent (real/executed acceptance files), but it governs the **tests-step
+  validator**, not a gate. No overlap: it constrains acceptance file shape, this
+  gate maps Gherkin scenarios to acceptance tests. No contradiction.
+- `specs/cross-platform-build-gate.feature`, `specs/enforce-coverage-in-validate.feature`,
+  `specs/diff-aware-gatekeeper.feature` — other gate/validate features; each
+  constructs its own scoped `GatesConfig` sub-struct and asserts only its own
+  gate's results. None snapshots the full gate list.
+
+#### Findings
+
+No conflicts detected. Verification of each coupling vector:
+
+1. **GatesConfig struct change** (new `SpecTraceability` field, `config.go:39`).
+   No test snapshots the full `GatesConfig` shape or marshals a fixed gate set.
+   `internal/config/config_test.go` writes only a minimal `[gates]\ni18n=true`
+   fixture; `defaultConfig()` (`config.go:74`) sets specific fields and leaves the
+   new field zero-valued (`Enabled:false`). The field is additive and
+   default-disabled — no round-trip or struct-literal test breaks.
+
+2. **gates.go RunWithFilter change** (new gate appended). The only gate-count
+   assertions are `internal/gates/gates_test.go:30` (`TestRunAllIncludesEnabledGates`,
+   expects 2) and `internal/gates/security_skip_test.go:56` (expects 2). Both
+   build their **own** `GatesConfig` literals enabling only the gates under test
+   (file_size+i18n; security via direct `checkSecurity`), with spec_traceability
+   left disabled (zero value). Neither receives an extra result. Confirmed green
+   by the 1269-pass suite.
+
+3. **centinela.toml change** (gate enabled at warn). No test loads the repo's real
+   `centinela.toml` and asserts a fixed gate set or `[gates]` key list. The only
+   `centinela.toml`-reading test is this feature's own `TestSTG_CentinelaEnablesWarn`.
+   No existing acceptance/integration test pins `centinela validate` output text.
+
+4. **Gate becomes repo-wide active on merge.** Confirmed `severity = "warn"` in
+   `centinela.toml:22` (not `fail`). The gate emits a single non-blocking WARN on
+   full-scan CI for the legacy backlog and CANNOT block any other feature's
+   `centinela validate`. On its own branch it is diff-scoped to
+   `specs/spec-traceability-gate.feature` and passes.
+
+5. **Spec/acceptance convention imposed on others?** No. Diff-aware scope means the
+   gate only inspects `.feature` files in the current change set; unchanged specs
+   (the 397-scenario legacy backlog) surface as warn-only and are never *required*
+   to change. No existing spec or acceptance test must be modified by this merge.
+
+#### Recommendation
+
+- **SAFE** — purely additive, default-disabled gate enabled at `severity="warn"`;
+  no existing test, spec, or config round-trip is broken, and warn severity
+  guarantees it cannot block other features' validate. Fresh-binary dogfood passes
+  (`✓ spec-traceability-gate  All 10 scenarios have acceptance coverage`,
+  `All gates passed`).

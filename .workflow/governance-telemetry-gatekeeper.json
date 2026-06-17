@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "cli_version": "dev",
+    "written_at": "2026-06-13T13:37:50Z"
+  },
+  "feature": "governance-telemetry",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-13T13:38:54Z",
+  "inputs": [
+    "specs/governance-telemetry.feature",
+    "specs/governed-project-memory.feature",
+    "specs/claim-verification.feature",
+    "specs/g2-import-graph-gate.feature",
+    "internal/telemetry/event.go",
+    "internal/telemetry/record.go",
+    "internal/telemetry/constructors.go",
+    "internal/telemetry/read.go",
+    "internal/config/telemetry.go",
+    "cmd/centinela/hook_prewrite.go",
+    "cmd/centinela/validate.go",
+    "cmd/centinela/complete.go",
+    "cmd/centinela/complete_verify.go",
+    "cmd/centinela/telemetry_emit.go",
+    "centinela.toml"
+  ],
+  "outputs": [
+    ".workflow/governance-telemetry-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

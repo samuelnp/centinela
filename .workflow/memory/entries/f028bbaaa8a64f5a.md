@@ -1,0 +1,13 @@
+---
+id: f028bbaaa8a64f5a
+feature: g2-import-graph-gate
+step: tests
+type: lesson
+title: - **Two exec-error branches remain uncovered (~unreachable).** The JSON-decode
+tags: edge-cases, lesson
+sourceArtifact: .workflow/g2-import-graph-gate-edge-cases.md
+createdAt: 2026-06-05T15:19:47Z
+---
+
+- **Two exec-error branches remain uncovered (~unreachable).** The JSON-decode
+- **Acceptance drives the gate via `gates.RunWithFilter`, not a spawned

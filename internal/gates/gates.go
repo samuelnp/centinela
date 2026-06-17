@@ -43,6 +43,30 @@ func RunWithFilter(cfg *config.Config, filter *gitdiff.Set) []Result {
 		results = append(results, checkI18nFiltered(cfg, filter))
 	}
 
+	if cfg.Gates.Build.Enabled {
+		results = append(results, checkBuild(cfg))
+	}
+
+	if cfg.Gates.ImportGraph.Enabled {
+		results = append(results, checkImportGraph(cfg, filter))
+	}
+
+	if cfg.Gates.Security.Enabled {
+		results = append(results, checkSecurity(cfg, filter)...)
+	}
+
+	if cfg.Gates.SpecTraceability.Enabled {
+		results = append(results, checkSpecTraceability(cfg, filter))
+	}
+
+	if cfg.Gates.RoadmapDrift.Enabled {
+		results = append(results, checkRoadmapDrift(cfg, filter))
+	}
+
+	if len(cfg.Gates.CustomGates) > 0 {
+		results = append(results, customGates(cfg, filter)...)
+	}
+
 	return results
 }
 

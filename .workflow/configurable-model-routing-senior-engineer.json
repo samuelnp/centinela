@@ -1,0 +1,42 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-06T12:57:18Z"
+  },
+  "feature": "configurable-model-routing",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-06T12:57:18Z",
+  "inputs": [
+    "docs/plans/configurable-model-routing.md",
+    "docs/features/configurable-model-routing.md",
+    "specs/configurable-model-routing.feature",
+    "internal/orchestration/resolve.go",
+    "internal/config/orchestration_models.go",
+    "internal/config/orchestration.go",
+    "cmd/centinela/hook_orchestration.go"
+  ],
+  "outputs": [
+    "internal/orchestration/resolve.go",
+    "internal/orchestration/model_routing.go",
+    "internal/orchestration/models.go",
+    "internal/config/orchestration.go",
+    "internal/config/orchestration_models.go",
+    "internal/config/orchestration_model_map.go",
+    "internal/config/file_size_exceptions.go",
+    "cmd/centinela/hook_orchestration.go",
+    "cmd/centinela/orchestration_annotate.go",
+    "internal/orchestration/resolve_test.go"
+  ],
+  "edgeCases": [
+    "Codex runner before codex-support: missing tier entry falls to rule 4 (returns tier name, ok=false), never a claude/opencode ID",
+    "Role-override table beats a model_map entry for the same runner (rule 1 over rule 2)",
+    "Plain tier-string role value (big-thinker = \"reasoning\") still loads and resolves as before (union unmarshal back-compat)",
+    "Empty model string in model_map or models override rejected at load, error names the offending key",
+    "Tier/runner keys normalized (trim+lowercase) before validation; ' Reasoning ' and ' Opencode ' accepted",
+    "Unknown runner key (gemini), unknown role, unknown tier all fail load naming the key",
+    "Absent/empty model_map and models tables resolve every role to its built-in default (zero-config safe)"
+  ],
+  "handoffTo": "qa-senior"
+}

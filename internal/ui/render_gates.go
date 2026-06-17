@@ -13,7 +13,7 @@ func RenderGateResult(r gates.Result) string {
 	case gates.Pass:
 		return StyleGreen.Render(IconDone+" "+r.Name) + "  " + StyleMuted.Render(r.Message)
 	case gates.Fail:
-		lines := []string{StyleRed.Render("✗ " + r.Name) + "  " + r.Message}
+		lines := []string{StyleRed.Render("✗ "+r.Name) + "  " + r.Message}
 		for _, d := range r.Details {
 			lines = append(lines, StyleMuted.Render("  · "+d))
 		}
@@ -21,7 +21,7 @@ func RenderGateResult(r gates.Result) string {
 	case gates.Warn:
 		return StyleYellow.Render("⚠ "+r.Name) + "  " + StyleMuted.Render(r.Message)
 	case gates.Skip:
-		return StyleMuted.Render("— "+r.Name+"  "+r.Message)
+		return StyleMuted.Render("— " + r.Name + "  " + r.Message)
 	}
 	return ""
 }

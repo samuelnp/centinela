@@ -1,0 +1,50 @@
+{
+  "_meta": {
+    "cli_version": "0.13.0",
+    "written_at": "2026-06-12T08:50:43Z"
+  },
+  "feature": "workflow-archetypes",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-12T08:50:43Z",
+  "inputs": [
+    "specs/workflow-archetypes.feature",
+    "docs/plans/workflow-archetypes.md",
+    ".workflow/workflow-archetypes-senior-engineer.md",
+    "internal/workflow/archetype.go",
+    "internal/workflow/archetype_order.go",
+    "internal/workflow/state.go",
+    "internal/roadmap/roadmap.go",
+    "internal/roadmap/archetype.go",
+    "internal/roadmap/dependencies.go",
+    "internal/ui/render_status.go",
+    "cmd/centinela/start.go",
+    "cmd/centinela/start_guard.go"
+  ],
+  "outputs": [
+    "tests/acceptance/workflow_archetypes_test.go",
+    "tests/acceptance/workflow_archetypes_gate_test.go",
+    "tests/acceptance/workflow_archetypes_state_test.go",
+    "tests/integration/workflow_archetypes_integration_test.go",
+    "internal/workflow/archetype_safety_test.go",
+    "internal/workflow/archetype_test.go",
+    "internal/workflow/archetype_order_test.go",
+    "internal/workflow/archetype_state_test.go",
+    "internal/roadmap/archetype_test.go",
+    "internal/ui/render_status_archetype_test.go",
+    "cmd/centinela/start_archetype_test.go",
+    ".workflow/workflow-archetypes-edge-cases.md"
+  ],
+  "edgeCases": [
+    "spike order has no validate step — ungated by absence, not a bypass branch (archetype_safety_test.go)",
+    "merge re-validates a promoted spike — executeValidation is step-agnostic",
+    "hotfix starts at code with no plan artifact required (integration + TestWA_HotfixOrder)",
+    "explicit --archetype flag overrides roadmap + bootstrap (start_archetype_test.go precedence)",
+    "unknown archetype rejected on flag path and roadmap-load path, error names the field/feature",
+    "archetype orthogonal to enforcement profile (spike order x strict profile)",
+    "ArchetypeStepOrder returns clones, not aliases of DefaultStepOrder (mutation safety)",
+    "status shows order[0]/archetype, not a hardcoded plan (render_status + integration)"
+  ],
+  "handoffTo": "validation-specialist"
+}

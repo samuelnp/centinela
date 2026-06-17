@@ -1,0 +1,548 @@
+[
+  {
+    "id": "0cd0b9d5a3adf24f",
+    "feature": "security-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Malformed JSON (secrets) → Warn, never false Pass.** A scanner that ran but",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/security-gate-edge-cases.md",
+    "createdAt": "2026-06-06T18:53:48Z"
+  },
+  {
+    "id": "121a9c908809ba77",
+    "feature": "right-size-docs-step",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Default surface = internal (forward-only light path).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/right-size-docs-step-edge-cases.md",
+    "createdAt": "2026-06-12T15:06:05Z"
+  },
+  {
+    "id": "125e619f45601e1d",
+    "feature": "governance-telemetry",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Disabled is a no-op** — `[telemetry] enabled=false` writes no file, no dir (`TestGT_DisabledNoOp`).",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/governance-telemetry-edge-cases.md",
+    "createdAt": "2026-06-13T13:30:03Z"
+  },
+  {
+    "id": "191b174e960a77d3",
+    "feature": "centinela-insights",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: centinela-insights",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/centinela-insights-gatekeeper.md",
+    "createdAt": "2026-06-14T20:53:59Z"
+  },
+  {
+    "id": "1ba2b232333b5a26",
+    "feature": "governance-telemetry",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: governance-telemetry",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/governance-telemetry-gatekeeper.md",
+    "createdAt": "2026-06-13T13:46:56Z"
+  },
+  {
+    "id": "1e0e5be8163572ed",
+    "feature": "centinela-doctor",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **No `.claude/` directory** → hooks check WARN (\"run `centinela setup`\"), no",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/centinela-doctor-edge-cases.md",
+    "createdAt": "2026-06-14T15:11:10Z"
+  },
+  {
+    "id": "20f5e09524c45465",
+    "feature": "deferred-findings-roadmap-capture",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: deferred-findings-roadmap-capture",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/deferred-findings-roadmap-capture-gatekeeper.md",
+    "createdAt": "2026-06-12T18:12:27Z"
+  },
+  {
+    "id": "211d4da2362ca083",
+    "feature": "audit-baseline-ratchet",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Record on a repo with violations** → baseline captures every Fail-gate",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/audit-baseline-ratchet-edge-cases.md",
+    "createdAt": "2026-06-16T12:24:01Z"
+  },
+  {
+    "id": "2437037d66852dc1",
+    "feature": "precommit-and-pr-gate",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: precommit-and-pr-gate",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/precommit-and-pr-gate-gatekeeper.md",
+    "createdAt": "2026-06-17T11:24:02Z"
+  },
+  {
+    "id": "28db0c5dc1738aef",
+    "feature": "workflow-archetypes",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: workflow-archetypes",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/workflow-archetypes-gatekeeper.md",
+    "createdAt": "2026-06-12T12:32:40Z"
+  },
+  {
+    "id": "32f04a9174b07dba",
+    "feature": "spec-traceability-gate",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: spec-traceability-gate",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/spec-traceability-gate-gatekeeper.md",
+    "createdAt": "2026-06-11T20:50:04Z"
+  },
+  {
+    "id": "36cc32f1a77b0cd5",
+    "feature": "centinela-insights",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Missing telemetry log** → clean \"no telemetry yet\", exit 0, no stack trace.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/centinela-insights-edge-cases.md",
+    "createdAt": "2026-06-14T20:25:40Z"
+  },
+  {
+    "id": "37b620e38200efd5",
+    "feature": "deterministic-artifact-scaffolds",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: deterministic-artifact-scaffolds",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/deterministic-artifact-scaffolds-gatekeeper.md",
+    "createdAt": "2026-06-12T18:32:28Z"
+  },
+  {
+    "id": "3f4e5f634549b2ed",
+    "feature": "workflow-archetypes",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Spike order has no validate step (ungated by absence, not a bypass).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/workflow-archetypes-edge-cases.md",
+    "createdAt": "2026-06-12T12:17:49Z"
+  },
+  {
+    "id": "47f88ed9b2258fb7",
+    "feature": "right-size-docs-step",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: right-size-docs-step",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/right-size-docs-step-gatekeeper.md",
+    "createdAt": "2026-06-12T15:18:51Z"
+  },
+  {
+    "id": "480e173b8b7cd979",
+    "feature": "configurable-model-routing",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- `tests/unit/configurable_subagent_models_resolve_unit_test.go` — migrated all",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/configurable-model-routing-edge-cases.md",
+    "createdAt": "2026-06-06T13:36:58Z"
+  },
+  {
+    "id": "5c1ccba03ee6b28f",
+    "feature": "g2-import-graph-gate",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: g2-import-graph-gate",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/g2-import-graph-gate-gatekeeper.md",
+    "createdAt": "2026-06-05T15:34:55Z"
+  },
+  {
+    "id": "615ebbc4673d981b",
+    "feature": "security-gate",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: security-gate",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/security-gate-gatekeeper.md",
+    "createdAt": "2026-06-06T19:05:30Z"
+  },
+  {
+    "id": "6f2c47e7d891ec8f",
+    "feature": "failure-ledger-plan-advisor",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Missing ledger file** → `recurringFailures` returns empty; no summary line,",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/failure-ledger-plan-advisor-edge-cases.md",
+    "createdAt": "2026-06-16T09:45:15Z"
+  },
+  {
+    "id": "73df66f18c575669",
+    "feature": "failure-ledger-plan-advisor",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: failure-ledger-plan-advisor",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/failure-ledger-plan-advisor-gatekeeper.md",
+    "createdAt": "2026-06-16T10:12:06Z"
+  },
+  {
+    "id": "8054a47cf854d7f8",
+    "feature": "capability-calibration",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report: capability-calibration",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/capability-calibration-gatekeeper.md",
+    "createdAt": "2026-06-15T12:31:34Z"
+  },
+  {
+    "id": "80628eab3542aadc",
+    "feature": "capability-calibration",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Division-by-zero / NaN guard** — a model with rework but zero `step-advanced`",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/capability-calibration-edge-cases.md",
+    "createdAt": "2026-06-15T12:04:37Z"
+  },
+  {
+    "id": "832f5df786047c53",
+    "feature": "deferred-findings-roadmap-capture",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Case:** Empty summary (defer) / **Impact:** Low / **Likelihood:** Medium / **Why:** Agents might pass empty flag; validated before any write, correct exit 1.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/deferred-findings-roadmap-capture-edge-cases.md",
+    "createdAt": "2026-06-12T17:42:35Z"
+  },
+  {
+    "id": "87cb212fb0271f08",
+    "feature": "enforcement-profiles",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: enforcement-profiles",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/enforcement-profiles-gatekeeper.md",
+    "createdAt": "2026-06-12T07:47:04Z"
+  },
+  {
+    "id": "8fa7cc944cfb8890",
+    "feature": "enforcement-profiles",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Explicit knob beats profile default.** Risk: a profile silently overriding a",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/enforcement-profiles-edge-cases.md",
+    "createdAt": "2026-06-12T07:28:18Z"
+  },
+  {
+    "id": "90ad78316f103f62",
+    "feature": "spec-traceability-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Scenario-name normalization (trim / collapse-spaces / strip one trailing",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/spec-traceability-gate-edge-cases.md",
+    "createdAt": "2026-06-11T16:10:32Z"
+  },
+  {
+    "id": "939bc20a9b1a7ea6",
+    "feature": "headless-governance",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: headless-governance",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/headless-governance-gatekeeper.md",
+    "createdAt": "2026-06-13T09:53:34Z"
+  },
+  {
+    "id": "981d6cea48994066",
+    "feature": "custom-gate-sdk",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: custom-gate-sdk",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/custom-gate-sdk-gatekeeper.md",
+    "createdAt": "2026-06-16T20:16:26Z"
+  },
+  {
+    "id": "9c696670fd9fa78c",
+    "feature": "centinela-doctor",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report: centinela-doctor",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/centinela-doctor-gatekeeper.md",
+    "createdAt": "2026-06-14T15:39:24Z"
+  },
+  {
+    "id": "a861ca032b250c87",
+    "feature": "configurable-model-routing",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: configurable-model-routing",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/configurable-model-routing-gatekeeper.md",
+    "createdAt": "2026-06-06T17:27:14Z"
+  },
+  {
+    "id": "b5afec861b2222c7",
+    "feature": "roadmap-doc-sync",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report: roadmap-doc-sync",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/roadmap-doc-sync-gatekeeper.md",
+    "createdAt": "2026-06-14T10:23:15Z"
+  },
+  {
+    "id": "bde7dae410e6773a",
+    "feature": "model-capability-profiles",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Back-compat: zero workflow + zero config → strict (byte-identical).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/model-capability-profiles-edge-cases.md",
+    "createdAt": "2026-06-12T16:22:21Z"
+  },
+  {
+    "id": "c4d216e0c87de8c1",
+    "feature": "model-capability-profiles",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report: model-capability-profiles",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/model-capability-profiles-gatekeeper.md",
+    "createdAt": "2026-06-12T17:00:44Z"
+  },
+  {
+    "id": "c9650edad42e7154",
+    "feature": "roadmap-doc-sync",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Backlog deferred-finding rendering (full provenance).** Backlog phase renders",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/roadmap-doc-sync-edge-cases.md",
+    "createdAt": "2026-06-14T09:18:31Z"
+  },
+  {
+    "id": "ca11202efb09c8a9",
+    "feature": "precommit-and-pr-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Staged fail-gate violation** (oversized staged `.go`) → `centinela precommit`",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/precommit-and-pr-gate-edge-cases.md",
+    "createdAt": "2026-06-17T10:58:22Z"
+  },
+  {
+    "id": "ccfcd939f5d569ec",
+    "feature": "deterministic-artifact-scaffolds",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Plan-role pre-fill (big-thinker, feature-specialist) includes the feature brief, every `docs/features/*.md`, AND the plan path `docs/plans/\u003cfeature\u003e.md` — verbatim `orchestration.RequiredPlanInputs(feature)`.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/deterministic-artifact-scaffolds-edge-cases.md",
+    "createdAt": "2026-06-12T18:16:47Z"
+  },
+  {
+    "id": "cdb73eb2216f4196",
+    "feature": "code-quality-hardening",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: code-quality-hardening",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/code-quality-hardening-gatekeeper.md",
+    "createdAt": "2026-06-10T16:25:22Z"
+  },
+  {
+    "id": "dfb681078078fa80",
+    "feature": "audit-baseline-ratchet",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: audit-baseline-ratchet",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/audit-baseline-ratchet-gatekeeper.md",
+    "createdAt": "2026-06-16T17:01:01Z"
+  },
+  {
+    "id": "ec28b0c94d081af3",
+    "feature": "headless-governance",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Env authoritative over config.** `CENTINELA_HEADLESS=1`/`true` forces headless ON even when `[headless] enabled=false`; `0`/`false` forces it OFF even when `enabled=true` and `detect_ci=true`. The env value, when non-empty, short-circuits both config tiers.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/headless-governance-edge-cases.md",
+    "createdAt": "2026-06-13T09:31:40Z"
+  },
+  {
+    "id": "ee609a7719ed7ecb",
+    "feature": "code-quality-hardening",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **gofmt always exits 0** — `gofmt -l` lists offenders but returns 0, so a",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/code-quality-hardening-edge-cases.md",
+    "createdAt": "2026-06-10T16:03:56Z"
+  },
+  {
+    "id": "f028bbaaa8a64f5a",
+    "feature": "g2-import-graph-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Two exec-error branches remain uncovered (~unreachable).** The JSON-decode",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/g2-import-graph-gate-edge-cases.md",
+    "createdAt": "2026-06-05T15:19:47Z"
+  },
+  {
+    "id": "fd962adabbaacf20",
+    "feature": "custom-gate-sdk",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Exit 0 → Pass**, non-zero → Fail; gate named in the report",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/custom-gate-sdk-edge-cases.md",
+    "createdAt": "2026-06-16T19:27:54Z"
+  }
+]

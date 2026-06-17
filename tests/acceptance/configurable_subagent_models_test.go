@@ -50,8 +50,12 @@ func TestOrchestrationHook_ConfiguredTierAnnotated(t *testing.T) {
 	cmd.Dir = d
 	out, _ := cmd.CombinedOutput()
 	s := string(out)
-	if !strings.Contains(s, "big-thinker (model: reasoning)") {
-		t.Errorf("AC1: expected annotation; got:\n%s", s)
+	// New per-runner annotation format: model: <id> (<runner>) for each runner.
+	if !strings.Contains(s, "big-thinker (model: claude-opus-4-7 (claude)") {
+		t.Errorf("AC1: expected per-runner annotation; got:\n%s", s)
+	}
+	if !strings.Contains(s, "model: anthropic/claude-opus-4-7 (opencode)") {
+		t.Errorf("AC1: expected opencode reasoning ID; got:\n%s", s)
 	}
 	if !strings.Contains(s, "claude-opus-4-7") || !strings.Contains(s, "anthropic/claude-opus-4-7") {
 		t.Errorf("AC6: expected both-runner IDs; got:\n%s", s)
@@ -68,10 +72,10 @@ func TestOrchestrationHook_AbsentTableAllDefaults(t *testing.T) {
 	cmd.Dir = d
 	out, _ := cmd.CombinedOutput()
 	s := string(out)
-	if !strings.Contains(s, "big-thinker (model: reasoning)") {
+	if !strings.Contains(s, "big-thinker (model: claude-opus-4-7 (claude)") {
 		t.Errorf("AC3: big-thinker default; got:\n%s", s)
 	}
-	if !strings.Contains(s, "feature-specialist (model: balanced)") {
+	if !strings.Contains(s, "feature-specialist (model: claude-sonnet-4-6 (claude)") {
 		t.Errorf("AC3: feature-specialist default; got:\n%s", s)
 	}
 }

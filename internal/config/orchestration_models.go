@@ -27,19 +27,41 @@ var allowedModelRoles = map[string]bool{
 	"edge-case-tester":         true,
 }
 
-// validateOrchestrationModels rejects unknown role keys and invalid tier values
-// in [orchestration.models]. Tiers are normalized (trim + lowercase) before
-// validation. An absent/empty table is valid (defaults apply downstream).
+// validateOrchestrationModels rejects unknown role keys, invalid tier values
+// (string form), and malformed runner→model tables (override form) in
+// [orchestration.models]. An absent/empty table is valid.
 func validateOrchestrationModels(cfg *Config) error {
-	for roleKey, tierValue := range cfg.Orchestration.Models {
+	for roleKey, value := range cfg.Orchestration.Models {
 		if !allowedModelRoles[roleKey] {
 			return fmt.Errorf("orchestration.models: unknown role key %q", roleKey)
 		}
-		tier := strings.ToLower(strings.TrimSpace(tierValue))
-		if !allowedModelTiers[tier] {
-			return fmt.Errorf("orchestration.models[%q]: invalid tier %q (allowed: %s)",
-				roleKey, tierValue, allowedTiersList())
+		if err := validateRoleModelValue(roleKey, value); err != nil {
+			return err
 		}
+	}
+	return nil
+}
+
+// validateRoleModelValue validates one union entry: the tier string form, or
+// the runner→model override table form.
+func validateRoleModelValue(roleKey string, value RoleModelValue) error {
+	if len(value.Overrides) > 0 {
+		for runnerKey, model := range value.Overrides {
+			runner := strings.ToLower(strings.TrimSpace(runnerKey))
+			if !allowedRunnerKeys[runner] {
+				return fmt.Errorf("orchestration.models[%q]: unknown runner key %q (allowed: %s)",
+					roleKey, runnerKey, allowedRunnerKeysList())
+			}
+			if strings.TrimSpace(model) == "" {
+				return fmt.Errorf("orchestration.models[%q].%s: model string must not be empty", roleKey, runnerKey)
+			}
+		}
+		return nil
+	}
+	tier := strings.ToLower(strings.TrimSpace(value.Tier))
+	if !allowedModelTiers[tier] {
+		return fmt.Errorf("orchestration.models[%q]: invalid tier %q (allowed: %s)",
+			roleKey, value.Tier, allowedTiersList())
 	}
 	return nil
 }

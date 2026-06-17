@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "cli_version": "0.25.0",
+    "written_at": "2026-06-16T16:51:32Z"
+  },
+  "feature": "audit-baseline-ratchet",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-16T16:51:32Z",
+  "inputs": [
+    ".workflow/audit-baseline-ratchet-gatekeeper.md",
+    "docs/plans/audit-baseline-ratchet.md",
+    "specs/audit-baseline-ratchet.feature"
+  ],
+  "outputs": [
+    ".workflow/audit-baseline-ratchet-gatekeeper.md",
+    ".workflow/audit-baseline-ratchet-edge-cases.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

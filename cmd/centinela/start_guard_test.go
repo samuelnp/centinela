@@ -49,7 +49,7 @@ func TestWorkflowOrderForFeatureGreenfieldBootstrapUsesThreeSteps(t *testing.T) 
 	if err != nil || len(order) != 4 || order[2] != "validate" || order[3] != "docs" {
 		t.Fatalf("expected bootstrap order: %v %v", order, err)
 	}
-	wf := workflow.NewWithOrder("setup", order)
+	wf := workflow.NewWithOrder("setup", order, "")
 	if workflow.StepNumberFor(wf, "validate") != 3 {
 		t.Fatal("validate should be step 3 for bootstrap workflow")
 	}

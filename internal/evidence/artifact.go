@@ -23,6 +23,9 @@ const (
 	KindProductionReadiness ArtifactKind = "production-readiness"
 	// KindDocumentationSpecialist is the docs-step JSON+MD pair.
 	KindDocumentationSpecialist ArtifactKind = "documentation-specialist"
+	// KindChangelog is the .workflow/<feature>-changelog.md one-liner the
+	// docs step requires for internal (non-user-facing) features.
+	KindChangelog ArtifactKind = "changelog"
 )
 
 // KindsAllowed lists every supported artifact kind in stable order for
@@ -33,6 +36,7 @@ func KindsAllowed() []ArtifactKind {
 		KindGatekeeper,
 		KindProductionReadiness,
 		KindDocumentationSpecialist,
+		KindChangelog,
 	}
 }
 

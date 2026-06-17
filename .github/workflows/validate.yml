@@ -10,10 +10,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
 
@@ -32,3 +32,33 @@ jobs:
 
       - name: Run centinela validate
         run: go run ./cmd/centinela validate
+
+  pr-gate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      - name: Render gate verdict
+        run: go run ./cmd/centinela pr-gate > /tmp/verdict.md || true
+
+      - name: Post or update PR comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/verdict.md --edit-last \
+            || gh pr comment ${{ github.event.pull_request.number }} --body-file /tmp/verdict.md
+
+      - name: Enforce gate exit code
+        run: go run ./cmd/centinela pr-gate

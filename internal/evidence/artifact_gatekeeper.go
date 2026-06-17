@@ -4,19 +4,20 @@ import "fmt"
 
 // gatekeeperBody renders the validate-step gatekeeper report stub. The
 // `**Status:**` line is parsed by `centinela validate` so the literal
-// SAFE | WARNING | BLOCKING vocabulary is preserved verbatim.
+// SAFE | WARNING | BLOCKING vocabulary is preserved verbatim. "Analyzed Specs"
+// is mechanically pre-filled from specs/*.feature (see analyzedSpecsList).
 func gatekeeperBody(feature string) []byte {
 	return []byte(fmt.Sprintf(`### Gatekeeper Report: %s
 **Date:** %s
 **Status:** SAFE
 
 #### Analyzed Specs
-- _List each existing .feature file you reviewed._
+%s
 
 #### Findings
-- _Affected spec / scenario / risk / suggestion. Empty list if SAFE._
+- %s
 
 #### Recommendation
-- SAFE: No conflicts detected. Proceed with implementation.
-`, feature, today()))
+- %s
+`, feature, today(), analyzedSpecsList(), FillSlot("affected spec / scenario / risk / suggestion; empty if SAFE"), FillSlot("SAFE/WARNING/BLOCKING + one-line rationale")))
 }

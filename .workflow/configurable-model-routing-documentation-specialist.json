@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-06T17:28:11Z"
+  },
+  "feature": "configurable-model-routing",
+  "step": "docs",
+  "role": "documentation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-06T17:28:11Z",
+  "inputs": [
+    "docs/features/configurable-model-routing.md,docs/plans/configurable-model-routing.md,specs/configurable-model-routing.feature"
+  ],
+  "outputs": [
+    "docs/project-docs/kb/configurable-model-routing.md,docs/project-docs/index.html"
+  ],
+  "edgeCases": [
+    "Unknown runner key fails at load time with exact error message",
+    "Per-role override beats tier remap in precedence",
+    "Codex runner with no default emits tier name with ok=false",
+    "Mixed forms (tier string and runner table) both valid in same config"
+  ],
+  "handoffTo": "complete"
+}

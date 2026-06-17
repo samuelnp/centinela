@@ -14,6 +14,9 @@ func TestRunHookContextDocsReminder(t *testing.T) {
 	defer os.Chdir(o)                       //nolint:errcheck
 	os.Chdir(d)                             //nolint:errcheck
 	os.MkdirAll(workflow.WorkflowDir, 0755) //nolint:errcheck
+	// User-facing feature: the docs banner still nags for the portal.
+	os.MkdirAll("docs/features", 0755)                                         //nolint:errcheck
+	os.WriteFile("docs/features/f.md", []byte("surface: user-facing\n"), 0644) //nolint:errcheck
 	wf := workflow.New("f")
 	wf.CurrentStep = "docs"
 	workflow.Save(wf) //nolint:errcheck

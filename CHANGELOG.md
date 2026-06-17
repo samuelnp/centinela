@@ -7,6 +7,7 @@ Release notes for tagged versions are also published on the [GitHub Releases pag
 ## [Unreleased]
 
 ### Added
+- **G2 layer-boundary gate** (`import_graph`): mechanically enforces per-layer import rules by parsing the Go import graph via `go list -json` (no new dependency) and failing `centinela validate` on forbidden cross-layer imports. Configured via `[gates.import_graph]` with `name`/`paths`/`allow` layer declarations; unmapped packages warn rather than fail; default disabled.
 - Per-feature plain-language knowledge base under `docs/project-docs/kb/`, generated alongside the main project docs.
 - Canonical orchestration evidence contract at `docs/architecture/evidence-contract.md` and matching role-specific JSON skeletons in every agent prompt.
 - Community profile files: `LICENSE`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `CHANGELOG.md`, plus `.github/ISSUE_TEMPLATE/`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/dependabot.yml`.

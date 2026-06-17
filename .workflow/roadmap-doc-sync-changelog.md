@@ -1,0 +1,1 @@
+- feat: `centinela roadmap generate` renders `ROADMAP.md` from `.workflow/roadmap.json` (now the source of truth, enriched with per-feature description/fixes, per-phase notes, and a top-level intro); a new `roadmap_drift` gate byte-compares the on-disk file to generator output and reports the first drifting line.

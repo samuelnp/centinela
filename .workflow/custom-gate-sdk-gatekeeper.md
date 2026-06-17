@@ -1,0 +1,45 @@
+### Gatekeeper Report: custom-gate-sdk
+
+**Date:** 2026-06-16
+**Status:** SAFE
+
+## Analyzed Specs
+
+- `specs/custom-gate-sdk.feature` (feature under review — 20 scenarios)
+- `specs/audit-baseline-ratchet.feature` (cross-feature: ratchet participation)
+- `specs/security-gate.feature`, `specs/g2-import-graph-gate.feature`, `specs/enforcement-profiles.feature` (skimmed; no overlap with custom-gate surface)
+
+## Findings
+
+**Conflict checks — all clear:**
+
+1. **`CustomGates` field on `GatesConfig`** (`config.go:44`, `[[gates.custom]]`) — purely additive TOML array-of-tables. Zero-length when unset; `NormalizeCustomGates` (`defaults.go:30`) and `validateCustomGates` (`file_size_exceptions.go:56`) both no-op on an empty slice. No existing config parsing or enforcement-profile default is affected.
+
+2. **`gates.go` append is a verified NO-OP when no custom gates are configured.** The new block (`gates.go:66-68`) is guarded by `if len(cfg.Gates.CustomGates) > 0`. When empty, `results` is never touched and the returned slice is byte-identical to prior behaviour. Existing validate scenarios are unaffected. Confirmed by `go test ./internal/gates/...` (passing) and full `centinela validate`.
+
+3. **`internal/audit/participation.go` (cross-feature risk) — SAFE.** `defaultParticipants` (the 5 built-in detail-emitting gates) is unchanged. The change only APPENDS configured custom-gate names to the participating set, still intersected with `target_gates` when that allowlist is non-empty (`add()` honours `allow`). With no custom gates configured, `cfg.Gates.CustomGates` is empty and the loop adds nothing — audit-baseline-ratchet behaviour is identical to before. This matches that spec's definition of participants ("mechanical gates that emit per-violation Details"); custom gates are detail-emitting by construction. `record.go` (`currentEntries`) needed no change — it already filters `RunWithFilter` results by `participatingGates`. All audit tests pass (incl. new `participation_custom_test.go`, `record_participation_test.go`).
+
+4. **`internal/gitdiff/set.go` `Paths()`** — purely additive accessor (nil-safe, order-unspecified). No existing caller behaviour changes; `Contains`/`Len`/`HasPrefix` untouched.
+
+5. **Security / shell-exec surface — no NEW class of risk; noted.** Custom gates run arbitrary shell via `sh -c` / `cmd /C` (`custom_command_exec.go`), inheriting the process env. This is the SAME trust model already granted to `[validate] commands`, which centinela has always shell-executed from checked-in config. Custom gates add no new attack surface beyond what `validate.commands` already permits — the trust boundary is "checked-in `centinela.toml` is trusted." Hardening present and correct: per-gate `context.WithTimeout` kills hung commands (timeout → Fail, never hangs validate); launch failure returns a non-zero code with the error captured in output (never a panic); blob output byte-capped (4096) and lines mode capped (200) to bound report size. **One expanded-execution note (informational, not blocking):** because `record.go` runs `gates.RunWithFilter(cfg, nil)`, enabled custom commands now also execute during `centinela audit baseline` and `centinela audit`, not only `validate`. This is required by and consistent with the baseline-participation spec scenario, but operators should be aware the command runs in more code paths than `validate` alone.
+
+**Integration correctness (verified by reading callers):**
+- `cmd/centinela/validate.go:66` blocks only on `gates.AllPassed == false`, which triggers only on `Status==Fail`. A custom `severity=warn` gate yields `Warn` → does not block (spec-correct). A `severity=fail` gate yields `Fail` → blocks (spec-correct).
+- `telemetry_emit.go:14` emits `gate-failure` for any `Status==Fail` result, so failing custom gates emit telemetry automatically with their own name — satisfies the telemetry scenario with no extra wiring.
+
+**Gate-keepers checklist:**
+- [x] **File size ≤100:** every changed `internal/` file passes — `custom_gate.go` 84, `custom_command.go` 96, `custom_command_exec.go` 51, `config.go` 100 (exactly at cap), `defaults.go` 31, `file_size_exceptions.go` 60, `gates.go` 81, `set.go` 72, `participation.go` 54. All new `internal/` `_test.go` files ≤100 (49, 61, 78, 83, 97, 98). (`tests/acceptance/custom_gate_sdk_test.go` is 330 lines but lives outside `internal/`+`cmd/`; G1 ≤100 scope is `internal/`+`cmd/` per project rule.)
+- [x] **No cross-layer import violation/cycle:** new code in `internal/gates` and `internal/config` imports only `config` + `gitdiff` + stdlib. `participation.go` adds no new import (already imports `config`). `internal/audit` imports only `config`+`gates` (allowed). No `centinela.toml` import-graph map change required.
+- [x] **`centinela validate` passes** (full suite, see Recommendation).
+- [x] **No business logic in outer layer:** all logic lives in `internal/`; `cmd/` unchanged for this feature.
+- [N/A] **i18n:** project is English-only, `gates.i18n = false` (PROJECT.md → Locales). Not applicable.
+- [x] **Gatekeeper report:** SAFE.
+- [N/A] **Production readiness:** gate not enabled for this feature.
+
+## Deferred Findings
+
+None.
+
+## Recommendation
+
+PROCEED to validation-specialist. The feature is additive and well-contained: byte-identical no-op when unconfigured, no new import edges, correct fail/warn/timeout/baseline/telemetry semantics, and a shell-exec model consistent with the pre-existing `[validate] commands` trust boundary. 375 package tests pass and `go build ./...` succeeds. The only informational note is that enabled custom commands also execute during `audit`/`audit baseline` (spec-required, not a defect). Status: SAFE.

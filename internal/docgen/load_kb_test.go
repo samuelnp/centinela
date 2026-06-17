@@ -63,9 +63,9 @@ func TestParseKBFile_UnterminatedFrontmatter(t *testing.T) {
 func TestLoadKBPages_DirAndError(t *testing.T) {
 	d := t.TempDir()
 	o, _ := os.Getwd()
-	defer os.Chdir(o) //nolint:errcheck
-	os.Chdir(d)       //nolint:errcheck
-	os.MkdirAll(KBDir, 0755)                                              //nolint:errcheck
+	defer os.Chdir(o)                                                      //nolint:errcheck
+	os.Chdir(d)                                                            //nolint:errcheck
+	os.MkdirAll(KBDir, 0755)                                               //nolint:errcheck
 	os.WriteFile(filepath.Join(KBDir, "alpha.md"), []byte(sampleKB), 0644) //nolint:errcheck
 	pages, err := loadKBPages()
 	if err != nil || len(pages) != 1 {

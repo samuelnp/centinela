@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "cli_version": "0.14.0",
+    "written_at": "2026-06-12T15:08:17Z"
+  },
+  "feature": "right-size-docs-step",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-12T15:08:17Z",
+  "inputs": [
+    ".workflow/right-size-docs-step-senior-engineer.md",
+    ".workflow/right-size-docs-step-qa-senior.md",
+    ".workflow/right-size-docs-step-edge-cases.md"
+  ],
+  "outputs": [
+    ".workflow/right-size-docs-step-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete",
+  "summary": "SAFE: surface-aware docs step. User-facing docs path byte-equivalent (full KB+portal+documentation-specialist); 7 fixtures correctly declare surface:user-facing preserving intent. Scaffold mirror identical + parity test passes. Forward-only (0 affected briefs). KindChangelog additive. merge docsPortalRegen seam best-effort, cannot fail a merge. verify/gates/complete.go/code-ux-gating untouched. validate passes all gates, spec-traceability 10/10."
+}

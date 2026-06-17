@@ -1,0 +1,68 @@
+### Gatekeeper Report: failure-ledger-plan-advisor
+**Date:** 2026-06-16
+**Status:** SAFE
+
+#### Analyzed Specs
+- specs/failure-ledger-plan-advisor.feature (the new spec)
+- specs/add-plan-advisor-mode.feature
+- specs/enrich-plan-advisor-context.feature
+- specs/centinela-insights.feature
+- specs/governance-telemetry.feature
+
+#### Conflict Analysis (shared contracts)
+- **`insights.Gates` export is purely additive.** `Compute` (internal/insights/compute.go:16)
+  still calls the unexported `gates(events, topN)`, so the public `Gates` wrapper introduces no
+  behavior change. `insights.Count` was already public (consumed by internal/ui/render_insights.go),
+  so the advisor reuses an existing contract. No existing caller breaks; `centinela insights`
+  output is unchanged, so specs/centinela-insights.feature (Blocks/Gates assertions) is unaffected.
+- **`bundle.Failures` is additive.** New field on an internal struct (internal/planadvisor/context.go);
+  no external consumer. It is populated only via `recurringFailures`, which returns nil when
+  telemetry is disabled or the ledger is missing/empty.
+- **`plan_advisor_failure_top_n` config knob is additive and defaulted.** New `WorkflowConfig` field
+  normalized in applyDefaults (clamped to [1,5], default 3). Unset configs get the default; no
+  existing config breaks.
+- **No perturbation of existing plan-advisor scenarios.** The new context line ("recurring gate
+  failures") and pre-warning question are emitted ONLY when `b.Failures` is non-empty, i.e. only
+  when an enabled ledger holds gate-failure events. The clean-repo guarantee is enforced and
+  acceptance-tested as byte-identical (TestFL_MissingLedgerByteIdentical /
+  TestFL_TelemetryDisabledSuppressesContext). Fixtures for add-plan-advisor-mode and
+  enrich-plan-advisor-context carry no ledger, so their output is unchanged. Those specs assert
+  behavioral properties (lens emission, question cap, plan-step gating), not byte-exact output —
+  all still hold. governance-telemetry.feature has no advisor coupling.
+
+#### Findings
+- none (no conflicts; no checklist item failed)
+
+#### Deferred Findings
+- **(minor, non-blocking) Spec prose vs. code threshold nominal mismatch.** The spec's pre-warning
+  scenarios narrate "the recurrence threshold for a pre-warning question is 3", but the code fires
+  the question at `topFailureCount(b) >= 2` (internal/planadvisor/questions.go:31). The acceptance
+  tests are the binding contract and are internally consistent with `>= 2`: the "above threshold"
+  case uses count 5 (fires) and the "below threshold" case uses count 1 per gate (does not fire);
+  both pass. The `>= 2` boundary is untested at exactly 2, and the prose says 3. Suggestion: align
+  the spec prose with the implemented threshold (or lift the constant to 3 and add a boundary test).
+  Non-blocking — behavior is correct for every asserted scenario.
+
+#### Gate-Keepers Checklist (verified by inspection)
+- [x] All changed source files <=100 lines: insights/gates.go 20, planadvisor/failures.go 29,
+  failures_view.go 18, context.go 31, context_summary.go 89, questions.go 65, config/workflow_config.go 30,
+  plan_advisor.go 43, defaults.go 29. Colocated tests <=100: plan_advisor_failure_topn_test.go 22,
+  gates_exported_test.go 42, failures_test.go 99, failures_view_test.go 29, questions_failures_test.go 59.
+- [x] No cross-layer import violations / no cycle. planadvisor is an unmapped package in the
+  import_graph matrix (already importing config/memory/roadmap on main); its new edges to
+  `insights` (aggregator) and `telemetry` (leaf) surface as the existing non-failing warning per
+  the documented conservative matrix policy (centinela.toml lines ~69-85, PROJECT.md G2). Verified
+  no cycle: neither internal/insights nor internal/telemetry imports internal/planadvisor.
+- [x] Build + tests pass. `go build ./...` succeeds; `go vet` clean; changed-package + tests/ suite
+  = 887 passed across 6 packages.
+- [x] No business logic in outer layer. The advisor logic lives entirely in internal/planadvisor;
+  cmd/ only wires the `hook plan-advisor` entry point.
+- [x] i18n: N/A. PROJECT.md declares English-only CLI; i18n gate disabled (no `gates.i18n` entry in
+  centinela.toml). Advisor strings follow the same pattern as existing advisor lines.
+- [x] Gatekeeper report: SAFE.
+
+#### Recommendation
+SAFE — proceed to validation-specialist. The feature is a purely additive, telemetry-gated,
+read-only context source with a hard byte-identical clean-repo guarantee that is acceptance-tested;
+it changes no existing contract and perturbs no sibling spec. One minor non-blocking deferred finding
+(spec-prose threshold of 3 vs. implemented `>= 2`) is documented for the validation step.

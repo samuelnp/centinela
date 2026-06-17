@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "cli_version": "0.26.0",
+    "written_at": "2026-06-17T10:57:54Z"
+  },
+  "feature": "precommit-and-pr-gate",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-17T10:57:54Z",
+  "inputs": [
+    "docs/plans/precommit-and-pr-gate.md",
+    "specs/precommit-and-pr-gate.feature",
+    "internal/githooks/install.go"
+  ],
+  "outputs": [
+    "tests/unit/precommit_pr_gate_unit_test.go",
+    "tests/integration/precommit_pr_gate_integration_test.go",
+    "tests/acceptance/precommit_pr_gate_test.go",
+    "internal/githooks/splice_test.go",
+    "internal/githooks/install_errors_test.go",
+    "internal/gitdiff/staged_test.go",
+    "internal/ui/render_markdown_test.go",
+    "internal/config/precommit_pr_gate_test.go",
+    ".workflow/precommit-and-pr-gate-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Staged fail-gate → precommit non-zero, names gate",
+    "Clean staged → exit 0",
+    "Unstaged ignored (only staged gated)",
+    "Not-a-repo/nothing staged → exit 0 clean (degrade-safe)",
+    "Build/cross-compile skipped by default (skip_build)",
+    "Warn gate non-blocking under precommit",
+    "Installer executable/idempotent/preserves user hook",
+    "Uninstall removes only marker block; deletes shebang-only; no-op on missing/absent",
+    "splice append/replace/idempotent/marked-region-only",
+    "ChangedFilesStaged success/empty/degrade",
+    "RenderGatesMarkdown marker/details/deterministic/cap",
+    "pr-gate markdown+exit; fail_on_warning; outside-PR renders no post",
+    "Config Normalize/validate; RawSkipBuild explicit-false honored",
+    "Determinism: identical staged → identical verdict+exit"
+  ],
+  "handoffTo": "validation-specialist"
+}

@@ -12,12 +12,16 @@ import (
 func TestValidateArtifactsDocsStrictOrchestration(t *testing.T) {
 	d := t.TempDir()
 	o, _ := os.Getwd()
-	defer os.Chdir(o)                                                //nolint:errcheck
-	os.Chdir(d)                                                      //nolint:errcheck
-	os.MkdirAll(".workflow", 0755)                                            //nolint:errcheck
-	os.MkdirAll("docs/project-docs/kb", 0755)                                 //nolint:errcheck
-	os.WriteFile("docs/project-docs/index.html", []byte("ok"), 0644)          //nolint:errcheck
-	os.WriteFile("docs/project-docs/kb/f.md", []byte("ok"), 0644)             //nolint:errcheck
+	defer os.Chdir(o)              //nolint:errcheck
+	os.Chdir(d)                    //nolint:errcheck
+	os.MkdirAll(".workflow", 0755) //nolint:errcheck
+	// User-facing docs path: declare the surface so the KB bundle and the
+	// documentation-specialist evidence are both required.
+	os.MkdirAll("docs/features", 0755)                                         //nolint:errcheck
+	os.WriteFile("docs/features/f.md", []byte("surface: user-facing\n"), 0644) //nolint:errcheck
+	os.MkdirAll("docs/project-docs/kb", 0755)                                  //nolint:errcheck
+	os.WriteFile("docs/project-docs/index.html", []byte("ok"), 0644)           //nolint:errcheck
+	os.WriteFile("docs/project-docs/kb/f.md", []byte("ok"), 0644)              //nolint:errcheck
 	os.WriteFile("docs/project-docs/kb/f.html", []byte("<html></html>"), 0644) //nolint:errcheck
 	wf := New("f")
 	wf.CurrentStep = "docs"
