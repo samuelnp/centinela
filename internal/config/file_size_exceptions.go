@@ -56,5 +56,11 @@ func validateConfig(cfg *Config) error {
 	if err := validateCustomGates(cfg.Gates.CustomGates); err != nil {
 		return err
 	}
+	if err := validatePrecommit(cfg.Precommit); err != nil {
+		return err
+	}
+	if err := validatePrGate(cfg.PrGate); err != nil {
+		return err
+	}
 	return nil
 }

@@ -28,4 +28,6 @@ func applyDefaults(cfg *Config) {
 	cfg.Gates.RoadmapDrift = NormalizeRoadmapDrift(cfg.Gates.RoadmapDrift)
 	cfg.Gates.AuditBaseline = NormalizeAuditBaseline(cfg.Gates.AuditBaseline)
 	cfg.Gates.CustomGates = NormalizeCustomGates(cfg.Gates.CustomGates)
+	cfg.Precommit = NormalizePrecommit(cfg.Precommit)
+	cfg.PrGate = NormalizePrGate(cfg.PrGate)
 }
