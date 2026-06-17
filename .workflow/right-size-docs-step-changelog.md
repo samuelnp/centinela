@@ -1,0 +1,1 @@
+- feat: make the docs step surface-aware — user-facing features keep the full KB/portal/evidence flow; internal features emit a one-line changelog and skip the KB guide, per-feature portal regen, and documentation-specialist ceremony (portal regenerates at merge time).

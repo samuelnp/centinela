@@ -35,5 +35,32 @@ func validateConfig(cfg *Config) error {
 	if err := validateOrchestrationModels(cfg); err != nil {
 		return err
 	}
+	if err := validateOrchestrationModelMap(cfg); err != nil {
+		return err
+	}
+	if err := validateCapabilities(cfg); err != nil {
+		return err
+	}
+	if err := validateSecurityGate(cfg.Gates.Security); err != nil {
+		return err
+	}
+	if err := validateSpecTraceability(cfg.Gates.SpecTraceability); err != nil {
+		return err
+	}
+	if err := validateRoadmapDrift(cfg.Gates.RoadmapDrift); err != nil {
+		return err
+	}
+	if err := validateAuditBaseline(cfg.Gates.AuditBaseline); err != nil {
+		return err
+	}
+	if err := validateCustomGates(cfg.Gates.CustomGates); err != nil {
+		return err
+	}
+	if err := validatePrecommit(cfg.Precommit); err != nil {
+		return err
+	}
+	if err := validatePrGate(cfg.PrGate); err != nil {
+		return err
+	}
 	return nil
 }

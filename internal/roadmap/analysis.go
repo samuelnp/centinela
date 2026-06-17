@@ -53,15 +53,10 @@ func ValidateAnalysis(r *Roadmap) error {
 	return nil
 }
 
+// roadmapFeatureSet returns the features that require analysis/quality
+// coverage. Backlog-phase findings are exempt — they carry no analysis or
+// quality entries until promoted. The exemption is defined once, in
+// NonBacklogFeatureSet, and shared by ValidateAnalysis and ValidateQuality.
 func roadmapFeatureSet(r *Roadmap) map[string]bool {
-	out := map[string]bool{}
-	if r == nil {
-		return out
-	}
-	for _, p := range r.Phases {
-		for _, f := range p.Features {
-			out[f.Name] = true
-		}
-	}
-	return out
+	return NonBacklogFeatureSet(r)
 }

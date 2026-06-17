@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-05T15:27:33Z"
+  },
+  "feature": "g2-import-graph-gate",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-05T15:27:33Z",
+  "inputs": [
+    "specs/g2-import-graph-gate.feature",
+    "specs/g1-justified-file-size-exceptions.feature",
+    "specs/cross-platform-build-gate.feature",
+    "docs/plans/g2-import-graph-gate.md"
+  ],
+  "outputs": [
+    ".workflow/g2-import-graph-gate-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "Arrow format in spec prose uses → (U+2192) but implementation and tests use -> (ASCII dash-gt). Cosmetic mismatch; all tests pass. Spec prose should be updated in a follow-up."
+  ],
+  "handoffTo": "complete"
+}

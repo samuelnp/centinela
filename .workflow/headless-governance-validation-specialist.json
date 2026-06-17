@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-13T09:43:19Z"
+  },
+  "feature": "headless-governance",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-13T09:43:55Z",
+  "inputs": [
+    "docs/plans/headless-governance.md",
+    "specs/headless-governance.feature",
+    ".workflow/headless-governance-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/headless-governance-validation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

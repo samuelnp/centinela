@@ -11,6 +11,10 @@ func TestValidateDocsOutput(t *testing.T) {
 	o, _ := os.Getwd()
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(d)       //nolint:errcheck
+	// This test exercises the user-facing docs path (KB + portal), so declare
+	// the surface explicitly; the internal path is covered separately.
+	os.MkdirAll("docs/features", 0755)                                         //nolint:errcheck
+	os.WriteFile("docs/features/f.md", []byte("surface: user-facing\n"), 0644) //nolint:errcheck
 	if err := validateDocsOutput(""); err == nil {
 		t.Fatal("expected missing feature error")
 	}
@@ -22,8 +26,8 @@ func TestValidateDocsOutput(t *testing.T) {
 	if err := ValidateArtifacts("f", "docs", nil); err == nil || !strings.Contains(err.Error(), "knowledge base markdown missing") {
 		t.Fatalf("expected KB md missing error, got %v", err)
 	}
-	os.MkdirAll("docs/project-docs/kb", 0755)                              //nolint:errcheck
-	os.WriteFile("docs/project-docs/kb/f.md", []byte("ok"), 0644)          //nolint:errcheck
+	os.MkdirAll("docs/project-docs/kb", 0755)                     //nolint:errcheck
+	os.WriteFile("docs/project-docs/kb/f.md", []byte("ok"), 0644) //nolint:errcheck
 	if err := ValidateArtifacts("f", "docs", nil); err == nil || !strings.Contains(err.Error(), "knowledge base page missing") {
 		t.Fatalf("expected KB html missing error, got %v", err)
 	}

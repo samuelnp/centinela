@@ -35,6 +35,12 @@ func RequiredRoles(step string) []Role {
 }
 
 func RequiredRolesForFeature(feature, step string) []Role {
+	if step == "docs" && !IsUserFacingFeature(feature) {
+		// Internal features ship a one-line changelog instead of the full
+		// knowledge-base bundle, so the documentation-specialist evidence is
+		// not required. Mirrors the code-step ux-ui gating below.
+		return nil
+	}
 	roles := append([]Role{}, RequiredRoles(step)...)
 	if step == "code" && IsUserFacingFeature(feature) {
 		roles = append(roles, RoleUXUISpecialist)

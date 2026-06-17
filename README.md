@@ -55,10 +55,14 @@ If an agent tries to write source code while the workflow is in the `plan` step,
 ## Demo
 
 <p align="center">
-  <img src="./assets/demo.gif" alt="Centinela workflow demo" width="800">
+  <img src="./assets/demo.gif" alt="Centinela governing a Claude Code session" width="800">
 </p>
 
-> Recorded with [`vhs`](https://github.com/charmbracelet/vhs). To regenerate: `vhs assets/demo.tape`.
+> A simulated Claude Code session: the PreToolUse hook blocks the ungoverned write,
+> the agent starts the workflow, every file write is tagged with the active step,
+> and the gates verify before anything ships — enforced, not requested.
+>
+> Recorded with [`vhs`](https://github.com/charmbracelet/vhs). To regenerate: `vhs assets/demo.tape` (the session script lives in `assets/demo.sh`).
 
 ---
 
@@ -560,6 +564,7 @@ See the [`[verify]` configuration block](#centinelatoml-reference) to adjust the
 | Gate | Rule | Config |
 |------|------|--------|
 | **G1: File Size** | Default max 100 lines, with optional justified exceptions up to 130 lines | `[gates] file_size = true` |
+| **G2: Layer Boundaries** | Parses the Go import graph and fails on any import that violates your declared per-layer allow-matrix | `[gates.import_graph]` |
 | **G11: i18n** | All locale files have identical keys (no missing translations) | `[gates] i18n = true` |
 | **G-Build: Cross-Compile** | Cross-compiles every configured release target and fails naming the broken `GOOS/GOARCH` | `[gates] build = true` |
 
@@ -584,6 +589,33 @@ targets = [
 ```
 
 The `command` is argv-parsed (`strings.Fields`) and executed directly — never via a shell — so spaces in paths are safe and shell injection is not possible.
+
+#### Layer-boundary (import-graph) gate
+
+The `G2: Layer Boundaries` gate turns your architecture's layer rules into a mechanical check. It parses the Go import graph with `go list -json` (no extra dependency) and fails `centinela validate` when a package imports another package its layer is not allowed to import — for example a leaf `config` package reaching up into `ui`. You declare the matrix in `centinela.toml`: each layer has a name, path globs, and the list of layers it may import. Standard-library and third-party imports are ignored; a package that matches no configured layer produces a non-failing **warning** (so the matrix can be adopted incrementally) rather than passing silently. Default is **disabled**.
+
+```toml
+[gates.import_graph]
+enabled = true
+# module = "github.com/you/yourapp"   # optional; defaults to `go list -m`
+
+[[gates.import_graph.layers]]
+name  = "leaf"
+paths = ["internal/config/**"]
+allow = []                            # a leaf layer imports no other layer
+
+[[gates.import_graph.layers]]
+name  = "domain"
+paths = ["internal/service/**"]
+allow = ["leaf"]
+
+[[gates.import_graph.layers]]
+name  = "cmd"
+paths = ["cmd/**"]
+allow = ["domain", "leaf"]
+```
+
+A forbidden edge is reported as `internal/config -> internal/ui (leaf may not import domain)`. Same-layer and self imports are always allowed.
 
 A companion parity test (`TestBuildMatrixParity`) keeps `[gates.build] targets` in `centinela.toml` in sync with the release matrix in `.github/workflows/release.yml`. If either list drifts, `go test ./...` fails during `centinela validate` and names the missing targets.
 

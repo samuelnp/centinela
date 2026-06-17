@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/autostart"
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
 
@@ -32,7 +33,13 @@ func runHookAutostart(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 	os.MkdirAll(workflow.WorkflowDir, 0755) //nolint:errcheck
-	if err := workflow.Save(workflow.NewWithOrder(feature, order)); err != nil {
+	cfg, _ := config.Load()
+	// No flags in the hook path: env/config still resolve inside ResolveStart.
+	decision := workflow.ResolveStart("", "", cfg)
+	wf := workflow.NewWithOrder(feature, order, decision.EffectiveProfile)
+	wf.EnforcementProfile = decision.PinnedProfile
+	wf.DriverModel = decision.DriverModel
+	if err := workflow.Save(wf); err != nil {
 		return nil
 	}
 	fmt.Printf("CENTINELA DIRECTIVE: auto-started workflow %q from prompt intent.\n", feature)

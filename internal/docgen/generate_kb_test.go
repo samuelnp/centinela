@@ -13,7 +13,7 @@ func TestGenerateWritesKBHTML(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(d)       //nolint:errcheck
 	writeFixture(t)
-	os.MkdirAll(KBDir, 0755) //nolint:errcheck
+	os.MkdirAll(KBDir, 0755)                                           //nolint:errcheck
 	os.WriteFile(filepath.Join(KBDir, "f.md"), []byte(sampleKB), 0644) //nolint:errcheck
 
 	if err := Generate("docs/project-docs/index.html", "Doc"); err != nil {
@@ -48,7 +48,7 @@ func TestGenerateFailsOnBrokenKB(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(d)       //nolint:errcheck
 	writeFixture(t)
-	os.MkdirAll(KBDir, 0755) //nolint:errcheck
+	os.MkdirAll(KBDir, 0755)                                                //nolint:errcheck
 	os.WriteFile(filepath.Join(KBDir, "broken.md"), []byte("# nope"), 0644) //nolint:errcheck
 	if err := Generate("docs/project-docs/index.html", "Doc"); err == nil {
 		t.Fatal("expected generate to fail on broken kb md")

@@ -35,7 +35,11 @@ func EvaluatePrewrite(path, cwd string, cfg *config.Config, wfs []*workflow.Work
 			continue
 		}
 		active++
-		if workflow.IsAllowedInStep(fileType, wf.CurrentStep) {
+		// outcome drops the ordering rails: any write in an active step is
+		// allowed. The no-active-workflow block above is untouched for all
+		// profiles. strict/guided keep today's step-gating.
+		if workflow.EffectiveProfile(wf, cfg) == config.ProfileOutcome ||
+			workflow.IsAllowedInStep(fileType, wf.CurrentStep) {
 			return PrewriteDecision{Allow: true, FileType: fileType}
 		}
 	}

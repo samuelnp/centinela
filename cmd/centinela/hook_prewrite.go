@@ -10,6 +10,7 @@ import (
 
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/hookpolicy"
+	"github.com/samuelnp/centinela/internal/telemetry"
 	"github.com/samuelnp/centinela/internal/ui"
 )
 
@@ -50,8 +51,10 @@ func runHookPrewrite(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 
-	cfg, _ := config.Load()
-	if cfg == nil {
+	cfg, err := config.Load()
+	if err != nil {
+		// Hooks must never break the host session: warn and use defaults.
+		fmt.Fprintln(os.Stderr, "config warning: "+err.Error())
 		cfg = &config.Config{}
 	}
 	wfs := loadActiveWorkflows()
@@ -60,11 +63,14 @@ func runHookPrewrite(_ *cobra.Command, _ []string) error {
 	if d.Allow {
 		return nil
 	}
+	model := resolveEmitModelFrom(wfs, cfg)
 	if d.NeedInit {
+		telemetry.RecordBlock(cfg, "", "", string(d.FileType), filePath, "need-init", model)
 		fmt.Fprintln(os.Stderr, ui.RenderBlocked(string(d.FileType), "", "—", filePath))
 		fmt.Fprintln(os.Stderr, ui.StyleMuted.Render("Run: centinela start <feature>"))
 		exitPrewrite(2)
 	}
+	telemetry.RecordBlock(cfg, d.Feature, d.Step, string(d.FileType), filePath, "out-of-step", model)
 	fmt.Fprintln(os.Stderr, ui.RenderBlocked(string(d.FileType), d.Step, d.Feature, filePath))
 	exitPrewrite(2)
 	return nil

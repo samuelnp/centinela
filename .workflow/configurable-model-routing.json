@@ -1,0 +1,36 @@
+{
+  "feature": "configurable-model-routing",
+  "startedAt": "2026-06-05T20:32:25.699563Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-06T13:02:55Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-06T17:29:58Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-06T11:46:44Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-06T13:36:58Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-06T17:27:14Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "worktreePath": ".worktrees/configurable-model-routing"
+}

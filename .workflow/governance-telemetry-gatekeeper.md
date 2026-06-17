@@ -1,0 +1,40 @@
+### Gatekeeper Report: governance-telemetry
+
+**Date:** 2026-06-13
+**Status:** SAFE
+
+#### Analyzed Specs
+
+- `specs/governance-telemetry.feature` (new — 18 scenarios; this branch's only spec change)
+- `specs/governed-project-memory.feature` (sibling best-effort/non-blocking capture pattern that telemetry mirrors)
+- `specs/claim-verification.feature` (verify hard-block semantics on `complete` — must be unchanged)
+- `specs/enforcement-profiles.feature` (verification is constant across profiles; advance/abort branches)
+- `specs/g2-import-graph-gate.feature` (unmapped-package = non-failing Warn contract)
+- `specs/enforce-coverage-in-validate.feature`, `specs/diff-aware-gatekeeper.feature`, `specs/spec-traceability-gate.feature` (validate gate result handling)
+
+#### Findings
+
+**A. Did telemetry emission change any existing governance behavior? NO — purely additive and non-blocking. VERDICT: SAFE.**
+
+The full branch diff (`git diff --stat main...HEAD`) touches NO domain behavior package: `internal/workflow`, `internal/gates`, `internal/verify`, and `internal/hookpolicy` are entirely untouched. The only behavioral wiring is in `cmd/`:
+
+- `cmd/centinela/hook_prewrite.go` (+3 lines): `RecordBlock(...)` calls inserted immediately before the pre-existing `exitPrewrite(2)` on the `NeedInit` and out-of-step branches. The block decision (`evalPrewrite` → `d.Allow` / `d.NeedInit`) and the exit code are byte-identical to main.
+- `cmd/centinela/validate.go` (+1 line): `emitGateFailures(cfg, results)` inserted after `gates.RunWithFilter`, before the existing render loop. `gates.AllPassed(results)` and `allPassed` are unchanged; the gate result is not consulted by the emitter.
+- `cmd/centinela/complete.go` (+4 / −16): the −16 is the `runClaimVerification` function being MOVED verbatim into the new `complete_verify.go` (not deleted). The functional additions are three calls — `RecordCompleteRejected(...,"gates")`, `RecordCompleteRejected(...,"verify")`, `RecordStepAdvanced(...)` — each placed adjacent to a pre-existing `return err` / success path. The hard-block conditions are unchanged.
+- `cmd/centinela/complete_verify.go` (new): `runClaimVerification` adds one `emitVerifyRejection(...)` call before the unchanged `return fmt.Errorf(...)`. The `res.HasFailures()` gate is identical to main.
+
+Non-blocking guarantee proven at the source: `telemetry.Record` (`internal/telemetry/record.go`) returns nothing — an I/O error is warned to stderr and swallowed (`fmt.Fprintln(os.Stderr, ...)`), exactly mirroring `internal/memory.Capture`. Default-on (`TelemetryConfig.IsEnabled` returns true when unset) cannot alter an outcome because emission has no return value feeding any decision.
+
+Proof tests still pass (independently run, not asserted): `go test ./...` → **1591 passed in 26 packages**, including the unmodified `cmd/centinela/verify_gate_test.go` (verify hard-block) and the gate/workflow suites. `centinela validate` → **All gates passed** (G1, G-Build, import_graph Warn, spec-traceability all green; 4 validate commands incl. coverage + fmt pass). Acceptance suite `tests/acceptance/governance_telemetry_*_test.go` (6 files) covers block/config/events/read/rework and passes via `go test ./tests/acceptance/...`.
+
+**B. Is `centinela.telemetry/v1` a stable contract for the 5 downstream features? YES, with one low-risk caveat. VERDICT: SAFE (low schema risk).**
+
+The `Event` struct (`internal/telemetry/event.go`) is flat with `omitempty` on all optional fields, JSON-tagged, self-describing via `schema:"centinela.telemetry/v1"` and an RFC3339-UTC `timestamp`. The only nested type, `CheckRef`, is owned locally (NOT imported from `internal/verify`), so the wire contract cannot drift when verify's internal `Check` shape changes — a deliberate decoupling that protects the downstream readers (centinela-insights, failure-ledger-plan-advisor, capability-calibration, team-dashboard, adaptive-skill-synthesis). The `Read`/`ReadDefault` reader is lenient (skips corrupt/garbage lines, missing file ⇒ nil,nil), so downstream consumers tolerate merge artifacts and partial writes. Schema risk is limited and acknowledged in-code: the `Schema` constant is documented "bump only on a breaking change," and the five event types are exported constants. Caveat (non-blocking): there is no machine-readable JSON Schema artifact or cross-package golden-line conformance fixture shared with the downstream features yet; field additions are safe (omitempty + lenient read) but a future rename/removal would be a breaking v2. Recommend the first downstream feature pin a golden-line fixture.
+
+**C. `internal/telemetry` left UNMAPPED in import_graph — acceptable and does NOT fail the gate. VERDICT: SAFE.**
+
+`go list` confirms `internal/telemetry` imports only `internal/config` + stdlib (bufio, encoding/json, errors, fmt, io/fs, os, path/filepath, time) — a clean config-only leaf, consistent with its package doc. The `[gates.import_graph]` layer paths in `centinela.toml` map only `leaf` (config/gitdiff/orchestration), `domain` (workflow/gates), and `cmd`; `internal/telemetry` matches no layer and therefore surfaces as a non-failing `⚠ import_graph Packages match no configured layer` Warn — identical treatment to the already-unmapped `internal/memory`, `internal/verify`, `internal/ui`, `internal/roadmap`. `centinela validate` returns "All gates passed", confirming the Warn is non-failing. This is consistent with the documented G2 contract (`specs/g2-import-graph-gate.feature`) and PROJECT.md's note that unmapped packages warn rather than pass silently. No new forbidden edge is introduced: telemetry's sole internal import (`config`) is a leaf, so even if mapped it would be a legal `cmd`/leaf consumer.
+
+#### Recommendation
+
+**SAFE** — Telemetry emission is strictly additive and non-blocking at all 7 cmd-layer chokepoints; no domain behavior file was modified, the full 1591-test suite and `centinela validate` pass, the `centinela.telemetry/v1` event is a stable flat contract with a self-owned `CheckRef`, and the unmapped-package Warn is the documented, non-failing G2 behavior shared with memory/verify.

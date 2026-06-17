@@ -8,6 +8,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/mattn/go-isatty"
 
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
@@ -52,9 +53,10 @@ func runStatusModel(wfs []*workflow.Workflow) error {
 
 func renderStatusBody(wfs []*workflow.Workflow) string {
 	sep := "\n" + ui.StyleMuted.Render(strings.Repeat("─", 32)) + "\n"
+	cfg, _ := config.Load() // nil-safe: provenance falls back to pinned value
 	views := make([]string, 0, len(wfs))
 	for _, wf := range wfs {
-		views = append(views, ui.RenderStatus(wf))
+		views = append(views, ui.RenderStatusWithConfig(wf, cfg))
 	}
 	return strings.Join(views, sep)
 }

@@ -9,22 +9,8 @@ import (
 
 const RoadmapFile = ".workflow/roadmap.json"
 
-// Feature is a single deliverable within a phase.
-type Feature struct {
-	Name      string   `json:"name"`
-	DependsOn []string `json:"dependsOn,omitempty"`
-}
-
-// Phase groups related features under a milestone.
-type Phase struct {
-	Name     string    `json:"name"`
-	Features []Feature `json:"features"`
-}
-
-// Roadmap holds the full project plan.
-type Roadmap struct {
-	Phases []Phase `json:"phases"`
-}
+// Feature, Phase and Roadmap struct definitions live in types.go to keep this
+// file within the ≤100-line budget after the prose fields were added.
 
 // Load reads roadmap.json from disk.
 func Load() (*Roadmap, error) {
@@ -67,9 +53,14 @@ func FeatureStatus(name string) string {
 	return "in-progress"
 }
 
-// Summary returns counts of features by status across all phases.
+// Summary returns counts of features by status across all schedulable phases.
+// Backlog entries are deferred findings, not schedulable features, so they are
+// excluded from every count (consistent with the render-side phase skip).
 func (r *Roadmap) Summary() (planned, inProgress, done int) {
 	for _, phase := range r.Phases {
+		if isBacklogPhaseName(phase.Name) {
+			continue
+		}
 		for _, f := range phase.Features {
 			switch FeatureStatus(f.Name) {
 			case "done":

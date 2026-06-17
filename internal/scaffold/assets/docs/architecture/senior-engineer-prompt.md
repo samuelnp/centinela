@@ -67,6 +67,11 @@ Output format:
 #### Trade-Offs
 - bullet list
 
+#### Deferred Findings
+- For every Outstanding TODO or out-of-scope fix you are NOT making now,
+  run: `centinela roadmap defer <slug> --summary "<one line>" --source <feature>/senior-engineer`
+- List the recorded slugs here, or state "none".
+
 #### Handoff
 - Next role: qa-senior
 - Outstanding TODOs: …

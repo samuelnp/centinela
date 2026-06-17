@@ -17,3 +17,9 @@ vendor/
 .playwright-mcp/
 landing-*.png
 landing-*.jpeg
+
+# Local private notes — not committed
+ECOSYSTEM.md
+
+# Local governance telemetry — local-only in this repo (feature contract for other projects is git-tracked)
+.workflow/telemetry/

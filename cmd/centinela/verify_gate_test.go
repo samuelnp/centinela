@@ -36,7 +36,7 @@ const valEvidence = `{"feature":"feat","step":"validate","role":"validation-spec
 
 func TestRunClaimVerificationHardBlocksOnFailedTests(t *testing.T) {
 	cfg := writeGateRepo(t, "false", valEvidence)
-	err := runClaimVerification("feat", "validate", cfg)
+	err := runClaimVerification("feat", "validate", "", cfg)
 	if err == nil {
 		t.Fatal("failing validate.commands must hard-block completion")
 	}
@@ -47,7 +47,7 @@ func TestRunClaimVerificationHardBlocksOnFailedTests(t *testing.T) {
 
 func TestRunClaimVerificationPassesOnHonestEvidence(t *testing.T) {
 	cfg := writeGateRepo(t, "true", valEvidence)
-	if err := runClaimVerification("feat", "validate", cfg); err != nil {
+	if err := runClaimVerification("feat", "validate", "", cfg); err != nil {
 		t.Fatalf("honest passing evidence should not block: %v", err)
 	}
 }

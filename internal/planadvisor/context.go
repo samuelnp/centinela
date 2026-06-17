@@ -1,6 +1,9 @@
 package planadvisor
 
-import "github.com/samuelnp/centinela/internal/config"
+import (
+	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/insights"
+)
 
 type bundle struct {
 	Feature                string
@@ -8,6 +11,7 @@ type bundle struct {
 	Dependencies, Siblings []string
 	Lessons, QualityNotes  []string
 	Memory                 []string
+	Failures               []insights.Count
 }
 
 func buildBundle(feature string, cfg *config.Config) bundle {
@@ -22,5 +26,6 @@ func buildBundle(feature string, cfg *config.Config) bundle {
 		Lessons:      relatedLessons(related),
 		QualityNotes: relatedQualityNotes(feature, related),
 		Memory:       recalledMemory(feature, deps, cfg),
+		Failures:     recurringFailures(cfg, failureTopN(cfg)),
 	}
 }

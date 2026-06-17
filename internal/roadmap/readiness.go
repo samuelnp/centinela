@@ -17,6 +17,9 @@ func DeriveReadiness(r *Roadmap) []FeatureReadiness {
 	}
 	var result []FeatureReadiness
 	for _, phase := range r.Phases {
+		if isBacklogPhaseName(phase.Name) {
+			continue // Backlog findings are never ready/blocked/startable
+		}
 		for _, f := range phase.Features {
 			result = append(result, classifyFeature(f))
 		}

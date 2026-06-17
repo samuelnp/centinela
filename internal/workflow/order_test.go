@@ -3,7 +3,7 @@ package workflow
 import "testing"
 
 func TestNewWithOrderAndOrderedSteps(t *testing.T) {
-	wf := NewWithOrder("f", BootstrapStepOrder)
+	wf := NewWithOrder("f", BootstrapStepOrder, "")
 	steps := wf.OrderedSteps()
 	if len(steps) != 4 || steps[2] != "validate" || steps[3] != "docs" {
 		t.Fatalf("unexpected step order: %#v", steps)

@@ -1,15 +1,36 @@
 [workflow]
 # Enable per-feature git worktrees at .worktrees/<feature>/ on `centinela start`.
 use_worktrees = true
+# Confirm only at the plan boundary (the highest-leverage review point);
+# later steps advance automatically — every gate still verifies mechanically.
+step_confirmation_mode = "after_plan"
 
 [validate]
 commands = [
   "go test ./...",
-  "./scripts/check-coverage.sh"
+  "go test ./tests/acceptance/...",
+  "./scripts/check-coverage.sh",
+  "./scripts/check-fmt.sh"
 ]
 
 [gates]
 file_size = true
+
+# spec-traceability gate: every in-scope Gherkin scenario must map to an
+# acceptance test (// Acceptance: specs/<slug>.feature + // Scenario: <name>).
+# Shipped in warn mode so CI surfaces the legacy uncovered-scenario backlog
+# without blocking merge; ratchet to fail once the backlog is cleared.
+[gates.spec_traceability]
+enabled  = true
+severity = "warn"
+
+# roadmap-drift gate: ROADMAP.md is generated from .workflow/roadmap.json via
+# `centinela roadmap generate`; this gate byte-compares the on-disk file with
+# generator output and reports drift. Shipped in warn mode for safe adoption;
+# ratchet to fail once ROADMAP.md is regenerated and clean.
+[gates.roadmap_drift]
+enabled  = true
+severity = "warn"
 
 [gates.build]
 enabled = true
@@ -22,3 +43,59 @@ targets = [
   { goos = "windows", goarch = "amd64" },
   { goos = "windows", goarch = "arm64" },
 ]
+
+# G2 import-graph gate: mechanically enforces the layer-boundary rule from
+# PROJECT.md. Conservatively maps only layers that can be encoded soundly
+# against the *real* import graph; unmapped packages (ui, roadmap, verify,
+# etc.) surface as a non-failing Warn. NOTE: PROJECT.md's G2 prose says
+# domain "may import internal/config only", but internal/gates also imports
+# internal/gitdiff and internal/workflow also imports internal/orchestration —
+# both are pure leaf utilities. The matrix below treats config, gitdiff, and
+# orchestration as the leaf layer, which is the honest model. PROJECT.md's G2
+# prose should be updated to match.
+[gates.import_graph]
+enabled = true
+
+[[gates.import_graph.layers]]
+name  = "leaf"
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**"]
+allow = []
+
+[[gates.import_graph.layers]]
+name  = "domain"
+paths = ["internal/workflow/**", "internal/gates/**"]
+allow = ["leaf"]
+
+# aggregator layer: internal/doctor is a domain orchestrator that reads several
+# domains (roadmap, evidence, worktree, setup, config, gates, workflow)
+# read-only and is itself imported only by cmd/. It is mapped here allowing the
+# encoded domain + leaf layers; its edges to still-unmapped packages
+# (roadmap/evidence/worktree/setup) surface as the existing non-failing warning,
+# consistent with the conservative matrix policy above. internal/insights joins
+# this layer: a read-only analytics aggregator over the telemetry log, imported
+# only by cmd/. Its sole edge is to internal/telemetry (a config-only leaf,
+# unmapped like the other domain reads), so it adds no new failing edge — the
+# unmapped-telemetry warning is the existing non-failing kind. See PROJECT.md G2.
+# internal/calibration also joins this layer: a read-only per-model calibration
+# analyzer over telemetry, importing the telemetry + config leaves only and
+# imported solely by cmd/ (its Report type by internal/ui for rendering).
+# internal/audit also joins this layer: a read-only baseline/ratchet aggregator
+# over gate results (internal/gates, domain) + config (leaf) + an on-disk
+# baseline artifact, imported only by cmd/ (its Diff type by internal/ui). Its
+# edges (audit→gates domain, audit→config leaf) are both allowed here; gates
+# never imports audit, so there is no cycle. See PROJECT.md G2.
+[[gates.import_graph.layers]]
+name  = "aggregator"
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**"]
+allow = ["domain", "leaf"]
+
+[[gates.import_graph.layers]]
+name  = "cmd"
+paths = ["cmd/**"]
+allow = ["domain", "leaf", "aggregator"]
+
+# Claim verification re-runs the full `go test ./...` suite to confirm the
+# tests-pass claim. This repo's acceptance + cross-compile tests legitimately
+# take ~75s, so the default 60s timeout is too short. Raise it with margin.
+[verify]
+verify_timeout = 240

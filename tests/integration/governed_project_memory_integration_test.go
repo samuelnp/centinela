@@ -42,7 +42,7 @@ func TestMemoryIntegration_CaptureLesson(t *testing.T) {
 	defer os.Chdir(orig) //nolint:errcheck
 	os.Chdir(dir)        //nolint:errcheck
 
-	os.MkdirAll(".workflow", 0755)                                                                      //nolint:errcheck
+	os.MkdirAll(".workflow", 0755)                                                                        //nolint:errcheck
 	os.WriteFile(".workflow/alpha-edge-cases.md", []byte("- timeout retry\n- idempotent writes\n"), 0644) //nolint:errcheck
 
 	memory.Capture("alpha", "tests", memCfg())
@@ -59,7 +59,7 @@ func TestMemoryIntegration_CaptureIdempotent(t *testing.T) {
 	defer os.Chdir(orig) //nolint:errcheck
 	os.Chdir(dir)        //nolint:errcheck
 
-	os.MkdirAll(".workflow", 0755)                                                  //nolint:errcheck
+	os.MkdirAll(".workflow", 0755)                                                    //nolint:errcheck
 	os.WriteFile(".workflow/alpha-edge-cases.md", []byte("- race condition\n"), 0644) //nolint:errcheck
 
 	cfg := memCfg()

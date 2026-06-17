@@ -42,7 +42,7 @@ func TestLoadEntriesIgnoresNonMdFiles(t *testing.T) {
 	defer os.Chdir(orig) //nolint:errcheck
 	os.Chdir(dir)        //nolint:errcheck
 
-	os.MkdirAll(entriesDir, 0o755) //nolint:errcheck
+	os.MkdirAll(entriesDir, 0o755)                                       //nolint:errcheck
 	os.WriteFile(entriesDir+"/entry.txt", []byte("not markdown"), 0o644) //nolint:errcheck
 	os.WriteFile(entriesDir+"/index.json", []byte("{}"), 0o644)          //nolint:errcheck
 

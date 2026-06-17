@@ -7,13 +7,13 @@ import (
 
 func TestResolveModel_DefaultAndOverride(t *testing.T) {
 	// Default: big-thinker → reasoning → claude-opus-4-7 (claude)
-	got, ok := ResolveModel(RoleBigThinker, nil, RunnerClaude)
+	got, ok := ResolveModel(RoleBigThinker, nil, nil, RunnerClaude)
 	if !ok || got != "claude-opus-4-7" {
 		t.Errorf("expected (claude-opus-4-7, true), got (%q, %v)", got, ok)
 	}
 	// Config override: big-thinker = fast → claude-haiku
-	models := map[string]string{"big-thinker": "fast"}
-	got, ok = ResolveModel(RoleBigThinker, models, RunnerClaude)
+	models := RoleModels{"big-thinker": {Tier: "fast"}}
+	got, ok = ResolveModel(RoleBigThinker, models, nil, RunnerClaude)
 	if !ok || got != "claude-haiku-4-5-20251001" {
 		t.Errorf("override: expected (claude-haiku-4-5-20251001, true), got (%q, %v)", got, ok)
 	}
@@ -26,8 +26,8 @@ func TestResolveModel_OpenCodeRunner(t *testing.T) {
 		{"fast", "anthropic/claude-haiku-4-5"},
 	}
 	for _, tc := range cases {
-		models := map[string]string{"big-thinker": tc.tier}
-		got, ok := ResolveModel(RoleBigThinker, models, RunnerOpenCode)
+		models := RoleModels{"big-thinker": {Tier: tc.tier}}
+		got, ok := ResolveModel(RoleBigThinker, models, nil, RunnerOpenCode)
 		if !ok || got != tc.want {
 			t.Errorf("opencode %q: expected (%q, true), got (%q, %v)", tc.tier, tc.want, got, ok)
 		}
@@ -35,7 +35,7 @@ func TestResolveModel_OpenCodeRunner(t *testing.T) {
 }
 
 func TestResolveModel_UnknownRunnerFallback(t *testing.T) {
-	got, ok := ResolveModel(RoleBigThinker, nil, RunnerUnknown)
+	got, ok := ResolveModel(RoleBigThinker, nil, nil, RunnerUnknown)
 	if ok {
 		t.Errorf("expected ok=false for unknown runner, got true; model=%q", got)
 	}
@@ -45,7 +45,7 @@ func TestResolveModel_UnknownRunnerFallback(t *testing.T) {
 }
 
 func TestResolveModel_NilMapNoPanic(t *testing.T) {
-	got, ok := ResolveModel(RoleDocsSpecialist, nil, RunnerClaude)
+	got, ok := ResolveModel(RoleDocsSpecialist, nil, nil, RunnerClaude)
 	if !ok || got != "claude-haiku-4-5-20251001" {
 		t.Errorf("nil map: expected (claude-haiku-4-5-20251001, true), got (%q, %v)", got, ok)
 	}

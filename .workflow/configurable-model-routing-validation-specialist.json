@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "cli_version": "0.8.0",
+    "written_at": "2026-06-06T13:52:42Z"
+  },
+  "feature": "configurable-model-routing",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-06T13:52:42Z",
+  "inputs": [
+    "docs/features/configurable-model-routing.md",
+    "docs/plans/configurable-model-routing.md",
+    "specs/configurable-model-routing.feature",
+    "specs/configurable-subagent-models.feature",
+    ".workflow/configurable-model-routing-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/configurable-model-routing-validation-specialist.md",
+    ".workflow/configurable-model-routing-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "codex runner falls back to bare tier name (ok=false path in ResolveModel) rather than leaking another runner's concrete model ID — gatekeeper confirmed this is legitimate production behavior, not stale format drift",
+    "scaffold mirror drift in docs/architecture/{gatekeepers,new-project-guide,testing-strategy,workflow-enforcement}.md is pre-existing and unrelated to this feature — this feature did not modify docs/architecture",
+    "4-step ResolveModel precedence handles missing modelMap entry at Step 4 (fallback to tier key) — all call sites pass the required Runner argument; no 3-arg call sites found"
+  ],
+  "handoffTo": "documentation-specialist"
+}

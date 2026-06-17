@@ -1,0 +1,107 @@
+### Gatekeeper Report: deferred-findings-roadmap-capture
+**Date:** 2026-06-12
+**Status:** WARNING
+
+#### Analyzed Specs
+
+All 77 specs reviewed:
+- adapt-opencode-support.feature
+- add-agent-evidence-contract.feature
+- add-ci-validate-workflow.feature
+- add-docs-step-workflow.feature
+- add-personality-feedback.feature
+- add-plan-advisor-mode.feature
+- add-ux-ui-specialist-orchestration.feature
+- agent-performance-audit.feature
+- auto-start-feature-intent.feature
+- automate-semver-release.feature
+- bootstrap-phase-zero-workflow.feature
+- claim-verification.feature
+- clarify-roadmap-missing-artifacts.feature
+- claude-status-line.feature
+- code-quality-hardening.feature
+- configurable-model-routing.feature
+- configurable-step-confirmation-mode.feature
+- configurable-subagent-models.feature
+- cross-platform-build-gate.feature
+- **deferred-findings-roadmap-capture.feature** (new, 25 scenarios)
+- diff-aware-gatekeeper.feature
+- docs-consistency-pass.feature
+- docs-knowledge-base-pages.feature
+- docs-latest-features-getting-started.feature
+- docs-migration-managed-docs.feature
+- docs-readme-bootstrap-tutorial.feature
+- docs-update-migrate-readme.feature
+- edge-case-subagent-tests-phase.feature
+- enforce-acceptance-tests-real-and-executed.feature
+- enforce-actionable-orchestration-evidence.feature
+- enforce-coverage-in-validate.feature
+- enforce-plan-snapshot-inputs.feature
+- enforce-step-subagent-orchestration.feature
+- enforcement-profiles.feature
+- enrich-plan-advisor-context.feature
+- evidence-cli.feature
+- extract-agent-shared-blocks.feature
+- fix-release-trigger-after-bump.feature
+- fix-release-workflow-run-tag-resolution.feature
+- fix-roadmap-write-blocked.feature
+- fix-setup-hook-template-detection.feature
+- fix-setup-next-step.feature
+- fix-status-non-tty.feature
+- fix-validate-plan-by-name.feature
+- g1-justified-file-size-exceptions.feature
+- g2-import-graph-gate.feature
+- generate-html-project-docs.feature
+- governed-project-memory.feature
+- harden-main-release-automation.feature
+- harden-opencode-plugin-compat.feature
+- improve-centinela-render-ui.feature
+- improve-docs-llm-hybrid-ui.feature
+- landing-page.feature
+- merge-steward-auto-dispatch.feature
+- migrate-full-sync.feature
+- opencode-force-setup-flow.feature
+- opencode-greeting-workflow.feature
+- opencode-hook-parity.feature
+- opencode-native-subagents.feature
+- opencode-setup-priority.feature
+- opencode-setup-question-parity.feature
+- orchestration-smoke-sim.feature
+- parallel-feature-worktrees.feature
+- promote-orchestration-agents.feature
+- raise-test-coverage-90.feature
+- reach-100-coverage.feature
+- readme-centinela-usage.feature
+- refactor-hook-policy-core.feature
+- refine-ux-specialist-evidence.feature
+- roadmap-checkpoint-prompt.feature
+- roadmap-parallel-readiness.feature
+- roadmap-quality-overall-threshold.feature
+- roadmap-senior-pm-analysis.feature
+- security-gate.feature
+- session-context-rehydration.feature
+- simplify-output-prefix-emojis.feature
+- spec-traceability-gate.feature
+
+#### Findings
+
+**Finding 1**
+- **Affected spec:** session-context-rehydration.feature
+- **Affected scenario:** "Every roadmap feature done yields a graceful roadmap-complete state with no next feature" (and roadmap-parallel-readiness.feature: "SessionStart rehydration shows the roadmap-complete message when all features are done")
+- **Risk:** `r.Summary()` in `cmd/centinela/hook_session.go:33` iterates ALL phases including Backlog. A Backlog entry with no workflow file returns `FeatureStatus() == "planned"`, so `planned > 0` evaluates true and `hasIncomplete = true` even when every real (non-Backlog) feature is done. The "Roadmap complete" message will never fire when a Backlog phase with entries exists, conflicting with the spec assertion. The acceptance test `TestAcceptance_AllDoneRoadmapComplete` uses a roadmap with no Backlog phase and does not catch this regression.
+- **Suggestion:** `r.Summary()` should skip Backlog-phase entries (mirror the Backlog exemption already applied in `DeriveReadiness`), or `hook_session.go` should compute `hasIncomplete` only from `DeriveReadiness` results (which already skip Backlog). This is a genuine behaviour gap.
+- **Resolution:** FIXED IN-FEATURE during the validate step (Fix Pass 2): `Summary()` now skips Backlog phases via `isBacklogPhaseName`, with regression tests in `internal/roadmap/summary_backlog_test.go`. The interim deferred slug was removed from the Backlog once the fix landed.
+
+**Finding 2**
+- **Affected spec:** roadmap-checkpoint-prompt.feature
+- **Affected scenario:** "Suppressed when the marker is fresh against all roadmap-defining artifacts" and "Stale marker re-fires when any roadmap supporting artifact was modified after the marker"
+- **Risk:** `roadmapcheckpoint.RequiredArtifacts()` includes `.workflow/roadmap.json`. Every successful `centinela roadmap defer` call writes to `roadmap.json` via `writeAtomic` (temp-file rename), updating its mtime. This means running `roadmap defer` after the checkpoint marker is recorded will mark the checkpoint stale and re-emit the "CENTINELA DIRECTIVE: roadmap checkpoint" directive on the next session hook run. This is the intended staleness mechanism for roadmap edits, but operators who defer findings mid-project may be surprised by unexpected checkpoint re-fires.
+- **Suggestion:** This is by design (defer modifies the roadmap, which is a roadmap-defining artifact). The behaviour is semantically correct and consistent with the spec. No code change needed; document in user-facing output that defer/promote affect checkpoint staleness. Tracked as an operator-education item rather than a code defect — not deferred.
+
+#### Deferred Findings
+
+none — Finding 1 was initially deferred as `session-rehydration-backlog-complete-flag`, then fixed in-feature (Fix Pass 2) and removed from the Backlog; Finding 2 is by-design behaviour requiring no remediation.
+
+#### Recommendation
+
+WARNING — one genuine behaviour gap was found (Finding 1: `r.Summary()` included Backlog entries in the `hasIncomplete` flag used by session rehydration, conflicting with the spec scenario that asserts "Roadmap complete" when all real features are done) and has been FIXED in-feature with regression tests (1506 tests now pass). All 8 prompt-file scaffold pairs are byte-identical, and no other existing spec is broken by this feature's Backlog exemption logic. Finding 2 (checkpoint staleness re-fires after defer/promote) is by-design and documented. The feature is safe to ship.

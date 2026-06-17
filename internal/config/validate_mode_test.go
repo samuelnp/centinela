@@ -4,14 +4,14 @@ import "testing"
 
 func TestNormalizeDiffMode(t *testing.T) {
 	cases := map[string]string{
-		"":         DiffModeAuto,
-		"  ":       DiffModeAuto,
-		"auto":     DiffModeAuto,
-		"Always":   DiffModeAlways,
-		"  off  ":  DiffModeOff,
-		"bogus":    DiffModeAuto,
-		"OFF":      DiffModeOff,
-		"ALWAYS":   DiffModeAlways,
+		"":        DiffModeAuto,
+		"  ":      DiffModeAuto,
+		"auto":    DiffModeAuto,
+		"Always":  DiffModeAlways,
+		"  off  ": DiffModeOff,
+		"bogus":   DiffModeAuto,
+		"OFF":     DiffModeOff,
+		"ALWAYS":  DiffModeAlways,
 	}
 	for in, want := range cases {
 		if got := NormalizeDiffMode(in); got != want {

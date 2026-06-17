@@ -36,6 +36,9 @@ func runEvidenceInit(_ *cobra.Command, args []string) error {
 	}
 	defer release()
 	skel := evidence.Skeleton(feature, role, Version)
+	if pre := evidence.PlanInputs(feature, role); pre != nil {
+		skel.Inputs = pre
+	}
 	if err := evidence.WriteAtomic(feature, role, skel); err != nil {
 		return err
 	}

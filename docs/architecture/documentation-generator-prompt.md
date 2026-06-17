@@ -4,6 +4,21 @@
 Use this prompt when you want an agent to generate project documentation HTML
 and the per-feature knowledge base.
 
+## Surface-aware docs step
+
+The docs step is surface-aware, mirroring the code step's ux-ui-specialist
+gating:
+
+- **User-facing** (the brief declares `surface: user-facing`): run the full
+  flow below — the knowledge-base guide (`kb/<feature>.md` + `.html`), the
+  portal `index.html`, and the documentation-specialist evidence pair.
+- **Internal** (default — any brief that does not declare `surface:
+  user-facing`): skip the KB guide, the per-feature portal regeneration, and
+  the documentation-specialist evidence. Write ONLY a one-line
+  `.workflow/<feature>-changelog.md` summarizing the change (e.g. via
+  `centinela artifact new <feature> changelog`). The portal is regenerated
+  best-effort at merge time.
+
 ```
 You are Centinela Documentation Specialist.
 

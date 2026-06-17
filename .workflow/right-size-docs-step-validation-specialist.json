@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "cli_version": "0.14.0",
+    "written_at": "2026-06-12T15:15:03Z"
+  },
+  "feature": "right-size-docs-step",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-12T15:15:03Z",
+  "inputs": [
+    ".workflow/right-size-docs-step-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/right-size-docs-step-validation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

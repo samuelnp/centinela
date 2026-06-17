@@ -79,6 +79,9 @@ func TestStatuslineRulesDocs(t *testing.T) {
 	wf.CurrentStep = "docs"
 	cfg := &config.Config{}
 	mkdir(t, ".workflow")
+	// User-facing feature: docs step gates on the portal then docs evidence.
+	mkdir(t, "docs/features")
+	write(t, "docs/features/alpha.md", "surface: user-facing\n")
 	workflow.Save(wf) //nolint:errcheck
 	block, _ := statusBlockAndNext(wf, cfg)
 	if block != "MISSING_DOCS_OUTPUT" {

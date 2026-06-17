@@ -1,0 +1,56 @@
+{
+  "_meta": {
+    "cli_version": "0.15.0",
+    "written_at": "2026-06-12T18:10:18Z"
+  },
+  "feature": "deterministic-artifact-scaffolds",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-12T00:00:00Z",
+  "inputs": [
+    "docs/plans/deterministic-artifact-scaffolds.md",
+    "specs/deterministic-artifact-scaffolds.feature",
+    "docs/features/deterministic-artifact-scaffolds.md",
+    "internal/orchestration/plan_snapshot.go",
+    "internal/evidence/plan_inputs.go",
+    "internal/evidence/fill.go",
+    "internal/evidence/companion_skeletons.go",
+    "internal/evidence/companion.go",
+    "internal/evidence/artifact_derive.go",
+    "internal/evidence/artifact_gatekeeper.go",
+    "internal/evidence/artifact_edge_cases.go",
+    "internal/evidence/artifact_prodready.go",
+    "internal/evidence/artifact_changelog.go",
+    "cmd/centinela/evidence_init.go"
+  ],
+  "outputs": [
+    "tests/acceptance/deterministic_artifact_scaffolds_helper_test.go",
+    "tests/acceptance/deterministic_artifact_scaffolds_prefill_test.go",
+    "tests/acceptance/deterministic_artifact_scaffolds_validate_test.go",
+    "tests/acceptance/deterministic_artifact_scaffolds_emptyfields_test.go",
+    "tests/acceptance/deterministic_artifact_scaffolds_fill_test.go",
+    "tests/acceptance/deterministic_artifact_scaffolds_artifacts_test.go",
+    "internal/orchestration/required_plan_inputs_test.go",
+    "internal/evidence/plan_inputs_test.go",
+    "internal/evidence/fill_companion_test.go",
+    "internal/evidence/artifact_bodies_test.go",
+    "internal/evidence/skeleton_not_poisoned_test.go",
+    "cmd/centinela/evidence_init_prefill_test.go",
+    ".workflow/deterministic-artifact-scaffolds-edge-cases.md"
+  ],
+  "edgeCases": [
+    "plan-role pre-fill includes the plan path docs/plans/<feature>.md",
+    "non-plan roles get empty inputs; PlanInputs returns nil",
+    "Skeleton/SchemaSkeleton/docsSpecialistPair inputs stay empty (no poisoning)",
+    "fill marker never lands in a marshaled evidence JSON list field",
+    "gatekeeper Analyzed Specs empty list when no specs exist",
+    "Status and Date lines preserved verbatim for validate parsing",
+    "init pre-fill idempotent under force re-run; sorted and deduped",
+    "unknown-role companion falls back to the one-line placeholder",
+    "RequiredPlanInputs dedups, sorts, normalizes dot and backslash paths",
+    "back-compat: pre-existing minimal hand-written JSON still validates"
+  ],
+  "handoffTo": "validation-specialist",
+  "coverage": "95.5"
+}
