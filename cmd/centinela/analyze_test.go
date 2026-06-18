@@ -78,4 +78,3 @@ func TestRunAnalyze_OutOverride(t *testing.T) {
 		t.Fatalf("default path must not be written under --out: %v", err)
 	}
 }
-
