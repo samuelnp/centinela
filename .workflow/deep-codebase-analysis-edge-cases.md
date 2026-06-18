@@ -35,3 +35,28 @@ All other irregularities (uncompilable Go, malformed manifests, missing
 toolchain, symlinks, unreadable individual files) are **non-fatal**: analyze is
 diagnostic, records a best-effort/empty result with a reason where relevant, and
 exits 0.
+
+## Edge → covering test (added at the tests step)
+
+Each edge case above now has an executable Go assertion. Colocated unit tests
+move the per-package 95% coverage gate; acceptance tests run the real binary and
+map 1:1 to Gherkin scenario titles (`// Scenario: <name>`).
+
+| # | Edge case | Covering test(s) |
+|---|-----------|------------------|
+| 1 | Empty / docs-only repo | `internal/analyze/analyze_test.go::TestAnalyze_EmptyRepo` |
+| 2 | Polyglot repo | `internal/analyze/analyze_test.go::TestAnalyze_PolyglotAssembly`; `languages_test.go::TestDetectLanguages_SortsCountDescNameAsc` |
+| 3 | `go list` fails | `internal/analyze/graph_test.go::TestBuildGraph_GoListFailureBestEffort`; `internal/golist/golist_test.go::TestPackages_ErrorSurfaced`; `golist_fake_test.go::TestRunGo_EmptyStderrWrapsRawError`, `TestPackages_DecodeErrorSurfaced` |
+| 4 | Malformed `package.json` | `internal/analyze/manifests_test.go::TestDetectManifests_MalformedPackageJSONStillDetected`; `analyze_test.go::TestAnalyze_FailingSubDetectorStillValid`; acceptance covers continue-and-emit |
+| 5 | Multiple manifests | `internal/analyze/manifests_test.go::TestDetectManifests_SortedByPath`; `analyze_test.go::TestAnalyze_PolyglotAssembly` |
+| 6 | No i18n | `internal/analyze/locales_test.go::TestDetectLocales_NoI18nIsEmpty` |
+| 7 | Huge / deep tree | `internal/analyze/walk_test.go::TestWalk_DepthBoundedLayout` |
+| 8 | Re-run overwrite | `internal/analyze/inventory_test.go::TestSave_ByteStableAcrossReruns`; `tests/integration/analyze_determinism_test.go`; `tests/acceptance/analyze_happy_test.go::TestAnalyzeDeterministicRerun` |
+| 9 | Symlinks / unreadable files | `internal/analyze/walk_test.go::TestWalk_SymlinkFileSkipped` |
+| 10 | Skip set + gitignore | `internal/analyze/walk_test.go::TestWalk_SkipSetExcludesDepsAndBuild`, `TestWalk_GitignoredPathExcluded`; `gitignore_test.go`; `tests/acceptance/analyze_edge_test.go::TestAnalyzeSkipsVendorDepsReadOnly` |
+| 11 | No recognized manifest | `internal/analyze/manifests_test.go::TestDetectManifests_NoneWhenAbsent`; `graph_test.go::TestBuildGraph_NoneWhenEmpty`; `tests/acceptance/analyze_edge_test.go::TestAnalyzeNoManifestStillValid` |
+| 12 | Un-writable output path | `internal/analyze/inventory_test.go::TestSave_UnwritablePathErrors`; `cmd/centinela/analyze_errors_test.go::TestRunAnalyze_UnwritableOutFails`; `tests/acceptance/analyze_edge_test.go::TestAnalyzeUnwritableOutFails` |
+| 13 | Non-existent / unreadable root | `internal/analyze/walk_test.go::TestWalk_UnreadableRootIsHardError`; `analyze_test.go::TestAnalyze_UnreadableRootErrors`; `cmd/centinela/analyze_errors_test.go::TestRunAnalyze_UnreadableRootFails`; `tests/acceptance/analyze_edge_test.go::TestAnalyzeUnreadableRootFails` |
+| 14 | Read-only guarantee | `tests/integration/analyze_determinism_test.go::TestAnalyzeIsByteIdenticalAndReadOnly`; `tests/acceptance/analyze_edge_test.go::TestAnalyzeSkipsVendorDepsReadOnly` |
+| 15 | `--out` override | `cmd/centinela/analyze_test.go::TestRunAnalyze_OutOverride`; `tests/acceptance/analyze_happy_test.go::TestAnalyzeOutOverride` |
+| 16 | Schema stability | `internal/analyze/inventory_test.go::TestSave_SchemaVersionPresent`; `tests/acceptance/analyze_happy_test.go::TestAnalyzeScanWritesInventory` |

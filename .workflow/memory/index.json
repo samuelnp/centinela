@@ -533,6 +533,19 @@
     "createdAt": "2026-06-05T15:19:47Z"
   },
   {
+    "id": "f5519c4b22f147c2",
+    "feature": "deep-codebase-analysis",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Un-writable output path** (#12) — the only sub-detector-independent hard",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/deep-codebase-analysis-edge-cases.md",
+    "createdAt": "2026-06-18T10:50:33Z"
+  },
+  {
     "id": "fd962adabbaacf20",
     "feature": "custom-gate-sdk",
     "step": "tests",
