@@ -56,14 +56,20 @@ targets = [
 [gates.import_graph]
 enabled = true
 
+# internal/golist is a new leaf: a `go list` wrapper importing only stdlib +
+# os/exec, shared by the import_graph gate (domain) and codebase analysis
+# (domain) so the loader is not forked. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "leaf"
-paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**"]
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**"]
 allow = []
 
+# internal/analyze is a domain package (deterministic codebase inventory for
+# `centinela analyze`) importing only leaves (internal/golist, internal/config);
+# it never imports gates/ui/cmd, so it adds no cycle. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "domain"
-paths = ["internal/workflow/**", "internal/gates/**"]
+paths = ["internal/workflow/**", "internal/gates/**", "internal/analyze/**"]
 allow = ["leaf"]
 
 # aggregator layer: internal/doctor is a domain orchestrator that reads several

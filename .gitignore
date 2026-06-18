@@ -23,3 +23,6 @@ ECOSYSTEM.md
 
 # Local governance telemetry — local-only in this repo (feature contract for other projects is git-tracked)
 .workflow/telemetry/
+
+# `centinela analyze` generated inventory — derived from the code, regenerated on demand
+.workflow/analysis.json
