@@ -1,0 +1,1 @@
+- feat(analyze): add `centinela analyze` — deterministic, read-only repo inventory (languages, framework/build/test, locales, package layout, Go import graph) written to `.workflow/analysis.json`; foundation for Phase 9 brownfield onboarding. Extracts a shared `internal/golist` leaf reused by the import_graph gate.

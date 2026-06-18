@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "cli_version": "0.28.5",
+    "written_at": "2026-06-18T10:42:58Z"
+  },
+  "feature": "deep-codebase-analysis",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-18T10:43:08Z",
+  "inputs": [
+    "docs/plans/deep-codebase-analysis.md",
+    "specs/deep-codebase-analysis.feature",
+    ".workflow/deep-codebase-analysis-senior-engineer.md",
+    ".workflow/deep-codebase-analysis-edge-cases.md"
+  ],
+  "outputs": [
+    "tests/integration/analyze_test.go",
+    "tests/integration/analyze_determinism_test.go",
+    "tests/acceptance/analyze_helper_test.go",
+    "tests/acceptance/analyze_happy_test.go",
+    "tests/acceptance/analyze_edge_test.go",
+    "internal/analyze/analyze_test.go",
+    "internal/analyze/languages_test.go",
+    "internal/analyze/manifests_test.go",
+    "internal/analyze/extract_misc_test.go",
+    "internal/analyze/locales_test.go",
+    "internal/analyze/walk_test.go",
+    "internal/analyze/gitignore_test.go",
+    "internal/analyze/graph_test.go",
+    "internal/analyze/inventory_test.go",
+    "internal/golist/golist_test.go",
+    "internal/golist/golist_fake_test.go",
+    "internal/ui/render_analyze_test.go",
+    "cmd/centinela/analyze_test.go",
+    "cmd/centinela/analyze_errors_test.go",
+    ".workflow/deep-codebase-analysis-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Empty/docs-only repo yields a valid empty inventory (primaryLanguage \"\", manifests/graph empty), exit 0",
+    "go list failure / uncompilable Go / missing toolchain: go-packages graph recorded best-effort empty with a Note, rest still emits, exit 0",
+    "Malformed package.json: npm manifest detected-but-unparsable (no build/test/deps), scan continues, exit 0",
+    "Skip set (vendor/node_modules/.git/.workflow/dist/build) + gitignored paths excluded from counts and layout",
+    "Symlinked/unreadable files skipped without aborting; depth-bounded layout caps deep trees",
+    "Deterministic byte-identical re-run on unchanged repo; read-only (only the output JSON is written, no source mutated)",
+    "HARD ERRORS (non-zero exit, no partial artifact): un-writable output path; non-existent/unreadable analysis root"
+  ],
+  "handoffTo": "validation-specialist"
+}

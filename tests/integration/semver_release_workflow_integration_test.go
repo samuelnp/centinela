@@ -50,7 +50,7 @@ func TestReleaseWorkflowAndInstallerContainExpectedFlow(t *testing.T) {
 		"tag_name: ${{ needs.build-and-release.outputs.tag }}",
 		"matrix: {goos: [linux, darwin, windows], goarch: [amd64, arm64]}",
 		"SHA256SUMS",
-		"softprops/action-gh-release@v2",
+		"softprops/action-gh-release@v3",
 	}
 	for _, c := range releaseChecks {
 		if !strings.Contains(releaseContent, c) {
