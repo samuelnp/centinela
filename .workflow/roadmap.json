@@ -311,24 +311,12 @@
     {
       "name": "Backlog",
       "features": [
-        {
-          "name": "rawio-reformat-diff-churn",
-          "summary": "First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn",
-          "source": {
-            "feature": "deferred-findings-roadmap-capture",
-            "role": "senior-engineer"
-          },
-          "deferredAt": "2026-06-12T16:29:13Z"
-        },
-        {
-          "name": "roadmap-import-graph-layer-mapping",
-          "summary": "Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2",
-          "source": {
-            "feature": "roadmap-doc-sync",
-            "role": "gatekeeper"
-          },
-          "deferredAt": "2026-06-14T10:30:31Z"
-        }
+        {"name":"rawio-reformat-diff-churn","summary":"First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn","source":{"feature":"deferred-findings-roadmap-capture","role":"senior-engineer"},"deferredAt":"2026-06-12T16:29:13Z"},
+        {"name":"roadmap-import-graph-layer-mapping","summary":"Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2","source":{"feature":"roadmap-doc-sync","role":"gatekeeper"},"deferredAt":"2026-06-14T10:30:31Z"},
+        {"name":"non-go-source-import-graphs","summary":"Parse source-level import graphs for non-Go languages (JS/TS, Ruby, Rust, Python); analyze v1 records declared manifest deps only","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
+        {"name":"brownfield-framework-fingerprinting","summary":"Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
+        {"name":"incremental-codebase-analysis","summary":"Incremental/cached re-analysis that only re-scans changed directories in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
+        {"name":"codebase-metrics-enrichment","summary":"Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"}
       ]
     }
   ],
