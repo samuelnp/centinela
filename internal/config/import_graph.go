@@ -12,21 +12,29 @@ type Layer struct {
 }
 
 // ImportGraphConfig controls the G2 import-graph gate. When Enabled, the gate
-// loads the whole module's import graph and checks every intra-module edge
-// against the per-layer allow matrix. Module defaults to the path reported by
-// `go list -m` when left blank.
+// loads the project's import graph via a language provider and checks every
+// intra-project edge against the per-layer allow matrix.
+//
+// Provider selects the graph backend: "" (auto-detect by manifest), "go",
+// "node", "python", or "script". ScriptCommand is the argv run by the "script"
+// provider, which must emit the import-graph JSON contract. Module is the Go
+// module override (go provider only), defaulting to `go list -m` when blank.
 type ImportGraphConfig struct {
-	Enabled bool    `toml:"enabled"`
-	Module  string  `toml:"module"`
-	Layers  []Layer `toml:"layers"`
+	Enabled       bool     `toml:"enabled"`
+	Module        string   `toml:"module"`
+	Provider      string   `toml:"provider"`
+	ScriptCommand []string `toml:"script_command"`
+	Layers        []Layer  `toml:"layers"`
 }
 
-// NormalizeImportGraph trims whitespace from the module path, layer names,
-// path globs, and allow entries. It does not drop malformed layers: a layer
-// with no paths is preserved so the gate can report it as a config error
-// rather than silently ignoring it.
+// NormalizeImportGraph trims whitespace from the module path, provider name,
+// script argv, layer names, path globs, and allow entries. It does not drop
+// malformed layers: a layer with no paths is preserved so the gate can report
+// it as a config error rather than silently ignoring it.
 func NormalizeImportGraph(g ImportGraphConfig) ImportGraphConfig {
 	g.Module = strings.TrimSpace(g.Module)
+	g.Provider = strings.ToLower(strings.TrimSpace(g.Provider))
+	g.ScriptCommand = trimNonEmpty(g.ScriptCommand)
 	cleaned := make([]Layer, 0, len(g.Layers))
 	for _, l := range g.Layers {
 		l.Name = strings.TrimSpace(l.Name)

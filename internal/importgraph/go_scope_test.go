@@ -1,8 +1,10 @@
-package gates
+package importgraph
 
 import (
 	"strings"
 	"testing"
+
+	"github.com/samuelnp/centinela/internal/golist"
 )
 
 func TestStripModulePrefix(t *testing.T) {
@@ -21,15 +23,15 @@ func TestStripModulePrefix(t *testing.T) {
 	}
 }
 
-func TestScopePackages_FoldsTestImportsDropsExternal(t *testing.T) {
+func TestScopeGoPkgs_FoldsTestImportsDropsExternal(t *testing.T) {
 	const mod = "github.com/samuelnp/centinela"
-	raw := []goListPkg{{
+	raw := []golist.Pkg{{
 		ImportPath:   mod + "/internal/gates",
 		Imports:      []string{"fmt", mod + "/internal/config"},
 		TestImports:  []string{mod + "/internal/gates"}, // self -> dropped
 		XTestImports: []string{mod + "/internal/workflow", "os"},
 	}, {ImportPath: "golang.org/x/tools"}} // third-party pkg dropped entirely
-	out := scopePackages(raw, mod)
+	out := scopeGoPkgs(raw, mod)
 	if len(out) != 1 || out[0].Path != "internal/gates" {
 		t.Fatalf("expected 1 scoped pkg, got %+v", out)
 	}

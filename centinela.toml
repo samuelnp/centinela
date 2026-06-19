@@ -53,15 +53,25 @@ targets = [
 # both are pure leaf utilities. The matrix below treats config, gitdiff, and
 # orchestration as the leaf layer, which is the honest model. PROJECT.md's G2
 # prose should be updated to match.
+#
+# The gate is language-aware: it auto-selects a graph provider by manifest
+# (go.mod -> go, package.json -> node, pyproject/requirements -> python) and
+# self-skips with a WARN when none matches. Non-Go projects can set an explicit
+# provider, or a custom script for languages without a built-in backend:
+#   provider = "node"                       # or "go" | "python" | "script"
+#   script_command = ["./scripts/edges.sh"] # must emit the import-graph JSON
+# This repo is Go, so the unset provider auto-selects "go" (unchanged behavior).
 [gates.import_graph]
 enabled = true
 
-# internal/golist is a new leaf: a `go list` wrapper importing only stdlib +
+# internal/golist is a leaf: a `go list` wrapper importing only stdlib +
 # os/exec, shared by the import_graph gate (domain) and codebase analysis
-# (domain) so the loader is not forked. See PROJECT.md G2.
+# (domain) so the loader is not forked. internal/importgraph is also a leaf: the
+# language-provider seam (go/node/python/script backends) consumed by the gate;
+# it imports only stdlib, os/exec, and the internal/golist leaf. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "leaf"
-paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**"]
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**"]
 allow = []
 
 # internal/analyze is a domain package (deterministic codebase inventory for

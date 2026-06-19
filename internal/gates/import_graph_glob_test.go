@@ -45,9 +45,3 @@ func TestAllowed_SameLayerAndAllowList(t *testing.T) {
 		t.Fatal("non-allow-listed cross-layer import must be forbidden")
 	}
 }
-
-func TestErrEmptyModule(t *testing.T) {
-	if errEmptyModule == nil || errEmptyModule.Error() != "module path is empty" {
-		t.Fatalf("unexpected errEmptyModule: %v", errEmptyModule)
-	}
-}
