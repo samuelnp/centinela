@@ -1,0 +1,45 @@
+{
+  "_meta": {
+    "cli_version": "0.29.0",
+    "written_at": "2026-06-19T10:00:35Z"
+  },
+  "feature": "g2-multi-language-import-graph",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-19T10:00:35Z",
+  "inputs": [
+    "specs/g2-multi-language-import-graph.feature",
+    "docs/plans/g2-multi-language-import-graph.md"
+  ],
+  "outputs": [
+    "internal/importgraph/go_scope_test.go",
+    "internal/importgraph/node_parse_test.go",
+    "internal/importgraph/helpers_test.go",
+    "internal/importgraph/node_backend_test.go",
+    "internal/importgraph/python_backend_test.go",
+    "internal/importgraph/script_graph_test.go",
+    "internal/importgraph/select_test.go",
+    "internal/importgraph/manifests_test.go",
+    "internal/importgraph/runner_test.go",
+    "internal/importgraph/go_backend_test.go",
+    "internal/gates/import_graph_classify_test.go",
+    "tests/integration/importgraph_integration_test.go",
+    "tests/acceptance/g2_multi_language_import_graph_test.go",
+    "tests/acceptance/g2_multi_language_import_graph_steps_test.go",
+    ".workflow/g2-multi-language-import-graph-edge-cases.md"
+  ],
+  "edgeCases": [
+    "no manifest -> Warn self-skip",
+    "tool missing -> Warn (CI green)",
+    "malformed tool output -> Fail",
+    "script nonzero exit -> Fail; empty valid -> Pass",
+    "go-repo parity green (dogfood pr-gate 0 failed)",
+    "broken go.mod -> Fail",
+    "empty matrix -> Warn",
+    "manifest in ancestor dir -> walk up",
+    "node_modules/core/self edges dropped",
+    "checkEdges ignores edges into unknown pkgs (providers emit all pkgs)"
+  ],
+  "handoffTo": "validation-specialist"
+}

@@ -1,22 +1,27 @@
 package gates
 
 import (
-	"github.com/samuelnp/centinela/internal/golist"
+	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/importgraph"
 )
 
-// goListPkg is the gate-local alias for golist.Pkg. The loader lives in the
-// shared internal/golist leaf (reused by codebase analysis); the gate delegates
-// to it so the streamed-JSON decode + stderr-surfacing logic has one home.
-type goListPkg = golist.Pkg
-
-// loadModulePath returns the current module path via the shared golist seam.
-func loadModulePath() (string, error) {
-	return golist.ModulePath()
+// loadGraph resolves the import-graph provider for the project (manifest-driven
+// unless cfg.Provider is set) and loads the scoped graph. The project root is
+// the current working directory — the gate is invoked from the project root.
+func loadGraph(cfg config.ImportGraphConfig) (importgraph.Graph, error) {
+	provider, err := importgraph.Select(".", cfg.Provider, cfg.Module, cfg.ScriptCommand, nil)
+	if err != nil {
+		return importgraph.Graph{}, err
+	}
+	return provider.Load(".")
 }
 
-// loadPackages loads the module's package import graph via the shared golist
-// seam. A non-zero exit (e.g. uncompilable code) is surfaced as an error so the
-// gate Fails rather than reporting a false Pass.
-func loadPackages() ([]goListPkg, error) {
-	return golist.Packages()
+// toPkgs adapts importgraph.Pkg values to the gate-local pkg type so checkEdges
+// and its existing tests stay unchanged regardless of the source provider.
+func toPkgs(in []importgraph.Pkg) []pkg {
+	out := make([]pkg, 0, len(in))
+	for _, p := range in {
+		out = append(out, pkg{Path: p.Path, Imports: p.Imports})
+	}
+	return out
 }

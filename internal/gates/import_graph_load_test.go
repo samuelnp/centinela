@@ -81,19 +81,12 @@ func TestRunImportGraph_LoadErrorFails(t *testing.T) {
 	}
 }
 
-func TestResolveModule_DiscoveryErrorFails(t *testing.T) {
-	// Blank module + broken go.mod -> `go list -m` fails -> config-error Fail.
+func TestImportGraph_DiscoveryErrorFails(t *testing.T) {
+	// Blank module + broken go.mod -> the go provider's `go list -m` discovery
+	// fails -> provider load error -> Fail prefixed "import_graph: ".
 	writeBrokenModule(t)
 	r := checkImportGraph(igCfg("", fixtureLayers()), nil)
-	if r.Status != Fail || !strings.HasPrefix(r.Message, "import_graph config: ") {
-		t.Fatalf("expected config-error Fail, got %v: %q", r.Status, r.Message)
-	}
-}
-
-func TestLoadModulePath_Fixture(t *testing.T) {
-	writeFixtureModule(t, "package a\n")
-	m, err := loadModulePath()
-	if err != nil || m != "fixturemod" {
-		t.Fatalf("loadModulePath: got %q %v", m, err)
+	if r.Status != Fail || !strings.HasPrefix(r.Message, "import_graph: ") {
+		t.Fatalf("expected load-error Fail, got %v: %q", r.Status, r.Message)
 	}
 }

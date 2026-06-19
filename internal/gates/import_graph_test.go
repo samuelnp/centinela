@@ -33,22 +33,11 @@ func TestCheckImportGraph_ConfigErrorFails(t *testing.T) {
 	}
 }
 
-func TestResolveModule(t *testing.T) {
-	if m, err := resolveModule("  github.com/a/b  "); err != nil || m != "  github.com/a/b  " {
-		t.Fatalf("explicit module returned verbatim: %q %v", m, err)
-	}
-	// Blank module triggers discovery via `go list -m`; inside this repo that
-	// resolves to the centinela module path without error.
-	m, err := resolveModule("")
-	if err != nil || m == "" {
-		t.Fatalf("blank module discovery failed: %q %v", m, err)
-	}
-}
-
 func TestCheckImportGraph_PassOnRealModule(t *testing.T) {
-	// Run against THIS module with a deliberately permissive single layer that
-	// maps every package, so no edge can be forbidden -> Pass. Exercises the
-	// full load -> scope -> check pipeline via real `go list -json`.
+	// Run against THIS module (auto-selected go provider via go.mod) with a
+	// deliberately permissive single layer that maps every package, so no edge
+	// can be forbidden -> Pass. Exercises the full provider load -> scope ->
+	// check pipeline via real `go list -json`, including blank-module discovery.
 	layers := []config.Layer{{Name: "all", Paths: []string{"**"}, Allow: nil}}
 	r := checkImportGraph(igCfg("", layers), nil)
 	if r.Status != Pass {

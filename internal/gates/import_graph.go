@@ -1,71 +1,40 @@
 package gates
 
 import (
-	"strings"
-
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/gitdiff"
 )
 
-// checkImportGraph enforces the G2 layer-boundary rule by loading the whole
-// module's import graph and checking every intra-module edge against the
-// configured allow matrix.
+// checkImportGraph enforces the G2 layer-boundary rule by loading the project's
+// import graph via a language provider (Go/Node/Python/custom-script, selected
+// by manifest unless configured) and checking every intra-project edge against
+// the configured allow matrix.
 //
 // The filter argument is accepted for RunWithFilter signature parity but is
 // DELIBERATELY IGNORED: a forbidden edge can be introduced or removed by a file
 // outside the current diff set, so a diff-scoped load would produce false
-// passes. This gate always loads the entire module.
+// passes. This gate always loads the entire project.
 func checkImportGraph(cfg *config.Config, _ *gitdiff.Set) Result {
-	r := Result{Name: "import_graph"}
 	g := cfg.Gates.ImportGraph
 	if len(g.Layers) == 0 {
-		r.Status = Warn
-		r.Message = "import_graph: layer matrix is empty."
-		return r
+		return Result{Name: "import_graph", Status: Warn, Message: "import_graph: layer matrix is empty."}
 	}
 	m, err := buildMatrix(g.Layers)
 	if err != nil {
-		r.Status = Fail
-		r.Message = "import_graph config: " + err.Error()
-		return r
+		return Result{Name: "import_graph", Status: Fail, Message: "import_graph config: " + err.Error()}
 	}
-	module, err := resolveModule(g.Module)
+	graph, err := loadGraph(g)
 	if err != nil {
-		r.Status = Fail
-		r.Message = "import_graph config: " + err.Error()
-		return r
+		return classifyLoadError(err)
 	}
-	return runImportGraph(m, module)
+	violations, unmapped := checkEdges(toPkgs(graph.Pkgs), m)
+	return reportEdges(violations, unmapped)
 }
 
-// resolveModule returns the configured module path, or discovers it via
-// `go list -m` when blank. A configured-but-empty module is a config error.
-func resolveModule(configured string) (string, error) {
-	if strings.TrimSpace(configured) != "" {
-		return configured, nil
-	}
-	module, err := loadModulePath()
-	if err != nil {
-		return "", err
-	}
-	if module == "" {
-		return "", errEmptyModule
-	}
-	return module, nil
-}
-
-// runImportGraph performs the load -> scope -> check pipeline and maps the
-// outcome to a Result: load error -> Fail; forbidden edges -> Fail (one detail
-// per edge); only unmapped packages -> Warn; otherwise Pass.
-func runImportGraph(m matrix, module string) Result {
+// reportEdges maps the edge-check outcome to a Result: forbidden edges -> Fail
+// (one detail per edge); only unmapped packages -> Warn; otherwise Pass.
+func reportEdges(violations, unmapped []string) Result {
 	r := Result{Name: "import_graph"}
-	raw, err := loadPackages()
-	if err != nil {
-		r.Status = Fail
-		r.Message = "import_graph: " + err.Error()
-		return r
-	}
-	violations, unmapped := checkEdges(scopePackages(raw, module), m)
 	switch {
 	case len(violations) > 0:
 		r.Status = Fail
@@ -77,7 +46,7 @@ func runImportGraph(m matrix, module string) Result {
 		r.Details = unmapped
 	default:
 		r.Status = Pass
-		r.Message = "All intra-module imports respect the layer matrix."
+		r.Message = "All intra-project imports respect the layer matrix."
 	}
 	return r
 }

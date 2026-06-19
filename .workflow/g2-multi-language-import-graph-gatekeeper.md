@@ -1,0 +1,54 @@
+# g2-multi-language-import-graph — gatekeeper
+
+### Gatekeeper Report: g2-multi-language-import-graph
+**Date:** 2026-06-19
+**Status:** SAFE
+
+## Analyzed Specs
+
+- `specs/g2-multi-language-import-graph.feature` (new — 7 scenarios)
+- `specs/g2-import-graph-gate.feature` (existing G2 matrix-semantics spec — most
+  directly related)
+- Full `specs/` directory scanned (90+ `.feature` files): no other spec touches
+  the `import_graph` gate, `internal/importgraph`/`internal/golist`, the
+  `ImportGraphConfig` DTO, or the G2 layer matrix.
+
+## Findings
+
+- **No conflicts detected.** The change is additive: a new leaf package plus two
+  new optional config fields (`Provider`, `ScriptCommand`). The two G2 specs are
+  complementary — `g2-import-graph-gate.feature` pins matrix/edge semantics on a
+  Go project; the new spec pins provider selection across languages, and its
+  first scenario explicitly preserves the legacy Go behavior (backward compat is
+  asserted, not assumed).
+- `centinela.toml` correctly adds `internal/importgraph/**` to the `leaf` layer,
+  and PROJECT.md G2 prose was updated to describe it — prose and matrix are
+  consistent for this feature.
+
+## Layer & Size Audit
+
+- **G1 (≤100 lines):** PASS. Every changed source and test file ≤96 lines.
+- **G2 layer purity:** PASS — independently verified via `go list`:
+  `internal/importgraph` imports only stdlib, `os/exec`, and the
+  `internal/golist` leaf. Consumed only by `internal/gates` (domain → leaf,
+  allowed). No import cycle. (The grep hits for `internal/config` etc. are
+  string literals/comments in test fixtures, not imports.)
+- **Outer-layer purity (G7):** PASS. `cmd/` does not reference `importgraph`;
+  dispatch lives entirely in `internal/gates` + `internal/importgraph`.
+- **Self-skip semantics:** PASS. `classifyLoadError` maps `ErrNoProvider` and
+  `*ToolMissingError` → non-failing Warn; all other load errors → Fail; empty
+  matrix → Warn before selection.
+- **Backward compatibility (Go path):** PASS. Provider auto-selects "go" by
+  manifest; the Go backend reuses the shared `golist` seam (moved, not
+  rewritten). Full suite (2420 tests), `go build ./...`, `go vet` clean; no
+  stale references to the retired gate helpers remain.
+
+## Deferred Findings
+
+- none
+
+## Recommendation
+
+- **SAFE** — additive, layer-pure (clean leaf, no cycle, no cmd leak), all 7
+  spec scenarios mapped to acceptance tests, full build/vet/test green, and the
+  Go path is provably unchanged. Proceed.

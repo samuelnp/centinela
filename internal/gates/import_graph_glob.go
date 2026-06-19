@@ -1,12 +1,6 @@
 package gates
 
-import (
-	"errors"
-	"strings"
-)
-
-// errEmptyModule is the config error for an explicitly-blank module path.
-var errEmptyModule = errors.New("module path is empty")
+import "strings"
 
 // trimDoubleStar returns (dir, true) for a glob ending in "/**", where dir is
 // the glob with the "/**" suffix removed. A bare "**" maps to "" (matches the
