@@ -208,6 +208,19 @@
     "createdAt": "2026-06-06T13:36:58Z"
   },
   {
+    "id": "4862095c07edd025",
+    "feature": "g2-multi-language-import-graph",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **No recognized manifest** → `ErrNoProvider` → gate self-skips with a",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/g2-multi-language-import-graph-edge-cases.md",
+    "createdAt": "2026-06-19T10:03:50Z"
+  },
+  {
     "id": "5c1ccba03ee6b28f",
     "feature": "g2-import-graph-gate",
     "step": "validate",
