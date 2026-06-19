@@ -533,6 +533,19 @@
     "createdAt": "2026-06-10T16:25:22Z"
   },
   {
+    "id": "d1632d2cefba0f51",
+    "feature": "archetype-inference-project-synthesis",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# archetype-inference-project-synthesis — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/archetype-inference-project-synthesis-gatekeeper.md",
+    "createdAt": "2026-06-19T15:17:21Z"
+  },
+  {
     "id": "dfb681078078fa80",
     "feature": "audit-baseline-ratchet",
     "step": "validate",

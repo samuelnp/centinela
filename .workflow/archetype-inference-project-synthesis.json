@@ -1,14 +1,14 @@
 {
   "feature": "archetype-inference-project-synthesis",
   "startedAt": "2026-06-19T11:42:30.615778Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-19T14:13:47Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-19T14:22:00Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-19T15:17:21Z"
     }
   },
   "stepOrder": [

@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "cli_version": "0.30.0",
+    "written_at": "2026-06-19T14:26:39Z"
+  },
+  "feature": "archetype-inference-project-synthesis",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-19T14:26:39Z",
+  "inputs": [
+    "specs/archetype-inference-project-synthesis.feature",
+    "PROJECT.md",
+    "centinela.toml"
+  ],
+  "outputs": [
+    ".workflow/archetype-inference-project-synthesis-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}
