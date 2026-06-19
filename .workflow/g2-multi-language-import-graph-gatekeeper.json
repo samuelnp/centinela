@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "cli_version": "0.29.0",
+    "written_at": "2026-06-19T10:11:28Z"
+  },
+  "feature": "g2-multi-language-import-graph",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-19T10:11:28Z",
+  "inputs": [
+    "specs/g2-multi-language-import-graph.feature",
+    "PROJECT.md",
+    "centinela.toml"
+  ],
+  "outputs": [
+    ".workflow/g2-multi-language-import-graph-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "complete"
+}

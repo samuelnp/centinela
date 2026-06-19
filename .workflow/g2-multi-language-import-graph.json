@@ -1,14 +1,14 @@
 {
   "feature": "g2-multi-language-import-graph",
   "startedAt": "2026-06-19T08:07:37.67964Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-19T09:50:02Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-19T10:03:50Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-19T10:27:07Z"
     }
   },
   "stepOrder": [

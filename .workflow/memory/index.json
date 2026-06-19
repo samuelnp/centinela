@@ -221,6 +221,19 @@
     "createdAt": "2026-06-19T10:03:50Z"
   },
   {
+    "id": "516c1dba5657b901",
+    "feature": "g2-multi-language-import-graph",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# g2-multi-language-import-graph — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/g2-multi-language-import-graph-gatekeeper.md",
+    "createdAt": "2026-06-19T10:27:07Z"
+  },
+  {
     "id": "5c1ccba03ee6b28f",
     "feature": "g2-import-graph-gate",
     "step": "validate",
