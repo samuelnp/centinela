@@ -73,3 +73,4 @@
 - Dependencies: governed-project-memory — extends the per-project memory model
 - Feature: adaptive-skill-synthesis
 - Dependencies: governance-telemetry, centinela-insights
+- Promoted from Backlog: g2-multi-language-import-graph (source=g2-import-graph-gate/gatekeeper, deferredAt=2026-06-19T08:02:58Z)

@@ -74,3 +74,4 @@
 - Summary: Extends governed memory across projects so lessons travel; clear value building on the existing per-project memory design, sharing/scoping boundaries scoped at plan.
 - Feature: adaptive-skill-synthesis
 - Summary: When telemetry shows a workflow isn't running as intended, synthesize/adjust skills so the harness absorbs repeated toil; high self-improvement value, appropriately last given its dependencies. Synthesis mechanics refined at plan.
+- Promoted from Backlog: g2-multi-language-import-graph (source=g2-import-graph-gate/gatekeeper, deferredAt=2026-06-19T08:02:58Z)

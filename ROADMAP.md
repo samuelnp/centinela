@@ -31,16 +31,13 @@
 
 ## Phase 3: Close the Mechanical-Verification Gap
 
-> The flagship promise — separation of concerns / layer dependencies — was
-> a *manual* code-review gate. Convert the remaining "requested" gates into
-> mechanically enforced ones, then open the gate engine to teams' own rules.
-
 - **g2-import-graph-gate** — Mechanically enforce per-archetype layer-dependency rules by parsing the import graph (Go `go/packages`, TS madge/ts-morph, Python AST). Turns the prose G2 rule in `PROJECT.md` into a checkable allow/deny matrix.
   *Fixes: agent silently introduces a forbidden cross-layer import that no gate catches.*
 - **security-gate** — Mechanical secret-scanning + dependency-vuln audit (`gitleaks` / `osv-scanner` / `govulncheck`, configurable) wired into validate.
   *Fixes: agent commits a secret or pulls a vulnerable dependency; subagent review misses it.*
 - **spec-traceability-gate** — Verify every Gherkin scenario in `specs/*.feature` maps to an executed step definition in `tests/acceptance/`.
   *Fixes: spec and acceptance tests drift apart; scenarios silently go unimplemented.*
+- **g2-multi-language-import-graph**
 
 ## Phase 4: Loop Velocity
 

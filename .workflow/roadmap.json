@@ -29,23 +29,11 @@
     },
     {
       "name": "Phase 3: Close the Mechanical-Verification Gap",
-      "note": "The flagship promise \u2014 separation of concerns / layer dependencies \u2014 was\na *manual* code-review gate. Convert the remaining \"requested\" gates into\nmechanically enforced ones, then open the gate engine to teams' own rules.",
       "features": [
-        {
-          "name": "g2-import-graph-gate",
-          "description": "Mechanically enforce per-archetype layer-dependency rules by parsing the import graph (Go `go/packages`, TS madge/ts-morph, Python AST). Turns the prose G2 rule in `PROJECT.md` into a checkable allow/deny matrix.",
-          "fixes": "agent silently introduces a forbidden cross-layer import that no gate catches."
-        },
-        {
-          "name": "security-gate",
-          "description": "Mechanical secret-scanning + dependency-vuln audit (`gitleaks` / `osv-scanner` / `govulncheck`, configurable) wired into validate.",
-          "fixes": "agent commits a secret or pulls a vulnerable dependency; subagent review misses it."
-        },
-        {
-          "name": "spec-traceability-gate",
-          "description": "Verify every Gherkin scenario in `specs/*.feature` maps to an executed step definition in `tests/acceptance/`.",
-          "fixes": "spec and acceptance tests drift apart; scenarios silently go unimplemented."
-        }
+        {"name":"g2-import-graph-gate","description":"Mechanically enforce per-archetype layer-dependency rules by parsing the import graph (Go `go/packages`, TS madge/ts-morph, Python AST). Turns the prose G2 rule in `PROJECT.md` into a checkable allow/deny matrix.","fixes":"agent silently introduces a forbidden cross-layer import that no gate catches."},
+        {"name":"security-gate","description":"Mechanical secret-scanning + dependency-vuln audit (`gitleaks` / `osv-scanner` / `govulncheck`, configurable) wired into validate.","fixes":"agent commits a secret or pulls a vulnerable dependency; subagent review misses it."},
+        {"name":"spec-traceability-gate","description":"Verify every Gherkin scenario in `specs/*.feature` maps to an executed step definition in `tests/acceptance/`.","fixes":"spec and acceptance tests drift apart; scenarios silently go unimplemented."},
+        {"name":"g2-multi-language-import-graph"}
       ]
     },
     {
