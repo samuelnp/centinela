@@ -100,9 +100,14 @@ allow = ["leaf"]
 # baseline artifact, imported only by cmd/ (its Diff type by internal/ui). Its
 # edges (audit→gates domain, audit→config leaf) are both allowed here; gates
 # never imports audit, so there is no cycle. See PROJECT.md G2.
+# internal/synthesize also joins this layer: a read-only archetype-inference +
+# PROJECT.md synthesizer that imports the internal/analyze domain (read-only) and
+# stdlib only, imported solely by cmd/ (its Inference type by internal/ui for
+# rendering). Its sole edge is synthesize→analyze (domain, allowed); analyze
+# never imports synthesize, so there is no cycle. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**"]
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**"]
 allow = ["domain", "leaf"]
 
 [[gates.import_graph.layers]]

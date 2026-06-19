@@ -260,6 +260,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "65b6bfe5c783fea1",
+    "feature": "archetype-inference-project-synthesis",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Each archetype inferred from conventional signals** — n-tier (handler/",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/archetype-inference-project-synthesis-edge-cases.md",
+    "createdAt": "2026-06-19T14:22:00Z"
+  },
+  {
     "id": "6f2c47e7d891ec8f",
     "feature": "failure-ledger-plan-advisor",
     "step": "tests",
@@ -518,6 +531,19 @@
     ],
     "sourceArtifact": ".workflow/code-quality-hardening-gatekeeper.md",
     "createdAt": "2026-06-10T16:25:22Z"
+  },
+  {
+    "id": "d1632d2cefba0f51",
+    "feature": "archetype-inference-project-synthesis",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# archetype-inference-project-synthesis — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/archetype-inference-project-synthesis-gatekeeper.md",
+    "createdAt": "2026-06-19T15:17:21Z"
   },
   {
     "id": "dfb681078078fa80",

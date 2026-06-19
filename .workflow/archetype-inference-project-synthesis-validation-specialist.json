@@ -1,0 +1,20 @@
+{
+  "_meta": {
+    "cli_version": "0.30.0",
+    "written_at": "2026-06-19T14:27:14Z"
+  },
+  "feature": "archetype-inference-project-synthesis",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-19T14:27:14Z",
+  "inputs": [
+    ".workflow/archetype-inference-project-synthesis-gatekeeper.md",
+    ".workflow/archetype-inference-project-synthesis-qa-senior.md"
+  ],
+  "outputs": [
+    ".workflow/archetype-inference-project-synthesis-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}
