@@ -70,7 +70,7 @@ func classify(scores []Score) Inference {
 	switch {
 	case ambiguous:
 		conf = Low
-	case top >= 6 && margin >= 3:
+	case top >= 5 && margin >= 3:
 		conf = High
 	case top >= 3:
 		conf = Medium

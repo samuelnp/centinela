@@ -260,6 +260,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "65b6bfe5c783fea1",
+    "feature": "archetype-inference-project-synthesis",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Each archetype inferred from conventional signals** — n-tier (handler/",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/archetype-inference-project-synthesis-edge-cases.md",
+    "createdAt": "2026-06-19T14:22:00Z"
+  },
+  {
     "id": "6f2c47e7d891ec8f",
     "feature": "failure-ledger-plan-advisor",
     "step": "tests",
