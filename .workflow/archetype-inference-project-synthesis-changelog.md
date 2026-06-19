@@ -1,0 +1,1 @@
+- feat: add `centinela synthesize` — deterministically infer the best-fit architecture archetype from the analyze inventory and draft a PROJECT.md (never clobbering an existing one) for brownfield onboarding.
