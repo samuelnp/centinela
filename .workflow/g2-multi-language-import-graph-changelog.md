@@ -1,0 +1,1 @@
+- feat: make the G2 import_graph gate language-aware — pluggable GraphProvider seam (go/node/python + custom-script) auto-selected by manifest, self-skipping with a Warn instead of hard-failing non-Go projects.
