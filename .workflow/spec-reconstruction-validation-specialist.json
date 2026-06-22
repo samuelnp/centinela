@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "cli_version": "0.31.0",
+    "written_at": "2026-06-22T10:21:48Z"
+  },
+  "feature": "spec-reconstruction",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-22T10:14:26Z",
+  "inputs": [
+    "docs/plans/spec-reconstruction.md",
+    "specs/spec-reconstruction.feature",
+    ".workflow/spec-reconstruction-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/spec-reconstruction-validation-specialist.md",
+    ".workflow/spec-reconstruction-gatekeeper.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

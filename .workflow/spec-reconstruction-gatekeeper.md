@@ -1,0 +1,56 @@
+### Gatekeeper Report: spec-reconstruction
+**Date:** 2026-06-22
+**Status:** SAFE
+
+#### Analyzed Specs
+Skimmed the full specs/ corpus (97 .feature files) for references to
+`reconstruct`, the `.workflow/reconstructed/` review dir, or any symbol this
+feature adds — none found outside spec-reconstruction.feature itself. Focused
+review of the contracts this feature touches:
+- specs/spec-reconstruction.feature — the new feature under review.
+- specs/deep-codebase-analysis.feature — owner of the `analyze` Inventory
+  contract that reconstruct consumes read-only.
+- specs/archetype-inference-project-synthesis.feature — sibling `synthesize`
+  aggregator whose `synthesize → analyze` edge this feature mirrors.
+- specs/spec-traceability-gate.feature — its scenario parser is reused by the
+  new feature's "every generated feature parses" scenario.
+- specs/g2-import-graph-gate.feature, specs/g2-multi-language-import-graph.feature
+  — the import_graph layer rules this feature extends.
+- specs/evidence-cli.feature, specs/enforce-step-subagent-orchestration.feature
+  — workflow-state / evidence contracts (unaffected).
+
+#### Findings
+None. This feature is purely additive. Verification per conflict class:
+
+- **Shared domain entity:** No existing domain entity modified. `git diff
+  main...HEAD` shows zero changes under `internal/analyze/` or `internal/gates/`.
+  `internal/reconstruct` consumes `analyze.Inventory` strictly read-only (reads
+  `inv.Packages` + signal fields; never assigns/mutates). `analyze` does not
+  import `reconstruct` (verified) — no cycle, no forced contract change on the
+  analyze owner.
+- **Use case:** No existing use case altered. `Select` / `Reconstruct` /
+  `WriteCorpus` are new functions in a new package; no existing call site rewired.
+- **Port / DTO:** No port interface or DTO shape that existing adapters, hooks,
+  or tests depend on is changed. New types (`Target`, `Reconstruction`,
+  `Artifact`, `Role`, `Reconstructor`) are introduced, not modified. The
+  `Reconstruction` type is rendered by `internal/ui/render_reconstruct.go`
+  (allowed read-only aggregator→ui rendering dependency).
+- **Workflow state:** No new workflow/step state introduced. `centinela
+  reconstruct` writes only into the `.workflow/reconstructed/` review dir, never
+  the canonical `specs/` dir, and skips any slug whose `specs/<slug>.feature`
+  already exists (write.go) — hand-authored specs are never clobbered, and the
+  spec-traceability gate's source set is unaffected.
+
+Layer-boundary check (G2 / import_graph): sole new edge is
+`reconstruct → analyze` (aggregator → domain, allowed). `cmd/centinela/
+reconstruct.go` imports `analyze`, `reconstruct`, `ui` (cmd may import domain +
+aggregator). `internal/reconstruct/**` is mapped into the aggregator layer in
+both PROJECT.md G2 and centinela.toml. All consistent.
+
+#### Deferred Findings
+none
+
+#### Recommendation
+- SAFE — Purely additive aggregator command: reads the analyze Inventory
+  read-only, writes only to a review dir, clobbers nothing. Proceed with
+  implementation/validation.

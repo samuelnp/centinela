@@ -183,3 +183,4 @@
 - **brownfield-framework-fingerprinting** — Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze *(deferred 2026-06-17T21:17:33Z · deep-codebase-analysis/big-thinker)*
 - **incremental-codebase-analysis** — Incremental/cached re-analysis that only re-scans changed directories in centinela analyze *(deferred 2026-06-17T21:17:33Z · deep-codebase-analysis/big-thinker)*
 - **codebase-metrics-enrichment** — Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference *(deferred 2026-06-17T21:17:33Z · deep-codebase-analysis/big-thinker)*
+- **brownfield-route-flow-extraction** — Framework-specific HTTP route and call-flow extraction for reconstructed specs; spec-reconstruction v1 ships package/manifest-derived targets only *(deferred 2026-06-22T07:52:17Z · spec-reconstruction/big-thinker)*

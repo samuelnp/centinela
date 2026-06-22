@@ -1,0 +1,32 @@
+{
+  "_meta": {
+    "cli_version": "0.31.0",
+    "written_at": "2026-06-22T10:15:06Z"
+  },
+  "feature": "spec-reconstruction",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-22T10:14:26Z",
+  "inputs": [
+    "specs/spec-reconstruction.feature",
+    "internal/reconstruct/reconstruct.go",
+    "internal/reconstruct/reconstructor.go",
+    "internal/reconstruct/select.go",
+    "internal/reconstruct/write.go",
+    "cmd/centinela/reconstruct.go",
+    "internal/ui/render_reconstruct.go",
+    "PROJECT.md",
+    "centinela.toml"
+  ],
+  "outputs": [
+    ".workflow/spec-reconstruction-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "shared-entity: analyze.Inventory consumed read-only; analyze does not import reconstruct (no cycle)",
+    "use-case: no existing use case rewired; only new Select/Reconstruct/WriteCorpus added",
+    "port/DTO: no existing port/DTO changed; new Reconstruction type rendered read-only by internal/ui",
+    "workflow-state: writes only to .workflow/reconstructed review dir, skips existing specs/<slug>.feature, never clobbers"
+  ],
+  "handoffTo": "validation-specialist"
+}

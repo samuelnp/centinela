@@ -1,0 +1,1 @@
+- feat: add `centinela reconstruct` — deterministically derive Gherkin `.feature` skeletons + `docs/features` brief stubs from the analyze Inventory into a review dir, with honest `# TODO: confirm` gaps, never clobbering hand-authored specs (swappable `Reconstructor` seam, no LLM).

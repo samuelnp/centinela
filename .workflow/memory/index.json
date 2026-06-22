@@ -52,6 +52,19 @@
     "createdAt": "2026-06-14T20:53:59Z"
   },
   {
+    "id": "19a327c9acc0d36b",
+    "feature": "spec-reconstruction",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: spec-reconstruction",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/spec-reconstruction-gatekeeper.md",
+    "createdAt": "2026-06-22T10:34:01Z"
+  },
+  {
     "id": "1ba2b232333b5a26",
     "feature": "governance-telemetry",
     "step": "validate",
@@ -271,6 +284,19 @@
     ],
     "sourceArtifact": ".workflow/archetype-inference-project-synthesis-edge-cases.md",
     "createdAt": "2026-06-19T14:22:00Z"
+  },
+  {
+    "id": "6d45f243b935eb16",
+    "feature": "spec-reconstruction",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Missing/old inventory** — `--in` points at a non-existent file → wraps",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/spec-reconstruction-edge-cases.md",
+    "createdAt": "2026-06-22T09:56:27Z"
   },
   {
     "id": "6f2c47e7d891ec8f",

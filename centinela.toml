@@ -105,9 +105,14 @@ allow = ["leaf"]
 # stdlib only, imported solely by cmd/ (its Inference type by internal/ui for
 # rendering). Its sole edge is synthesize→analyze (domain, allowed); analyze
 # never imports synthesize, so there is no cycle. See PROJECT.md G2.
+# internal/reconstruct also joins this layer: a read-only spec-corpus
+# reconstructor that imports the internal/analyze domain (read-only) and stdlib
+# only, imported solely by cmd/ (its Reconstruction type by internal/ui for
+# rendering). Its sole edge is reconstruct→analyze (domain, allowed); analyze
+# never imports reconstruct, so there is no cycle. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**"]
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**"]
 allow = ["domain", "leaf"]
 
 [[gates.import_graph.layers]]
