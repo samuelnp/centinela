@@ -1,0 +1,46 @@
+{
+  "_meta": {
+    "cli_version": "0.31.0",
+    "written_at": "2026-06-22T08:22:32Z"
+  },
+  "feature": "spec-reconstruction",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-22T08:22:32Z",
+  "inputs": [
+    "docs/plans/spec-reconstruction.md",
+    "specs/spec-reconstruction.feature",
+    ".workflow/spec-reconstruction-senior-engineer.md",
+    "internal/reconstruct/reconstructor.go",
+    "internal/reconstruct/feature.go",
+    "internal/reconstruct/write.go"
+  ],
+  "outputs": [
+    "tests/acceptance/reconstruct_happy_test.go",
+    "tests/acceptance/reconstruct_edge_test.go",
+    "tests/acceptance/reconstruct_helper_test.go",
+    "tests/integration/reconstruct_pipeline_test.go",
+    "internal/reconstruct/select_test.go",
+    "internal/reconstruct/reconstructor_test.go",
+    "internal/reconstruct/write_test.go",
+    "internal/reconstruct/feature_test.go",
+    "cmd/centinela/reconstruct_test.go",
+    "cmd/centinela/reconstruct_errors_test.go",
+    "internal/ui/render_reconstruct_test.go",
+    ".workflow/spec-reconstruction-edge-cases.md"
+  ],
+  "edgeCases": [
+    "missing inventory -> ErrNoInventory guidance, non-zero exit, no corpus",
+    "empty/doc-only inventory -> 0 targets, no empty feature",
+    "polyglot empty Go graph -> manifest/package targets",
+    "hand-authored spec skipped, byte-unchanged",
+    "re-run byte-identical determinism",
+    "slug collisions disambiguated",
+    "package list bounded to maxTargets",
+    "exclusion precedence over promotion",
+    "no-behavior target -> Feature + single TODO stub",
+    "every generated .feature parses with spec_traceability"
+  ],
+  "handoffTo": "validation-specialist"
+}

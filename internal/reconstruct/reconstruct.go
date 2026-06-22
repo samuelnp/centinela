@@ -37,12 +37,12 @@ type Target struct {
 // "# TODO: confirm" markers across all features, and the paths written/skipped
 // once WriteCorpus runs.
 type Reconstruction struct {
-	Targets   []Target `json:"targets"`
+	Targets   []Target   `json:"targets"`
 	Features  []Artifact `json:"-"`
 	Briefs    []Artifact `json:"-"`
-	TodoCount int      `json:"todoCount"`
-	Written   []string `json:"written"`
-	Skipped   []string `json:"skipped"`
+	TodoCount int        `json:"todoCount"`
+	Written   []string   `json:"written"`
+	Skipped   []string   `json:"skipped"`
 }
 
 // Artifact is one assembled file: its slug-derived basename and pure-string body.

@@ -273,6 +273,19 @@
     "createdAt": "2026-06-19T14:22:00Z"
   },
   {
+    "id": "6d45f243b935eb16",
+    "feature": "spec-reconstruction",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Missing/old inventory** — `--in` points at a non-existent file → wraps",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/spec-reconstruction-edge-cases.md",
+    "createdAt": "2026-06-22T09:56:27Z"
+  },
+  {
     "id": "6f2c47e7d891ec8f",
     "feature": "failure-ledger-plan-advisor",
     "step": "tests",
