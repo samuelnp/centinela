@@ -1,15 +1,15 @@
 {
   "feature": "spec-reconstruction",
   "startedAt": "2026-06-22T07:38:39.953708Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-22T08:20:09Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-22T10:34:25Z"
     },
     "plan": {
       "status": "done",
