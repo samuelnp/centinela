@@ -52,6 +52,19 @@
     "createdAt": "2026-06-14T20:53:59Z"
   },
   {
+    "id": "19a327c9acc0d36b",
+    "feature": "spec-reconstruction",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: spec-reconstruction",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/spec-reconstruction-gatekeeper.md",
+    "createdAt": "2026-06-22T10:34:01Z"
+  },
+  {
     "id": "1ba2b232333b5a26",
     "feature": "governance-telemetry",
     "step": "validate",
