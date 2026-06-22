@@ -30,10 +30,24 @@
     {
       "name": "Phase 3: Close the Mechanical-Verification Gap",
       "features": [
-        {"name":"g2-import-graph-gate","description":"Mechanically enforce per-archetype layer-dependency rules by parsing the import graph (Go `go/packages`, TS madge/ts-morph, Python AST). Turns the prose G2 rule in `PROJECT.md` into a checkable allow/deny matrix.","fixes":"agent silently introduces a forbidden cross-layer import that no gate catches."},
-        {"name":"security-gate","description":"Mechanical secret-scanning + dependency-vuln audit (`gitleaks` / `osv-scanner` / `govulncheck`, configurable) wired into validate.","fixes":"agent commits a secret or pulls a vulnerable dependency; subagent review misses it."},
-        {"name":"spec-traceability-gate","description":"Verify every Gherkin scenario in `specs/*.feature` maps to an executed step definition in `tests/acceptance/`.","fixes":"spec and acceptance tests drift apart; scenarios silently go unimplemented."},
-        {"name":"g2-multi-language-import-graph"}
+        {
+          "name": "g2-import-graph-gate",
+          "description": "Mechanically enforce per-archetype layer-dependency rules by parsing the import graph (Go `go/packages`, TS madge/ts-morph, Python AST). Turns the prose G2 rule in `PROJECT.md` into a checkable allow/deny matrix.",
+          "fixes": "agent silently introduces a forbidden cross-layer import that no gate catches."
+        },
+        {
+          "name": "security-gate",
+          "description": "Mechanical secret-scanning + dependency-vuln audit (`gitleaks` / `osv-scanner` / `govulncheck`, configurable) wired into validate.",
+          "fixes": "agent commits a secret or pulls a vulnerable dependency; subagent review misses it."
+        },
+        {
+          "name": "spec-traceability-gate",
+          "description": "Verify every Gherkin scenario in `specs/*.feature` maps to an executed step definition in `tests/acceptance/`.",
+          "fixes": "spec and acceptance tests drift apart; scenarios silently go unimplemented."
+        },
+        {
+          "name": "g2-multi-language-import-graph"
+        }
       ]
     },
     {
@@ -304,7 +318,8 @@
         {"name":"non-go-source-import-graphs","summary":"Parse source-level import graphs for non-Go languages (JS/TS, Ruby, Rust, Python); analyze v1 records declared manifest deps only","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
         {"name":"brownfield-framework-fingerprinting","summary":"Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
         {"name":"incremental-codebase-analysis","summary":"Incremental/cached re-analysis that only re-scans changed directories in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"codebase-metrics-enrichment","summary":"Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"}
+        {"name":"codebase-metrics-enrichment","summary":"Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
+        {"name":"brownfield-route-flow-extraction","summary":"Framework-specific HTTP route and call-flow extraction for reconstructed specs; spec-reconstruction v1 ships package/manifest-derived targets only","source":{"feature":"spec-reconstruction","role":"big-thinker"},"deferredAt":"2026-06-22T07:52:17Z"}
       ]
     }
   ],
