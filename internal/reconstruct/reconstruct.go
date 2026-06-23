@@ -8,6 +8,8 @@
 // rendered by internal/ui.
 package reconstruct
 
+import "strings"
+
 // Role is the inferred behavioral kind of a target, driving role-aware scenario
 // skeletons. An unknown role still yields a non-empty, assertion-free stub.
 type Role string
@@ -49,4 +51,26 @@ type Reconstruction struct {
 type Artifact struct {
 	Slug string
 	Body string
+}
+
+// TodoTargets returns, in the Reconstruction's already-sorted target order, the
+// targets whose assembled feature artifact still carries an un-confirmed
+// "# TODO: confirm" marker — i.e. the surfaces whose reconstructed behavior is
+// not yet confirmed. It is a thin read-only accessor over the existing
+// Features/Targets so consumers (e.g. internal/brownmap) need not duplicate the
+// skeleton's TODO-marker rule. A target with no TODO-bearing artifact is omitted.
+func (r Reconstruction) TodoTargets() []Target {
+	bySlug := map[string]bool{}
+	for _, f := range r.Features {
+		if strings.Contains(f.Body, todoMarker) {
+			bySlug[f.Slug] = true
+		}
+	}
+	var out []Target
+	for _, t := range r.Targets {
+		if bySlug[t.Slug] {
+			out = append(out, t)
+		}
+	}
+	return out
 }

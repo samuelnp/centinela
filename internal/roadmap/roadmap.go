@@ -54,11 +54,12 @@ func FeatureStatus(name string) string {
 }
 
 // Summary returns counts of features by status across all schedulable phases.
-// Backlog entries are deferred findings, not schedulable features, so they are
-// excluded from every count (consistent with the render-side phase skip).
+// Backlog entries (deferred findings) and Baseline entries (already-built
+// capability) are not schedulable features, so they are excluded from every
+// count via the shared isNonSchedulablePhase predicate.
 func (r *Roadmap) Summary() (planned, inProgress, done int) {
 	for _, phase := range r.Phases {
-		if isBacklogPhaseName(phase.Name) {
+		if isNonSchedulablePhase(phase.Name) {
 			continue
 		}
 		for _, f := range phase.Features {
