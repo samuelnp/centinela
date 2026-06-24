@@ -117,6 +117,19 @@
     "createdAt": "2026-06-16T12:24:01Z"
   },
   {
+    "id": "2123700a12b2de19",
+    "feature": "brownfield-roadmap-generation",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **`atomicWrite` mid-write fault branches** (`tmp.Write`/`tmp.Close` errors) and the `json.MarshalIndent` error in `WriteDraft` are not unit-covered: they require OS-level fault injection and a Roadmap of plain structs cannot fail to marshal. Overall statement coverage stays at 95.1% (≥ 95.0%); these branches are defensive returns with no logic. Mitigation: the rename and mkdir failure paths (the realistic crash-safety edges) *are* covered.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/brownfield-roadmap-generation-edge-cases.md",
+    "createdAt": "2026-06-24T07:07:24Z"
+  },
+  {
     "id": "2437037d66852dc1",
     "feature": "precommit-and-pr-gate",
     "step": "validate",
