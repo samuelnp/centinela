@@ -585,6 +585,19 @@
     "createdAt": "2026-06-19T15:17:21Z"
   },
   {
+    "id": "dc433988c7e638ef",
+    "feature": "adoption-baseline",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Skip-if-exists leaves the baseline byte-unchanged (text mode)** — a second `centinela adopt`",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/adoption-baseline-edge-cases.md",
+    "createdAt": "2026-06-24T11:20:51Z"
+  },
+  {
     "id": "dfb681078078fa80",
     "feature": "audit-baseline-ratchet",
     "step": "validate",
