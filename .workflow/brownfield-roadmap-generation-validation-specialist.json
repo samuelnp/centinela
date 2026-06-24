@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "cli_version": "0.32.0",
+    "written_at": "2026-06-24T07:12:10Z"
+  },
+  "feature": "brownfield-roadmap-generation",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-24T07:24:27Z",
+  "inputs": [
+    "docs/plans/brownfield-roadmap-generation.md",
+    "specs/brownfield-roadmap-generation.feature",
+    ".workflow/brownfield-roadmap-generation-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/brownfield-roadmap-generation-validation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

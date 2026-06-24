@@ -598,6 +598,19 @@
     "createdAt": "2026-06-16T17:01:01Z"
   },
   {
+    "id": "e1f88350d2b47fa4",
+    "feature": "brownfield-roadmap-generation",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: brownfield-roadmap-generation",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/brownfield-roadmap-generation-gatekeeper.md",
+    "createdAt": "2026-06-24T07:50:54Z"
+  },
+  {
     "id": "ec28b0c94d081af3",
     "feature": "headless-governance",
     "step": "tests",

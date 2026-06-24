@@ -1,14 +1,14 @@
 {
   "feature": "brownfield-roadmap-generation",
   "startedAt": "2026-06-23T09:50:44.765206Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-23T12:26:31Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-24T07:07:24Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-24T07:50:54Z"
     }
   },
   "stepOrder": [
