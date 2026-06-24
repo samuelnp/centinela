@@ -1,0 +1,1 @@
+- feat: `centinela adopt` records today's gate violations as the accepted audit baseline in one deliberate step — skip-if-exists by default (`--force` to overwrite), with a per-gate adoption report and `--json` verdict — so day-one `validate` on a brownfield repo isn't drowned by pre-existing legacy debt.
