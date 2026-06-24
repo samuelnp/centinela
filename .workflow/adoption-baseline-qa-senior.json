@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "cli_version": "0.33.0",
+    "written_at": "2026-06-24T10:41:19Z"
+  },
+  "feature": "adoption-baseline",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-24T11:13:06Z",
+  "inputs": [
+    "docs/plans/adoption-baseline.md",
+    "specs/adoption-baseline.feature",
+    ".workflow/adoption-baseline-senior-engineer.md",
+    "internal/audit/adopt.go",
+    "internal/ui/render_adopt.go",
+    "cmd/centinela/adopt.go",
+    "cmd/centinela/adopt_render.go"
+  ],
+  "outputs": [
+    "tests/acceptance/adoption_baseline_test.go",
+    "tests/acceptance/adoption_baseline_edge_test.go",
+    "tests/integration/adoption_baseline_integration_test.go",
+    "tests/unit/adoption_baseline_unit_test.go",
+    "internal/audit/adopt_test.go",
+    "internal/audit/adopt_more_test.go",
+    "internal/ui/render_adopt_test.go",
+    "cmd/centinela/adopt_test.go",
+    "cmd/centinela/adopt_json_test.go",
+    ".workflow/adoption-baseline-edge-cases.md"
+  ],
+  "edgeCases": [
+    "skip-if-exists leaves baseline byte-unchanged and exits non-zero (text and --json)",
+    "clean repo writes a zero-finding baseline (nothing to ratchet)",
+    "adopt output is byte-identical to audit.Record+Save",
+    "post-adoption audit reports 0 new (day-one validate not drowned)",
+    "Load error (baseline path is a directory) propagates without writing",
+    "force flag overwrites and widens the existing baseline"
+  ],
+  "handoffTo": "validation-specialist"
+}
