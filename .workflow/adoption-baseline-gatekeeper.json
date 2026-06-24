@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "cli_version": "0.33.0",
+    "written_at": "2026-06-24T11:21:36Z"
+  },
+  "feature": "adoption-baseline",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-24T11:23:25Z",
+  "inputs": [
+    "PROJECT.md",
+    "specs/adoption-baseline.feature",
+    "specs/audit-baseline-ratchet.feature",
+    "internal/audit/adopt.go",
+    "internal/ui/render_adopt.go",
+    "cmd/centinela/adopt.go",
+    "cmd/centinela/adopt_render.go"
+  ],
+  "outputs": [
+    ".workflow/adoption-baseline-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "shared baseline-file coexistence with audit baseline (same path, same Record+Save, byte-identical format)",
+    "additive-only Adopt + Baseline.Total (no existing call sites changed)",
+    "command-name collision (adopt top-level vs audit baseline subcommand)"
+  ],
+  "handoffTo": "validation-specialist"
+}

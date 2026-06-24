@@ -1,14 +1,14 @@
 {
   "feature": "adoption-baseline",
   "startedAt": "2026-06-24T09:40:56.735641Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-24T10:39:28Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-24T11:20:51Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-24T11:51:14Z"
     }
   },
   "stepOrder": [

@@ -1,5 +1,18 @@
 [
   {
+    "id": "029e30bb6159e8b0",
+    "feature": "adoption-baseline",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: adoption-baseline",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/adoption-baseline-gatekeeper.md",
+    "createdAt": "2026-06-24T11:51:14Z"
+  },
+  {
     "id": "0cd0b9d5a3adf24f",
     "feature": "security-gate",
     "step": "tests",
