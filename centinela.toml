@@ -110,10 +110,18 @@ allow = ["leaf"]
 # only, imported solely by cmd/ (its Reconstruction type by internal/ui for
 # rendering). Its sole edge is reconstruct→analyze (domain, allowed); analyze
 # never imports reconstruct, so there is no cycle. See PROJECT.md G2.
+# internal/brownmap also joins this layer: a read-only brownfield roadmap
+# generator for `centinela roadmap brownfield` that imports internal/analyze
+# (domain), internal/roadmap (domain), and internal/reconstruct (aggregator)
+# read-only plus stdlib, imported solely by cmd/ (its Plan type by internal/ui
+# for rendering). Its analyze/roadmap edges are domain (allowed); its
+# brownmap→reconstruct edge is aggregator→aggregator, which is why this layer's
+# allow is extended to include "aggregator". analyze/roadmap/reconstruct never
+# import brownmap, so there is no cycle. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**"]
-allow = ["domain", "leaf"]
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**", "internal/brownmap/**"]
+allow = ["domain", "leaf", "aggregator"]
 
 [[gates.import_graph.layers]]
 name  = "cmd"

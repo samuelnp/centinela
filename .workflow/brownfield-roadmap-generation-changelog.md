@@ -1,0 +1,1 @@
+- feat: `centinela roadmap brownfield` generates a draft roadmap from the codebase inventory, recording already-built capability as a schedule-exempt Baseline phase and reconstruct TODOs plus `--goal` items as net-new gap phases, never clobbering the canonical roadmap.json.

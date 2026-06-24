@@ -1,0 +1,58 @@
+{
+  "_meta": {
+    "cli_version": "0.32.0",
+    "written_at": "2026-06-23T12:46:00Z"
+  },
+  "feature": "brownfield-roadmap-generation",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-23T13:22:06Z",
+  "inputs": [
+    "docs/plans/brownfield-roadmap-generation.md",
+    "specs/brownfield-roadmap-generation.feature",
+    ".workflow/brownfield-roadmap-generation-senior-engineer.md",
+    "internal/brownmap/generate.go",
+    "internal/brownmap/baseline.go",
+    "internal/brownmap/gaps.go",
+    "internal/brownmap/write.go",
+    "internal/roadmap/baseline.go",
+    "internal/reconstruct/reconstruct.go",
+    "internal/ui/render_brownfield.go",
+    "cmd/centinela/roadmap_brownfield.go",
+    "tests/acceptance/reconstruct_helper_test.go",
+    "tests/acceptance/reconstruct_happy_test.go"
+  ],
+  "outputs": [
+    "tests/unit/brownfield_baseline_unit_test.go",
+    "tests/integration/brownfield_pipeline_test.go",
+    "tests/acceptance/brownfield_helper_test.go",
+    "tests/acceptance/brownfield_happy_test.go",
+    "tests/acceptance/brownfield_edge_test.go",
+    ".workflow/brownfield-roadmap-generation-edge-cases.md",
+    "internal/brownmap/generate_test.go",
+    "internal/brownmap/baseline_test.go",
+    "internal/brownmap/gaps_test.go",
+    "internal/brownmap/write_test.go",
+    "internal/brownmap/write_more_test.go",
+    "internal/roadmap/baseline_test.go",
+    "internal/reconstruct/todotargets_test.go",
+    "internal/ui/render_brownfield_test.go",
+    "cmd/centinela/roadmap_brownfield_test.go",
+    "cmd/centinela/roadmap_brownfield_errors_test.go"
+  ],
+  "edgeCases": [
+    "Missing inventory: non-zero exit, guides to centinela analyze, no draft written",
+    "Malformed inventory: distinct error, not the analyze-guidance path",
+    "Canonical roadmap.json never clobbered: byte-equal after run; draft lands only at draft path",
+    "Refusing --out = canonical path: WriteDraft refuses, wrapped write error, no file created",
+    "Empty/doc-only inventory: empty non-nil Baseline, 0 gaps, no malformed draft",
+    "No-TODO no-goal: Baseline-only draft, no Gaps phase, summary hints --goal",
+    "Determinism: two runs on unchanged inventory produce byte-identical draft JSON",
+    "Baseline exempt from status/coverage/readiness via same predicate as Backlog; Backlog/Bootstrap regression unchanged",
+    "Empty role on a target: description renders module label",
+    "TodoTargets accessor: returns TODO-bearing targets in order, zero-able",
+    "Mkdir/rename write failure surfaced as error; temp file cleaned up"
+  ],
+  "handoffTo": "validation-specialist"
+}

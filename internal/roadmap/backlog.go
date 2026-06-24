@@ -51,16 +51,18 @@ func BacklogFeatures(r *Roadmap) []Feature {
 	return out
 }
 
-// NonBacklogFeatureSet returns the names of all features NOT in a Backlog
+// NonBacklogFeatureSet returns the names of all features in a schedulable
 // phase. This is the single coverage set ValidateAnalysis/ValidateQuality and
-// readiness use, so Backlog findings are exempt in exactly one place.
+// readiness use, so non-schedulable findings are exempt in exactly one place.
+// It skips every non-schedulable phase (Backlog deferred findings and Baseline
+// already-built capability) via the shared isNonSchedulablePhase predicate.
 func NonBacklogFeatureSet(r *Roadmap) map[string]bool {
 	out := map[string]bool{}
 	if r == nil {
 		return out
 	}
 	for _, p := range r.Phases {
-		if isBacklogPhaseName(p.Name) {
+		if isNonSchedulablePhase(p.Name) {
 			continue
 		}
 		for _, f := range p.Features {
