@@ -533,6 +533,19 @@
     "createdAt": "2026-06-12T17:00:44Z"
   },
   {
+    "id": "c8a174bcf8ce6416",
+    "feature": "completion-delivery-prompt",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Completion emits guidance only — never delivers.** The done-branch prints the panel + directive",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/completion-delivery-prompt-edge-cases.md",
+    "createdAt": "2026-06-24T18:16:15Z"
+  },
+  {
     "id": "c9650edad42e7154",
     "feature": "roadmap-doc-sync",
     "step": "tests",

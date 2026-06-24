@@ -17,6 +17,15 @@ var gitDeliver = func(args ...string) (string, error) {
 	return strings.TrimSpace(string(out)), err
 }
 
+// ghAvailable and ghCreatePR are overridable seams for tests; defaults shell
+// out to the real `gh` CLI.
+var ghAvailable = gitutil.GitHubCLIAvailable
+
+var ghCreatePR = func(feature string) (string, error) {
+	out, err := exec.Command("gh", "pr", "create", "--head", feature, "--fill").CombinedOutput()
+	return strings.TrimSpace(string(out)), err
+}
+
 // runDeliverPR pushes the feature branch and opens a PR via `gh`. With no
 // origin it refuses (no push). When `gh` is absent it still pushes, prints
 // honest manual instructions, and returns an error so the exit is non-zero —
@@ -33,15 +42,15 @@ func runDeliverPR(_ *cobra.Command, feature string) error {
 	}
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Pushed %q to origin.", feature)))
 
-	if !gitutil.GitHubCLIAvailable() {
+	if !ghAvailable() {
 		fmt.Println(ui.StyleYellow.Render("`gh` not available — branch pushed, but no PR was opened."))
 		fmt.Println(ui.StyleMuted.Render("Open a PR manually for branch " + feature + " against the default branch."))
 		return fmt.Errorf("PR not opened: gh CLI unavailable for %q", feature)
 	}
-	out, err := exec.Command("gh", "pr", "create", "--head", feature, "--fill").CombinedOutput()
+	url, err := ghCreatePR(feature)
 	if err != nil {
-		return fmt.Errorf("gh pr create failed: %s: %w", strings.TrimSpace(string(out)), err)
+		return fmt.Errorf("gh pr create failed: %s: %w", url, err)
 	}
-	fmt.Println(ui.RenderSuccess("Opened pull request: " + strings.TrimSpace(string(out))))
+	fmt.Println(ui.RenderSuccess("Opened pull request: " + url))
 	return nil
 }
