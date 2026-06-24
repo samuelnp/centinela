@@ -68,10 +68,13 @@ enabled = true
 # os/exec, shared by the import_graph gate (domain) and codebase analysis
 # (domain) so the loader is not forked. internal/importgraph is also a leaf: the
 # language-provider seam (go/node/python/script backends) consumed by the gate;
-# it imports only stdlib, os/exec, and the internal/golist leaf. See PROJECT.md G2.
+# it imports only stdlib, os/exec, and the internal/golist leaf. internal/gitutil
+# is also a leaf: a stdlib + os/exec git/`gh` wrapper (origin-remote / gh
+# detection + the delivery-option matrix for `centinela deliver`) consumed by
+# cmd/ (and internal/ui read-only for its Option type). See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "leaf"
-paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**"]
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**"]
 allow = []
 
 # internal/analyze is a domain package (deterministic codebase inventory for
