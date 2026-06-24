@@ -1,11 +1,11 @@
 {
   "feature": "adoption-baseline",
   "startedAt": "2026-06-24T09:40:56.735641Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-24T10:39:28Z"
     },
     "docs": {
       "status": "pending",
@@ -16,7 +16,7 @@
       "completedAt": "2026-06-24T10:33:28Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {
