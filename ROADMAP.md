@@ -184,3 +184,4 @@
 - **incremental-codebase-analysis** — Incremental/cached re-analysis that only re-scans changed directories in centinela analyze *(deferred 2026-06-17T21:17:33Z · deep-codebase-analysis/big-thinker)*
 - **codebase-metrics-enrichment** — Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference *(deferred 2026-06-17T21:17:33Z · deep-codebase-analysis/big-thinker)*
 - **brownfield-route-flow-extraction** — Framework-specific HTTP route and call-flow extraction for reconstructed specs; spec-reconstruction v1 ships package/manifest-derived targets only *(deferred 2026-06-22T07:52:17Z · spec-reconstruction/big-thinker)*
+- **centinela-changelog-subcommand** — Standalone centinela changelog subcommand for merge-path changelog parity (independent of PR delivery) *(deferred 2026-06-25T16:36:23Z · delivery-artifact-generation/big-thinker)*
