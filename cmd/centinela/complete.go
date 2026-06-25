@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/gitutil"
 	"github.com/samuelnp/centinela/internal/memory"
 	"github.com/samuelnp/centinela/internal/telemetry"
 	"github.com/samuelnp/centinela/internal/ui"
@@ -79,6 +80,14 @@ func runComplete(_ *cobra.Command, args []string) error {
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Step %q completed for %q.", current, feature)))
 	if wf.CurrentStep == "done" {
 		fmt.Println(ui.StyleGreen.Bold(true).Render(fmt.Sprintf("Workflow complete for %q!", feature)))
+		// Surface delivery options as guidance only — never push or merge.
+		// A HasOriginRemote error is treated as "no origin"; it must never
+		// block an otherwise-complete workflow.
+		hasOrigin, _ := gitutil.HasOriginRemote(".")
+		worktreeMode := wf.WorktreePath != ""
+		opts := gitutil.DeliveryOptions(hasOrigin, worktreeMode)
+		fmt.Println(ui.RenderDeliveryChoice(feature, opts))
+		fmt.Println(gitutil.DeliveryDirective(feature, opts))
 	} else {
 		fmt.Println(ui.RenderStep("Next step", wf.CurrentStep))
 	}

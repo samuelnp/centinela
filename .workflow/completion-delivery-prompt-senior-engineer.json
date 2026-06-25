@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "cli_version": "0.34.0",
+    "written_at": "2026-06-24T17:03:40Z"
+  },
+  "feature": "completion-delivery-prompt",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-24T17:13:22Z",
+  "inputs": [
+    "docs/plans/completion-delivery-prompt.md",
+    "specs/completion-delivery-prompt.feature",
+    ".workflow/completion-delivery-prompt-feature-specialist.md",
+    "internal/worktree/steward.go",
+    "cmd/centinela/merge.go",
+    "cmd/centinela/merge_dispatch.go",
+    "internal/ui/render_merge.go",
+    "internal/golist/golist.go"
+  ],
+  "outputs": [
+    "internal/gitutil/remote.go",
+    "internal/gitutil/options.go",
+    "internal/gitutil/directive.go",
+    "internal/ui/render_delivery.go",
+    "cmd/centinela/deliver.go",
+    "cmd/centinela/deliver_pr.go",
+    "cmd/centinela/complete.go",
+    "centinela.toml",
+    "PROJECT.md"
+  ],
+  "edgeCases": [
+    "completion emits directive text only — no push/merge side effects (read-only HasOriginRemote)",
+    "deliver requires an explicit --via (Cobra MarkFlagRequired); --via with an unknown value errors 'choose --via pr|merge'",
+    "HasOriginRemote error treated as no-origin in complete — never blocks completion",
+    "pr-via with no origin refuses with a clear error and never pushes",
+    "pr-via with gh absent still pushes, prints honest manual-PR instructions, returns non-zero, never claims a PR was opened",
+    "merge-via composes runMerge unchanged (clean removes worktree; conflict reuses merge-steward dispatch + --continue)"
+  ],
+  "handoffTo": "qa-senior"
+}

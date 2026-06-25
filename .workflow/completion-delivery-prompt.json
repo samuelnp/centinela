@@ -1,0 +1,37 @@
+{
+  "feature": "completion-delivery-prompt",
+  "startedAt": "2026-06-24T15:46:16.561961Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-24T17:36:09Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-25T08:38:23Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-24T17:01:32Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-24T18:16:15Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-25T08:37:39Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/completion-delivery-prompt"
+}
