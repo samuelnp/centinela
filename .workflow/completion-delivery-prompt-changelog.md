@@ -1,0 +1,1 @@
+- feat: on workflow completion, Centinela emits a delivery directive listing only the valid options (PR via `gh` when an `origin` remote exists, or local merge via the merge-steward) and a new `centinela deliver <feature> --via pr|merge` command that acts on the explicit choice — never pushing or merging without confirmation.
