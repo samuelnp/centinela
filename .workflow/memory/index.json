@@ -182,6 +182,19 @@
     "createdAt": "2026-06-11T20:50:04Z"
   },
   {
+    "id": "36c7046e9ed9ea01",
+    "feature": "completion-delivery-prompt",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: completion-delivery-prompt",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/completion-delivery-prompt-gatekeeper.md",
+    "createdAt": "2026-06-25T08:37:39Z"
+  },
+  {
     "id": "36cc32f1a77b0cd5",
     "feature": "centinela-insights",
     "step": "tests",

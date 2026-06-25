@@ -21,7 +21,14 @@ func cdpRepo(t *testing.T, withOrigin bool) string {
 	}
 	gitIn("init")
 	if withOrigin {
-		gitIn("remote", "add", "origin", "https://example.com/x.git")
+		// A LOCAL bare repo as origin keeps every push offline — a network URL
+		// would make `git push` hang on DNS/credential prompts and stall the suite.
+		bare := t.TempDir()
+		b := exec.Command("git", "init", "--bare", bare)
+		if out, err := b.CombinedOutput(); err != nil {
+			t.Fatalf("init bare: %s", out)
+		}
+		gitIn("remote", "add", "origin", bare)
 	}
 	writeFile(t, dir, "centinela.toml", "[workflow]\ndisable_auto_commit=true\nuse_worktrees=true\n")
 	return dir

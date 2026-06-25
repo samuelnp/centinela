@@ -132,7 +132,8 @@ paths = ["cmd/**"]
 allow = ["domain", "leaf", "aggregator"]
 
 # Claim verification re-runs the full `go test ./...` suite to confirm the
-# tests-pass claim. This repo's acceptance + cross-compile tests legitimately
-# take ~75s, so the default 60s timeout is too short. Raise it with margin.
+# tests-pass claim. The suite (acceptance binary builds + cross-compile) grows
+# with each feature and now runs ~220s, so the default 60s timeout is far too
+# short. Raise it with margin to keep the verify re-run from flaking on wall-clock.
 [verify]
-verify_timeout = 240
+verify_timeout = 360

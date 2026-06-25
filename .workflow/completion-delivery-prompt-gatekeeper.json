@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "cli_version": "0.34.0",
+    "written_at": "2026-06-24T18:16:59Z"
+  },
+  "feature": "completion-delivery-prompt",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-24T18:27:23Z",
+  "inputs": [
+    "PROJECT.md",
+    "specs/completion-delivery-prompt.feature",
+    "specs/merge-steward-auto-dispatch.feature",
+    "specs/parallel-feature-worktrees.feature",
+    "internal/gitutil/remote.go",
+    "internal/gitutil/options.go",
+    "internal/gitutil/directive.go",
+    "internal/ui/render_delivery.go",
+    "cmd/centinela/deliver.go",
+    "cmd/centinela/deliver_pr.go",
+    "cmd/centinela/complete.go",
+    "cmd/centinela/merge.go",
+    "centinela.toml"
+  ],
+  "outputs": [
+    ".workflow/completion-delivery-prompt-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "additive done-branch output: complete.go only adds text after the Workflow-complete line; early-return and non-done branches untouched",
+    "deliver --via merge composes existing runMerge (same dispatchSteward + merge --continue); no merge reimplementation, no divergence from merge-steward",
+    "no deliver command-name collision in cmd/centinela/",
+    "internal/gitutil leaf imports nothing internal; ui->gitutil and cmd->gitutil are leaf reads; no cycle; mapped in centinela.toml + PROJECT.md G2; import_graph exits 0",
+    "completion directive vs merge-steward directive vs step-confirmation hooks: distinct triggers (done-branch vs merge dispatch); text-only, no push/merge side effects; coexist"
+  ],
+  "handoffTo": "validation-specialist"
+}
