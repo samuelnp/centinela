@@ -26,3 +26,12 @@ ECOSYSTEM.md
 
 # `centinela analyze` generated inventory — derived from the code, regenerated on demand
 .workflow/analysis.json
+
+# Per-feature evidence is machine plumbing — generated and validated locally by
+# `centinela complete`, never read after a feature merges. Keep the readable
+# -<role>.md companions (reviewer + LLM knowledge base) committed; drop the
+# machine-only JSON and the never-deleted advisory .lock files. roadmap.json is
+# required project state (the rehydration hook reads it) so it stays tracked.
+.workflow/*.json
+!.workflow/roadmap.json
+.workflow/*.lock

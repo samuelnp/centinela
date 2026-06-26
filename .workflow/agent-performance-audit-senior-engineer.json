@@ -1,1 +1,0 @@
-{"feature":"agent-performance-audit","step":"code","role":"senior-engineer","status":"done","generatedAt":"2026-05-09T00:00:00Z","inputs":["docs/plans/agent-performance-audit.md","specs/agent-performance-audit.feature"],"outputs":["internal/setup/opencode_agent_config.go","internal/orchestration/policy.go"],"edgeCases":[],"handoffTo":"qa-senior"}
