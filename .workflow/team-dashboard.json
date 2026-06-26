@@ -1,14 +1,14 @@
 {
   "feature": "team-dashboard",
   "startedAt": "2026-06-26T10:22:04.375808Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-26T11:05:08Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-26T11:35:24Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-26T13:34:29Z"
     }
   },
   "stepOrder": [

@@ -18,7 +18,7 @@ func realisticInputs() teamdashboard.Inputs {
 	return teamdashboard.Inputs{
 		Active: []*workflow.Workflow{{
 			Feature: "alpha", CurrentStep: "code", StartedAt: now.Add(-72 * time.Hour),
-			StepOrder: []string{"plan", "code", "tests", "validate", "docs"},
+			StepOrder:          []string{"plan", "code", "tests", "validate", "docs"},
 			EnforcementProfile: "strict", Archetype: "hexagonal", WorktreePath: ".worktrees/alpha",
 		}},
 		Roadmap: &roadmap.Roadmap{Phases: []roadmap.Phase{
