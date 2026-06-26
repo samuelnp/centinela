@@ -1,1 +1,0 @@
-{"feature":"opencode-native-subagents","step":"code","role":"senior-engineer","status":"done","generatedAt":"2026-05-06T00:00:00Z","inputs":["docs/plans/opencode-native-subagents.md","specs/opencode-native-subagents.feature"],"outputs":["internal/setup/opencode_agent_config.go","internal/setup/opencode_config_build.go"],"edgeCases":[],"handoffTo":"qa-senior"}

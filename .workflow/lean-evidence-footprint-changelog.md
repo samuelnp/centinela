@@ -1,0 +1,1 @@
+- chore: stop committing machine-only `.workflow/` evidence (`*.json` except `roadmap.json`, and all `*.lock`); keep the readable `-<role>.md` narratives. Untracks 751 existing files (−22k lines), shrinking PR diffs and repo footprint.

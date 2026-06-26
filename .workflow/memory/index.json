@@ -273,6 +273,19 @@
     "createdAt": "2026-06-19T10:03:50Z"
   },
   {
+    "id": "487cfeeedc35cfd4",
+    "feature": "lean-evidence-footprint",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: lean-evidence-footprint",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/lean-evidence-footprint-gatekeeper.md",
+    "createdAt": "2026-06-26T14:10:18Z"
+  },
+  {
     "id": "516c1dba5657b901",
     "feature": "g2-multi-language-import-graph",
     "step": "validate",
@@ -375,6 +388,19 @@
     ],
     "sourceArtifact": ".workflow/team-dashboard-gatekeeper.md",
     "createdAt": "2026-06-26T13:34:29Z"
+  },
+  {
+    "id": "771ed9694d1d594d",
+    "feature": "lean-evidence-footprint",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- No change to lock semantics, so no concurrency test is added — the",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/lean-evidence-footprint-edge-cases.md",
+    "createdAt": "2026-06-26T13:37:27Z"
   },
   {
     "id": "8054a47cf854d7f8",
