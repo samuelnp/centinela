@@ -1,15 +1,15 @@
 {
   "feature": "team-dashboard",
   "startedAt": "2026-06-26T10:22:04.375808Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-26T11:05:08Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-26T13:34:58Z"
     },
     "plan": {
       "status": "done",

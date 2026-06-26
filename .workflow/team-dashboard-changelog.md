@@ -1,0 +1,1 @@
+- feat: add `centinela dashboard` — a read-only board aggregating in-flight features (step, age, git-derived owner), roadmap burn-down, and gate health across worktrees, with `--json` output
