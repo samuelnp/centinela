@@ -273,6 +273,19 @@
     "createdAt": "2026-06-19T10:03:50Z"
   },
   {
+    "id": "487cfeeedc35cfd4",
+    "feature": "lean-evidence-footprint",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: lean-evidence-footprint",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/lean-evidence-footprint-gatekeeper.md",
+    "createdAt": "2026-06-26T14:10:18Z"
+  },
+  {
     "id": "516c1dba5657b901",
     "feature": "g2-multi-language-import-graph",
     "step": "validate",
