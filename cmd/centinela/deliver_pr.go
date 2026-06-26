@@ -19,19 +19,25 @@ var gitDeliver = func(args ...string) (string, error) {
 }
 
 // ghAvailable and ghCreatePR are overridable seams for tests; defaults shell
-// out to the real `gh` CLI. ghCreatePR opens the PR with a composed body file.
+// out to the real `gh` CLI with a composed title and body file.
 var ghAvailable = gitutil.GitHubCLIAvailable
 
-var ghCreatePR = func(feature, bodyPath string) (string, error) {
-	out, err := exec.Command("gh", "pr", "create", "--head", feature, "--body-file", bodyPath).CombinedOutput()
+var ghCreatePR = func(feature, title, bodyPath string) (string, error) {
+	out, err := exec.Command("gh", prCreateArgs(feature, title, bodyPath)...).CombinedOutput()
 	return strings.TrimSpace(string(out)), err
 }
 
+// prCreateArgs builds the `gh pr create` argv. It always passes --title and
+// --body-file (never --fill) so creation succeeds non-interactively with the
+// evidence-composed artifacts.
+func prCreateArgs(feature, title, bodyPath string) []string {
+	return []string{"pr", "create", "--head", feature, "--title", title, "--body-file", bodyPath}
+}
+
 // runDeliverPR commits the composed changelog line, pushes the feature branch,
-// and opens a PR via `gh` with an evidence-composed body. With no origin it
-// refuses (no push). When `gh` is absent it still pushes, prints honest manual
-// instructions, and returns an error so the exit is non-zero — it never claims
-// a PR was opened.
+// and opens a PR via `gh` with an evidence-composed title and body. No origin
+// refuses (no push). gh absent still pushes, prints honest manual instructions,
+// and returns a non-zero error — it never claims a PR was opened.
 func runDeliverPR(_ *cobra.Command, feature string) error {
 	if ok, _ := gitutil.HasOriginRemote("."); !ok {
 		return fmt.Errorf("no origin remote — PR delivery unavailable for %q", feature)
@@ -68,20 +74,20 @@ func commitChangelog(feature string) error {
 	return nil
 }
 
-// openPR builds the composed body file and opens the PR, honoring the gh-absent
-// honest-failure contract (push already happened; never claim a PR was opened).
+// openPR builds the composed title + body file and opens the PR, honoring the
+// gh-absent honest-failure contract (push already happened; never claim a PR).
 func openPR(feature string) error {
 	if !ghAvailable() {
 		fmt.Println(ui.StyleYellow.Render("`gh` not available — branch pushed, but no PR was opened."))
 		fmt.Println(ui.StyleMuted.Render("Open a PR manually for branch " + feature + " against the default branch."))
 		return fmt.Errorf("PR not opened: gh CLI unavailable for %q", feature)
 	}
-	bodyPath, err := buildPRBody(feature)
+	title, bodyPath, err := buildPRBody(feature)
 	if err != nil {
 		return fmt.Errorf("compose PR body for %q: %w", feature, err)
 	}
 	defer os.Remove(bodyPath)
-	url, err := ghCreatePR(feature, bodyPath)
+	url, err := ghCreatePR(feature, title, bodyPath)
 	if err != nil {
 		return fmt.Errorf("gh pr create failed: %s: %w", url, err)
 	}

@@ -37,9 +37,12 @@ func artifactsRepo(t *testing.T, f string, withChangelog bool) {
 
 func TestBuildPRBodyWritesComposedFile(t *testing.T) {
 	artifactsRepo(t, "alpha", true)
-	path, err := buildPRBody("alpha")
+	title, path, err := buildPRBody("alpha")
 	if err != nil {
 		t.Fatalf("buildPRBody: %v", err)
+	}
+	if title == "" {
+		t.Fatal("buildPRBody must return a non-empty PR title")
 	}
 	defer os.Remove(path)
 	data, err := os.ReadFile(path)

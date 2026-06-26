@@ -25,3 +25,14 @@ func ComposePRBody(e Evidence) string {
 	out = append(out, provenanceFooter(e))
 	return strings.Join(out, "\n\n") + "\n"
 }
+
+// ComposePRTitle returns a concise PR title for e: the changelog summary line
+// (a conventional-commit-shaped one-liner), or the feature slug as a fallback.
+// `gh pr create` requires a title when non-interactive, so this must never be
+// empty.
+func ComposePRTitle(e Evidence) string {
+	if t := strings.TrimSpace(ComposeChangelog(e).Line); t != "" {
+		return t
+	}
+	return e.Feature
+}

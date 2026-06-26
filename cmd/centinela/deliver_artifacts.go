@@ -53,22 +53,23 @@ func gatherEvidence(feature string) (delivery.Evidence, error) {
 	}, nil
 }
 
-// buildPRBody composes the PR body from feature evidence and writes it to a
-// temp file, returning the path for `gh pr create --body-file`.
-func buildPRBody(feature string) (string, error) {
+// buildPRBody composes the PR title and body from feature evidence, writes the
+// body to a temp file, and returns (title, bodyFilePath). `gh pr create` needs
+// both --title and --body-file when non-interactive.
+func buildPRBody(feature string) (title, path string, err error) {
 	e, err := gatherEvidence(feature)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	f, err := os.CreateTemp("", "centinela-pr-body-*.md")
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	defer f.Close()
 	if _, err := f.WriteString(delivery.ComposePRBody(e)); err != nil {
-		return "", err
+		return "", "", err
 	}
-	return f.Name(), nil
+	return delivery.ComposePRTitle(e), f.Name(), nil
 }
 
 // writeChangelog inserts the feature's changelog line into CHANGELOG.md,

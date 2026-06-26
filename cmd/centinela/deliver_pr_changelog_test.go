@@ -25,16 +25,22 @@ func TestRunDeliverPRPassesBodyFile(t *testing.T) {
 	deliverRepo(t, true)
 	seedChangelogSources(t, "feat")
 	cleanPushStub(t)
-	var gotPath string
+	var gotPath, gotTitle string
 	pa, pc := ghAvailable, ghCreatePR
 	ghAvailable = func() bool { return true }
-	ghCreatePR = func(_, bodyPath string) (string, error) { gotPath = bodyPath; return "https://x/pull/1", nil }
+	ghCreatePR = func(_, title, bodyPath string) (string, error) {
+		gotTitle, gotPath = title, bodyPath
+		return "https://x/pull/1", nil
+	}
 	t.Cleanup(func() { ghAvailable, ghCreatePR = pa, pc })
 	if err := runDeliverPR(nil, "feat"); err != nil {
 		t.Fatalf("expected success: %v", err)
 	}
 	if strings.TrimSpace(gotPath) == "" {
 		t.Fatal("ghCreatePR must receive a non-empty --body-file path")
+	}
+	if strings.TrimSpace(gotTitle) == "" {
+		t.Fatal("ghCreatePR must receive a non-empty --title (gh refuses non-interactively without one)")
 	}
 }
 
