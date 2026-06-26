@@ -1,0 +1,42 @@
+{
+  "_meta": {
+    "cli_version": "0.35.0",
+    "written_at": "2026-06-26T07:43:25Z"
+  },
+  "feature": "delivery-artifact-generation",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-26T07:43:48Z",
+  "inputs": [
+    "docs/plans/delivery-artifact-generation.md",
+    "specs/delivery-artifact-generation.feature",
+    ".workflow/delivery-artifact-generation-senior-engineer.md"
+  ],
+  "outputs": [
+    "internal/delivery/extract_test.go",
+    "internal/delivery/sections_test.go",
+    "internal/delivery/prbody_test.go",
+    "internal/delivery/changelog_test.go",
+    "internal/delivery/changelog_insert_test.go",
+    "cmd/centinela/deliver_artifacts_test.go",
+    "cmd/centinela/deliver_gather_test.go",
+    "cmd/centinela/deliver_pr_changelog_test.go",
+    "tests/integration/delivery_artifact_changelog_test.go",
+    "tests/acceptance/delivery_artifact_generation_test.go",
+    ".workflow/delivery-artifact-generation-edge-cases.md"
+  ],
+  "edgeCases": [
+    "Missing evidence source omits its PR-body section (never fabricated)",
+    "Gate status line never faked when no gatekeeper verdict or verification tally is sourceable",
+    "Changelog insertion is idempotent: re-running deliver leaves exactly one bullet",
+    "Missing CHANGELOG.md is a graceful no-op, not an error",
+    "gh absent: branch still pushed, manual instructions, non-zero exit, never claims a PR opened",
+    "No origin remote refuses PR delivery before any push",
+    "Category boundary: feat->Added, fix->Fixed, refactor/chore/other->Changed",
+    "Released sections (below --- or under a released heading) are never modified",
+    "FILL-slot changelog stub ignored; seed derived from brief or feature slug",
+    "No [Unreleased] block: InsertEntry returns unchanged text + false"
+  ],
+  "handoffTo": "validation-specialist"
+}
