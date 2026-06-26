@@ -78,18 +78,6 @@ func gateStatusSection(e Evidence) string {
 	return "## Gate status\n\n" + strings.Join(lines, "\n")
 }
 
-// gatekeeperVerdict scans report for the first verdict keyword in priority
-// order UNSAFE > WARNING > SAFE. Returns "" when none is present.
-func gatekeeperVerdict(report string) string {
-	up := strings.ToUpper(report)
-	for _, v := range []string{"UNSAFE", "WARNING", "SAFE"} {
-		if strings.Contains(up, v) {
-			return v
-		}
-	}
-	return ""
-}
-
 // provenanceFooter is the one guaranteed section: constant text only.
 func provenanceFooter(e Evidence) string {
 	return fmt.Sprintf(provenanceLine, e.Feature)
