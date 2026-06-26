@@ -715,6 +715,19 @@
     "createdAt": "2026-06-05T15:19:47Z"
   },
   {
+    "id": "f071acbd34f9b6ee",
+    "feature": "delivery-artifact-generation",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/delivery-artifact-generation-gatekeeper.md",
+    "createdAt": "2026-06-26T08:37:56Z"
+  },
+  {
     "id": "f5519c4b22f147c2",
     "feature": "deep-codebase-analysis",
     "step": "tests",

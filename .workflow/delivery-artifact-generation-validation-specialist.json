@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "cli_version": "0.35.0",
+    "written_at": "2026-06-26T08:17:35Z"
+  },
+  "feature": "delivery-artifact-generation",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-26T08:24:49Z",
+  "inputs": [
+    "docs/plans/delivery-artifact-generation.md",
+    "specs/delivery-artifact-generation.feature",
+    ".workflow/delivery-artifact-generation-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/delivery-artifact-generation-validation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}
