@@ -752,5 +752,18 @@
     ],
     "sourceArtifact": ".workflow/custom-gate-sdk-edge-cases.md",
     "createdAt": "2026-06-16T19:27:54Z"
+  },
+  {
+    "id": "ff330e1ec8610e53",
+    "feature": "team-dashboard",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **No active workflows** → empty `Features`; renderer prints \"no active features\".",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/team-dashboard-edge-cases.md",
+    "createdAt": "2026-06-26T11:35:24Z"
   }
 ]

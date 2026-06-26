@@ -1,0 +1,45 @@
+{
+  "_meta": {
+    "cli_version": "0.36.0",
+    "written_at": "2026-06-26T11:19:44Z"
+  },
+  "feature": "team-dashboard",
+  "step": "tests",
+  "role": "qa-senior",
+  "status": "done",
+  "generatedAt": "2026-06-26T11:19:44Z",
+  "inputs": [
+    "docs/plans/team-dashboard.md",
+    "specs/team-dashboard.feature",
+    ".workflow/team-dashboard-senior-engineer.md"
+  ],
+  "outputs": [
+    "internal/teamdashboard/features_test.go",
+    "internal/teamdashboard/features_age_test.go",
+    "internal/teamdashboard/burndown_test.go",
+    "internal/teamdashboard/burndown_done_test.go",
+    "internal/teamdashboard/gatehealth_test.go",
+    "internal/teamdashboard/compute_test.go",
+    "cmd/centinela/dashboard_test.go",
+    "cmd/centinela/dashboard_owner_test.go",
+    "internal/ui/render_dashboard_test.go",
+    "internal/ui/render_dashboard_defaults_test.go",
+    "tests/integration/team_dashboard_test.go",
+    "tests/acceptance/team_dashboard_test.go",
+    ".workflow/team-dashboard-edge-cases.md"
+  ],
+  "edgeCases": [
+    "No active workflows -> empty Features + honest empty-state panel",
+    "Nil *workflow.Workflow in Active slice skipped, not dereferenced",
+    "Zero/future StartedAt clamps AgeDays to 0; floor-days otherwise",
+    "Owner missing/empty -> 'unknown' advisory fallback",
+    "Nil roadmap -> Present:false; empty present roadmap -> 0/0 done",
+    "Backlog/Baseline phases excluded from burn-down (mirrors Summary())",
+    "Non-gate-failure events excluded; empty Gate buckets under '<none>'",
+    "Gate ranking matches insights.Gates verbatim (count desc, key asc)",
+    "Compute deterministic: same Inputs -> identical Dashboard",
+    "Read-only purity: no I/O, no git in aggregator; command writes no files",
+    "JSON mode emits stable top-level fields Features/Roadmap/Gates, ANSI-free"
+  ],
+  "handoffTo": "validation-specialist"
+}
