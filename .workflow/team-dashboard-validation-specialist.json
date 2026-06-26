@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "cli_version": "0.36.0",
+    "written_at": "2026-06-26T12:05:29Z"
+  },
+  "feature": "team-dashboard",
+  "step": "validate",
+  "role": "validation-specialist",
+  "status": "done",
+  "generatedAt": "2026-06-26T12:12:19Z",
+  "inputs": [
+    "docs/plans/team-dashboard.md",
+    "specs/team-dashboard.feature",
+    ".workflow/team-dashboard-gatekeeper.md"
+  ],
+  "outputs": [
+    ".workflow/team-dashboard-validation-specialist.md"
+  ],
+  "edgeCases": [],
+  "handoffTo": "documentation-specialist"
+}

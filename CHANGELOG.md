@@ -13,6 +13,7 @@ Release notes for tagged versions are also published on the [GitHub Releases pag
 - Community profile files: `LICENSE`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `CHANGELOG.md`, plus `.github/ISSUE_TEMPLATE/`, `.github/PULL_REQUEST_TEMPLATE.md`, `.github/dependabot.yml`.
 - README badges row, 30-second tour, table of contents, and "When *not* to use Centinela" section.
 - feat: compose the PR body and a `CHANGELOG` `[Unreleased]` entry automatically from a feature's delivery evidence (brief, plan, gatekeeper verdict) on `centinela deliver --via pr`
+- feat: add `centinela dashboard` — a read-only board aggregating in-flight features (step, age, git-derived owner), roadmap burn-down, and gate health across worktrees, with `--json` output
 
 ### Changed
 - Repository metadata: description, homepage, and 20 discoverability topics added on GitHub.

@@ -1,0 +1,29 @@
+{
+  "_meta": {
+    "cli_version": "0.36.0",
+    "written_at": "2026-06-26T11:36:52Z"
+  },
+  "feature": "team-dashboard",
+  "step": "validate",
+  "role": "gatekeeper",
+  "status": "done",
+  "generatedAt": "2026-06-26T12:03:49Z",
+  "inputs": [
+    "specs/team-dashboard.feature",
+    "internal/teamdashboard/dashboard.go",
+    "cmd/centinela/dashboard.go",
+    "cmd/centinela/dashboard_owner.go",
+    "internal/ui/render_dashboard_panels.go",
+    "PROJECT.md",
+    "centinela.toml"
+  ],
+  "outputs": [
+    ".workflow/team-dashboard-gatekeeper.md"
+  ],
+  "edgeCases": [
+    "Read-only purity: dashboard run leaves .workflow mtimes unchanged and creates no files (verified independently)",
+    "Pre-existing non-failing import_graph 'no configured layer' + spec-traceability warnings, no team-dashboard mention",
+    "gofmt alignment fix applied to tests/integration/team_dashboard_test.go to clear the check-fmt validate command"
+  ],
+  "handoffTo": "validation-specialist"
+}

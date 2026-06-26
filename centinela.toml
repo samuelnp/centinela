@@ -127,9 +127,17 @@ allow = ["leaf"]
 # PRBody/ChangelogEntry types by internal/ui if ever rendered). Its
 # delivery→verify edge is aggregator→domain (allowed); verify/evidence never
 # import delivery, so there is no cycle. See PROJECT.md G2.
+# internal/teamdashboard also joins this layer: a read-only team-status
+# aggregator for `centinela dashboard` that imports internal/workflow (domain),
+# internal/roadmap (domain), the internal/telemetry leaf, and internal/insights
+# (aggregator) read-only plus stdlib, imported solely by cmd/ (its Dashboard
+# type by internal/ui for rendering). Its workflow/roadmap edges are domain
+# (allowed); its teamdashboard→insights edge is aggregator→aggregator (allowed
+# via this layer's allow). workflow/roadmap/telemetry/insights never import
+# teamdashboard, so there is no cycle. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**", "internal/brownmap/**", "internal/delivery/**"]
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**", "internal/brownmap/**", "internal/delivery/**", "internal/teamdashboard/**"]
 allow = ["domain", "leaf", "aggregator"]
 
 [[gates.import_graph.layers]]

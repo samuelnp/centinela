@@ -364,6 +364,19 @@
     "createdAt": "2026-06-16T10:12:06Z"
   },
   {
+    "id": "770071455d914eb7",
+    "feature": "team-dashboard",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# team-dashboard — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/team-dashboard-gatekeeper.md",
+    "createdAt": "2026-06-26T13:34:29Z"
+  },
+  {
     "id": "8054a47cf854d7f8",
     "feature": "capability-calibration",
     "step": "validate",
@@ -752,5 +765,18 @@
     ],
     "sourceArtifact": ".workflow/custom-gate-sdk-edge-cases.md",
     "createdAt": "2026-06-16T19:27:54Z"
+  },
+  {
+    "id": "ff330e1ec8610e53",
+    "feature": "team-dashboard",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **No active workflows** → empty `Features`; renderer prints \"no active features\".",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/team-dashboard-edge-cases.md",
+    "createdAt": "2026-06-26T11:35:24Z"
   }
 ]
