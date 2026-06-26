@@ -22,7 +22,7 @@ func artifactsRepo(t *testing.T, f string, withChangelog bool) {
 	}
 	write("docs/features/"+f+".md", "## Problem\n\nbig problem\n\n## Who / Why\n\nfor users\n")
 	write("docs/plans/"+f+".md", "## Proposed Architecture\n\narch text\n")
-	write(".workflow/"+f+"-gatekeeper.md", "Verdict: SAFE\n")
+	write(".workflow/"+f+"-gatekeeper.md", "### Gatekeeper Report\n**Status:** SAFE\n")
 	write(".workflow/"+f+"-changelog.md", "- feat: ship "+f+"\n")
 	write("specs/"+f+".feature", "Feature: x\n")
 	if withChangelog {

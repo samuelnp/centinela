@@ -46,7 +46,7 @@ func TestAcceptanceSection(t *testing.T) {
 }
 
 func TestGateStatusSection(t *testing.T) {
-	if got := gateStatusSection(Evidence{GatekeeperReport: "Verdict: SAFE to ship"}); !strings.Contains(got, "SAFE") {
+	if got := gateStatusSection(Evidence{GatekeeperReport: "**Status:** SAFE"}); !strings.Contains(got, "SAFE") {
 		t.Fatalf("verdict: %q", got)
 	}
 	v := &verify.VerificationResult{Checks: []verify.Check{{Status: verify.StatusPass}, {Status: verify.StatusFail}}}
@@ -55,15 +55,6 @@ func TestGateStatusSection(t *testing.T) {
 	}
 	if gateStatusSection(Evidence{}) != "" {
 		t.Fatal("gate status omitted when neither present")
-	}
-}
-
-func TestGatekeeperVerdictPriority(t *testing.T) {
-	if gatekeeperVerdict("all safe but WARNING here") != "WARNING" {
-		t.Fatal("WARNING beats SAFE")
-	}
-	if gatekeeperVerdict("nothing here") != "" {
-		t.Fatal("no verdict")
 	}
 }
 

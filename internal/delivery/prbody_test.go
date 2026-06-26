@@ -10,7 +10,7 @@ func TestComposePRBodyFull(t *testing.T) {
 		Feature:          "alpha",
 		Brief:            secBrief,
 		Plan:             "## Proposed Architecture\n\narch text\n",
-		GatekeeperReport: "Verdict: SAFE",
+		GatekeeperReport: "**Status:** SAFE",
 		SpecPath:         "specs/alpha.feature",
 	}
 	body := ComposePRBody(e)
