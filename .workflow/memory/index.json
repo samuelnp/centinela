@@ -364,6 +364,19 @@
     "createdAt": "2026-06-16T10:12:06Z"
   },
   {
+    "id": "771ed9694d1d594d",
+    "feature": "lean-evidence-footprint",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- No change to lock semantics, so no concurrency test is added — the",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/lean-evidence-footprint-edge-cases.md",
+    "createdAt": "2026-06-26T13:37:27Z"
+  },
+  {
     "id": "8054a47cf854d7f8",
     "feature": "capability-calibration",
     "step": "validate",
