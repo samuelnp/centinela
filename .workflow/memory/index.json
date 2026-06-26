@@ -468,6 +468,19 @@
     "createdAt": "2026-06-13T09:53:34Z"
   },
   {
+    "id": "93d72bb3e0b9706d",
+    "feature": "delivery-artifact-generation",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Verification tally not wired on the delivery path (intentional).** The first",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/delivery-artifact-generation-edge-cases.md",
+    "createdAt": "2026-06-26T07:59:31Z"
+  },
+  {
     "id": "981d6cea48994066",
     "feature": "custom-gate-sdk",
     "step": "validate",
@@ -700,6 +713,19 @@
     ],
     "sourceArtifact": ".workflow/g2-import-graph-gate-edge-cases.md",
     "createdAt": "2026-06-05T15:19:47Z"
+  },
+  {
+    "id": "f071acbd34f9b6ee",
+    "feature": "delivery-artifact-generation",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/delivery-artifact-generation-gatekeeper.md",
+    "createdAt": "2026-06-26T08:37:56Z"
   },
   {
     "id": "f5519c4b22f147c2",

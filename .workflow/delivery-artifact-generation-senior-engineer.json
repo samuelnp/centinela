@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "cli_version": "0.35.0",
+    "written_at": "2026-06-25T20:15:05Z"
+  },
+  "feature": "delivery-artifact-generation",
+  "step": "code",
+  "role": "senior-engineer",
+  "status": "done",
+  "generatedAt": "2026-06-25T20:15:05Z",
+  "inputs": [
+    "docs/plans/delivery-artifact-generation.md",
+    "specs/delivery-artifact-generation.feature",
+    "docs/features/delivery-artifact-generation.md",
+    ".workflow/delivery-artifact-generation-big-thinker.md",
+    ".workflow/delivery-artifact-generation-feature-specialist.md",
+    "PROJECT.md"
+  ],
+  "outputs": [
+    "internal/delivery/delivery.go",
+    "internal/delivery/extract.go",
+    "internal/delivery/sections.go",
+    "internal/delivery/prbody.go",
+    "internal/delivery/changelog.go",
+    "internal/delivery/changelog_insert.go",
+    "internal/delivery/changelog_place.go",
+    "cmd/centinela/deliver_artifacts.go",
+    "cmd/centinela/deliver_pr.go",
+    "PROJECT.md",
+    "centinela.toml"
+  ],
+  "edgeCases": [
+    "Missing evidence source (brief/plan/gatekeeper/stub) omits its PR-body section rather than fabricating it",
+    "Gate-status line omitted when neither a gatekeeper verdict nor a Verification result can be sourced (never faked)",
+    "Re-running deliver does not duplicate the changelog line (InsertEntry idempotent, scoped to [Unreleased])",
+    "Missing CHANGELOG.md makes writeChangelog a no-op, never an error; delivery still proceeds",
+    "gh absent: branch still pushed, honest manual instructions, non-zero exit, no PR claimed (behavior preserved from completion-delivery-prompt)",
+    "No origin remote: PR delivery refused before any push"
+  ],
+  "handoffTo": "qa-senior"
+}

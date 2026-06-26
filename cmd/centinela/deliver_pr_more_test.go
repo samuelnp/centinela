@@ -19,7 +19,7 @@ func stubGH(t *testing.T, available bool, url string, err error) {
 	t.Helper()
 	pa, pc := ghAvailable, ghCreatePR
 	ghAvailable = func() bool { return available }
-	ghCreatePR = func(string) (string, error) { return url, err }
+	ghCreatePR = func(string, string, string) (string, error) { return url, err }
 	t.Cleanup(func() { ghAvailable, ghCreatePR = pa, pc })
 }
 

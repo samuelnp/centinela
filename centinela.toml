@@ -121,9 +121,15 @@ allow = ["leaf"]
 # brownmap→reconstruct edge is aggregator→aggregator, which is why this layer's
 # allow is extended to include "aggregator". analyze/roadmap/reconstruct never
 # import brownmap, so there is no cycle. See PROJECT.md G2.
+# internal/delivery also joins this layer: a read-only delivery-artifact composer
+# for `centinela deliver --via pr` that imports internal/verify (domain) and
+# internal/evidence read-only plus stdlib, imported solely by cmd/ (its
+# PRBody/ChangelogEntry types by internal/ui if ever rendered). Its
+# delivery→verify edge is aggregator→domain (allowed); verify/evidence never
+# import delivery, so there is no cycle. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**", "internal/brownmap/**"]
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**", "internal/brownmap/**", "internal/delivery/**"]
 allow = ["domain", "leaf", "aggregator"]
 
 [[gates.import_graph.layers]]
