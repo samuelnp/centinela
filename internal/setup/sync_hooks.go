@@ -6,7 +6,7 @@ func planHooksSettings() (*SyncItem, error) {
 	if err != nil || !changed {
 		return nil, err
 	}
-	return &SyncItem{Kind: SyncClaudeHooks, Path: path, Action: classifyAction(path)}, nil
+	return &SyncItem{Kind: SyncKindPrewriteHook, Path: path, Action: classifyAction(path)}, nil
 }
 
 func planOpenCodeConfig() (*SyncItem, error) {
