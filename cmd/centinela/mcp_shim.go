@@ -2,10 +2,8 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
-	"os/exec"
 
 	sdk "github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/spf13/cobra"
@@ -16,6 +14,10 @@ import (
 // exitMcpShim is overridable in tests; production uses os.Exit so a block
 // verdict maps onto the harness pre-write deny (exit 2), like the native hook.
 var exitMcpShim = os.Exit
+
+// mcpConnect is the connection seam — overridable in tests with an in-memory
+// session so the decide/deny path is exercised without spawning a subprocess.
+var mcpConnect = mcpConnectSelf
 
 var mcpShimCmd = &cobra.Command{
 	Use:           "shim [feature]",
@@ -35,20 +37,15 @@ func runMcpShim(_ *cobra.Command, args []string) error {
 		feature = args[0]
 	}
 	ctx := context.Background()
-	sess, err := mcpConnectSelf(ctx)
+	sess, err := mcpConnect(ctx)
 	if err != nil {
 		return err
 	}
 	defer sess.Close() //nolint:errcheck
-	gd, err := shimDecision(ctx, sess, "run_gates", feature)
+	decision, err := shimDecide(ctx, sess, feature)
 	if err != nil {
 		return err
 	}
-	vd, err := shimDecision(ctx, sess, "verify_claims", feature)
-	if err != nil {
-		return err
-	}
-	decision := mcpgov.Combine(gd, vd)
 	if decision == mcpgov.Block {
 		fmt.Fprintln(os.Stderr, "centinela mcp: block — write denied")
 		exitMcpShim(2)
@@ -58,35 +55,16 @@ func runMcpShim(_ *cobra.Command, args []string) error {
 	return nil
 }
 
-// mcpConnectSelf launches this binary as `mcp serve` and connects an MCP client.
-func mcpConnectSelf(ctx context.Context) (*sdk.ClientSession, error) {
-	self, err := os.Executable()
-	if err != nil {
-		return nil, err
-	}
-	client := sdk.NewClient(&sdk.Implementation{Name: "centinela-shim", Version: mcpgov.SchemaVersion}, nil)
-	return client.Connect(ctx, &sdk.CommandTransport{Command: exec.Command(self, "mcp", "serve")}, nil)
-}
-
-// shimDecision calls a tool and reads its "decision" field from the JSON result.
-func shimDecision(ctx context.Context, sess *sdk.ClientSession, tool, feature string) (string, error) {
-	res, err := sess.CallTool(ctx, &sdk.CallToolParams{Name: tool, Arguments: map[string]any{"feature": feature}})
+// shimDecide calls run_gates + verify_claims and combines their decisions into
+// the overall verdict (worst wins), equalling Decide on the same packet.
+func shimDecide(ctx context.Context, sess *sdk.ClientSession, feature string) (string, error) {
+	gd, err := shimDecision(ctx, sess, "run_gates", feature)
 	if err != nil {
 		return "", err
 	}
-	if res.IsError {
-		return "", fmt.Errorf("%s: tool error", tool)
+	vd, err := shimDecision(ctx, sess, "verify_claims", feature)
+	if err != nil {
+		return "", err
 	}
-	for _, c := range res.Content {
-		if tc, ok := c.(*sdk.TextContent); ok {
-			var out struct {
-				Decision string `json:"decision"`
-			}
-			if err := json.Unmarshal([]byte(tc.Text), &out); err != nil {
-				return "", err
-			}
-			return out.Decision, nil
-		}
-	}
-	return "", fmt.Errorf("%s: no text content", tool)
+	return mcpgov.Combine(gd, vd), nil
 }

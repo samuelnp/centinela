@@ -1,5 +1,18 @@
 [
   {
+    "id": "01c8844795f46019",
+    "feature": "mcp-governance-server",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- `runMcpServe` (blocks on stdio) and `mcpConnectSelf` (spawns the binary) are",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/mcp-governance-server-edge-cases.md",
+    "createdAt": "2026-06-29T18:18:47Z"
+  },
+  {
     "id": "029e30bb6159e8b0",
     "feature": "adoption-baseline",
     "step": "validate",
