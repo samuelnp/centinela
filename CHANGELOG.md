@@ -15,6 +15,7 @@ Release notes for tagged versions are also published on the [GitHub Releases pag
 - feat: compose the PR body and a `CHANGELOG` `[Unreleased]` entry automatically from a feature's delivery evidence (brief, plan, gatekeeper verdict) on `centinela deliver --via pr`
 - feat: add `centinela dashboard` — a read-only board aggregating in-flight features (step, age, git-derived owner), roadmap burn-down, and gate health across worktrees, with `--json` output
 - feat(cost): add cost-governance soft gate — a Stop-hook attributes host-harness transcript token spend to the active feature/step, `centinela cost` reports spend vs configurable `[cost]` budgets, and `centinela validate` surfaces a non-blocking ⚠ when over budget (never blocks). Zero config = silent no-op.
+- feat(mcp): expose governance as a versioned MCP server (`centinela.mcp/v1`). `centinela mcp serve` (official Go SDK, stdio) offers read_rules/run_gates/verify_claims/workflow_state reusing the verdict packet; it is advisory (allow/warn/block). `centinela mcp shim` maps a block verdict onto the harness pre-write deny (exit 2), so any MCP harness consumes governance with zero Centinela-specific code.
 
 ### Changed
 - Repository metadata: description, homepage, and 20 discoverability topics added on GitHub.
