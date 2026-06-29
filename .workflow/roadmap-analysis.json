@@ -37,6 +37,13 @@
     {"name":"local-harness-support","dependsOn":["host-harness-adapters","model-capability-profiles"]},
     {"name":"cross-project-memory","dependsOn":["governed-project-memory"]},
     {"name":"adaptive-skill-synthesis","dependsOn":["governance-telemetry","centinela-insights"]},
+    {"name":"cost-observability-ledger","dependsOn":["cost-governance","governance-telemetry"]},
+    {"name":"mcp-governance-server","dependsOn":["headless-governance"]},
+    {"name":"agents-md-canonical-surface","dependsOn":[]},
+    {"name":"sdd-spec-kit-interop","dependsOn":["spec-traceability-gate"]},
+    {"name":"agent-action-provenance","dependsOn":["governance-telemetry"]},
+    {"name":"agent-threat-security-gate","dependsOn":["security-gate"]},
+    {"name":"governance-roi-eval-harness","dependsOn":["governance-telemetry","centinela-insights"]},
     {"name":"g2-multi-language-import-graph"}
   ]
 }

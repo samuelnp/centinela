@@ -292,6 +292,44 @@
             "governed-project-memory"
           ],
           "description": "Promote governed-memory lessons from per-repo to an org-shared ledger, so a failure fixed in one repo warns every repo."
+        },
+        {
+          "name": "mcp-governance-server",
+          "dependsOn": [
+            "headless-governance"
+          ],
+          "description": "Expose Centinela's rules, gate engine, and claim-verification as a versioned MCP server (v1 tools: read_rules, run_gates, verify_claims, workflow_state) reusing the headless-governance verdict packet as the wire payload. The MCP server is advisory-by-protocol: it returns a structured verdict (allow/warn/block) \u2014 it cannot itself stop a write \u2014 so enforcement stays harness-side via a thin shim that maps a block verdict onto the harness's existing pre-write deny (the same contract the native hook uses). The tool surface and verdict schema are explicitly versioned so harnesses pin a compatibility level. Acceptance: a harness with zero Centinela-specific code obtains a verdict purely through MCP tool calls; the shim test asserts a block verdict aborts the write while allow proceeds; a parity test asserts the MCP verdict and the native-hook verdict are identical for the same diff and workflow state.",
+          "fixes": "every new host harness needs a bespoke hook/parity adapter, so governance can only be consumed by harnesses Centinela has explicitly integrated."
+        },
+        {
+          "name": "agents-md-canonical-surface",
+          "dependsOn": [],
+          "description": "Make AGENTS.md the canonical rules surface via a managed region fenced by `<!-- centinela:managed:start -->` / `<!-- centinela:managed:end -->`: init/migrate emit Centinela's hard rules and active profile into that region, and Centinela re-ingests a constrained, documented directive schema (rule toggles, profile, locales, layer dependency overrides) authored outside the managed block. Free-form prose outside the managed block and outside the known schema is preserved verbatim and ignored by the rule engine \u2014 never silently honored \u2014 and any directive that conflicts with a hard rule surfaces as a lint WARNING rather than an override. Acceptance: init produces a valid AGENTS.md with the fenced managed region; round-trip (emit -> hand-edit outside the region -> re-emit) preserves user content byte-for-byte; a known-schema directive is ingested into the rule set; a conflicting directive produces a lint warning; an unrecognized free-form line is preserved and ignored.",
+          "fixes": "Centinela's rules live in a Centinela-specific surface, so the 60K+ repos and AGENTS.md-reading harnesses cannot read or contribute to Centinela governance."
+        },
+        {
+          "name": "sdd-spec-kit-interop",
+          "dependsOn": [
+            "spec-traceability-gate"
+          ],
+          "description": "Position Centinela as the enforcement layer for Spec-Driven Development with a pinned mapping: GitHub Spec Kit `spec.md` requirements -> Gherkin Scenarios in specs/*.feature, `plan.md` -> docs/plans, `tasks.md` -> step checklist; AWS Kiro requirements map the same way. Each imported requirement receives a stable traceability ID linked to its Scenario; 'links intact' means spec-traceability-gate tracks that ID and FAILS when no code/test covers it. Export regenerates a Spec-Kit-compatible `spec.md` from Centinela's Gherkin + plan artifacts, round-tripping lossily-mapped external fields (e.g. Kiro design rationale) through a preserved sidecar block. External formats are pinned to committed fixtures (Spec Kit v0.8.x and a Kiro schema snapshot under testdata). Acceptance: a fixture spec.md imports with traceability IDs attached; the gate fails when a tracked requirement loses coverage; export round-trips the fixture without dropping sidecar fields.",
+          "fixes": "teams adopting Spec-Driven Development (Spec Kit, Kiro) generate specs that nothing enforces, so spec and shipped code silently diverge."
+        },
+        {
+          "name": "agent-action-provenance",
+          "dependsOn": [
+            "governance-telemetry"
+          ],
+          "description": "Produce a hash-chained, signed provenance trail of every gate verdict, claim-verification result, and step transition, exported as an in-toto Statement carrying a SLSA v1 provenance predicate. Signing uses a repo-scoped key created by `centinela attest init` (private key in durable .workflow state or a git-config-referenced path; public key committed for verification); org deployments may swap in a KMS/sigstore backend behind the same signer interface (interface only in v1). Each record names the model/harness that made the claim and the gate that cleared it. Acceptance: each completed step appends a hash-chained record; `centinela attest <feature>` emits a verifiable in-toto/SLSA bundle; verification passes on an untampered bundle and fails when any prior record is altered; the bundle attributes each claim to its model/harness.",
+          "fixes": "gate verdicts and claim-verification results aren't tamper-evident or exportable, so an enterprise can't audit or attest to what an agent was permitted to do."
+        },
+        {
+          "name": "agent-threat-security-gate",
+          "dependsOn": [
+            "security-gate"
+          ],
+          "description": "Extend the security gate with per-class agent-native threat detection: (a) secret/credential exfiltration \u2014 deterministic regex+entropy signature scan over added diff lines, plus flagging new outbound-network calls introduced adjacent to a secret read; (b) prompt injection \u2014 a heuristic signature set over agent-fetched/MCP-sourced content, explicitly best-effort (WARNING, not a completeness claim); (c) unexpected capability \u2014 a diff introducing a new network/exec/credential API absent from the pre-change tree. Acceptance: runs against a committed corpus (testdata/agent-threats/ with planted-positive and clean cases); a planted exfiltration diff BLOCKs under the strict profile; an injected-instruction fixture WARNs; zero false positives on the existing security-gate clean corpus (the numeric bar = 0 FP on that fixed corpus).",
+          "fixes": "the security gate scans for conventional vulnerabilities but not agent-native threats (prompt injection from fetched/MCP content, secret exfiltration in diffs), the attack surface that exists only because an autonomous agent wrote the code."
         }
       ]
     },
@@ -307,6 +345,24 @@
           ],
           "description": "When telemetry shows a workflow isn't running as expected \u2014 e.g. the same feature/step requires too many manual validation rounds, repeated rework, or the user keeps hand-correcting the same thing \u2014 Centinela proposes and scaffolds a **skill** (a Claude Code / OpenCode skill, or a reusable validate command / sub-agent prompt) that automates the repetitive step further. Generated skills are reviewable artifacts the user approves before they take effect \u2014 never silently self-modifying.",
           "fixes": "the human becomes the slow loop, re-validating the same step over and over, with no path for the harness to absorb that toil."
+        },
+        {
+          "name": "cost-observability-ledger",
+          "dependsOn": [
+            "cost-governance",
+            "governance-telemetry"
+          ],
+          "description": "A historical, queryable ledger layered on cost-governance: records per-feature/per-step token and model-tier spend over time, supports showback/chargeback rollups, and flags anomalies (e.g. a step whose cost regressed 4x). Complements the preventive budget gate with explanatory analytics, mirroring the proven telemetry/insights append-and-rollup pattern. Acceptance: each governed step appends a spend record; `centinela cost report` rolls up by feature/step/model; an injected cost spike triggers an anomaly flag; the ledger survives across features and is git-tracked durable state.",
+          "fixes": "per-step budgets prevent runaway spend but leave no history, so teams cannot attribute, trend, or anomaly-detect token cost across features and steps."
+        },
+        {
+          "name": "governance-roi-eval-harness",
+          "dependsOn": [
+            "governance-telemetry",
+            "centinela-insights"
+          ],
+          "description": "Deterministic A/B evaluation over a committed fixture: a recorded multi-step agent transcript whose steps introduce planted, oracle-known bugs. The intervention model is veto-and-drop (no live agent, no corrective branching): the governed arm replays each recorded step and runs gates + claim-verification against that step's diff; a step whose diff fails a gate or makes a false claim is REJECTED and its diff is not applied to the accumulating tree, so the governed final diff omits the vetoed buggy steps. The ungoverned arm applies every recorded step unconditionally. Both arms are fully deterministic because the transcript is fixed and the gates are deterministic. Metrics: surviving-bug count (planted bugs present in each arm's final diff per the oracle test suite), plus vetoed-step count, claim-verification rejections, and token cost; output is a reviewable delta report. Acceptance: `centinela eval` yields identical results on repeated runs of the fixture; the governed arm's surviving-bug count is strictly lower than the ungoverned arm's because vetoed steps don't land; a deliberately weakened profile (fewer active gates) vetoes fewer steps and measurably raises the governed arm's surviving-bug count.",
+          "fixes": "Centinela asserts it improves correctness but can't measure it, so there's no governed-vs-ungoverned baseline to prove ROI or catch governance regressions over time."
         }
       ]
     },
