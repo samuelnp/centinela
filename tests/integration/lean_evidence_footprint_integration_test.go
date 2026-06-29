@@ -39,7 +39,7 @@ func TestEvidencePlumbingIgnored(t *testing.T) {
 	dir := seedIgnoreRepo(t)
 	for _, rel := range []string{
 		".workflow/f-big-thinker.json",
-		".workflow/f.json",
+		".workflow/f-senior-engineer.json",
 		".workflow/f-big-thinker.lock",
 	} {
 		if !ignored(t, dir, rel) {
@@ -50,8 +50,13 @@ func TestEvidencePlumbingIgnored(t *testing.T) {
 
 func TestKbAndRoadmapNotIgnored(t *testing.T) {
 	dir := seedIgnoreRepo(t)
+	// Durable state must stay tracked: a bare per-feature ledger (.workflow/
+	// f.json) is NOT role-suffixed, so the fail-safe policy keeps it tracked.
 	for _, rel := range []string{
 		".workflow/roadmap.json",
+		".workflow/roadmap-analysis.json",
+		".workflow/audit-baseline.json",
+		".workflow/f.json",
 		".workflow/f-big-thinker.md",
 	} {
 		if ignored(t, dir, rel) {
