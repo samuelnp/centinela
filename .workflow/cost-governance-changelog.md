@@ -1,0 +1,1 @@
+- feat(cost): add cost-governance soft gate — a Stop-hook attributes host-harness transcript token spend to the active feature/step, `centinela cost` reports spend vs configurable `[cost]` budgets, and `centinela validate` surfaces a non-blocking ⚠ when over budget (never blocks). Zero config = silent no-op.
