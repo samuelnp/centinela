@@ -30,8 +30,15 @@ ECOSYSTEM.md
 # Per-feature evidence is machine plumbing — generated and validated locally by
 # `centinela complete`, never read after a feature merges. Keep the readable
 # -<role>.md companions (reviewer + LLM knowledge base) committed; drop the
-# machine-only JSON and the never-deleted advisory .lock files. roadmap.json is
-# required project state (the rehydration hook reads it) so it stays tracked.
+# machine-only JSON and the never-deleted advisory .lock files.
 .workflow/*.json
-!.workflow/roadmap.json
 .workflow/*.lock
+# ...EXCEPT these top-level JSONs are durable project state, NOT per-feature
+# evidence — they MUST stay tracked. The roadmap bootstrap artifacts gate
+# greenfield start (rehydration + senior-PM analysis + quality scoring) and the
+# audit baseline is the committed ratchet snapshot. Gitignoring them blocks the
+# workflow, so any new durable-state .workflow/*.json belongs on this allow-list.
+!.workflow/roadmap.json
+!.workflow/roadmap-analysis.json
+!.workflow/roadmap-quality.json
+!.workflow/audit-baseline.json
