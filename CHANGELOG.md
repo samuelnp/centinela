@@ -14,6 +14,7 @@ Release notes for tagged versions are also published on the [GitHub Releases pag
 - README badges row, 30-second tour, table of contents, and "When *not* to use Centinela" section.
 - feat: compose the PR body and a `CHANGELOG` `[Unreleased]` entry automatically from a feature's delivery evidence (brief, plan, gatekeeper verdict) on `centinela deliver --via pr`
 - feat: add `centinela dashboard` — a read-only board aggregating in-flight features (step, age, git-derived owner), roadmap burn-down, and gate health across worktrees, with `--json` output
+- feat: extract a HarnessAdapter interface + registry (Claude/OpenCode refactored onto it with byte-for-byte parity) and add first-class Aider support via `--agent aider`
 
 ### Changed
 - Repository metadata: description, homepage, and 20 discoverability topics added on GitHub.
