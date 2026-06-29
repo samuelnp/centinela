@@ -585,6 +585,19 @@
     "createdAt": "2026-06-06T17:27:14Z"
   },
   {
+    "id": "ab201152cc003c17",
+    "feature": "mcp-governance-server",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: mcp-governance-server",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/mcp-governance-server-gatekeeper.md",
+    "createdAt": "2026-06-29T18:43:16Z"
+  },
+  {
     "id": "b5afec861b2222c7",
     "feature": "roadmap-doc-sync",
     "step": "validate",
