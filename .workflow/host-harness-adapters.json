@@ -1,15 +1,15 @@
 {
   "feature": "host-harness-adapters",
   "startedAt": "2026-06-29T16:57:15.161086Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-29T17:46:06Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-29T18:48:32Z"
     },
     "plan": {
       "status": "done",
