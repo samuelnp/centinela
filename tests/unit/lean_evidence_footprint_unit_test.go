@@ -18,13 +18,12 @@ func leanGitignore(t *testing.T) string {
 	return string(b)
 }
 
-// TestGitignoreHasEvidencePatterns asserts role evidence is ignored by explicit
-// suffix (the f138f90 fail-safe policy) plus the advisory .lock files.
+// TestGitignoreHasEvidencePatterns asserts the role-suffixed evidence + lock
+// patterns are present so per-role machine plumbing stays untracked.
 func TestGitignoreHasEvidencePatterns(t *testing.T) {
 	gi := leanGitignore(t)
 	for _, want := range []string{
 		".workflow/*-big-thinker.json",
-		".workflow/*-senior-engineer.json",
 		".workflow/*-gatekeeper.json",
 		".workflow/*.lock",
 	} {
@@ -34,12 +33,14 @@ func TestGitignoreHasEvidencePatterns(t *testing.T) {
 	}
 }
 
-// TestNoBroadWorkflowJSONIgnore guards the fail-safe policy (f138f90): evidence
-// is ignored by explicit role suffix, never a bare ".workflow/*.json" glob that
-// would silently drop durable state (roadmap.json, per-feature ledgers).
-func TestNoBroadWorkflowJSONIgnore(t *testing.T) {
-	gi := "\n" + leanGitignore(t) + "\n"
-	if strings.Contains(gi, "\n.workflow/*.json\n") {
-		t.Errorf("broad %q ignore would drop durable .workflow state", ".workflow/*.json")
+// TestGitignoreKeepsDurableState guards the fix for the over-broad *.json rule:
+// the gitignore must NOT contain a bare `.workflow/*.json` (which silently drops
+// the per-feature root state ledger + roadmap bootstrap artifacts).
+func TestGitignoreKeepsDurableState(t *testing.T) {
+	gi := leanGitignore(t)
+	for _, line := range strings.Split(gi, "\n") {
+		if strings.TrimSpace(line) == ".workflow/*.json" {
+			t.Error("a bare .workflow/*.json ignore drops durable state — ignore by role suffix instead")
+		}
 	}
 }

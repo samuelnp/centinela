@@ -15,6 +15,7 @@ const (
 	TypeVerifyRejection  = "verify-rejection"
 	TypeCompleteRejected = "complete-rejected"
 	TypeStepAdvanced     = "step-advanced"
+	TypeCostSample       = "cost-sample"
 )
 
 // Event is one governance event, serialized as a single JSON line in
@@ -22,18 +23,20 @@ const (
 // readers can consume it stably. The only nested type is CheckRef (owned here,
 // NOT imported from internal/verify, to keep this package a config-only leaf).
 type Event struct {
-	Schema     string     `json:"schema"`
-	Type       string     `json:"type"`
-	Timestamp  string     `json:"timestamp"` // RFC3339 UTC
-	Feature    string     `json:"feature,omitempty"`
-	Step       string     `json:"step,omitempty"`
-	Model      string     `json:"model,omitempty"`      // driver model id, stamped at emit (back-compat: old lines → "")
-	Reason     string     `json:"reason,omitempty"`     // block: need-init|out-of-step ; complete-rejected: gates|verify
-	FileType   string     `json:"fileType,omitempty"`   // block
-	TargetPath string     `json:"targetPath,omitempty"` // block
-	Gate       string     `json:"gate,omitempty"`       // gate-failure
-	Message    string     `json:"message,omitempty"`    // gate-failure
-	Checks     []CheckRef `json:"checks,omitempty"`     // verify-rejection
+	Schema       string     `json:"schema"`
+	Type         string     `json:"type"`
+	Timestamp    string     `json:"timestamp"` // RFC3339 UTC
+	Feature      string     `json:"feature,omitempty"`
+	Step         string     `json:"step,omitempty"`
+	Model        string     `json:"model,omitempty"`        // driver model id, stamped at emit (back-compat: old lines → "")
+	Reason       string     `json:"reason,omitempty"`       // block: need-init|out-of-step ; complete-rejected: gates|verify
+	FileType     string     `json:"fileType,omitempty"`     // block
+	TargetPath   string     `json:"targetPath,omitempty"`   // block
+	Gate         string     `json:"gate,omitempty"`         // gate-failure
+	Message      string     `json:"message,omitempty"`      // gate-failure
+	Checks       []CheckRef `json:"checks,omitempty"`       // verify-rejection
+	InputTokens  int        `json:"inputTokens,omitempty"`  // cost-sample (back-compat: old lines → 0)
+	OutputTokens int        `json:"outputTokens,omitempty"` // cost-sample
 }
 
 // CheckRef is a failing claim check (telemetry's own copy of verify's shape).

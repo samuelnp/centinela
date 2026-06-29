@@ -1,5 +1,18 @@
 [
   {
+    "id": "01c8844795f46019",
+    "feature": "mcp-governance-server",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- `runMcpServe` (blocks on stdio) and `mcpConnectSelf` (spawns the binary) are",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/mcp-governance-server-edge-cases.md",
+    "createdAt": "2026-06-29T18:18:47Z"
+  },
+  {
     "id": "029e30bb6159e8b0",
     "feature": "adoption-baseline",
     "step": "validate",
@@ -325,6 +338,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "618f421e0f43cf4c",
+    "feature": "cost-governance",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: cost-governance",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/cost-governance-gatekeeper.md",
+    "createdAt": "2026-06-29T16:55:36Z"
+  },
+  {
     "id": "65b6bfe5c783fea1",
     "feature": "archetype-inference-project-synthesis",
     "step": "tests",
@@ -559,6 +585,19 @@
     "createdAt": "2026-06-06T17:27:14Z"
   },
   {
+    "id": "ab201152cc003c17",
+    "feature": "mcp-governance-server",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: mcp-governance-server",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/mcp-governance-server-gatekeeper.md",
+    "createdAt": "2026-06-29T18:43:16Z"
+  },
+  {
     "id": "b5afec861b2222c7",
     "feature": "roadmap-doc-sync",
     "step": "validate",
@@ -687,6 +726,19 @@
     ],
     "sourceArtifact": ".workflow/archetype-inference-project-synthesis-gatekeeper.md",
     "createdAt": "2026-06-19T15:17:21Z"
+  },
+  {
+    "id": "db2d2fb521ce2b4f",
+    "feature": "cost-governance",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Cross-feature attribution within a single Stop is approximate (transcript is",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/cost-governance-edge-cases.md",
+    "createdAt": "2026-06-29T16:32:45Z"
   },
   {
     "id": "dc433988c7e638ef",

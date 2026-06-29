@@ -137,7 +137,7 @@ allow = ["leaf"]
 # teamdashboard, so there is no cycle. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**", "internal/brownmap/**", "internal/delivery/**", "internal/teamdashboard/**"]
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**", "internal/brownmap/**", "internal/delivery/**", "internal/teamdashboard/**", "internal/cost/**", "internal/mcp/**"]
 allow = ["domain", "leaf", "aggregator"]
 
 [[gates.import_graph.layers]]
@@ -151,3 +151,14 @@ allow = ["domain", "leaf", "aggregator"]
 # short. Raise it with margin to keep the verify re-run from flaking on wall-clock.
 [verify]
 verify_timeout = 360
+
+# [cost] — cost-governance soft gate (opt-in; omitted = silent no-op).
+# A capture hook attributes host-harness transcript token spend to the active
+# feature/step; `centinela cost` reports spend vs budget and `centinela validate`
+# surfaces a non-failing ⚠ when over budget. It NEVER blocks complete.
+# [cost]
+# enabled = true
+# step_token_budget = 200000       # per-step token budget (0 = off)
+# feature_token_budget = 1000000   # per-feature token budget (0 = off)
+# [cost.tier_budgets]              # optional, keyed by model id
+# "claude-opus-4-7" = 800000

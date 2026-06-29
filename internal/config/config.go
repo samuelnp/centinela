@@ -22,6 +22,7 @@ type Config struct {
 	Headless      HeadlessConfig      `toml:"headless"`
 	Precommit     PrecommitConfig     `toml:"precommit"`
 	PrGate        PrGateConfig        `toml:"pr_gate"`
+	Cost          CostConfig          `toml:"cost"`
 }
 
 // ValidateConfig holds user-defined commands that centinela runs during validate.

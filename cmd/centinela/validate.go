@@ -71,6 +71,8 @@ func executeValidationWithFlag(flag config.FlagOverride) error {
 		allPassed = false
 	}
 
+	emitCostWarning(cfg) // soft gate: surfaces an over-budget ⚠, never fails
+
 	fmt.Println()
 	if allPassed {
 		fmt.Println(ui.RenderSuccess("All gates passed."))
