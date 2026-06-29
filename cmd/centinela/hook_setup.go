@@ -32,8 +32,7 @@ func runHookSetup(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 	if !hasProject {
-		fmt.Println("CENTINELA DIRECTIVE: setup required. Ask setup questions and write PROJECT.md.")
-		fmt.Println(ui.RenderSetupNeeded())
+		emitSetupDirective()
 		return nil
 	}
 	if !exists("ROADMAP.md") {
