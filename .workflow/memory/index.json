@@ -429,6 +429,19 @@
     "createdAt": "2026-06-26T13:37:27Z"
   },
   {
+    "id": "782f63dad80a30df",
+    "feature": "brownfield-setup-detection",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: brownfield-setup-detection",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/brownfield-setup-detection-gatekeeper.md",
+    "createdAt": "2026-06-29T20:25:51Z"
+  },
+  {
     "id": "8054a47cf854d7f8",
     "feature": "capability-calibration",
     "step": "validate",

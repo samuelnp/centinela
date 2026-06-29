@@ -1,14 +1,14 @@
 {
   "feature": "brownfield-setup-detection",
   "startedAt": "2026-06-29T17:38:19.525668Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-29T17:55:55Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-29T18:26:44Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-29T20:25:51Z"
     }
   },
   "stepOrder": [
