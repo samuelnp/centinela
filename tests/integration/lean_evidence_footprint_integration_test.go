@@ -39,7 +39,7 @@ func TestEvidencePlumbingIgnored(t *testing.T) {
 	dir := seedIgnoreRepo(t)
 	for _, rel := range []string{
 		".workflow/f-big-thinker.json",
-		".workflow/f.json",
+		".workflow/f-gatekeeper.json",
 		".workflow/f-big-thinker.lock",
 	} {
 		if !ignored(t, dir, rel) {
@@ -50,8 +50,12 @@ func TestEvidencePlumbingIgnored(t *testing.T) {
 
 func TestKbAndRoadmapNotIgnored(t *testing.T) {
 	dir := seedIgnoreRepo(t)
+	// roadmap bootstrap, the per-feature root state ledger, and the narratives
+	// are all durable state — they must stay tracked under the role-suffix rule.
 	for _, rel := range []string{
 		".workflow/roadmap.json",
+		".workflow/roadmap-analysis.json",
+		".workflow/f.json",
 		".workflow/f-big-thinker.md",
 	} {
 		if ignored(t, dir, rel) {

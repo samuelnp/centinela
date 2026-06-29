@@ -325,6 +325,19 @@
     "createdAt": "2026-06-06T19:05:30Z"
   },
   {
+    "id": "618f421e0f43cf4c",
+    "feature": "cost-governance",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: cost-governance",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/cost-governance-gatekeeper.md",
+    "createdAt": "2026-06-29T16:55:36Z"
+  },
+  {
     "id": "65b6bfe5c783fea1",
     "feature": "archetype-inference-project-synthesis",
     "step": "tests",
@@ -674,6 +687,19 @@
     ],
     "sourceArtifact": ".workflow/archetype-inference-project-synthesis-gatekeeper.md",
     "createdAt": "2026-06-19T15:17:21Z"
+  },
+  {
+    "id": "db2d2fb521ce2b4f",
+    "feature": "cost-governance",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Cross-feature attribution within a single Stop is approximate (transcript is",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/cost-governance-edge-cases.md",
+    "createdAt": "2026-06-29T16:32:45Z"
   },
   {
     "id": "dc433988c7e638ef",

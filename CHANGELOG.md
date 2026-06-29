@@ -14,6 +14,7 @@ Release notes for tagged versions are also published on the [GitHub Releases pag
 - README badges row, 30-second tour, table of contents, and "When *not* to use Centinela" section.
 - feat: compose the PR body and a `CHANGELOG` `[Unreleased]` entry automatically from a feature's delivery evidence (brief, plan, gatekeeper verdict) on `centinela deliver --via pr`
 - feat: add `centinela dashboard` — a read-only board aggregating in-flight features (step, age, git-derived owner), roadmap burn-down, and gate health across worktrees, with `--json` output
+- feat(cost): add cost-governance soft gate — a Stop-hook attributes host-harness transcript token spend to the active feature/step, `centinela cost` reports spend vs configurable `[cost]` budgets, and `centinela validate` surfaces a non-blocking ⚠ when over budget (never blocks). Zero config = silent no-op.
 
 ### Changed
 - Repository metadata: description, homepage, and 20 discoverability topics added on GitHub.

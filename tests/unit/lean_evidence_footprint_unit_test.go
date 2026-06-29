@@ -18,13 +18,13 @@ func leanGitignore(t *testing.T) string {
 	return string(b)
 }
 
-// TestGitignoreHasEvidencePatterns asserts the lean-evidence-footprint block
-// is present so machine plumbing stays untracked and roadmap.json is kept.
+// TestGitignoreHasEvidencePatterns asserts the role-suffixed evidence + lock
+// patterns are present so per-role machine plumbing stays untracked.
 func TestGitignoreHasEvidencePatterns(t *testing.T) {
 	gi := leanGitignore(t)
 	for _, want := range []string{
-		".workflow/*.json",
-		"!.workflow/roadmap.json",
+		".workflow/*-big-thinker.json",
+		".workflow/*-gatekeeper.json",
 		".workflow/*.lock",
 	} {
 		if !strings.Contains(gi, want) {
@@ -33,16 +33,14 @@ func TestGitignoreHasEvidencePatterns(t *testing.T) {
 	}
 }
 
-// TestRoadmapNegationAfterJSONIgnore guards ordering: the negation must come
-// after the broad *.json ignore or git would not re-include roadmap.json.
-func TestRoadmapNegationAfterJSONIgnore(t *testing.T) {
+// TestGitignoreKeepsDurableState guards the fix for the over-broad *.json rule:
+// the gitignore must NOT contain a bare `.workflow/*.json` (which silently drops
+// the per-feature root state ledger + roadmap bootstrap artifacts).
+func TestGitignoreKeepsDurableState(t *testing.T) {
 	gi := leanGitignore(t)
-	ignore := strings.Index(gi, ".workflow/*.json")
-	negate := strings.Index(gi, "!.workflow/roadmap.json")
-	if ignore < 0 || negate < 0 {
-		t.Fatal("expected both the json ignore and the roadmap negation")
-	}
-	if negate < ignore {
-		t.Errorf("roadmap negation (%d) must follow the json ignore (%d)", negate, ignore)
+	for _, line := range strings.Split(gi, "\n") {
+		if strings.TrimSpace(line) == ".workflow/*.json" {
+			t.Error("a bare .workflow/*.json ignore drops durable state — ignore by role suffix instead")
+		}
 	}
 }

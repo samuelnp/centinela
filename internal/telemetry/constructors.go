@@ -37,3 +37,13 @@ func RecordCompleteRejected(cfg *config.Config, feature, step, reason, model str
 func RecordStepAdvanced(cfg *config.Config, feature, step, model string) {
 	Record(cfg, Event{Type: TypeStepAdvanced, Feature: feature, Step: step, Model: model})
 }
+
+// RecordCostSample records host-harness token spend attributed to the active
+// feature/step/model. No-op for a non-positive total so an empty transcript
+// delta never writes a noise line.
+func RecordCostSample(cfg *config.Config, feature, step, model string, in, out int) {
+	if in <= 0 && out <= 0 {
+		return
+	}
+	Record(cfg, Event{Type: TypeCostSample, Feature: feature, Step: step, Model: model, InputTokens: in, OutputTokens: out})
+}
