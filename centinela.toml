@@ -137,7 +137,7 @@ allow = ["leaf"]
 # teamdashboard, so there is no cycle. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "aggregator"
-paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**", "internal/brownmap/**", "internal/delivery/**", "internal/teamdashboard/**", "internal/cost/**"]
+paths = ["internal/doctor/**", "internal/insights/**", "internal/calibration/**", "internal/audit/**", "internal/synthesize/**", "internal/reconstruct/**", "internal/brownmap/**", "internal/delivery/**", "internal/teamdashboard/**", "internal/cost/**", "internal/mcp/**"]
 allow = ["domain", "leaf", "aggregator"]
 
 [[gates.import_graph.layers]]

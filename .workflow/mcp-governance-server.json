@@ -1,0 +1,37 @@
+{
+  "feature": "mcp-governance-server",
+  "startedAt": "2026-06-29T17:12:20.106908Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-29T17:58:05Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-29T18:44:22Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-29T17:44:19Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-29T18:18:47Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-29T18:43:16Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/mcp-governance-server"
+}

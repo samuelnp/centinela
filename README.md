@@ -44,6 +44,7 @@ If an agent tries to write source code while the workflow is in the `plan` step,
 - [Getting Started](#getting-started)
 - [The Standard Five-Step Workflow](#the-standard-five-step-workflow)
 - [How the Hooks Work](#how-the-hooks-work)
+- [Consuming Governance via MCP](#consuming-governance-via-mcp)
 - [Gate Checks](#gate-checks)
 - [Architecture Archetypes](#architecture-archetypes)
 - [`centinela.toml` Reference](#centinelatoml-reference)
@@ -226,6 +227,7 @@ flowchart TB
 - **Cleaner workflow feedback** with compact `🛡️👁️` CLI output, status tags, and prompt-driven command mapping for roadmap, start, continue, validate, and docs flows.
 - **Claim verification** with `centinela verify <feature>` that independently re-derives ground truth for every evidence claim (tests pass, coverage, non-stub outputs, edge-case mapping) and hard-blocks `centinela complete` at the validate step when any hard claim fails.
 - **Cross-platform build gate** (`G-Build: Cross-Compile`) that cross-compiles every configured release target during `centinela validate` and fails naming the broken `GOOS/GOARCH` pair, so platform build errors are caught locally before the release pipeline. Configured via `[gates.build]` with `enabled`, `command`, and a `targets` list of `{goos, goarch}` pairs; default disabled. A parity test keeps the target list in sync with the release matrix in `.github/workflows/release.yml`.
+- **MCP governance server** (`centinela.mcp/v1`) so any MCP-speaking harness consumes governance with zero Centinela-specific code. `centinela mcp serve` exposes `read_rules`, `run_gates`, `verify_claims`, and `workflow_state` over stdio (reusing the verdict packet); it is advisory (`allow`/`warn`/`block`). `centinela mcp shim` maps a `block` verdict onto the harness pre-write deny (`exit 2`), and a parity test keeps the MCP verdict identical to the native-hook verdict. See [Consuming Governance via MCP](#consuming-governance-via-mcp).
 
 ---
 
@@ -540,6 +542,60 @@ running apply commands.
 **Workflow context** — injects a context block showing all active workflows and their current step, so Claude always has accurate state without reading any files.
 
 **Autostart + orchestration** — when no workflow is active, Centinela can auto-start a feature from prompt intent. In strict orchestration mode it also tells the agent which specialist evidence files are required before `centinela complete` can advance the step.
+
+---
+
+## Consuming Governance via MCP
+
+The hooks above are harness-specific (Claude, OpenCode). For **any** other MCP-speaking harness, Centinela exposes the same governance as a versioned **Model Context Protocol** server — so a host with *zero* Centinela-specific code can obtain a verdict purely through tool calls.
+
+```bash
+centinela mcp serve   # runs the MCP server on stdio (schema: centinela.mcp/v1)
+```
+
+Register it with any MCP client. For a project-scoped `.mcp.json` (Claude Code, and most MCP hosts):
+
+```json
+{
+  "mcpServers": {
+    "centinela": { "command": "centinela", "args": ["mcp", "serve"] }
+  }
+}
+```
+
+### Tools (`centinela.mcp/v1`)
+
+| Tool | Arguments | Returns |
+|------|-----------|---------|
+| `read_rules` | _(none)_ | profile, archetype, file-size limit, enabled gates, locales |
+| `run_gates` | `feature?` | gate results + a `decision` (`allow`/`warn`/`block`) |
+| `verify_claims` | `feature?` | claim-verification checks + a `decision` |
+| `workflow_state` | `feature?` | active feature run provenance + on-disk evidence index |
+
+`feature` is optional — omit it to use the active feature. Every result carries `"schema": "centinela.mcp/v1"` so harnesses can pin a compatibility level. A `run_gates` result looks like:
+
+```json
+{ "schema": "centinela.mcp/v1", "decision": "block",
+  "gates": [ { "name": "G1: File Size", "status": "fail", "message": "internal/big/big.go: 134 lines (>100)" } ] }
+```
+
+### Advisory by protocol + the enforcement shim
+
+The server is **advisory**: it returns `allow | warn | block` and *cannot itself stop a write*. Enforcement stays harness-side via a thin shim that maps a `block` verdict onto the harness's existing pre-write deny — the same `exit 2` contract the native hook uses:
+
+```bash
+centinela mcp shim            # active feature; exit 2 on block, 0 on allow/warn
+centinela mcp shim my-feature # explicit feature
+```
+
+Wire it as a deny hook in the harness. The shim runs the full gate + claim suite, so prefer a once-per-turn `Stop` hook over a per-write `PreToolUse` matcher unless your gates are fast:
+
+```json
+{ "hooks": { "Stop": [
+  { "hooks": [ { "type": "command", "command": "centinela mcp shim" } ] } ] } }
+```
+
+A `block` exits non-zero and the harness acts on the deny; `allow`/`warn` exit 0 and it proceeds. The MCP verdict is identical to the native-hook verdict for the same diff and workflow state (a parity test enforces this), so you can adopt MCP without changing how governance decides.
 
 ---
 
