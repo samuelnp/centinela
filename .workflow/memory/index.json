@@ -572,6 +572,19 @@
     "createdAt": "2026-06-14T10:23:15Z"
   },
   {
+    "id": "b61a04e0d9a329fe",
+    "feature": "host-harness-adapters",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: host-harness-adapters",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/host-harness-adapters-gatekeeper.md",
+    "createdAt": "2026-06-29T18:47:23Z"
+  },
+  {
     "id": "bde7dae410e6773a",
     "feature": "model-capability-profiles",
     "step": "tests",

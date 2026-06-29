@@ -18,7 +18,7 @@ func TestHostHarnessAC6_KnownAgentIsValid(t *testing.T) {
 	}
 }
 
-// Scenario: --agent with an unknown value exits non-zero and lists registered harnesses
+// Scenario: --agent with an unknown value lists registered harnesses
 
 func TestHostHarnessAC6_UnknownAgentExitsWithHarnessList(t *testing.T) {
 	bin := buildCent(t)
