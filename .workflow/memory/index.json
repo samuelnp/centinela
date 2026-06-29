@@ -676,6 +676,19 @@
     "createdAt": "2026-06-19T15:17:21Z"
   },
   {
+    "id": "db2d2fb521ce2b4f",
+    "feature": "cost-governance",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Cross-feature attribution within a single Stop is approximate (transcript is",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/cost-governance-edge-cases.md",
+    "createdAt": "2026-06-29T16:32:45Z"
+  },
+  {
     "id": "dc433988c7e638ef",
     "feature": "adoption-baseline",
     "step": "tests",
