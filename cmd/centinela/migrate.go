@@ -23,7 +23,7 @@ var migrateCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(migrateCmd)
 	migrateCmd.Flags().BoolVar(&applyFullMigration, "apply", false, "Apply changes")
-	migrateCmd.Flags().StringVar(&fullAgent, "agent", "both", "Scope for setup: claude, opencode, or both")
+	migrateCmd.Flags().StringVar(&fullAgent, "agent", "both", "Scope for setup: claude, opencode, aider, or both")
 }
 
 func runMigrate(_ *cobra.Command, args []string) error {
@@ -31,7 +31,7 @@ func runMigrate(_ *cobra.Command, args []string) error {
 		return fmt.Errorf("unknown migrate argument %q", args[0])
 	}
 	if !isValidAgent(fullAgent) {
-		return fmt.Errorf("invalid --agent %q (use: claude|opencode|both)", fullAgent)
+		return invalidAgentError(fullAgent)
 	}
 	// User-facing command: a corrupted centinela.toml must fail loudly, and
 	// before any migration side effect is applied.

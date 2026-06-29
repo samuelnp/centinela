@@ -2,31 +2,21 @@ package setup
 
 import "os"
 
+// BuildSyncPlan composes the managed-asset plan for an agent selector by
+// iterating the harness registry. There is no per-harness if-ladder: single
+// agents and composites (e.g. "both") both resolve through adaptersFor.
 func BuildSyncPlan(agent string) (SyncPlan, error) {
-	plan := SyncPlan{}
-	if useClaude(agent) {
-		it, err := planHooksSettings()
-		if err != nil {
-			return SyncPlan{}, err
-		}
-		appendItem(&plan, it)
+	adapters, err := adaptersFor(agent)
+	if err != nil {
+		return SyncPlan{}, err
 	}
-	if useOpenCode(agent) {
-		it, err := planOpenCodeConfig()
+	plan := SyncPlan{}
+	for _, a := range adapters {
+		items, err := a.PlanItems()
 		if err != nil {
 			return SyncPlan{}, err
 		}
-		appendItem(&plan, it)
-		it, err = planPluginFile()
-		if err != nil {
-			return SyncPlan{}, err
-		}
-		appendItem(&plan, it)
-		it, err = planAgentsFile()
-		if err != nil {
-			return SyncPlan{}, err
-		}
-		appendItem(&plan, it)
+		plan.Items = append(plan.Items, items...)
 	}
 	return plan, nil
 }
@@ -45,16 +35,19 @@ func ApplySync(plan SyncPlan) error {
 
 func applyItem(it SyncItem) error {
 	switch it.Kind {
-	case SyncClaudeHooks:
+	case SyncKindPrewriteHook:
+		if it.Path == pluginFile {
+			return writeManagedPlugin(it.Path)
+		}
 		_, err := InjectHooks(it.Path)
 		return err
 	case SyncOpenCodeCfg:
 		_, err := InjectOpenCodeConfig(it.Path)
 		return err
-	case SyncOpenCodePlug:
-		return writeManagedPlugin(it.Path)
 	case SyncAgents:
 		return writeManagedAgents(it.Path)
+	case SyncAiderConfig:
+		return writeManagedAiderConfig(it.Path)
 	default:
 		return nil
 	}
@@ -67,12 +60,15 @@ func appendItem(plan *SyncPlan, item *SyncItem) {
 	plan.Items = append(plan.Items, *item)
 }
 
-func useClaude(agent string) bool {
-	return agent == "claude" || agent == "both"
-}
-
-func useOpenCode(agent string) bool {
-	return agent == "opencode" || agent == "both"
+// itemSlice collects non-nil planned items into a slice.
+func itemSlice(items ...*SyncItem) []SyncItem {
+	out := []SyncItem{}
+	for _, it := range items {
+		if it != nil {
+			out = append(out, *it)
+		}
+	}
+	return out
 }
 
 func classifyAction(path string) SyncAction {

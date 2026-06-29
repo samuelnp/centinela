@@ -1,19 +1,25 @@
 package main
 
-import "testing"
+import (
+	"strings"
+	"testing"
+
+	"github.com/samuelnp/centinela/internal/setup"
+)
 
 func TestAgentFlags(t *testing.T) {
-	if !isValidAgent("claude") || !isValidAgent("opencode") || !isValidAgent("both") {
+	if !isValidAgent("claude") || !isValidAgent("opencode") || !isValidAgent("aider") || !isValidAgent("both") {
 		t.Fatal("expected valid agents")
 	}
 	if isValidAgent("nope") {
 		t.Fatal("unexpected valid agent")
 	}
-	if !usesClaude("both") || usesClaude("opencode") {
-		t.Fatal("usesClaude mismatch")
+	both, err := setup.AgentsFor("both")
+	if err != nil || strings.Join(both, ",") != "claude,opencode" {
+		t.Fatalf("expected both to resolve to claude,opencode: %v %v", both, err)
 	}
-	if !usesOpenCode("both") || usesOpenCode("claude") {
-		t.Fatal("usesOpenCode mismatch")
+	if msg := invalidAgentError("nope").Error(); !strings.Contains(msg, "aider") {
+		t.Fatalf("invalid agent error should list registered harnesses: %s", msg)
 	}
 }
 

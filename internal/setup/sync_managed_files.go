@@ -10,7 +10,7 @@ const pluginHeader = "// centinela:managed-version=" + setupDocVersion + " templ
 const agentsHeader = "<!-- centinela:managed-version=" + setupDocVersion + " template=AGENTS.md -->"
 
 func planPluginFile() (*SyncItem, error) {
-	return planManagedFile(pluginFile, pluginHeader+"\n"+pluginContent, pluginContent, SyncOpenCodePlug)
+	return planManagedFile(pluginFile, pluginHeader+"\n"+pluginContent, pluginContent, SyncKindPrewriteHook)
 }
 
 func planAgentsFile() (*SyncItem, error) {
@@ -29,7 +29,9 @@ func planManagedFile(path, target, legacy string, kind SyncKind) (*SyncItem, err
 	if s == target {
 		return nil, nil
 	}
-	if strings.HasPrefix(s, "// centinela:managed-version=") || strings.HasPrefix(s, "<!-- centinela:managed-version=") {
+	if strings.HasPrefix(s, "// centinela:managed-version=") ||
+		strings.HasPrefix(s, "<!-- centinela:managed-version=") ||
+		strings.HasPrefix(s, "# centinela:managed-version=") {
 		return &SyncItem{Kind: kind, Path: path, Action: SyncUpdate}, nil
 	}
 	if s == legacy {

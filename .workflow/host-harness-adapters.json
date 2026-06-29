@@ -1,0 +1,37 @@
+{
+  "feature": "host-harness-adapters",
+  "startedAt": "2026-06-29T16:57:15.161086Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-29T17:46:06Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-29T18:48:32Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-29T17:18:30Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-29T18:13:26Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-29T18:47:23Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/host-harness-adapters"
+}
