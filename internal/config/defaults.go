@@ -30,4 +30,5 @@ func applyDefaults(cfg *Config) {
 	cfg.Gates.CustomGates = NormalizeCustomGates(cfg.Gates.CustomGates)
 	cfg.Precommit = NormalizePrecommit(cfg.Precommit)
 	cfg.PrGate = NormalizePrGate(cfg.PrGate)
+	cfg.Cost = NormalizeCost(cfg.Cost)
 }

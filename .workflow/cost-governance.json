@@ -1,11 +1,11 @@
 {
   "feature": "cost-governance",
   "startedAt": "2026-06-29T15:15:06.809612Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-29T16:09:59Z"
     },
     "docs": {
       "status": "pending",
@@ -16,7 +16,7 @@
       "completedAt": "2026-06-29T15:53:40Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {

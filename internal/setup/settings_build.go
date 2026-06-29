@@ -14,12 +14,13 @@ func buildHookSettings(path string) (bool, []byte, error) {
 	if h, ok := rawSettings["hooks"]; ok {
 		_ = json.Unmarshal(h, &rawHooks)
 	}
-	var pre, post, prompt, session []HookGroup
+	var pre, post, prompt, session, stop []HookGroup
 	_ = json.Unmarshal(rawHooks["PreToolUse"], &pre)
 	_ = json.Unmarshal(rawHooks["PostToolUse"], &post)
 	_ = json.Unmarshal(rawHooks["UserPromptSubmit"], &prompt)
 	_ = json.Unmarshal(rawHooks["SessionStart"], &session)
-	if !mergeHooks(&pre, &post, &prompt, &session) {
+	_ = json.Unmarshal(rawHooks["Stop"], &stop)
+	if !mergeHooks(&pre, &post, &prompt, &session, &stop) {
 		if !ensureStatusLine(rawSettings) {
 			return false, nil, nil
 		}
@@ -30,6 +31,7 @@ func buildHookSettings(path string) (bool, []byte, error) {
 	rawHooks["PostToolUse"], _ = json.Marshal(post)
 	rawHooks["UserPromptSubmit"], _ = json.Marshal(prompt)
 	rawHooks["SessionStart"], _ = json.Marshal(session)
+	rawHooks["Stop"], _ = json.Marshal(stop)
 	rawSettings["hooks"], _ = json.Marshal(rawHooks)
 	data, err := json.MarshalIndent(rawSettings, "", "  ")
 	return true, data, err
