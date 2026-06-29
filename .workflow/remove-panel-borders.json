@@ -1,11 +1,11 @@
 {
   "feature": "remove-panel-borders",
   "startedAt": "2026-06-29T20:31:25.726826Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-29T20:37:46Z"
     },
     "docs": {
       "status": "pending",
@@ -16,7 +16,7 @@
       "completedAt": "2026-06-29T20:34:40Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {

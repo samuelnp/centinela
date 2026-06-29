@@ -11,10 +11,11 @@ const (
 	toneError   tone = "error"
 )
 
+// renderSystemPanel renders a branded header line followed by the body, with no
+// border box — the header (persona label + channel + title, tone-colored) plus
+// the content below it is the whole rendering.
 func renderSystemPanel(channel, title string, t tone, body string) string {
-	head := renderSystemLine(channel, title, t)
-	content := lipgloss.JoinVertical(lipgloss.Left, head, "", body)
-	return panelStyle(t).Render(content)
+	return renderSystemLine(channel, title, t) + "\n\n" + body
 }
 
 func renderSystemLine(channel, title string, t tone) string {
@@ -22,21 +23,6 @@ func renderSystemLine(channel, title string, t tone) string {
 	meta := StyleMuted.Render(" " + channel + " ")
 	text := StyleBold.Render(" " + title)
 	return label + meta + text
-}
-
-func panelStyle(t tone) lipgloss.Style {
-	s := boxStyle
-	s = s.BorderForeground(colorBlue)
-	if t == toneSuccess {
-		s = s.BorderForeground(colorGreen)
-	}
-	if t == toneWarn {
-		s = s.BorderForeground(colorYellow)
-	}
-	if t == toneError {
-		s = s.BorderForeground(colorRed)
-	}
-	return s
 }
 
 func styleForTone(t tone) lipgloss.Style {
