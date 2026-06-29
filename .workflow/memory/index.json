@@ -299,6 +299,19 @@
     "createdAt": "2026-06-19T10:27:07Z"
   },
   {
+    "id": "571af6e4baf30598",
+    "feature": "brownfield-setup-detection",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Empty `src/` is NOT a signal — a freshly scaffolded repo carrying an empty",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/brownfield-setup-detection-edge-cases.md",
+    "createdAt": "2026-06-29T18:26:44Z"
+  },
+  {
     "id": "5c1ccba03ee6b28f",
     "feature": "g2-import-graph-gate",
     "step": "validate",
