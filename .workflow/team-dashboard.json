@@ -1,0 +1,37 @@
+{
+  "feature": "team-dashboard",
+  "startedAt": "2026-06-26T10:22:04.375808Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-26T11:05:08Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-26T13:34:58Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-26T10:42:19Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-26T11:35:24Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-26T13:34:29Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/team-dashboard"
+}

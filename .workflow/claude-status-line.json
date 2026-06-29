@@ -1,0 +1,30 @@
+{
+  "feature": "claude-status-line",
+  "startedAt": "2026-03-27T22:18:58.758444Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-03-27T22:25:46Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-27T22:20:47Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-03-27T22:27:39Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-03-27T22:31:35Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

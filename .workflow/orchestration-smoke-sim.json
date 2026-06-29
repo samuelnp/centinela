@@ -1,0 +1,30 @@
+{
+  "feature": "orchestration-smoke-sim",
+  "startedAt": "2026-03-27T11:07:00.909928Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-03-27T11:08:29Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-27T11:08:07Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-03-27T11:09:38Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-04-22T20:01:18Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

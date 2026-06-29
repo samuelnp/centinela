@@ -1,0 +1,35 @@
+{
+  "feature": "configurable-subagent-models",
+  "startedAt": "2026-05-24T19:50:27.039248Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-05-24T20:28:27Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-05-24T21:05:11Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-05-24T20:03:46Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-05-24T20:58:31Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-05-24T21:02:50Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

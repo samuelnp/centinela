@@ -1,0 +1,35 @@
+{
+  "feature": "docs-knowledge-base-pages",
+  "startedAt": "2026-05-11T18:01:26.808547Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-05-12T19:56:29Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-05-12T20:14:21Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-05-11T18:03:09Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-05-12T19:58:17Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-05-12T20:00:46Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

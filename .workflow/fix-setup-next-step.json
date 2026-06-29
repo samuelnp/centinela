@@ -1,0 +1,23 @@
+{
+  "feature": "fix-setup-next-step",
+  "startedAt": "2026-03-17T21:09:37.990388Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-03-17T21:10:39Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-17T21:10:16Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-03-17T21:11:26Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-03-17T21:54:21Z"
+    }
+  }
+}

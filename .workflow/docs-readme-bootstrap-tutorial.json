@@ -1,0 +1,30 @@
+{
+  "feature": "docs-readme-bootstrap-tutorial",
+  "startedAt": "2026-03-27T10:56:48.945778Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-03-27T10:59:26Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-27T10:57:51Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-03-27T10:59:58Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-03-27T11:01:05Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

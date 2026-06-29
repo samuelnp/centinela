@@ -27,18 +27,23 @@ ECOSYSTEM.md
 # `centinela analyze` generated inventory — derived from the code, regenerated on demand
 .workflow/analysis.json
 
-# Per-feature evidence is machine plumbing — generated and validated locally by
-# `centinela complete`, never read after a feature merges. Keep the readable
-# -<role>.md companions (reviewer + LLM knowledge base) committed; drop the
-# machine-only JSON and the never-deleted advisory .lock files.
-.workflow/*.json
+# Per-feature ROLE evidence is machine plumbing — generated and validated
+# locally by `centinela complete`, inert after a feature merges. Ignore those
+# JSONs plus the never-deleted advisory .lock files. Everything ELSE under
+# .workflow/ is durable project state and MUST stay tracked: the per-feature
+# root <feature>.json (the completion ledger FeatureStatus reads to show the
+# roadmap's done/ready), roadmap{,-analysis,-quality}.json, audit-baseline.json,
+# memory/, and the -<role>.md narratives (reviewer + LLM knowledge base).
+# Ignoring by role suffix (never a bare *.json) fails safe: a new role at worst
+# leaks one evidence file, whereas a broad *.json silently drops durable state.
+.workflow/*-big-thinker.json
+.workflow/*-feature-specialist.json
+.workflow/*-senior-engineer.json
+.workflow/*-ux-ui-specialist.json
+.workflow/*-qa-senior.json
+.workflow/*-validation-specialist.json
+.workflow/*-documentation-specialist.json
+.workflow/*-gatekeeper.json
+.workflow/*-production-readiness.json
+.workflow/*-merge-steward.json
 .workflow/*.lock
-# ...EXCEPT these top-level JSONs are durable project state, NOT per-feature
-# evidence — they MUST stay tracked. The roadmap bootstrap artifacts gate
-# greenfield start (rehydration + senior-PM analysis + quality scoring) and the
-# audit baseline is the committed ratchet snapshot. Gitignoring them blocks the
-# workflow, so any new durable-state .workflow/*.json belongs on this allow-list.
-!.workflow/roadmap.json
-!.workflow/roadmap-analysis.json
-!.workflow/roadmap-quality.json
-!.workflow/audit-baseline.json

@@ -1,0 +1,35 @@
+{
+  "feature": "session-context-rehydration",
+  "startedAt": "2026-05-23T15:49:10.003758Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-05-23T16:31:58Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-05-23T21:34:29Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-05-23T16:17:51Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-05-23T21:08:34Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-05-23T21:28:09Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

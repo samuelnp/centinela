@@ -1,0 +1,29 @@
+{
+  "feature": "fix-release-workflow-run-tag-resolution",
+  "startedAt": "2026-03-25T16:16:08.432307Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-03-25T16:17:43Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-25T16:16:43Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-03-25T16:19:27Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-03-25T16:22:30Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ]
+}

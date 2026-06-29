@@ -1,0 +1,35 @@
+{
+  "feature": "opencode-setup-question-parity",
+  "startedAt": "2026-04-28T20:22:58.050855Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-04-28T20:24:37Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-04-28T20:27:49Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-04-28T20:24:04Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-04-28T20:25:21Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-04-28T20:26:47Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

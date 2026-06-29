@@ -1,0 +1,35 @@
+{
+  "feature": "merge-steward-auto-dispatch",
+  "startedAt": "2026-05-15T20:59:22.324144Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-05-15T21:27:15Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-05-20T17:23:37Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-05-15T21:12:01Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-05-19T10:58:07Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-05-20T12:48:51Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

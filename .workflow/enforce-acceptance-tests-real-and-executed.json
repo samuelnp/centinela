@@ -1,0 +1,35 @@
+{
+  "feature": "enforce-acceptance-tests-real-and-executed",
+  "startedAt": "2026-04-07T16:20:15.944149Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-04-07T20:24:14Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-04-07T20:32:07Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-04-07T16:21:52Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-04-07T20:24:47Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-04-07T20:29:57Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

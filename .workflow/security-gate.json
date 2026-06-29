@@ -1,0 +1,36 @@
+{
+  "feature": "security-gate",
+  "startedAt": "2026-06-06T17:55:32.620332Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-06T18:12:44Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-06T19:10:52Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-06T18:06:15Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-06T18:53:48Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-06T19:05:30Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "worktreePath": ".worktrees/security-gate"
+}

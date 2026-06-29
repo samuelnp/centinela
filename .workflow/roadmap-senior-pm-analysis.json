@@ -1,0 +1,30 @@
+{
+  "feature": "roadmap-senior-pm-analysis",
+  "startedAt": "2026-03-27T21:17:57.021941Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-03-27T21:26:43Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-03-27T21:18:43Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-03-27T21:29:45Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-03-27T21:48:44Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

@@ -1,0 +1,35 @@
+{
+  "feature": "refine-ux-specialist-evidence",
+  "startedAt": "2026-04-27T06:03:04.798846Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-04-27T07:14:34Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-04-27T14:08:33Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-04-27T06:35:35Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-04-27T07:16:52Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-04-27T07:29:06Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}

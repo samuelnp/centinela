@@ -1,0 +1,35 @@
+{
+  "feature": "docs-latest-features-getting-started",
+  "startedAt": "2026-04-24T07:48:56.302485Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-04-24T08:02:24Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-04-24T08:09:40Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-04-24T07:52:53Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-04-24T08:03:35Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-04-24T08:08:54Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1"
+}
