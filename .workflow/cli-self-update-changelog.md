@@ -1,0 +1,1 @@
+- feat: add `centinela update` self-updater — downloads the os/arch-matched release binary, verifies it against `SHA256SUMS`, and atomically replaces itself; `--check` is read-only and a TTL-cached, fail-silent startup notice flags new versions (never auto-installs)
