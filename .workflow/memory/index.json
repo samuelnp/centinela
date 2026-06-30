@@ -689,19 +689,6 @@
     "createdAt": "2026-06-14T10:23:15Z"
   },
   {
-    "id": "bacb676c33af8e1a",
-    "feature": "remove-panel-borders",
-    "step": "tests",
-    "type": "lesson",
-    "title": "- Single-line `CLI` output (`RenderSuccess`/`RenderStep`) was already unboxed and",
-    "tags": [
-      "edge-cases",
-      "lesson"
-    ],
-    "sourceArtifact": ".workflow/remove-panel-borders-edge-cases.md",
-    "createdAt": "2026-06-29T20:44:23Z"
-  },
-  {
     "id": "b61a04e0d9a329fe",
     "feature": "host-harness-adapters",
     "step": "validate",
@@ -713,6 +700,19 @@
     ],
     "sourceArtifact": ".workflow/host-harness-adapters-gatekeeper.md",
     "createdAt": "2026-06-29T18:47:23Z"
+  },
+  {
+    "id": "bacb676c33af8e1a",
+    "feature": "remove-panel-borders",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Single-line `CLI` output (`RenderSuccess`/`RenderStep`) was already unboxed and",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/remove-panel-borders-edge-cases.md",
+    "createdAt": "2026-06-29T20:44:23Z"
   },
   {
     "id": "bde7dae410e6773a",
@@ -728,19 +728,6 @@
     "createdAt": "2026-06-12T16:22:21Z"
   },
   {
-    "id": "c4212237ec169c57",
-    "feature": "fix-init-managed-sync-drift",
-    "step": "tests",
-    "type": "lesson",
-    "title": "- Legacy `EnsureAgentsFile`/`EnsureOpenCodePlugin`/`InjectOpenCodeConfig` remain",
-    "tags": [
-      "edge-cases",
-      "lesson"
-    ],
-    "sourceArtifact": ".workflow/fix-init-managed-sync-drift-edge-cases.md",
-    "createdAt": "2026-06-30T07:56:22Z"
-  },
-  {
     "id": "be475fddb37d46a0",
     "feature": "coverage-hardening",
     "step": "tests",
@@ -752,6 +739,19 @@
     ],
     "sourceArtifact": ".workflow/coverage-hardening-edge-cases.md",
     "createdAt": "2026-06-30T09:52:35Z"
+  },
+  {
+    "id": "c4212237ec169c57",
+    "feature": "fix-init-managed-sync-drift",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Legacy `EnsureAgentsFile`/`EnsureOpenCodePlugin`/`InjectOpenCodeConfig` remain",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/fix-init-managed-sync-drift-edge-cases.md",
+    "createdAt": "2026-06-30T07:56:22Z"
   },
   {
     "id": "c4d216e0c87de8c1",
@@ -804,6 +804,19 @@
     ],
     "sourceArtifact": ".workflow/precommit-and-pr-gate-edge-cases.md",
     "createdAt": "2026-06-17T10:58:22Z"
+  },
+  {
+    "id": "cc5ee0741fa76608",
+    "feature": "codex-support",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Relative apply_patch code path blocks** (the load-bearing regression): a",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/codex-support-edge-cases.md",
+    "createdAt": "2026-06-30T15:51:20Z"
   },
   {
     "id": "cc69be7431eb2913",

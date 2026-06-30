@@ -68,17 +68,30 @@ func TestDeferredPaths_InRoadmapBacklog(t *testing.T) {
 }
 
 // Scenario: No production behaviour changed
+// Scoped to the coverage-hardening branch (contract: "tests only"). On main it
+// would otherwise falsely trip on later features that add production Go files,
+// so it self-scopes via the branch's commit subjects.
 func TestNoBehaviourChange_OnlyTestFilesAdded(t *testing.T) {
-	cmd := exec.Command("git", "diff", "--name-only", "--diff-filter=A", "main...HEAD")
-	cmd.Dir = chRoot
-	out, err := cmd.Output()
+	subj, err := gitOut(t, "log", "--format=%s", "main..HEAD")
+	if err != nil || (subj != "" && !strings.Contains(subj, "coverage-hardening")) {
+		t.Skip("invariant scoped to the coverage-hardening branch only")
+	}
+	out, err := gitOut(t, "diff", "--name-only", "--diff-filter=A", "main...HEAD")
 	if err != nil {
 		t.Skipf("git diff unavailable: %v", err)
 	}
-	for _, raw := range strings.Split(strings.TrimSpace(string(out)), "\n") {
+	for _, raw := range strings.Split(strings.TrimSpace(out), "\n") {
 		if !strings.HasSuffix(raw, ".go") || strings.HasSuffix(raw, "_test.go") {
 			continue
 		}
 		t.Errorf("non-test Go file added: %s", raw)
 	}
+}
+
+func gitOut(t *testing.T, args ...string) (string, error) {
+	t.Helper()
+	cmd := exec.Command("git", args...)
+	cmd.Dir = chRoot
+	out, err := cmd.Output()
+	return string(out), err
 }

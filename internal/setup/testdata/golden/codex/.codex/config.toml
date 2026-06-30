@@ -1,0 +1,40 @@
+# centinela:managed-version=1 template=.codex/config.toml
+[[hooks.PreToolUse]]
+matcher = "apply_patch"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = "centinela hook prewrite"
+
+[[hooks.PostToolUse]]
+matcher = "apply_patch"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = "centinela hook postwrite"
+
+[[hooks.UserPromptSubmit]]
+
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = "centinela hook setup"
+
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = "centinela hook migrate"
+
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = "centinela hook autostart"
+
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = "centinela hook orchestration"
+
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = "centinela hook plan-advisor"
+
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = "centinela hook context"
