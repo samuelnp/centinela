@@ -637,6 +637,19 @@
     "createdAt": "2026-06-12T16:22:21Z"
   },
   {
+    "id": "be475fddb37d46a0",
+    "feature": "coverage-hardening",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Colocated-only coverage rule**: The 95% gate is driven exclusively by colocated `*_test.go` files; files under `tests/` do not contribute to the per-package coverage percentage. Integration test `TestNewTestFiles_WithinG1Limit` walks the relevant dirs and asserts G1 for every pattern added by this feature, ensuring the rule is not bypassed by a large test file smuggled in colocated.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/coverage-hardening-edge-cases.md",
+    "createdAt": "2026-06-30T09:52:35Z"
+  },
+  {
     "id": "c4d216e0c87de8c1",
     "feature": "model-capability-profiles",
     "step": "validate",
