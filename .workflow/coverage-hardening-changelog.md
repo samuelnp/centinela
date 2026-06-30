@@ -1,0 +1,1 @@
+- test: raise total statement coverage from 95.0% to 97.4% with real colocated unit tests across cmd/centinela and internal/{roadmap,gates,evidence,worktree,setup,ui,migration,analyze}, establishing margin above the 95% gate so parallel merges don't tip main red. Gate threshold unchanged; genuinely un-unit-testable paths deferred to the roadmap rather than faked.
