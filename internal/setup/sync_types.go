@@ -11,11 +11,14 @@ const (
 type SyncKind string
 
 const (
-	SyncClaudeHooks  SyncKind = "claude-hooks"
-	SyncOpenCodeCfg  SyncKind = "opencode-config"
-	SyncOpenCodePlug SyncKind = "opencode-plugin"
-	SyncAgents       SyncKind = "agents"
-	setupDocVersion           = "1"
+	// SyncKindPrewriteHook is the blocking-write hook surface. Claude wires it
+	// via settings.json hooks; OpenCode via its plugin file. Adapters that
+	// declare CapBlocksWrites must emit an item of this kind.
+	SyncKindPrewriteHook SyncKind = "prewrite-hook"
+	SyncOpenCodeCfg      SyncKind = "opencode-config"
+	SyncAgents           SyncKind = "agents"
+	SyncAiderConfig      SyncKind = "aider-config"
+	setupDocVersion               = "1"
 )
 
 type SyncItem struct {

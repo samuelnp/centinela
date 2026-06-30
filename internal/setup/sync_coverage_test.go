@@ -18,7 +18,7 @@ func TestBuildSyncPlanErrorAndApplyItemBranches(t *testing.T) {
 
 	os.RemoveAll("AGENTS.md") //nolint:errcheck
 	plan := SyncPlan{Items: []SyncItem{
-		{Kind: SyncClaudeHooks, Path: ".claude/settings.json", Action: SyncCreate},
+		{Kind: SyncKindPrewriteHook, Path: ".claude/settings.json", Action: SyncCreate},
 		{Kind: SyncOpenCodeCfg, Path: "opencode.json", Action: SyncCreate},
 	}}
 	if err := ApplySync(plan); err != nil {

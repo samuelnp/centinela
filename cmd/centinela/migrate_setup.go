@@ -21,12 +21,12 @@ var migrateSetupCmd = &cobra.Command{
 func init() {
 	migrateCmd.AddCommand(migrateSetupCmd)
 	migrateSetupCmd.Flags().BoolVar(&applySetupMigration, "apply", false, "Apply changes")
-	migrateSetupCmd.Flags().StringVar(&setupAgent, "agent", "both", "Scope: claude, opencode, or both")
+	migrateSetupCmd.Flags().StringVar(&setupAgent, "agent", "both", "Scope: claude, opencode, aider, or both")
 }
 
 func runMigrateSetup(_ *cobra.Command, _ []string) error {
 	if !isValidAgent(setupAgent) {
-		return fmt.Errorf("invalid --agent %q (use: claude|opencode|both)", setupAgent)
+		return invalidAgentError(setupAgent)
 	}
 	plan, err := setup.BuildSyncPlan(setupAgent)
 	if err != nil {
