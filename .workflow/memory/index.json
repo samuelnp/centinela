@@ -559,6 +559,19 @@
     "createdAt": "2026-06-16T20:16:26Z"
   },
   {
+    "id": "9a7bf5a49de8746e",
+    "feature": "fix-init-managed-sync-drift",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: fix-init-managed-sync-drift",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/fix-init-managed-sync-drift-gatekeeper.md",
+    "createdAt": "2026-06-30T08:20:46Z"
+  },
+  {
     "id": "9c696670fd9fa78c",
     "feature": "centinela-doctor",
     "step": "validate",

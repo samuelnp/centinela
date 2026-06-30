@@ -1,14 +1,14 @@
 {
   "feature": "fix-init-managed-sync-drift",
   "startedAt": "2026-06-30T07:44:21.61255Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-30T07:49:15Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-30T07:56:22Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-30T08:20:46Z"
     }
   },
   "stepOrder": [
