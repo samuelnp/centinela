@@ -1,14 +1,14 @@
 {
   "feature": "workflow-revise-loop",
   "startedAt": "2026-06-30T14:47:49.691489Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-30T15:35:40Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-30T16:45:57Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-30T17:28:39Z"
     }
   },
   "stepOrder": [

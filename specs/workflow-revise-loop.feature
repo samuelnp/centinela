@@ -157,7 +157,8 @@ Feature: Workflow revise loop
     Then the command exits 0
     And the current step of my-feature is code
     And no ux-ui-specialist evidence is referenced in the invalidation output
-    And .workflow/my-feature-senior-engineer.json is invalidated
+    And .workflow/my-feature-qa-senior.json is invalidated
+    And .workflow/my-feature-senior-engineer.json is preserved because code is the target step
 
   Scenario: Re-opened step CompletedAt is cleared
     # Scenario: completed-at-cleared-on-reopen

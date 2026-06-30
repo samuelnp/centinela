@@ -338,6 +338,19 @@
     "createdAt": "2026-06-29T18:26:44Z"
   },
   {
+    "id": "57eef19dbdfee88d",
+    "feature": "workflow-revise-loop",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: workflow-revise-loop",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/workflow-revise-loop-gatekeeper.md",
+    "createdAt": "2026-06-30T17:28:39Z"
+  },
+  {
     "id": "5c1ccba03ee6b28f",
     "feature": "g2-import-graph-gate",
     "step": "validate",

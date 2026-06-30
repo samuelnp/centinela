@@ -389,7 +389,8 @@
         {"name":"brownfield-manifest-breadth","summary":"Extend HasSource manifest list to pom.xml, composer.json, build.gradle for broader ecosystem coverage","source":{"feature":"brownfield-setup-detection","role":"feature-specialist"},"deferredAt":"2026-06-29T17:46:35Z"},
         {"name":"unit-test-mcp-server-in-memory-transport","summary":"Cover runMcpServe/mcpConnectSelf via an in-memory MCP transport","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
         {"name":"fault-inject-atomic-write-error-paths","summary":"Cover WriteBytesAtomic and low-level I/O error branches via fault injection","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"unit-test-vuln-tool-external-seam","summary":"Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"}
+        {"name":"unit-test-vuln-tool-external-seam","summary":"Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
+        {"name":"workflow-save-atomic-write","summary":"workflow.Save uses plain os.WriteFile; a crash mid-write can truncate .workflow/<feature>.json — make it write-temp-then-rename","source":{"feature":"workflow-revise-loop","role":"validation-specialist"},"deferredAt":"2026-06-30T17:06:02Z"}
       ]
     }
   ],
