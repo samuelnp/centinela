@@ -33,6 +33,32 @@ func RenderSetupNeeded() string {
 	return renderSystemPanel("SETUP", "PROJECT CONFIG REQUIRED", toneWarn, body)
 }
 
+// RenderBrownfieldSetupNeeded returns context to inject when PROJECT.md is
+// missing but the repo already contains source. Instead of cold-interrogating
+// the user, the agent drafts PROJECT.md from the codebase, then confirms.
+func RenderBrownfieldSetupNeeded() string {
+	body := lipgloss.JoinVertical(lipgloss.Left,
+		StyleYellow.Render("⚠ Existing code detected — PROJECT.md missing"),
+		"",
+		"Do NOT interrogate the user with setup questions. This repo already",
+		"has source code. Draft PROJECT.md from the codebase, then confirm.",
+		"",
+		StyleMuted.Render("1. Run `centinela analyze` (scans the repo into .workflow/analysis.json)"),
+		StyleMuted.Render("2. Run `centinela synthesize` (drafts PROJECT.md from the inventory;"),
+		StyleMuted.Render("   infers the archetype)"),
+		StyleMuted.Render("3. ENRICH the draft — read the key source (design docs, manifests like"),
+		StyleMuted.Render("   package.json/go.mod, i18n locale files) to correct inferred guesses"),
+		StyleMuted.Render("   and fill gaps"),
+		StyleMuted.Render("4. Set `**Project Stage:** existing` in PROJECT.md (so the workflow"),
+		StyleMuted.Render("   skips greenfield bootstrap)"),
+		StyleMuted.Render("5. Present the drafted PROJECT.md to the user, confirm any uncertain"),
+		StyleMuted.Render("   fields, THEN finalize"),
+		"",
+		StyleRed.Render("Draft from the code first — confirm with the user — then write PROJECT.md."),
+	)
+	return renderSystemPanel("SETUP", "BROWNFIELD PROJECT DETECTED", toneWarn, body)
+}
+
 // RenderProductionReadinessSetupNeeded returns context when the prompt file is missing.
 func RenderProductionReadinessSetupNeeded() string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
