@@ -559,6 +559,19 @@
     "createdAt": "2026-06-26T07:59:31Z"
   },
   {
+    "id": "95fb6896b9f04707",
+    "feature": "cli-self-update",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: cli-self-update",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/cli-self-update-gatekeeper.md",
+    "createdAt": "2026-06-30T10:06:23Z"
+  },
+  {
     "id": "981d6cea48994066",
     "feature": "custom-gate-sdk",
     "step": "validate",

@@ -1,14 +1,14 @@
 {
   "feature": "cli-self-update",
   "startedAt": "2026-06-30T07:52:36.527111Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-30T08:45:57Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-30T09:36:29Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-30T10:06:23Z"
     }
   },
   "stepOrder": [
