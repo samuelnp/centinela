@@ -28,13 +28,17 @@ func init() {
 	initCmd.Flags().BoolVar(&localFlag, "local", false,
 		"Write hooks to .claude/settings.local.json instead of settings.json")
 	initCmd.Flags().StringVar(&agentFlag, "agent", "both",
-		"Target integrations: claude, opencode, or both")
+		"Target integrations: claude, opencode, aider, or both")
 }
 
 func runInit(_ *cobra.Command, _ []string) error {
 	agent := strings.ToLower(agentFlag)
 	if !isValidAgent(agent) {
-		return fmt.Errorf("invalid --agent %q (use: claude|opencode|both)", agentFlag)
+		return invalidAgentError(agentFlag)
+	}
+	selected, err := setup.AgentsFor(agent)
+	if err != nil {
+		return err
 	}
 
 	result, err := scaffold.Extract(".")
@@ -53,13 +57,14 @@ func runInit(_ *cobra.Command, _ []string) error {
 	if err := syncWorktreeIgnores("."); err != nil {
 		return err
 	}
-	if usesOpenCode(agent) {
-		if err := setupOpenCode(); err != nil {
+	return dispatchSetup(selected)
+}
+
+func dispatchSetup(selected []string) error {
+	for _, name := range selected {
+		if err := runHarnessSetup(name); err != nil {
 			return err
 		}
-	}
-	if usesClaude(agent) {
-		return setupClaude()
 	}
 	return nil
 }

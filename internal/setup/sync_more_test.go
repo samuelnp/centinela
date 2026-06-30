@@ -28,14 +28,14 @@ func TestBuildSyncPlanByAgent(t *testing.T) {
 
 	claude, _ := BuildSyncPlan("claude")
 	for _, it := range claude.Items {
-		if it.Kind != SyncClaudeHooks {
+		if it.Kind != SyncKindPrewriteHook {
 			t.Fatalf("unexpected kind for claude scope: %s", it.Kind)
 		}
 	}
 	opencode, _ := BuildSyncPlan("opencode")
 	for _, it := range opencode.Items {
-		if it.Kind == SyncClaudeHooks {
-			t.Fatal("unexpected claude hooks in opencode scope")
+		if it.Path == ".claude/settings.json" {
+			t.Fatal("unexpected claude settings in opencode scope")
 		}
 	}
 }
@@ -55,7 +55,7 @@ func TestApplySyncManualReviewUnknownAndError(t *testing.T) {
 		t.Fatal(err)
 	}
 	os.WriteFile(".opencode", []byte("x"), 0644) //nolint:errcheck
-	plug := SyncPlan{Items: []SyncItem{{Kind: SyncOpenCodePlug, Path: pluginFile, Action: SyncUpdate}}}
+	plug := SyncPlan{Items: []SyncItem{{Kind: SyncKindPrewriteHook, Path: pluginFile, Action: SyncUpdate}}}
 	if err := ApplySync(plug); err == nil {
 		t.Fatal("expected plugin write error with conflicting .opencode file")
 	}

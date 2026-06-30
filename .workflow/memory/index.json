@@ -312,6 +312,19 @@
     "createdAt": "2026-06-19T10:27:07Z"
   },
   {
+    "id": "571af6e4baf30598",
+    "feature": "brownfield-setup-detection",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Empty `src/` is NOT a signal — a freshly scaffolded repo carrying an empty",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/brownfield-setup-detection-edge-cases.md",
+    "createdAt": "2026-06-29T18:26:44Z"
+  },
+  {
     "id": "5c1ccba03ee6b28f",
     "feature": "g2-import-graph-gate",
     "step": "validate",
@@ -427,6 +440,19 @@
     ],
     "sourceArtifact": ".workflow/lean-evidence-footprint-edge-cases.md",
     "createdAt": "2026-06-26T13:37:27Z"
+  },
+  {
+    "id": "782f63dad80a30df",
+    "feature": "brownfield-setup-detection",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: brownfield-setup-detection",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/brownfield-setup-detection-gatekeeper.md",
+    "createdAt": "2026-06-29T20:25:51Z"
   },
   {
     "id": "8054a47cf854d7f8",
@@ -622,6 +648,19 @@
     ],
     "sourceArtifact": ".workflow/remove-panel-borders-edge-cases.md",
     "createdAt": "2026-06-29T20:44:23Z"
+  },
+  {
+    "id": "b61a04e0d9a329fe",
+    "feature": "host-harness-adapters",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: host-harness-adapters",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/host-harness-adapters-gatekeeper.md",
+    "createdAt": "2026-06-29T18:47:23Z"
   },
   {
     "id": "bde7dae410e6773a",

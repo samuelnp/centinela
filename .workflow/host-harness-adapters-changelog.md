@@ -1,0 +1,1 @@
+- feat: extract a HarnessAdapter interface + registry (Claude/OpenCode refactored onto it with byte-for-byte parity) and add first-class Aider support via `--agent aider`
