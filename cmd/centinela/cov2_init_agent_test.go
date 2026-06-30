@@ -26,8 +26,8 @@ func TestCov2SetupOpenCodePluginWriteError(t *testing.T) {
 	if err := os.WriteFile(".opencode", []byte("x"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := setupOpenCode(); err == nil || !strings.Contains(err.Error(), "OpenCode plugin") {
-		t.Fatalf("expected an OpenCode plugin write failure, got %v", err)
+	if err := setupOpenCode(); err == nil || !strings.Contains(err.Error(), ".opencode/plugins") {
+		t.Fatalf("expected an OpenCode asset write failure, got %v", err)
 	}
 }
 

@@ -24,23 +24,29 @@ func runHarnessSetup(name string) error {
 	}
 }
 
+// setupOpenCode wires OpenCode through the registry-driven managed-sync path
+// (the same seam setupAider uses) so init writes opencode.json, the prewrite
+// plugin, and AGENTS.md in their managed form — carrying the centinela
+// managed-version header the migration system expects. Using the legacy
+// header-less Ensure* writers here left a freshly-init'd project permanently
+// reporting pending migrations.
 func setupOpenCode() error {
-	if changed, err := setup.InjectOpenCodeConfig("opencode.json"); err != nil {
-		return fmt.Errorf("failed to update opencode.json: %w", err)
-	} else if changed {
-		fmt.Println(ui.RenderSuccess("configured opencode.json"))
-	} else {
-		fmt.Println(ui.StyleMuted.Render("opencode.json already configured"))
+	plan, err := setup.BuildSyncPlan("opencode")
+	if err != nil {
+		return err
 	}
-	if changed, err := setup.EnsureOpenCodePlugin(); err != nil {
-		return fmt.Errorf("failed to write OpenCode plugin: %w", err)
-	} else if changed {
-		fmt.Println(ui.RenderSuccess("created .opencode/plugins/centinela.js"))
+	for _, it := range plan.Items {
+		if it.Action == setup.SyncManualReview {
+			fmt.Println(ui.StyleYellow.Render("⚠ manual-review " + it.Path + " (" + it.Reason + ")"))
+		}
 	}
-	if changed, err := setup.EnsureAgentsFile(); err != nil {
-		return fmt.Errorf("failed to write AGENTS.md: %w", err)
-	} else if changed {
-		fmt.Println(ui.RenderSuccess("created AGENTS.md"))
+	if err := setup.ApplySync(plan); err != nil {
+		return fmt.Errorf("failed to write OpenCode assets: %w", err)
+	}
+	for _, it := range plan.Items {
+		if it.Action != setup.SyncManualReview {
+			fmt.Println(ui.RenderSuccess(string(it.Action) + " " + it.Path))
+		}
 	}
 	return nil
 }
