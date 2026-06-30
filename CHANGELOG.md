@@ -21,6 +21,7 @@ Release notes for tagged versions are also published on the [GitHub Releases pag
 
 ### Changed
 - Repository metadata: description, homepage, and 20 discoverability topics added on GitHub.
+- refactor(ui): remove the rounded border box from all system panels. `renderSystemPanel` now renders the branded header line (`🛡️👁️ <channel> <title>`) plus the body with no `╭──╮` frame, across CLI command output and hook directives alike. Branding, colors, and content are unchanged; dead box styles removed.
 
 ---
 
