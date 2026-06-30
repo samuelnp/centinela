@@ -21,6 +21,9 @@ Release notes for tagged versions are also published on the [GitHub Releases pag
 ### Changed
 - Repository metadata: description, homepage, and 20 discoverability topics added on GitHub.
 
+### Fixed
+- fix(init): stop greenfield `centinela init` from reporting spurious pending migrations. `setupOpenCode()` now writes AGENTS.md and the OpenCode plugin through the managed-sync path (with the `centinela:managed-version` header the migration expects), mirroring the Aider setup. A fresh `init` followed by `centinela migrate` now reports 0 pending instead of 2.
+
 ---
 
 For pre-release history, refer to `git log` and the [Releases page](https://github.com/samuelnp/centinela/releases).
