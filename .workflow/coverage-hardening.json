@@ -1,14 +1,14 @@
 {
   "feature": "coverage-hardening",
   "startedAt": "2026-06-30T08:03:50.665294Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-30T09:34:53Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-30T09:52:35Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-30T11:29:04Z"
     }
   },
   "stepOrder": [

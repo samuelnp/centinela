@@ -325,6 +325,19 @@
     "createdAt": "2026-06-05T15:34:55Z"
   },
   {
+    "id": "5d4bc36b16cccc92",
+    "feature": "coverage-hardening",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: coverage-hardening",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/coverage-hardening-gatekeeper.md",
+    "createdAt": "2026-06-30T11:29:04Z"
+  },
+  {
     "id": "615ebbc4673d981b",
     "feature": "security-gate",
     "step": "validate",
