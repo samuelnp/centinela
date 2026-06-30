@@ -42,6 +42,11 @@ type Workflow struct {
 	// before this field existed and when no driver model was configured —
 	// EffectiveProfile simply skips the capability tier for those.
 	DriverModel string `json:"driverModel,omitempty"`
+	// Revisions is the append-only audit log of backward transitions performed by
+	// `centinela revise`. Empty/absent on workflows that were never rewound
+	// (back-compat, like Archetype) — RevisionsSummary handles the empty case.
+	// The Revision type lives in rewind.go alongside the logic that appends it.
+	Revisions []Revision `json:"revisions,omitempty"`
 }
 
 // WorkflowDir is the directory where workflow JSON files are stored.

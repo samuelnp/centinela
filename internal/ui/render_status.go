@@ -29,6 +29,9 @@ func RenderStatusWithConfig(wf *workflow.Workflow, cfg *config.Config) string {
 	if wf.WorktreePath != "" {
 		rows = append(rows, StyleBold.Render("Worktree")+" "+wf.WorktreePath)
 	}
+	if summary := workflow.RevisionsSummary(wf); summary != "" {
+		rows = append(rows, StyleBold.Render("Revisions")+" "+summary)
+	}
 	rows = append(rows, "")
 	for _, step := range wf.OrderedSteps() {
 		info := wf.Steps[step]

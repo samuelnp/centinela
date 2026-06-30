@@ -15,6 +15,7 @@ const (
 	TypeVerifyRejection  = "verify-rejection"
 	TypeCompleteRejected = "complete-rejected"
 	TypeStepAdvanced     = "step-advanced"
+	TypeStepRevised      = "step-revised"
 	TypeCostSample       = "cost-sample"
 )
 
@@ -28,6 +29,7 @@ type Event struct {
 	Timestamp    string     `json:"timestamp"` // RFC3339 UTC
 	Feature      string     `json:"feature,omitempty"`
 	Step         string     `json:"step,omitempty"`
+	From         string     `json:"from,omitempty"`         // step-revised: the step rewound away from (Step holds the target)
 	Model        string     `json:"model,omitempty"`        // driver model id, stamped at emit (back-compat: old lines → "")
 	Reason       string     `json:"reason,omitempty"`       // block: need-init|out-of-step ; complete-rejected: gates|verify
 	FileType     string     `json:"fileType,omitempty"`     // block
