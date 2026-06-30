@@ -13,6 +13,7 @@ func TestGoldenParityClaudeOpenCode(t *testing.T) {
 	cases := map[string][]string{
 		"claude":   {".claude/settings.json"},
 		"opencode": {"opencode.json", ".opencode/plugins/centinela.js", "AGENTS.md"},
+		"codex":    {".codex/config.toml", "AGENTS.md"},
 	}
 	root, _ := os.Getwd()
 	for agent, files := range cases {

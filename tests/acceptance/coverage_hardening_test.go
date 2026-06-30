@@ -68,21 +68,19 @@ func TestDeferredPaths_InRoadmapBacklog(t *testing.T) {
 }
 
 // Scenario: No production behaviour changed
+// Scoped to the coverage-hardening branch (contract: "tests only"). On main it
+// would otherwise falsely trip on later features that add production Go files,
+// so it self-scopes via the branch's commit subjects.
 func TestNoBehaviourChange_OnlyTestFilesAdded(t *testing.T) {
-	cmd := exec.Command("git", "diff", "--name-only", "--diff-filter=A", "main...HEAD")
-	cmd.Dir = chRoot
-	out, err := cmd.Output()
+	subj, err := gitOut(t, "log", "--format=%s", "main..HEAD")
+	if err != nil || (subj != "" && !strings.Contains(subj, "coverage-hardening")) {
+		t.Skip("invariant scoped to the coverage-hardening branch only")
+	}
+	out, err := gitOut(t, "diff", "--name-only", "--diff-filter=A", "main...HEAD")
 	if err != nil {
 		t.Skipf("git diff unavailable: %v", err)
 	}
-	added := strings.Split(strings.TrimSpace(string(out)), "\n")
-	// Guards the coverage-hardening feature's own diff (test-only). Once merged,
-	// its sentinel test file lives in main and drops out of main...HEAD — so we
-	// are on a later feature branch where the premise no longer applies. Skip.
-	if !chContainsSuffix(added, "cmd/centinela/cov2_config_error_test.go") {
-		t.Skip("coverage-hardening already merged; invariant scoped to its own branch")
-	}
-	for _, raw := range added {
+	for _, raw := range strings.Split(strings.TrimSpace(out), "\n") {
 		if !strings.HasSuffix(raw, ".go") || strings.HasSuffix(raw, "_test.go") {
 			continue
 		}
@@ -90,11 +88,10 @@ func TestNoBehaviourChange_OnlyTestFilesAdded(t *testing.T) {
 	}
 }
 
-func chContainsSuffix(paths []string, suffix string) bool {
-	for _, p := range paths {
-		if strings.HasSuffix(p, suffix) {
-			return true
-		}
-	}
-	return false
+func gitOut(t *testing.T, args ...string) (string, error) {
+	t.Helper()
+	cmd := exec.Command("git", args...)
+	cmd.Dir = chRoot
+	out, err := cmd.Output()
+	return string(out), err
 }

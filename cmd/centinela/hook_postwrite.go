@@ -31,6 +31,7 @@ type postwriteInput struct {
 	ToolInput struct {
 		FilePath  string `json:"file_path"`
 		FilePath2 string `json:"filePath"`
+		Command   string `json:"command"`
 	} `json:"tool_input"`
 }
 
@@ -80,7 +81,13 @@ func extractPostwritePath(raw []byte) string {
 	if in.ToolInput.FilePath != "" {
 		return in.ToolInput.FilePath
 	}
-	return in.ToolInput.FilePath2
+	if in.ToolInput.FilePath2 != "" {
+		return in.ToolInput.FilePath2
+	}
+	if paths := hookpolicy.ExtractApplyPatchPaths(in.ToolInput.Command); len(paths) > 0 {
+		return paths[0]
+	}
+	return ""
 }
 
 func mustGetwd() string {
