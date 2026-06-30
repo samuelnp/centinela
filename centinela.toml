@@ -71,10 +71,14 @@ enabled = true
 # it imports only stdlib, os/exec, and the internal/golist leaf. internal/gitutil
 # is also a leaf: a stdlib + os/exec git/`gh` wrapper (origin-remote / gh
 # detection + the delivery-option matrix for `centinela deliver`) consumed by
-# cmd/ (and internal/ui read-only for its Option type). See PROJECT.md G2.
+# cmd/ (and internal/ui read-only for its Option type). internal/selfupdate is
+# also a leaf: the `centinela update` self-updater (release resolution, asset
+# download, SHA256SUMS verify, atomic binary replace) + the SessionStart update
+# notice. It imports only the standard library — computing its XDG cache path
+# from env directly — so it adds no internal edge. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "leaf"
-paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**"]
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**", "internal/selfupdate/**"]
 allow = []
 
 # internal/analyze is a domain package (deterministic codebase inventory for

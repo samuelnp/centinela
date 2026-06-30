@@ -1,0 +1,84 @@
+### Gatekeeper Report: brownfield-setup-detection
+**Date:** 2026-06-29
+**Status:** SAFE
+
+#### Analyzed Specs
+- specs/brownfield-setup-detection.feature (the new spec under review)
+- specs/fix-setup-hook-template-detection.feature
+- specs/opencode-force-setup-flow.feature
+- specs/opencode-setup-question-parity.feature
+- specs/opencode-setup-priority.feature
+- specs/opencode-hook-parity.feature
+- specs/bootstrap-phase-zero-workflow.feature
+- specs/roadmap-checkpoint-prompt.feature
+- specs/clarify-roadmap-missing-artifacts.feature
+- specs/brownfield-roadmap-generation.feature
+- specs/archetype-inference-project-synthesis.feature
+- specs/adoption-baseline.feature
+- specs/deep-codebase-analysis.feature
+- Plus a sweep of all remaining specs/*.feature for references to the setup
+  hook, the greenfield setup directive, PROJECT.md-absent handling, and the
+  analyze/synthesize/projectstage packages.
+
+#### Findings
+No conflicts detected. Detailed verification:
+
+1. **Greenfield setup path preserved byte-for-byte.** The diff to
+   cmd/centinela/hook_setup.go only extracts the existing `!hasProject` body
+   into a new helper `emitSetupDirective()` (cmd/centinela/hook_setup_setup.go).
+   For a repo with no source the helper emits the identical directive line
+   `CENTINELA DIRECTIVE: setup required. Ask setup questions and write
+   PROJECT.md.` followed by the unchanged `ui.RenderSetupNeeded()`. The git diff
+   of internal/ui/render_setup.go is purely additive: `RenderSetupNeeded()` (the
+   6-question panel) is untouched; only `RenderBrownfieldSetupNeeded()` was
+   added. This satisfies fix-setup-hook-template-detection.feature ("Plain
+   directive line accompanies boxed guidance") and opencode-setup-question-parity
+   (the six exact questions still render).
+
+2. **Brownfield branch is purely additive.** The new branch fires only inside
+   `!hasProject` when `analyze.HasSource(".")` is true. The PROJECT.md-present
+   path, the ROADMAP/roadmap-analysis/roadmap-quality/production-readiness
+   directives, and the roadmap checkpoint logic are unchanged — so
+   roadmap-checkpoint-prompt, clarify-roadmap-missing-artifacts, and
+   bootstrap-phase-zero-workflow expectations are unaffected. The new spec's
+   own "PROJECT.md already present bypasses both setup directives" scenario
+   matches the still-unchanged `hasProject` short-circuit.
+
+3. **analyze / synthesize / projectstage contracts intact.** The diff to
+   internal/analyze/ adds only detect.go and detect_test.go; manifests.go,
+   internal/synthesize/, and internal/projectstage/ are not modified.
+   `HasSource` performs a read-only iteration over `manifestTable` keys plus a
+   single-entry `Readdirnames(1)` on conventional source dirs — no mutation of
+   shared state, no change to `detectManifests` or the Manifest contract.
+   Therefore brownfield-roadmap-generation, archetype-inference-project-
+   synthesis, adoption-baseline, and deep-codebase-analysis (which depend on
+   analyze/synthesize) are not contractually broken.
+
+4. **Existing hook-setup unit tests still hold.** Pre-existing tests
+   (cmd/centinela/hook_setup_directive_test.go and *_more, *_quality) build
+   their temp repos with only `centinela.toml` (or PROJECT.md) and no manifest
+   or populated source dir, so `HasSource(".")` returns false and they keep
+   hitting the greenfield branch and its "CENTINELA DIRECTIVE: setup required" /
+   "PROJECT.md not found" assertions.
+
+5. **OpenCode parity specs unaffected.** OpenCode setup instructions are emitted
+   from static managed/template files (internal/setup) and the shared
+   `RenderSetupNeeded` content, not by invoking `hook setup` at runtime; the
+   greenfield rendering is unchanged, so opencode-force-setup-flow,
+   opencode-setup-question-parity, opencode-setup-priority, and
+   opencode-hook-parity continue to pass.
+
+Informational (not a conflict): by design, a repo that already contains source
+but lacks PROJECT.md now routes to the brownfield analyze/synthesize directive
+instead of the 6-question prompt. This is the intended behavior of this feature;
+the parity/setup specs assert against greenfield (empty) fixtures, so no
+expectation is violated.
+
+#### Deferred Findings
+- none
+
+#### Recommendation
+SAFE: No conflicts detected. The change is strictly additive — the greenfield
+setup directive and 6-question flow are preserved for empty repos, the
+analyze/synthesize/projectstage contracts are unchanged, and no domain entity,
+port, DTO, or existing use case was modified. Proceed with validation.

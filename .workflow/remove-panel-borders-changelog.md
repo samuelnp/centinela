@@ -1,0 +1,1 @@
+- refactor(ui): remove the rounded border box from all system panels. `renderSystemPanel` now renders the branded header line (`🛡️👁️ <channel> <title>`) plus the body with no `╭──╮` frame, across CLI command output and hook directives alike. Branding, colors, and content are unchanged; dead box styles removed.

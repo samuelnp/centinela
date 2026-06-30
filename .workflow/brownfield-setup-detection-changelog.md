@@ -1,0 +1,1 @@
+- feat(setup): detect brownfield projects (existing source, no PROJECT.md) and route the setup hook to draft PROJECT.md from the codebase via analyze+synthesize then confirm — instead of cold-interrogating the user with greenfield setup questions. New cheap root-only `analyze.HasSource` detector; greenfield path unchanged for empty repos.

@@ -26,6 +26,19 @@
     "createdAt": "2026-06-24T11:51:14Z"
   },
   {
+    "id": "07a2c4fa3f6ec2e9",
+    "feature": "cli-self-update",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Risk**: The ldflag-injected version omits the `v` prefix (\"0.40.2\") but the GitHub release tag always carries it (\"v0.40.2\"). A naive string comparison would treat them as different, triggering a spurious update loop.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/cli-self-update-edge-cases.md",
+    "createdAt": "2026-06-30T09:36:29Z"
+  },
+  {
     "id": "0cd0b9d5a3adf24f",
     "feature": "security-gate",
     "step": "tests",
@@ -312,6 +325,19 @@
     "createdAt": "2026-06-19T10:27:07Z"
   },
   {
+    "id": "571af6e4baf30598",
+    "feature": "brownfield-setup-detection",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Empty `src/` is NOT a signal — a freshly scaffolded repo carrying an empty",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/brownfield-setup-detection-edge-cases.md",
+    "createdAt": "2026-06-29T18:26:44Z"
+  },
+  {
     "id": "5c1ccba03ee6b28f",
     "feature": "g2-import-graph-gate",
     "step": "validate",
@@ -323,6 +349,19 @@
     ],
     "sourceArtifact": ".workflow/g2-import-graph-gate-gatekeeper.md",
     "createdAt": "2026-06-05T15:34:55Z"
+  },
+  {
+    "id": "5d4bc36b16cccc92",
+    "feature": "coverage-hardening",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: coverage-hardening",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/coverage-hardening-gatekeeper.md",
+    "createdAt": "2026-06-30T11:29:04Z"
   },
   {
     "id": "615ebbc4673d981b",
@@ -427,6 +466,19 @@
     ],
     "sourceArtifact": ".workflow/lean-evidence-footprint-edge-cases.md",
     "createdAt": "2026-06-26T13:37:27Z"
+  },
+  {
+    "id": "782f63dad80a30df",
+    "feature": "brownfield-setup-detection",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: brownfield-setup-detection",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/brownfield-setup-detection-gatekeeper.md",
+    "createdAt": "2026-06-29T20:25:51Z"
   },
   {
     "id": "8054a47cf854d7f8",
@@ -546,6 +598,19 @@
     "createdAt": "2026-06-26T07:59:31Z"
   },
   {
+    "id": "95fb6896b9f04707",
+    "feature": "cli-self-update",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: cli-self-update",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/cli-self-update-gatekeeper.md",
+    "createdAt": "2026-06-30T10:06:23Z"
+  },
+  {
     "id": "981d6cea48994066",
     "feature": "custom-gate-sdk",
     "step": "validate",
@@ -624,6 +689,19 @@
     "createdAt": "2026-06-14T10:23:15Z"
   },
   {
+    "id": "bacb676c33af8e1a",
+    "feature": "remove-panel-borders",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Single-line `CLI` output (`RenderSuccess`/`RenderStep`) was already unboxed and",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/remove-panel-borders-edge-cases.md",
+    "createdAt": "2026-06-29T20:44:23Z"
+  },
+  {
     "id": "b61a04e0d9a329fe",
     "feature": "host-harness-adapters",
     "step": "validate",
@@ -661,6 +739,19 @@
     ],
     "sourceArtifact": ".workflow/fix-init-managed-sync-drift-edge-cases.md",
     "createdAt": "2026-06-30T07:56:22Z"
+  },
+  {
+    "id": "be475fddb37d46a0",
+    "feature": "coverage-hardening",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Colocated-only coverage rule**: The 95% gate is driven exclusively by colocated `*_test.go` files; files under `tests/` do not contribute to the per-package coverage percentage. Integration test `TestNewTestFiles_WithinG1Limit` walks the relevant dirs and asserts G1 for every pattern added by this feature, ensuring the rule is not bypassed by a large test file smuggled in colocated.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/coverage-hardening-edge-cases.md",
+    "createdAt": "2026-06-30T09:52:35Z"
   },
   {
     "id": "c4d216e0c87de8c1",
@@ -713,6 +804,19 @@
     ],
     "sourceArtifact": ".workflow/precommit-and-pr-gate-edge-cases.md",
     "createdAt": "2026-06-17T10:58:22Z"
+  },
+  {
+    "id": "cc69be7431eb2913",
+    "feature": "remove-panel-borders",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: remove-panel-borders",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/remove-panel-borders-gatekeeper.md",
+    "createdAt": "2026-06-29T21:07:03Z"
   },
   {
     "id": "ccfcd939f5d569ec",

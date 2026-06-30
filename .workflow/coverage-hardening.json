@@ -1,0 +1,37 @@
+{
+  "feature": "coverage-hardening",
+  "startedAt": "2026-06-30T08:03:50.665294Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-30T09:34:53Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-30T13:13:29Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-30T08:23:44Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-30T09:52:35Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-30T11:29:04Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/coverage-hardening"
+}
