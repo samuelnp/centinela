@@ -122,6 +122,29 @@ identical to pre-feature.
       call, NO `ollama`/`vLLM` process, NO network git push (use a local bare repo
       as origin if a push is exercised). Tagged `@acceptance @e2e @hermetic`.
 
+## Discovered during the tests step (qa-senior)
+
+16. **Foreign NON-OBJECT value under the managed provider key** — e.g.
+    `{"provider":{"ollama":123}}` where the `ollama` value is a number, not an
+    object.
+    - Expected: `isManagedProvider` cannot parse it as a managed block, so
+      `mergeProvider` treats it as foreign and leaves it unclobbered
+      (`changed=false`). Hardening of edge case 11.
+    - Test: `TestMergeProviderForeignNonObject` (internal/setup).
+
+17. **Stale `main...HEAD` guard breaks the suite for the first feature after
+    coverage-hardening** — `TestNoBehaviourChange_OnlyTestFilesAdded` asserted no
+    production `.go` file is added on the branch. That invariant only held while
+    coverage-hardening (a test-only feature) was itself HEAD; local-harness-support
+    is the first feature merged afterward and legitimately adds production code, so
+    the guard fails for everyone going forward and is also commit-state fragile.
+    - Expected: the guard is removed (its real invariant — new code is tested — is
+      already enforced by the live coverage gate on the merged tree). Not a faked
+      gate: no threshold lowered, the coverage gate still runs at the 95% floor and
+      total measured 97.4%.
+    - Test: removal documented in `tests/acceptance/coverage_hardening_test.go`; the
+      other three coverage-hardening scenarios remain and pass.
+
 ## File-size (G1)
 
 15. **New config + adapter code ≤100 lines/file** — provider builders split into
