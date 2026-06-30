@@ -77,7 +77,7 @@ func TestInjectOpenCodeConfig_PreservesExistingAgents(t *testing.T) {
 
 	seed := `{"agent":{"custom":{"description":"keep","mode":"subagent"},"big-thinker":{"description":"mine","mode":"subagent","prompt":"custom"},"build":{"permission":{"task":{"custom":"allow"}}}}}`
 	os.WriteFile("opencode.json", []byte(seed), 0644) //nolint:errcheck
-	setup.InjectOpenCodeConfig("opencode.json", nil)       //nolint:errcheck
+	setup.InjectOpenCodeConfig("opencode.json", nil)  //nolint:errcheck
 
 	data, _ := os.ReadFile("opencode.json") //nolint:errcheck
 	var parsed map[string]json.RawMessage

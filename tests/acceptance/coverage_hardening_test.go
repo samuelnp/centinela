@@ -65,6 +65,7 @@ func TestDeferredPaths_InRoadmapBacklog(t *testing.T) {
 		}
 	}
 }
+
 // Note: a former TestNoBehaviourChange_OnlyTestFilesAdded guard lived here. It
 // asserted `git diff --diff-filter=A main...HEAD` added no production .go files —
 // an invariant that only held while coverage-hardening (a test-only feature) was

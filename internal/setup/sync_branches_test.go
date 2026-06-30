@@ -48,7 +48,7 @@ func TestPlanSettingsNoChange(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(t.TempDir())
 
-	InjectHooks(".claude/settings.json")  //nolint:errcheck
+	InjectHooks(".claude/settings.json")       //nolint:errcheck
 	InjectOpenCodeConfig("opencode.json", nil) //nolint:errcheck
 
 	if it, err := planHooksSettings(); err != nil || it != nil {

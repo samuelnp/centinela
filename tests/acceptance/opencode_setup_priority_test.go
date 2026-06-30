@@ -17,8 +17,8 @@ func TestOpenCodeSetupPriority_GeneratedAssetsFavorSetup(t *testing.T) {
 	os.Chdir(dir)           //nolint:errcheck
 
 	setup.InjectOpenCodeConfig("opencode.json", nil) //nolint:errcheck
-	setup.EnsureAgentsFile()                    //nolint:errcheck
-	setup.EnsureOpenCodePlugin()                //nolint:errcheck
+	setup.EnsureAgentsFile()                         //nolint:errcheck
+	setup.EnsureOpenCodePlugin()                     //nolint:errcheck
 
 	config, _ := os.ReadFile("opencode.json") //nolint:errcheck
 	var parsed map[string]json.RawMessage
