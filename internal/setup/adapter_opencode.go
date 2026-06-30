@@ -1,8 +1,10 @@
 package setup
 
 // openCodeAdapter wires OpenCode: a blocking prewrite plugin, prompt context,
-// and the AGENTS.md rules surface, plus opencode.json config.
-type openCodeAdapter struct{}
+// and the AGENTS.md rules surface, plus opencode.json config. The registry holds
+// the zero value (local == nil); BuildSyncPlanWithLocal substitutes an adapter
+// carrying the managed local provider when a local block is declared.
+type openCodeAdapter struct{ local *LocalProvider }
 
 func (openCodeAdapter) Name() string { return "opencode" }
 
@@ -10,8 +12,8 @@ func (openCodeAdapter) Capabilities() []Capability {
 	return []Capability{CapBlocksWrites, CapPromptContext, CapRulesFile}
 }
 
-func (openCodeAdapter) PlanItems() ([]SyncItem, error) {
-	cfg, err := planOpenCodeConfig()
+func (a openCodeAdapter) PlanItems() ([]SyncItem, error) {
+	cfg, err := planOpenCodeConfig(a.local)
 	if err != nil {
 		return nil, err
 	}

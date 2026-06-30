@@ -13,7 +13,10 @@ import (
 func DriverModelFrom(flagModel string, cfg *Config) string {
 	candidates := []string{flagModel, os.Getenv("CENTINELA_MODEL")}
 	if cfg != nil {
-		candidates = append(candidates, cfg.Orchestration.DriverModel)
+		// [orchestration] driver_model outranks the declared local model: the
+		// local block's model is the lowest-precedence candidate. Empty is
+		// trimmed away, so the zero-config path is unaffected.
+		candidates = append(candidates, cfg.Orchestration.DriverModel, cfg.Orchestration.Local.Model)
 	}
 	for _, c := range candidates {
 		if v := strings.TrimSpace(c); v != "" {

@@ -28,6 +28,9 @@ func ProfileProvenance(wf *Workflow, cfg *config.Config) (profile, note string) 
 			profile = config.NormalizeEnforcementProfile(config.ProfileForCapability(class, cfg))
 			return profile, fmt.Sprintf("driver: %s → %s", wf.DriverModel, class)
 		}
+		if _, ok := config.LocalDefaultClass(wf.DriverModel, cfg); ok {
+			return config.ProfileStrict, fmt.Sprintf("local default: %s → limited → strict", wf.DriverModel)
+		}
 		return config.ProfileStrict, fmt.Sprintf("driver: %s → no capability, default strict", wf.DriverModel)
 	}
 	return config.ProfileStrict, "default"

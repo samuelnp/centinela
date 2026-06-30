@@ -43,8 +43,7 @@ func defaultProfileForClass(class string) string {
 	}
 }
 
-// normClass normalizes a capability class value: trim + lowercase (classes are a
-// fixed vocabulary, unlike opaque model ids which are only trimmed).
+// normClass normalizes a capability class: trim + lowercase (fixed vocabulary).
 func normClass(class string) string {
 	return strings.ToLower(strings.TrimSpace(class))
 }
@@ -91,6 +90,10 @@ func ProfileForCapability(class string, cfg *Config) string {
 func DefaultProfileForModel(modelID string, cfg *Config) (profile string, ok bool) {
 	class, found := CapabilityClassFor(modelID, cfg)
 	if !found {
+		// Lowest tier: an unmapped declared local model defaults limited → strict.
+		if _, ok := LocalDefaultClass(modelID, cfg); ok {
+			return ProfileForCapability(CapabilityLimited, cfg), true
+		}
 		return "", false
 	}
 	return ProfileForCapability(class, cfg), true

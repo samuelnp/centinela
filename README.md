@@ -324,6 +324,45 @@ MIN_COVERAGE=96.5 ./scripts/check-coverage.sh
 
 Commands run natively via the OS. No shell scripts, no bash dependency — works on Windows, macOS, and Linux.
 
+#### Point Centinela at a local model
+
+Declare a local backend with an `[orchestration.local]` block and `centinela init` / `centinela migrate` will wire the OpenCode provider for you — no hand-editing `opencode.json`. The block has four fields:
+
+| Field | Required | Meaning |
+|-------|----------|---------|
+| `provider` | yes | `ollama` or `openai-compatible` |
+| `endpoint` | yes | Base URL of the local server (OpenAI-compatible `/v1` path) |
+| `model` | yes | Opaque model id passed through to the runner |
+| `api_key_env` | no | Env var name whose value the runner reads as the API key (`openai-compatible` only) |
+
+Both kinds drive an OpenAI-compatible endpoint through the npm `@ai-sdk/openai-compatible` provider; they differ only in whether an API-key reference is written.
+
+```toml
+# Ollama running locally — no API key needed.
+[orchestration.local]
+provider = "ollama"
+endpoint = "http://localhost:11434/v1"
+model    = "qwen2.5-coder"
+
+# Any other OpenAI-compatible server (llama.cpp, vLLM, LM Studio, ...).
+# Use api_key_env when the server expects an Authorization header.
+[orchestration.local]
+provider    = "openai-compatible"
+endpoint    = "http://localhost:8080/v1"
+model       = "my-local-model"
+api_key_env = "LOCAL_API_KEY"   # runner reads the value of this env var
+```
+
+When a local block is present, `centinela init`/`migrate` add a **managed** provider block to `opencode.json` (`options.baseURL` from `endpoint`; `options.apiKey = "{env:NAME}"` for `openai-compatible` with `api_key_env`; the model under `models`). Centinela owns only its own provider key, never clobbering a user-written or foreign provider, and the wiring is idempotent — re-running rewrites it only on a real change. A config with no `[orchestration.local]` block produces byte-for-byte the same managed output as before.
+
+A declared local `model` with no explicit capability class defaults to the `limited` capability → `strict` profile, as the strictly-lowest precedence tier — so you get maximum scaffolding just by declaring an endpoint. An explicit `--profile` or a global `[workflow] enforcement_profile` still wins. `centinela status` shows the provenance:
+
+```
+Profile  strict  (local default: qwen2.5-coder → limited → strict)
+```
+
+Centinela validates only the *shape* of the block (known `provider`, all-or-nothing, non-empty `endpoint` + `model`). The `endpoint`, `model`, and `api_key_env` strings are opaque — Centinela never connects to the server, verifies the model exists, or resolves the env var. Availability is the runner's job.
+
 ### Example: Bootstrap a new project
 
 Use this flow when starting from scratch.

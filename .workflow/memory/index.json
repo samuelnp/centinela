@@ -91,6 +91,19 @@
     "createdAt": "2026-06-14T20:53:59Z"
   },
   {
+    "id": "1971208766f93b4c",
+    "feature": "local-harness-support",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Expected: config load fails with an error naming the `provider` key and",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/local-harness-support-edge-cases.md",
+    "createdAt": "2026-06-30T15:37:51Z"
+  },
+  {
     "id": "19a327c9acc0d36b",
     "feature": "spec-reconstruction",
     "step": "validate",
@@ -570,6 +583,19 @@
     ],
     "sourceArtifact": ".workflow/deep-codebase-analysis-gatekeeper.md",
     "createdAt": "2026-06-18T11:42:23Z"
+  },
+  {
+    "id": "88280554b11fdef7",
+    "feature": "local-harness-support",
+    "step": "validate",
+    "type": "verdict",
+    "title": "\u003c!-- centinela:doc-version=1 template=docs/architecture/gatekeeper-prompt.md --\u003e",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/local-harness-support-gatekeeper.md",
+    "createdAt": "2026-06-30T16:40:42Z"
   },
   {
     "id": "8fa7cc944cfb8890",

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/setup"
 	"github.com/samuelnp/centinela/internal/ui"
 )
@@ -27,15 +28,21 @@ func runHarnessSetup(name string) error {
 }
 
 // applyManagedSetup runs the registry-driven managed-sync path for one harness:
-// it builds the plan, surfaces manual-review files, applies the writes, and
-// renders per-item success. The managed-version header it writes is what the
-// migration system expects, so a freshly-init'd project reports no pending
-// drift. label names the harness in the failure message only.
+// it builds the plan and applies it. The managed-version header it writes is
+// what the migration system expects, so a freshly-init'd project reports no
+// pending drift. label names the harness in the failure message only.
 func applyManagedSetup(agent, label string) error {
 	plan, err := setup.BuildSyncPlan(agent)
 	if err != nil {
 		return err
 	}
+	return applyPlan(plan, label)
+}
+
+// applyPlan surfaces manual-review files, applies the writes, and renders
+// per-item success. Shared by the plain registry path (applyManagedSetup) and
+// the OpenCode path that threads in an optional local-provider block.
+func applyPlan(plan setup.SyncPlan, label string) error {
 	for _, it := range plan.Items {
 		if it.Action == setup.SyncManualReview {
 			fmt.Println(ui.StyleYellow.Render("⚠ manual-review " + it.Path + " (" + it.Reason + ")"))
@@ -52,7 +59,22 @@ func applyManagedSetup(agent, label string) error {
 	return nil
 }
 
-func setupOpenCode() error { return applyManagedSetup("opencode", "OpenCode") }
+// setupOpenCode wires OpenCode through the registry-driven managed-sync path,
+// threading in the optional [orchestration.local] provider block so init writes
+// opencode.json (incl. any local provider), the prewrite plugin, and AGENTS.md
+// in their managed form — carrying the centinela managed-version header the
+// migration system expects.
+func setupOpenCode() error {
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
+	plan, err := setup.BuildSyncPlanWithLocal("opencode", localProviderFrom(cfg))
+	if err != nil {
+		return err
+	}
+	return applyPlan(plan, "OpenCode")
+}
 
 func setupAider() error { return applyManagedSetup("aider", "Aider") }
 
