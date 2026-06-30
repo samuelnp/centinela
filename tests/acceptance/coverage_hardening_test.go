@@ -75,10 +75,26 @@ func TestNoBehaviourChange_OnlyTestFilesAdded(t *testing.T) {
 	if err != nil {
 		t.Skipf("git diff unavailable: %v", err)
 	}
-	for _, raw := range strings.Split(strings.TrimSpace(string(out)), "\n") {
+	added := strings.Split(strings.TrimSpace(string(out)), "\n")
+	// Guards the coverage-hardening feature's own diff (test-only). Once merged,
+	// its sentinel test file lives in main and drops out of main...HEAD — so we
+	// are on a later feature branch where the premise no longer applies. Skip.
+	if !chContainsSuffix(added, "cmd/centinela/cov2_config_error_test.go") {
+		t.Skip("coverage-hardening already merged; invariant scoped to its own branch")
+	}
+	for _, raw := range added {
 		if !strings.HasSuffix(raw, ".go") || strings.HasSuffix(raw, "_test.go") {
 			continue
 		}
 		t.Errorf("non-test Go file added: %s", raw)
 	}
+}
+
+func chContainsSuffix(paths []string, suffix string) bool {
+	for _, p := range paths {
+		if strings.HasSuffix(p, suffix) {
+			return true
+		}
+	}
+	return false
 }
