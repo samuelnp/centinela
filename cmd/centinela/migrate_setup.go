@@ -22,7 +22,7 @@ var migrateSetupCmd = &cobra.Command{
 func init() {
 	migrateCmd.AddCommand(migrateSetupCmd)
 	migrateSetupCmd.Flags().BoolVar(&applySetupMigration, "apply", false, "Apply changes")
-	migrateSetupCmd.Flags().StringVar(&setupAgent, "agent", "both", "Scope: claude, opencode, aider, or both")
+	migrateSetupCmd.Flags().StringVar(&setupAgent, "agent", "both", "Scope: claude, opencode, aider, codex, or both")
 }
 
 func runMigrateSetup(_ *cobra.Command, _ []string) error {

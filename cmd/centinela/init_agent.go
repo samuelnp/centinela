@@ -18,6 +18,8 @@ func runHarnessSetup(name string) error {
 		return setupOpenCode()
 	case "aider":
 		return setupAider()
+	case "codex":
+		return setupCodex()
 	case "claude":
 		return setupClaude()
 	default:
@@ -25,12 +27,43 @@ func runHarnessSetup(name string) error {
 	}
 }
 
-// setupOpenCode wires OpenCode through the registry-driven managed-sync path
-// (the same seam setupAider uses) so init writes opencode.json, the prewrite
-// plugin, and AGENTS.md in their managed form — carrying the centinela
-// managed-version header the migration system expects. Using the legacy
-// header-less Ensure* writers here left a freshly-init'd project permanently
-// reporting pending migrations.
+// applyManagedSetup runs the registry-driven managed-sync path for one harness:
+// it builds the plan and applies it. The managed-version header it writes is
+// what the migration system expects, so a freshly-init'd project reports no
+// pending drift. label names the harness in the failure message only.
+func applyManagedSetup(agent, label string) error {
+	plan, err := setup.BuildSyncPlan(agent)
+	if err != nil {
+		return err
+	}
+	return applyPlan(plan, label)
+}
+
+// applyPlan surfaces manual-review files, applies the writes, and renders
+// per-item success. Shared by the plain registry path (applyManagedSetup) and
+// the OpenCode path that threads in an optional local-provider block.
+func applyPlan(plan setup.SyncPlan, label string) error {
+	for _, it := range plan.Items {
+		if it.Action == setup.SyncManualReview {
+			fmt.Println(ui.StyleYellow.Render("⚠ manual-review " + it.Path + " (" + it.Reason + ")"))
+		}
+	}
+	if err := setup.ApplySync(plan); err != nil {
+		return fmt.Errorf("failed to write %s assets: %w", label, err)
+	}
+	for _, it := range plan.Items {
+		if it.Action != setup.SyncManualReview {
+			fmt.Println(ui.RenderSuccess(string(it.Action) + " " + it.Path))
+		}
+	}
+	return nil
+}
+
+// setupOpenCode wires OpenCode through the registry-driven managed-sync path,
+// threading in the optional [orchestration.local] provider block so init writes
+// opencode.json (incl. any local provider), the prewrite plugin, and AGENTS.md
+// in their managed form — carrying the centinela managed-version header the
+// migration system expects.
 func setupOpenCode() error {
 	cfg, err := config.Load()
 	if err != nil {
@@ -40,44 +73,12 @@ func setupOpenCode() error {
 	if err != nil {
 		return err
 	}
-	for _, it := range plan.Items {
-		if it.Action == setup.SyncManualReview {
-			fmt.Println(ui.StyleYellow.Render("⚠ manual-review " + it.Path + " (" + it.Reason + ")"))
-		}
-	}
-	if err := setup.ApplySync(plan); err != nil {
-		return fmt.Errorf("failed to write OpenCode assets: %w", err)
-	}
-	for _, it := range plan.Items {
-		if it.Action != setup.SyncManualReview {
-			fmt.Println(ui.RenderSuccess(string(it.Action) + " " + it.Path))
-		}
-	}
-	return nil
+	return applyPlan(plan, "OpenCode")
 }
 
-// setupAider wires Aider's managed files through the registry-driven plan/apply
-// path so the managed-marker seam handles create/update/manual-review.
-func setupAider() error {
-	plan, err := setup.BuildSyncPlan("aider")
-	if err != nil {
-		return err
-	}
-	for _, it := range plan.Items {
-		if it.Action == setup.SyncManualReview {
-			fmt.Println(ui.StyleYellow.Render("⚠ manual-review " + it.Path + " (" + it.Reason + ")"))
-		}
-	}
-	if err := setup.ApplySync(plan); err != nil {
-		return fmt.Errorf("failed to write Aider assets: %w", err)
-	}
-	for _, it := range plan.Items {
-		if it.Action != setup.SyncManualReview {
-			fmt.Println(ui.RenderSuccess(string(it.Action) + " " + it.Path))
-		}
-	}
-	return nil
-}
+func setupAider() error { return applyManagedSetup("aider", "Aider") }
+
+func setupCodex() error { return applyManagedSetup("codex", "Codex") }
 
 func isValidAgent(agent string) bool {
 	return setup.IsValidAgent(agent)
