@@ -1,0 +1,37 @@
+{
+  "feature": "cli-self-update",
+  "startedAt": "2026-06-30T07:52:36.527111Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-30T08:45:57Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-30T10:07:04Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-30T08:06:54Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-30T09:36:29Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-30T10:06:23Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/cli-self-update"
+}

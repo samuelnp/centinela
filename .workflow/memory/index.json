@@ -26,6 +26,19 @@
     "createdAt": "2026-06-24T11:51:14Z"
   },
   {
+    "id": "07a2c4fa3f6ec2e9",
+    "feature": "cli-self-update",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Risk**: The ldflag-injected version omits the `v` prefix (\"0.40.2\") but the GitHub release tag always carries it (\"v0.40.2\"). A naive string comparison would treat them as different, triggering a spurious update loop.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/cli-self-update-edge-cases.md",
+    "createdAt": "2026-06-30T09:36:29Z"
+  },
+  {
     "id": "0cd0b9d5a3adf24f",
     "feature": "security-gate",
     "step": "tests",
@@ -570,6 +583,19 @@
     ],
     "sourceArtifact": ".workflow/delivery-artifact-generation-edge-cases.md",
     "createdAt": "2026-06-26T07:59:31Z"
+  },
+  {
+    "id": "95fb6896b9f04707",
+    "feature": "cli-self-update",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: cli-self-update",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/cli-self-update-gatekeeper.md",
+    "createdAt": "2026-06-30T10:06:23Z"
   },
   {
     "id": "981d6cea48994066",
