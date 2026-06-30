@@ -28,7 +28,7 @@ func init() {
 	initCmd.Flags().BoolVar(&localFlag, "local", false,
 		"Write hooks to .claude/settings.local.json instead of settings.json")
 	initCmd.Flags().StringVar(&agentFlag, "agent", "both",
-		"Target integrations: claude, opencode, aider, or both")
+		"Target integrations: claude, opencode, aider, codex, or both")
 }
 
 func runInit(_ *cobra.Command, _ []string) error {

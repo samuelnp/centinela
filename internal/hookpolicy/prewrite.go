@@ -15,6 +15,9 @@ type PrewriteDecision struct {
 	FileType workflow.FileType
 	Step     string
 	Feature  string
+	// Path is the offending path on a blocking decision. EvaluatePrewriteMulti
+	// sets it so callers can render which of several patched files was blocked.
+	Path string
 }
 
 // EvaluatePrewrite decides whether a file write is allowed.

@@ -26,12 +26,13 @@ type HarnessAdapter interface {
 var ErrUnknownAgent = errors.New("unknown agent")
 
 // orderedAgents is the registration order used for lookups and error messages.
-var orderedAgents = []string{"claude", "opencode", "aider"}
+var orderedAgents = []string{"claude", "opencode", "aider", "codex"}
 
 var registry = map[string]HarnessAdapter{
 	"claude":   claudeAdapter{},
 	"opencode": openCodeAdapter{},
 	"aider":    aiderAdapter{},
+	"codex":    codexAdapter{},
 }
 
 // composites maps a multi-harness selector to its component adapter names.
