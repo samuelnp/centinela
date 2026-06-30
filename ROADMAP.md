@@ -205,3 +205,6 @@
 - **selfupdate-notice-http-timeout** — centinela update + startup notice use http.DefaultClient (no timeout); a stalled GitHub connection can block session start indefinitely — give the production Updater a bounded client timeout (~5s) so the cold-cache notice fails fast and silent *(deferred 2026-06-30T09:45:19Z · cli-self-update/gatekeeper)*
 - **brownfield-onboarding-docs** — Document the brownfield onboarding path (analyze, synthesize, enrich, confirm) in new-project-guide.md *(deferred 2026-06-29T17:42:52Z · brownfield-setup-detection/big-thinker)*
 - **brownfield-manifest-breadth** — Extend HasSource manifest list to pom.xml, composer.json, build.gradle for broader ecosystem coverage *(deferred 2026-06-29T17:46:35Z · brownfield-setup-detection/feature-specialist)*
+- **unit-test-mcp-server-in-memory-transport** — Cover runMcpServe/mcpConnectSelf via an in-memory MCP transport *(deferred 2026-06-30T08:12:27Z · coverage-hardening/big-thinker)*
+- **fault-inject-atomic-write-error-paths** — Cover WriteBytesAtomic and low-level I/O error branches via fault injection *(deferred 2026-06-30T08:12:27Z · coverage-hardening/big-thinker)*
+- **unit-test-vuln-tool-external-seam** — Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam *(deferred 2026-06-30T08:12:27Z · coverage-hardening/big-thinker)*
