@@ -1,0 +1,1 @@
+- feat: add OpenAI Codex as a first-class host harness (`centinela init --agent codex`) — managed `.codex/config.toml` wiring PreToolUse/PostToolUse/UserPromptSubmit hooks + AGENTS.md, with apply_patch-aware prewrite blocking (relative-path resolution included)
