@@ -55,9 +55,13 @@ func TestRenderSetupMigrationPlanApplyMode(t *testing.T) {
 	}
 }
 
-// TestPanelStyleErrorTone covers the toneError branch of panelStyle.
-func TestPanelStyleErrorTone(t *testing.T) {
-	if panelStyle(toneError).Render("x") == "" {
-		t.Fatal("error-tone panel style should render")
+// TestStyleForToneBranches covers styleForTone's error tone and the default
+// (non-success/warn/error) fallback branch.
+func TestStyleForToneBranches(t *testing.T) {
+	if styleForTone(toneError).Render("x") == "" {
+		t.Fatal("error-tone style should render")
+	}
+	if styleForTone(toneInfo).Render("x") == "" {
+		t.Fatal("default-tone style should render")
 	}
 }

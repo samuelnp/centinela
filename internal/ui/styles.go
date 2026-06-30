@@ -16,16 +16,6 @@ var (
 	StyleYellow = lipgloss.NewStyle().Foreground(colorYellow)
 	StyleBlue   = lipgloss.NewStyle().Foreground(colorBlue)
 
-	boxStyle = lipgloss.NewStyle().
-			Border(lipgloss.RoundedBorder()).
-			BorderForeground(colorBlue).
-			Padding(0, 1)
-
-	errorBoxStyle = lipgloss.NewStyle().
-			Border(lipgloss.RoundedBorder()).
-			BorderForeground(colorRed).
-			Padding(0, 1)
-
 	IconActive  = StyleYellow.Render("▶")
 	IconDone    = StyleGreen.Render("✓")
 	IconPending = StyleMuted.Render("○")
