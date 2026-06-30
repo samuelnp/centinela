@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/setup"
 	"github.com/samuelnp/centinela/internal/ui"
 )
@@ -28,7 +29,11 @@ func runMigrateSetup(_ *cobra.Command, _ []string) error {
 	if !isValidAgent(setupAgent) {
 		return invalidAgentError(setupAgent)
 	}
-	plan, err := setup.BuildSyncPlan(setupAgent)
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
+	plan, err := setup.BuildSyncPlanWithLocal(setupAgent, localProviderFrom(cfg))
 	if err != nil {
 		return err
 	}

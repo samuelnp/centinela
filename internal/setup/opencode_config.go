@@ -9,8 +9,8 @@ const opencodeSchema = "https://opencode.ai/config.json"
 
 // InjectOpenCodeConfig merges Centinela defaults into opencode.json.
 // Existing unrelated keys are preserved.
-func InjectOpenCodeConfig(path string) (bool, error) {
-	changed, data, err := buildOpenCodeConfig(path)
+func InjectOpenCodeConfig(path string, local *LocalProvider) (bool, error) {
+	changed, data, err := buildOpenCodeConfig(path, local)
 	if err != nil {
 		return false, err
 	}

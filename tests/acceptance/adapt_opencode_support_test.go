@@ -16,7 +16,7 @@ func TestOpenCodeConfig_ExistingKeysRemain(t *testing.T) {
 	os.Chdir(dir)           //nolint:errcheck
 
 	os.WriteFile("opencode.json", []byte(`{"command":{"review":{"description":"keep"}}}`), 0644) //nolint:errcheck
-	if _, err := setup.InjectOpenCodeConfig("opencode.json"); err != nil {
+	if _, err := setup.InjectOpenCodeConfig("opencode.json", nil); err != nil {
 		t.Fatalf("InjectOpenCodeConfig error: %v", err)
 	}
 

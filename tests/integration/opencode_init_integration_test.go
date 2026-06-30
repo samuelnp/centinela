@@ -13,7 +13,7 @@ func TestOpenCodeSetup_WritesAllArtifacts(t *testing.T) {
 	defer os.Chdir(origDir) //nolint:errcheck
 	os.Chdir(dir)           //nolint:errcheck
 
-	if changed, err := setup.InjectOpenCodeConfig("opencode.json"); err != nil || !changed {
+	if changed, err := setup.InjectOpenCodeConfig("opencode.json", nil); err != nil || !changed {
 		t.Fatalf("InjectOpenCodeConfig = (%v, %v), want (true, nil)", changed, err)
 	}
 	if changed, err := setup.EnsureOpenCodePlugin(); err != nil || !changed {

@@ -12,6 +12,7 @@ type OrchestrationConfig struct {
 	Capabilities       map[string]string            `toml:"capabilities"`        // model id → capability class
 	CapabilityProfiles map[string]string            `toml:"capability_profiles"` // class → enforcement profile
 	DriverModel        string                       `toml:"driver_model"`        // workflow's default-profile key
+	Local              LocalConfig                  `toml:"local"`               // local-model backend (lowest-precedence tier)
 }
 
 // RoleModelValue is the union value of an [orchestration.models].<role> entry:

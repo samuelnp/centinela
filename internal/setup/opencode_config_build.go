@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func buildOpenCodeConfig(path string) (bool, []byte, error) {
+func buildOpenCodeConfig(path string, local *LocalProvider) (bool, []byte, error) {
 	raw := map[string]json.RawMessage{}
 	if data, err := os.ReadFile(path); err == nil {
 		_ = json.Unmarshal(data, &raw)
@@ -19,6 +19,9 @@ func buildOpenCodeConfig(path string) (bool, []byte, error) {
 		changed = true
 	}
 	if mergeOpenCodeAgents(raw) {
+		changed = true
+	}
+	if mergeProvider(raw, local) {
 		changed = true
 	}
 	if !changed {

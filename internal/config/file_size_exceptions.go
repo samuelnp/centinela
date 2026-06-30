@@ -41,6 +41,9 @@ func validateConfig(cfg *Config) error {
 	if err := validateCapabilities(cfg); err != nil {
 		return err
 	}
+	if err := validateLocalConfig(cfg); err != nil {
+		return err
+	}
 	if err := validateSecurityGate(cfg.Gates.Security); err != nil {
 		return err
 	}

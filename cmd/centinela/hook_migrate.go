@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/migration"
 	"github.com/samuelnp/centinela/internal/setup"
 	"github.com/samuelnp/centinela/internal/ui"
@@ -34,7 +35,8 @@ func runHookMigrate(_ *cobra.Command, _ []string) error {
 			docsCount = len(plan.Items)
 		}
 	}
-	sync, err := setup.BuildSyncPlan("both")
+	cfg, _ := config.Load()
+	sync, err := setup.BuildSyncPlanWithLocal("both", localProviderFrom(cfg))
 	if err == nil {
 		setupCount = len(sync.Items)
 	}

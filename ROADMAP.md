@@ -208,3 +208,4 @@
 - **unit-test-mcp-server-in-memory-transport** — Cover runMcpServe/mcpConnectSelf via an in-memory MCP transport *(deferred 2026-06-30T08:12:27Z · coverage-hardening/big-thinker)*
 - **fault-inject-atomic-write-error-paths** — Cover WriteBytesAtomic and low-level I/O error branches via fault injection *(deferred 2026-06-30T08:12:27Z · coverage-hardening/big-thinker)*
 - **unit-test-vuln-tool-external-seam** — Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam *(deferred 2026-06-30T08:12:27Z · coverage-hardening/big-thinker)*
+- **aider-local-provider-wiring** — Point the Aider/Claude harness at a local endpoint; local block currently wires only OpenCode's provider surface *(deferred 2026-06-30T14:45:14Z · local-harness-support/big-thinker)*
