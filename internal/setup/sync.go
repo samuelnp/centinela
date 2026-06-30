@@ -36,6 +36,9 @@ func ApplySync(plan SyncPlan) error {
 func applyItem(it SyncItem) error {
 	switch it.Kind {
 	case SyncKindPrewriteHook:
+		if it.Path == codexConfigFile {
+			return writeManagedCodexConfig(it.Path)
+		}
 		if it.Path == pluginFile {
 			return writeManagedPlugin(it.Path)
 		}

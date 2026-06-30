@@ -7,7 +7,7 @@ import (
 )
 
 func TestLookup_KnownAgents(t *testing.T) {
-	for _, name := range []string{"claude", "opencode", "aider"} {
+	for _, name := range []string{"claude", "opencode", "aider", "codex"} {
 		a, err := Lookup(name)
 		if err != nil {
 			t.Fatalf("Lookup(%q): unexpected error: %v", name, err)
@@ -26,7 +26,7 @@ func TestLookup_UnknownAgent_TypedError(t *testing.T) {
 	if !errors.Is(err, ErrUnknownAgent) {
 		t.Fatalf("expected wrapped ErrUnknownAgent, got %v", err)
 	}
-	for _, n := range []string{"claude", "opencode", "aider"} {
+	for _, n := range []string{"claude", "opencode", "aider", "codex"} {
 		if !strings.Contains(err.Error(), n) {
 			t.Fatalf("error missing %q: %s", n, err)
 		}
@@ -35,7 +35,7 @@ func TestLookup_UnknownAgent_TypedError(t *testing.T) {
 
 func TestRegisteredAgents_Order(t *testing.T) {
 	agents := RegisteredAgents()
-	want := []string{"claude", "opencode", "aider"}
+	want := []string{"claude", "opencode", "aider", "codex"}
 	if len(agents) != len(want) {
 		t.Fatalf("want %d agents, got %d", len(want), len(agents))
 	}
@@ -47,13 +47,13 @@ func TestRegisteredAgents_Order(t *testing.T) {
 }
 
 func TestRegisteredAdapters_Count(t *testing.T) {
-	if got := RegisteredAdapters(); len(got) != 3 {
-		t.Fatalf("expected 3 adapters, got %d", len(got))
+	if got := RegisteredAdapters(); len(got) != 4 {
+		t.Fatalf("expected 4 adapters, got %d", len(got))
 	}
 }
 
 func TestIsValidAgent(t *testing.T) {
-	for _, name := range []string{"claude", "opencode", "aider", "both"} {
+	for _, name := range []string{"claude", "opencode", "aider", "codex", "both"} {
 		if !IsValidAgent(name) {
 			t.Fatalf("IsValidAgent(%q) = false, want true", name)
 		}

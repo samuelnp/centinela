@@ -17,13 +17,13 @@ func TestRunHookPrewriteBlockedPaths(t *testing.T) {
 
 	exitCode := 0
 	oldExit := exitPrewrite
-	oldEval := evalPrewrite
+	oldEval := evalPrewriteMulti
 	defer func() {
 		exitPrewrite = oldExit
-		evalPrewrite = oldEval
+		evalPrewriteMulti = oldEval
 	}()
 	exitPrewrite = func(c int) { exitCode = c }
-	evalPrewrite = func(string, string, *config.Config, []*workflow.Workflow) hookpolicy.PrewriteDecision {
+	evalPrewriteMulti = func([]string, string, *config.Config, []*workflow.Workflow) hookpolicy.PrewriteDecision {
 		return hookpolicy.PrewriteDecision{NeedInit: true, FileType: workflow.TypeCode}
 	}
 
@@ -39,7 +39,7 @@ func TestRunHookPrewriteBlockedPaths(t *testing.T) {
 	wf := workflow.New("f")
 	wf.CurrentStep = "plan"
 	workflow.Save(wf) //nolint:errcheck
-	evalPrewrite = func(string, string, *config.Config, []*workflow.Workflow) hookpolicy.PrewriteDecision {
+	evalPrewriteMulti = func([]string, string, *config.Config, []*workflow.Workflow) hookpolicy.PrewriteDecision {
 		return hookpolicy.PrewriteDecision{FileType: workflow.TypeCode, Step: "plan", Feature: "f"}
 	}
 	withStdin(t, `{"tool_input":{"filePath":"`+d+`/internal/a.go"}}`, func() {
