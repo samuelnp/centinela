@@ -26,6 +26,10 @@ type SyncItem struct {
 	Path   string
 	Action SyncAction
 	Reason string
+	// Local carries the managed local provider (opencode items only) so apply
+	// rewrites the same block the plan computed. nil for every other item and
+	// for the zero-config opencode path.
+	Local *LocalProvider
 }
 
 type SyncPlan struct {

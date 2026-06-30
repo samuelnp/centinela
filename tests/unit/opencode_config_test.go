@@ -17,7 +17,7 @@ func TestInjectOpenCodeConfig_MergesWithoutLosingKeys(t *testing.T) {
 	seed := `{"command":{"test":{"description":"keep"}},"instructions":["RULES.md"]}`
 	os.WriteFile("opencode.json", []byte(seed), 0644) //nolint:errcheck
 
-	changed, err := setup.InjectOpenCodeConfig("opencode.json")
+	changed, err := setup.InjectOpenCodeConfig("opencode.json", nil)
 	if err != nil {
 		t.Fatalf("InjectOpenCodeConfig error: %v", err)
 	}
@@ -59,8 +59,8 @@ func TestInjectOpenCodeConfig_IsIdempotent(t *testing.T) {
 	defer os.Chdir(origDir) //nolint:errcheck
 	os.Chdir(dir)           //nolint:errcheck
 
-	setup.InjectOpenCodeConfig("opencode.json") //nolint:errcheck
-	changed, err := setup.InjectOpenCodeConfig("opencode.json")
+	setup.InjectOpenCodeConfig("opencode.json", nil) //nolint:errcheck
+	changed, err := setup.InjectOpenCodeConfig("opencode.json", nil)
 	if err != nil {
 		t.Fatalf("InjectOpenCodeConfig error: %v", err)
 	}
@@ -77,7 +77,7 @@ func TestInjectOpenCodeConfig_PreservesExistingAgents(t *testing.T) {
 
 	seed := `{"agent":{"custom":{"description":"keep","mode":"subagent"},"big-thinker":{"description":"mine","mode":"subagent","prompt":"custom"},"build":{"permission":{"task":{"custom":"allow"}}}}}`
 	os.WriteFile("opencode.json", []byte(seed), 0644) //nolint:errcheck
-	setup.InjectOpenCodeConfig("opencode.json")       //nolint:errcheck
+	setup.InjectOpenCodeConfig("opencode.json", nil)       //nolint:errcheck
 
 	data, _ := os.ReadFile("opencode.json") //nolint:errcheck
 	var parsed map[string]json.RawMessage

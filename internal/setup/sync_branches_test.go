@@ -33,10 +33,10 @@ func TestInjectOpenCodeConfigNoChange(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(t.TempDir())
 
-	if changed, err := InjectOpenCodeConfig("opencode.json"); err != nil || !changed {
+	if changed, err := InjectOpenCodeConfig("opencode.json", nil); err != nil || !changed {
 		t.Fatalf("first merge should change: changed=%v err=%v", changed, err)
 	}
-	if changed, err := InjectOpenCodeConfig("opencode.json"); err != nil || changed {
+	if changed, err := InjectOpenCodeConfig("opencode.json", nil); err != nil || changed {
 		t.Fatalf("second merge should be a no-op: changed=%v err=%v", changed, err)
 	}
 }
@@ -49,12 +49,12 @@ func TestPlanSettingsNoChange(t *testing.T) {
 	os.Chdir(t.TempDir())
 
 	InjectHooks(".claude/settings.json")  //nolint:errcheck
-	InjectOpenCodeConfig("opencode.json") //nolint:errcheck
+	InjectOpenCodeConfig("opencode.json", nil) //nolint:errcheck
 
 	if it, err := planHooksSettings(); err != nil || it != nil {
 		t.Fatalf("planHooksSettings should be nil no-op: it=%v err=%v", it, err)
 	}
-	if it, err := planOpenCodeConfig(); err != nil || it != nil {
+	if it, err := planOpenCodeConfig(nil); err != nil || it != nil {
 		t.Fatalf("planOpenCodeConfig should be nil no-op: it=%v err=%v", it, err)
 	}
 }

@@ -6,12 +6,23 @@ import "os"
 // iterating the harness registry. There is no per-harness if-ladder: single
 // agents and composites (e.g. "both") both resolve through adaptersFor.
 func BuildSyncPlan(agent string) (SyncPlan, error) {
+	return BuildSyncPlanWithLocal(agent, nil)
+}
+
+// BuildSyncPlanWithLocal is BuildSyncPlan plus the managed local provider. For
+// the opencode adapter it substitutes an adapter carrying local; every other
+// adapter is untouched. local == nil reproduces BuildSyncPlan byte-for-byte, so
+// the zero-config path is unchanged.
+func BuildSyncPlanWithLocal(agent string, local *LocalProvider) (SyncPlan, error) {
 	adapters, err := adaptersFor(agent)
 	if err != nil {
 		return SyncPlan{}, err
 	}
 	plan := SyncPlan{}
 	for _, a := range adapters {
+		if _, ok := a.(openCodeAdapter); ok {
+			a = openCodeAdapter{local: local}
+		}
 		items, err := a.PlanItems()
 		if err != nil {
 			return SyncPlan{}, err
@@ -42,7 +53,7 @@ func applyItem(it SyncItem) error {
 		_, err := InjectHooks(it.Path)
 		return err
 	case SyncOpenCodeCfg:
-		_, err := InjectOpenCodeConfig(it.Path)
+		_, err := InjectOpenCodeConfig(it.Path, it.Local)
 		return err
 	case SyncAgents:
 		return writeManagedAgents(it.Path)

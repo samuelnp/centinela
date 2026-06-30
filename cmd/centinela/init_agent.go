@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/setup"
 	"github.com/samuelnp/centinela/internal/ui"
 )
@@ -31,7 +32,11 @@ func runHarnessSetup(name string) error {
 // header-less Ensure* writers here left a freshly-init'd project permanently
 // reporting pending migrations.
 func setupOpenCode() error {
-	plan, err := setup.BuildSyncPlan("opencode")
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
+	plan, err := setup.BuildSyncPlanWithLocal("opencode", localProviderFrom(cfg))
 	if err != nil {
 		return err
 	}

@@ -11,7 +11,7 @@ func TestOpenCodeSetupFiles(t *testing.T) {
 	defer os.Chdir(o) //nolint:errcheck
 	os.Chdir(d)       //nolint:errcheck
 
-	if changed, err := InjectOpenCodeConfig("opencode.json"); err != nil || !changed {
+	if changed, err := InjectOpenCodeConfig("opencode.json", nil); err != nil || !changed {
 		t.Fatalf("InjectOpenCodeConfig: %v %v", changed, err)
 	}
 	if changed, err := EnsureOpenCodePlugin(); err != nil || !changed {
@@ -20,7 +20,7 @@ func TestOpenCodeSetupFiles(t *testing.T) {
 	if changed, err := EnsureAgentsFile(); err != nil || !changed {
 		t.Fatalf("EnsureAgentsFile: %v %v", changed, err)
 	}
-	if changed, _ := InjectOpenCodeConfig("opencode.json"); changed {
+	if changed, _ := InjectOpenCodeConfig("opencode.json", nil); changed {
 		t.Fatal("expected idempotent OpenCode config")
 	}
 }
