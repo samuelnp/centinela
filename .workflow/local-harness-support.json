@@ -1,15 +1,15 @@
 {
   "feature": "local-harness-support",
   "startedAt": "2026-06-30T14:35:48.743699Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-30T15:07:50Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-30T16:46:15Z"
     },
     "plan": {
       "status": "done",
