@@ -23,6 +23,7 @@ func init() {
 
 func runHookSession(_ *cobra.Command, _ []string) error {
 	io.ReadAll(os.Stdin) //nolint:errcheck // drain stdin to avoid SIGPIPE
+	emitUpdateNotice()
 	r, err := roadmap.Load()
 	if err != nil || r == nil {
 		// No roadmap (absent or invalid) — exit silently, no payload.
@@ -35,4 +36,13 @@ func runHookSession(_ *cobra.Command, _ []string) error {
 	fmt.Println("CENTINELA DIRECTIVE: session rehydration — recovered project state below.")
 	fmt.Println(ui.RenderSessionRehydration(r, ready, hasIncomplete))
 	return nil
+}
+
+// emitUpdateNotice prints the throttled, fail-silent "update available" notice.
+// It never blocks or errors the session: a "" notice (current, dev build,
+// within-TTL cache, or any network/parse error) prints nothing.
+func emitUpdateNotice() {
+	if notice := newSelfUpdater(Version).Notice(); notice != "" {
+		fmt.Println(notice)
+	}
 }
