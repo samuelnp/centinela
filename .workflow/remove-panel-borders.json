@@ -1,0 +1,37 @@
+{
+  "feature": "remove-panel-borders",
+  "startedAt": "2026-06-29T20:31:25.726826Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-06-29T20:37:46Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-06-29T21:13:50Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-06-29T20:34:40Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-06-29T20:44:23Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-06-29T21:07:03Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/remove-panel-borders"
+}

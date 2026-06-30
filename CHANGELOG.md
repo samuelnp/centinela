@@ -18,9 +18,11 @@ Release notes for tagged versions are also published on the [GitHub Releases pag
 - feat(cost): add cost-governance soft gate — a Stop-hook attributes host-harness transcript token spend to the active feature/step, `centinela cost` reports spend vs configurable `[cost]` budgets, and `centinela validate` surfaces a non-blocking ⚠ when over budget (never blocks). Zero config = silent no-op.
 - feat(mcp): expose governance as a versioned MCP server (`centinela.mcp/v1`). `centinela mcp serve` (official Go SDK, stdio) offers read_rules/run_gates/verify_claims/workflow_state reusing the verdict packet; it is advisory (allow/warn/block). `centinela mcp shim` maps a block verdict onto the harness pre-write deny (exit 2), so any MCP harness consumes governance with zero Centinela-specific code.
 - feat: add `centinela update` self-updater — downloads the os/arch-matched release binary, verifies it against `SHA256SUMS`, and atomically replaces itself; `--check` is read-only and a TTL-cached, fail-silent startup notice flags new versions (never auto-installs)
+- feat(setup): detect brownfield projects (existing source, no PROJECT.md) and route the setup hook to draft PROJECT.md from the codebase via analyze+synthesize then confirm — instead of cold-interrogating the user with greenfield setup questions. New cheap root-only `analyze.HasSource` detector; greenfield path unchanged for empty repos.
 
 ### Changed
 - Repository metadata: description, homepage, and 20 discoverability topics added on GitHub.
+- refactor(ui): remove the rounded border box from all system panels. `renderSystemPanel` now renders the branded header line (`🛡️👁️ <channel> <title>`) plus the body with no `╭──╮` frame, across CLI command output and hook directives alike. Branding, colors, and content are unchanged; dead box styles removed.
 
 ---
 
