@@ -195,6 +195,19 @@
     "createdAt": "2026-06-12T12:32:40Z"
   },
   {
+    "id": "2c5c631e117fa2e8",
+    "feature": "codex-support",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: codex-support",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/codex-support-gatekeeper.md",
+    "createdAt": "2026-06-30T16:38:08Z"
+  },
+  {
     "id": "32f04a9174b07dba",
     "feature": "spec-traceability-gate",
     "step": "validate",

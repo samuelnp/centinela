@@ -1,14 +1,14 @@
 {
   "feature": "codex-support",
   "startedAt": "2026-06-30T14:37:46.477566Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-06-30T15:13:31Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-06-30T15:51:20Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-06-30T16:38:08Z"
     }
   },
   "stepOrder": [
