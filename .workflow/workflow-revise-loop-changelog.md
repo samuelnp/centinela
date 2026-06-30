@@ -1,0 +1,1 @@
+- feat: add `centinela revise <feature> --to <step> --reason "<why>"` — a controlled, audit-logged backward step transition that re-opens downstream steps and sheds only their certification evidence (never source/test code), forcing the gates to re-run on the corrected tree
