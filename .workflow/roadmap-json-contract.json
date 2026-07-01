@@ -1,11 +1,11 @@
 {
   "feature": "roadmap-json-contract",
   "startedAt": "2026-07-01T09:46:22.750775Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-01T10:47:11Z"
     },
     "docs": {
       "status": "pending",
@@ -16,7 +16,7 @@
       "completedAt": "2026-07-01T10:39:51Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {
