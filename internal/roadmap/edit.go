@@ -30,6 +30,9 @@ func Edit(path string, req EditRequest) error {
 	if err != nil {
 		return err
 	}
+	if editIsNoop(req) {
+		return nil // nothing effectively changes → leave roadmap.json byte-identical
+	}
 	var feat Feature
 	if err := json.Unmarshal(raw, &feat); err != nil {
 		return err
@@ -46,4 +49,13 @@ func Edit(path string, req EditRequest) error {
 		return err
 	}
 	return finalizeMutation(path, doc)
+}
+
+// editIsNoop reports whether an edit request changes nothing: no rename (empty or
+// same-name), no description/archetype, and no --depends-on. Such an edit is a
+// byte-identical no-op — the file is not rewritten at all (mirrors reorder's
+// order-preserving no-op guard).
+func editIsNoop(req EditRequest) bool {
+	noRename := req.NewName == "" || req.NewName == req.Slug
+	return noRename && req.Description == "" && req.Archetype == "" && !req.SetDeps
 }

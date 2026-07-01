@@ -25,6 +25,9 @@ func Move(path string, req MoveRequest) error {
 	if err != nil {
 		return err
 	}
+	if req.BeforeAnchor == req.Slug || req.AfterAnchor == req.Slug {
+		return nil // anchoring a feature to itself is a no-op (byte-identical)
+	}
 	if err := doc.requireSchedulablePhaseIdx(srcIdx); err != nil {
 		return err
 	}

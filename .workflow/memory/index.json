@@ -403,6 +403,19 @@
     "createdAt": "2026-06-05T15:34:55Z"
   },
   {
+    "id": "5d0c85e7774dbaa9",
+    "feature": "roadmap-edit-move",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Only the flags provided change; unspecified fields (archetype, dependsOn) stay intact.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/roadmap-edit-move-edge-cases.md",
+    "createdAt": "2026-07-01T21:13:55Z"
+  },
+  {
     "id": "5d4bc36b16cccc92",
     "feature": "coverage-hardening",
     "step": "validate",
