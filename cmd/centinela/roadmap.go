@@ -1,13 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/roadmap"
 	"github.com/samuelnp/centinela/internal/ui"
 )
+
+var roadmapViewJSON bool
 
 var roadmapCmd = &cobra.Command{
 	Use:   "roadmap",
@@ -16,6 +20,7 @@ var roadmapCmd = &cobra.Command{
 }
 
 func init() {
+	roadmapCmd.Flags().BoolVar(&roadmapViewJSON, "json", false, "Emit the schedulable roadmap view as indented JSON")
 	rootCmd.AddCommand(roadmapCmd)
 }
 
@@ -23,6 +28,14 @@ func runRoadmap(_ *cobra.Command, _ []string) error {
 	r, err := roadmap.Load()
 	if err != nil {
 		return roadmapCommandError(err)
+	}
+	if roadmapViewJSON {
+		data, err := json.MarshalIndent(roadmap.BuildView(r), "", "  ")
+		if err != nil {
+			return err
+		}
+		fmt.Fprintln(os.Stdout, string(data))
+		return nil
 	}
 	fmt.Println(ui.RenderRoadmap(r))
 	return nil

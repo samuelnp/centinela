@@ -1,0 +1,1 @@
+- feat: add read-only `--json` roadmap contract — `roadmap --json` (derived RoadmapView with per-feature status/readiness + counts), `roadmap ready --json` (ready-name array), and new `roadmap show|list [--json]` (persisted Roadmap verbatim); deterministic/byte-stable, no schema change, so Magallanes can render a Plan page by shelling out.

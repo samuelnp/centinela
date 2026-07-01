@@ -1,0 +1,37 @@
+{
+  "feature": "roadmap-json-contract",
+  "startedAt": "2026-07-01T09:46:22.750775Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-01T10:47:11Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-01T12:34:28Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-01T10:39:51Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-01T11:42:43Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-01T12:33:51Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/roadmap-json-contract"
+}
