@@ -533,6 +533,19 @@
     "createdAt": "2026-06-15T12:04:37Z"
   },
   {
+    "id": "8267382370a51463",
+    "feature": "roadmap-json-contract",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Done / in-progress rows omit readiness** — `status` alone carries the signal; `readiness` and `blockedBy` are absent (BuildView only populates them for planned rows).",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/roadmap-json-contract-edge-cases.md",
+    "createdAt": "2026-07-01T11:42:43Z"
+  },
+  {
     "id": "832f5df786047c53",
     "feature": "deferred-findings-roadmap-capture",
     "step": "tests",
