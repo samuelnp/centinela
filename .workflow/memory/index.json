@@ -1066,6 +1066,19 @@
     "createdAt": "2026-06-26T08:37:56Z"
   },
   {
+    "id": "f3b75893528900d3",
+    "feature": "roadmap-crud-add-remove",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Invalid (non-kebab) slug — `validateSlug` rejects before any read.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/roadmap-crud-add-remove-edge-cases.md",
+    "createdAt": "2026-07-01T16:53:53Z"
+  },
+  {
     "id": "f5519c4b22f147c2",
     "feature": "deep-codebase-analysis",
     "step": "tests",
