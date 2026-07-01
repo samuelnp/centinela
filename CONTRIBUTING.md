@@ -22,6 +22,24 @@ centinela complete <feature-name>
 
 The orchestration validator rejects evidence JSONs that don't match the contract — read [`docs/architecture/evidence-contract.md`](docs/architecture/evidence-contract.md) before writing one.
 
+## Build from source
+
+**Prerequisites:** Go 1.21+
+
+```bash
+git clone https://github.com/samuelnp/centinela
+cd centinela
+go build -o centinela ./cmd/centinela/
+```
+
+Cross-compile for other platforms:
+
+```bash
+GOOS=linux   GOARCH=amd64 go build -o centinela-linux-amd64  ./cmd/centinela/
+GOOS=darwin  GOARCH=arm64 go build -o centinela-darwin-arm64 ./cmd/centinela/
+GOOS=windows GOARCH=amd64 go build -o centinela-windows.exe  ./cmd/centinela/
+```
+
 ## Pull-request expectations
 
 - **One feature per branch.** Branch name should match the feature slug used in `centinela start`.
