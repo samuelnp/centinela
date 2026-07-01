@@ -56,6 +56,11 @@ func UnmetDependencies(r *Roadmap, feature string) []string {
 }
 
 func classifyFeature(f Feature) FeatureReadiness {
+	// Reader 2: a draft is never ready/blocked — it has no scores yet, so ReadySet
+	// (which keeps only State=="ready") and `roadmap ready` exclude it.
+	if f.Draft {
+		return FeatureReadiness{Name: f.Name, State: "draft"}
+	}
 	status := FeatureStatus(f.Name)
 	switch status {
 	case "done":

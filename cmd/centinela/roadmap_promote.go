@@ -29,9 +29,6 @@ func init() {
 
 func runRoadmapPromote(cmd *cobra.Command, args []string) error {
 	slug := args[0]
-	if promotePhase == "" {
-		return fmt.Errorf("--phase is required")
-	}
 	// Distinguish an unset --scores (evaluator/print-context path) from an
 	// explicitly-empty --scores="" (a usage error): cobra's Changed reports
 	// whether the flag was provided at all, regardless of its value.
@@ -40,6 +37,11 @@ func runRoadmapPromote(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("--scores was set but empty; provide six comma-separated integers (ac,uv,dc,dep,ee,overall) or omit --scores for the evaluator context")
 	}
 	if !scoresSet {
+		// The evaluator-context path is Backlog-only and needs a target phase; the
+		// scored path resolves --phase per branch (drafts finalize in place).
+		if promotePhase == "" {
+			return fmt.Errorf("--phase is required")
+		}
 		return printEvaluatorContext(slug)
 	}
 	return promoteScored(slug)
@@ -78,7 +80,17 @@ func reportPromoteResult(slug string) error {
 	if err := roadmap.ValidateQuality(r); err != nil {
 		return fmt.Errorf("promote wrote files but validate failed: %w", err)
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf(
-		"Promoted %q to %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", slug, promotePhase)))
+	fmt.Println(ui.RenderSuccess(promoteResultMessage(slug)))
 	return nil
+}
+
+// promoteResultMessage phrases success for either branch: a Backlog promote
+// moved the slug into --phase, while an in-place draft finalize did not move it.
+func promoteResultMessage(slug string) string {
+	if promotePhase == "" {
+		return fmt.Sprintf(
+			"Finalized draft %q in place. Remember to sync ROADMAP.md (roadmap-doc-sync).", slug)
+	}
+	return fmt.Sprintf(
+		"Promoted %q to %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", slug, promotePhase)
 }

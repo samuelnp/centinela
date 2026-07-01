@@ -1,0 +1,37 @@
+{
+  "feature": "roadmap-crud-add-remove",
+  "startedAt": "2026-07-01T14:52:13.715439Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-01T16:19:42Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-01T17:22:09Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-01T15:53:34Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-01T16:53:53Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-01T17:21:39Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/roadmap-crud-add-remove"
+}

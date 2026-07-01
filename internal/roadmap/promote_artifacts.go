@@ -10,25 +10,7 @@ import (
 // quality JSON (raw-preserving) and appends provenance bullets to their .md
 // companions. Each file write is atomic (temp-file+rename).
 func appendPromotionArtifacts(slug, summary string, scores QualityScores, f *BacklogFinding) error {
-	analysisEntry, err := compactBytes(AnalysisFeature{Name: slug})
-	if err != nil {
-		return err
-	}
-	if err := appendFeatureEntry(RoadmapAnalysisFile, analysisEntry); err != nil {
-		return err
-	}
-	qualityEntry, err := compactBytes(QualityFeature{Name: slug, Scores: scores, Summary: summary})
-	if err != nil {
-		return err
-	}
-	if err := appendFeatureEntry(RoadmapQualityFile, qualityEntry); err != nil {
-		return err
-	}
-	bullet := provenanceBullet(slug, f)
-	if err := appendLine(RoadmapAnalysisMarkdown, bullet); err != nil {
-		return err
-	}
-	return appendLine(RoadmapQualityMarkdown, bullet)
+	return appendScoreArtifacts(slug, summary, scores, provenanceBullet(slug, f))
 }
 
 // appendFeatureEntry appends entry to the top-level "features" array of a JSON

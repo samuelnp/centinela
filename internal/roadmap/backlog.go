@@ -57,6 +57,24 @@ func BacklogFeatures(r *Roadmap) []Feature {
 // It skips every non-schedulable phase (Backlog deferred findings and Baseline
 // already-built capability) via the shared isNonSchedulablePhase predicate.
 func NonBacklogFeatureSet(r *Roadmap) map[string]bool {
+	// THE single draft exemption: an unscored draft in a schedulable phase carries
+	// no analysis/quality entry until finalized, so the coverage set omits it. This
+	// is the ONLY place the draft dimension changes the coverage set; the other
+	// three draft readers (classifyFeature, Summary, BuildView) read f.Draft
+	// directly, and dependency validation uses the fuller dependencyTargetSet.
+	return schedulableFeatureSet(r, false)
+}
+
+// dependencyTargetSet returns every schedulable feature name that a dependsOn
+// may legally reference — drafts INCLUDED, because a draft is a real feature you
+// can depend on even though it is exempt from the analysis/quality coverage set.
+func dependencyTargetSet(r *Roadmap) map[string]bool {
+	return schedulableFeatureSet(r, true)
+}
+
+// schedulableFeatureSet collects feature names in schedulable (non-Backlog,
+// non-Baseline) phases. When includeDrafts is false, drafts are omitted.
+func schedulableFeatureSet(r *Roadmap, includeDrafts bool) map[string]bool {
 	out := map[string]bool{}
 	if r == nil {
 		return out
@@ -66,6 +84,9 @@ func NonBacklogFeatureSet(r *Roadmap) map[string]bool {
 			continue
 		}
 		for _, f := range p.Features {
+			if f.Draft && !includeDrafts {
+				continue
+			}
 			out[f.Name] = true
 		}
 	}

@@ -23,6 +23,7 @@ Release notes for tagged versions are also published on the [GitHub Releases pag
 - feat: add OpenAI Codex as a first-class host harness (`centinela init --agent codex`) — managed `.codex/config.toml` wiring PreToolUse/PostToolUse/UserPromptSubmit hooks + AGENTS.md, with apply_patch-aware prewrite blocking (relative-path resolution included)
 - feat: add `centinela revise <feature> --to <step> --reason "<why>"` — a controlled, audit-logged backward step transition that re-opens downstream steps and sheds only their certification evidence (never source/test code), forcing the gates to re-run on the corrected tree
 - feat: add read-only `--json` roadmap contract — `roadmap --json` (derived RoadmapView with per-feature status/readiness + counts), `roadmap ready --json` (ready-name array), and new `roadmap show|list [--json]` (persisted Roadmap verbatim); deterministic/byte-stable, no schema change, so Magallanes can render a Plan page by shelling out.
+- feat: add `roadmap add`/`remove` and a per-feature `Draft` lifecycle — `add <slug> --phase` records a validate-exempt draft (excluded from `ready`/counts, shown as `readiness:"draft"` in `roadmap --json`, refused by `start` until scored), `remove`/`rm` deletes a feature guarded against depended-on/in-progress-done, and `promote` gains an in-place draft-finalize branch (chosen by the slug's location); reuses the atomic format-preserving raw layer.
 
 ### Changed
 - Repository metadata: description, homepage, and 20 discoverability topics added on GitHub.

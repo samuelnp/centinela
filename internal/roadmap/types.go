@@ -15,6 +15,12 @@ type Feature struct {
 	Summary    string  `json:"summary,omitempty"`    // deferred-finding one-liner
 	Source     *Source `json:"source,omitempty"`     // {feature, role} provenance
 	DeferredAt string  `json:"deferredAt,omitempty"` // RFC3339 capture time
+	// Draft marks an authored-but-unscored feature living in a schedulable phase.
+	// A draft is exempt from the ≥9 analysis/quality coverage set (via the single
+	// NonBacklogFeatureSet hook), classifies as State:"draft" (not ready), is not
+	// counted as committed work in Summary, serializes readiness:"draft" in the
+	// JSON view, and refuses `start` until finalized by `roadmap promote`.
+	Draft bool `json:"draft,omitempty"`
 }
 
 // Phase groups related features under a milestone.

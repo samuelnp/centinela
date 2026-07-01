@@ -13,7 +13,9 @@ func ValidateDependencies(r *Roadmap) error {
 	if r == nil {
 		return nil
 	}
-	names := roadmapFeatureSet(r)
+	// Dependency targets include drafts (real, dependable features); only the
+	// analysis/quality coverage set (roadmapFeatureSet) omits them.
+	names := dependencyTargetSet(r)
 	deps := map[string][]string{}
 	for _, phase := range r.Phases {
 		for _, f := range phase.Features {

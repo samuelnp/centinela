@@ -10,6 +10,7 @@ type FeatureView struct {
 	Name      string   `json:"name"`
 	Phase     string   `json:"phase"`
 	Status    string   `json:"status"`
+	Draft     bool     `json:"draft,omitempty"`
 	Readiness string   `json:"readiness,omitempty"`
 	DependsOn []string `json:"dependsOn"`
 	BlockedBy []string `json:"blockedBy,omitempty"`

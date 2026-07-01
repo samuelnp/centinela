@@ -533,6 +533,19 @@
     "createdAt": "2026-06-29T20:25:51Z"
   },
   {
+    "id": "7fdf7fb1ded896d0",
+    "feature": "roadmap-crud-add-remove",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: roadmap-crud-add-remove",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/roadmap-crud-add-remove-gatekeeper.md",
+    "createdAt": "2026-07-01T17:21:39Z"
+  },
+  {
     "id": "8054a47cf854d7f8",
     "feature": "capability-calibration",
     "step": "validate",
@@ -1064,6 +1077,19 @@
     ],
     "sourceArtifact": ".workflow/delivery-artifact-generation-gatekeeper.md",
     "createdAt": "2026-06-26T08:37:56Z"
+  },
+  {
+    "id": "f3b75893528900d3",
+    "feature": "roadmap-crud-add-remove",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Invalid (non-kebab) slug — `validateSlug` rejects before any read.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/roadmap-crud-add-remove-edge-cases.md",
+    "createdAt": "2026-07-01T16:53:53Z"
   },
   {
     "id": "f5519c4b22f147c2",

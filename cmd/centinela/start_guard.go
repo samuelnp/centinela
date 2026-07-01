@@ -16,6 +16,12 @@ import (
 // branch is itself a kind of archetype: it only applies when no archetype is
 // explicitly chosen.
 func resolveArchetypeOrder(feature, flag string) ([]string, string, error) {
+	// Refuse a draft before any archetype resolution: a draft carries no quality
+	// scores, so starting it would bypass the ≥9 gate — mirroring the Backlog
+	// refusal. Independent of --archetype so a scored-later draft cannot slip in.
+	if r, err := roadmap.Load(); err == nil && roadmap.IsDraftFeature(r, feature) {
+		return nil, "", draftStartError(feature)
+	}
 	if name := strings.TrimSpace(flag); name != "" {
 		return archetypeOrderByName(name)
 	}
