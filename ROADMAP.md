@@ -158,9 +158,6 @@
 
 ## Phase 11: Ecosystem
 
-> Bring-your-own-harness is the moat: a vendor-neutral governance contract
-> across every harness and every model class, cloud or local.
-
 - **host-harness-adapters** — Extend the hook/parity pattern (today Claude + OpenCode) to Cursor, Aider, Windsurf, and Copilot Workspace. Best done after a shared integration core, so adding a third target isn't a maintenance tax.
 - **codex-support** — First-class support for OpenAI **Codex** as a host harness alongside Claude Code and OpenCode: wire Codex's config/integration surface to Centinela's prewrite enforcement, postwrite status tags, and prompt-context injection, generate the Codex-native rules file (e.g. `AGENTS.md`), and extend the parity tests so the three harnesses stay in lockstep through `init` and `migrate`. Codex has a large and growing user base, so dual-support with Claude Code materially widens who can adopt Centinela. (depends on host-harness-adapters)
   *Fixes: Codex users locked out of Centinela's governance because enforcement is wired only for Claude Code / OpenCode.*
@@ -177,6 +174,7 @@
   *Fixes: gate verdicts and claim-verification results aren't tamper-evident or exportable, so an enterprise can't audit or attest to what an agent was permitted to do.*
 - **agent-threat-security-gate** — Extend the security gate with per-class agent-native threat detection: (a) secret/credential exfiltration — deterministic regex+entropy signature scan over added diff lines, plus flagging new outbound-network calls introduced adjacent to a secret read; (b) prompt injection — a heuristic signature set over agent-fetched/MCP-sourced content, explicitly best-effort (WARNING, not a completeness claim); (c) unexpected capability — a diff introducing a new network/exec/credential API absent from the pre-change tree. Acceptance: runs against a committed corpus (testdata/agent-threats/ with planted-positive and clean cases); a planted exfiltration diff BLOCKs under the strict profile; an injected-instruction fixture WARNs; zero false positives on the existing security-gate clean corpus (the numeric bar = 0 FP on that fixed corpus). (depends on security-gate)
   *Fixes: the security gate scans for conventional vulnerabilities but not agent-native threats (prompt injection from fetched/MCP content, secret exfiltration in diffs), the attack surface that exists only because an autonomous agent wrote the code.*
+- **roadmap-crud-add-remove**
 
 ## Phase 12: Self-Improvement
 
@@ -210,6 +208,5 @@
 - **unit-test-vuln-tool-external-seam** — Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam *(deferred 2026-06-30T08:12:27Z · coverage-hardening/big-thinker)*
 - **aider-local-provider-wiring** — Point the Aider/Claude harness at a local endpoint; local block currently wires only OpenCode's provider surface *(deferred 2026-06-30T14:45:14Z · local-harness-support/big-thinker)*
 - **workflow-save-atomic-write** — workflow.Save uses plain os.WriteFile; a crash mid-write can truncate .workflow/<feature>.json — make it write-temp-then-rename *(deferred 2026-06-30T17:52:51Z · workflow-revise-loop/validation-specialist)*
-- **roadmap-crud-add-remove** — roadmap add/remove/rm + per-feature Draft flag (validate-exempt until scored) + generalized promote (in-place draft finalize); establishes generalized raw-feature helpers. Depends on roadmap-json-contract (done). *(deferred 2026-07-01T13:32:50Z · roadmap-editing-suite-design/big-thinker)*
 - **roadmap-edit-move** — roadmap edit/update, move, reorder; dependent dependsOn rewrite on rename; cycle re-validation across renames/moves. Depends on roadmap-crud-add-remove. *(deferred 2026-07-01T13:32:50Z · roadmap-editing-suite-design/big-thinker)*
 - **roadmap-phase-ops** — roadmap phase add/rename/remove with dirty-map reindex in the raw layer; refuse non-empty phase remove unless --force. Highest raw-layer complexity, land last. *(deferred 2026-07-01T13:32:50Z · roadmap-editing-suite-design/big-thinker)*

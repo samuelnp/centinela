@@ -75,3 +75,4 @@
 - Feature: adaptive-skill-synthesis
 - Summary: When telemetry shows a workflow isn't running as intended, synthesize/adjust skills so the harness absorbs repeated toil; high self-improvement value, appropriately last given its dependencies. Synthesis mechanics refined at plan.
 - Promoted from Backlog: g2-multi-language-import-graph (source=g2-import-graph-gate/gatekeeper, deferredAt=2026-06-19T08:02:58Z)
+- Promoted from Backlog: roadmap-crud-add-remove (source=roadmap-editing-suite-design/big-thinker, deferredAt=2026-07-01T13:32:50Z)

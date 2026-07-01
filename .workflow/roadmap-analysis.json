@@ -45,6 +45,7 @@
     {"name":"agent-threat-security-gate","dependsOn":["security-gate"]},
     {"name":"governance-roi-eval-harness","dependsOn":["governance-telemetry","centinela-insights"]},
     {"name":"cli-self-update","dependsOn":[]},
-    {"name":"g2-multi-language-import-graph"}
+    {"name":"g2-multi-language-import-graph"},
+    {"name":"roadmap-crud-add-remove"}
   ]
 }

@@ -74,3 +74,4 @@
 - Feature: adaptive-skill-synthesis
 - Dependencies: governance-telemetry, centinela-insights
 - Promoted from Backlog: g2-multi-language-import-graph (source=g2-import-graph-gate/gatekeeper, deferredAt=2026-06-19T08:02:58Z)
+- Promoted from Backlog: roadmap-crud-add-remove (source=roadmap-editing-suite-design/big-thinker, deferredAt=2026-07-01T13:32:50Z)
