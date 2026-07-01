@@ -182,6 +182,19 @@
     "createdAt": "2026-06-24T07:07:24Z"
   },
   {
+    "id": "2337859c969fd539",
+    "feature": "roadmap-json-contract",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: roadmap-json-contract",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/roadmap-json-contract-gatekeeper.md",
+    "createdAt": "2026-07-01T12:33:51Z"
+  },
+  {
     "id": "2437037d66852dc1",
     "feature": "precommit-and-pr-gate",
     "step": "validate",
