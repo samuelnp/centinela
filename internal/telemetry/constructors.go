@@ -38,6 +38,13 @@ func RecordStepAdvanced(cfg *config.Config, feature, step, model string) {
 	Record(cfg, Event{Type: TypeStepAdvanced, Feature: feature, Step: step, Model: model})
 }
 
+// RecordRevised records a controlled backward transition performed by
+// `centinela revise`, carrying both endpoints of the jump (from→to). It is the
+// audit sibling of RecordStepAdvanced for the rework path.
+func RecordRevised(cfg *config.Config, feature, from, to, model string) {
+	Record(cfg, Event{Type: TypeStepRevised, Feature: feature, From: from, Step: to, Model: model})
+}
+
 // RecordCostSample records host-harness token spend attributed to the active
 // feature/step/model. No-op for a non-positive total so an empty transcript
 // delta never writes a noise line.
