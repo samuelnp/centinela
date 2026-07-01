@@ -364,6 +364,19 @@
     "createdAt": "2026-06-29T18:26:44Z"
   },
   {
+    "id": "57eef19dbdfee88d",
+    "feature": "workflow-revise-loop",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: workflow-revise-loop",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/workflow-revise-loop-gatekeeper.md",
+    "createdAt": "2026-06-30T17:28:39Z"
+  },
+  {
     "id": "5c1ccba03ee6b28f",
     "feature": "g2-import-graph-gate",
     "step": "validate",
@@ -908,6 +921,19 @@
     ],
     "sourceArtifact": ".workflow/archetype-inference-project-synthesis-gatekeeper.md",
     "createdAt": "2026-06-19T15:17:21Z"
+  },
+  {
+    "id": "d9e90c3c18f6d565",
+    "feature": "workflow-revise-loop",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Empty / whitespace-only `--reason`** — rejected at two layers: the cmd",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/workflow-revise-loop-edge-cases.md",
+    "createdAt": "2026-06-30T16:45:57Z"
   },
   {
     "id": "db2d2fb521ce2b4f",
