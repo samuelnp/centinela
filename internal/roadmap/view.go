@@ -19,7 +19,11 @@ func BuildView(r *Roadmap) RoadmapView {
 		for _, f := range phase.Features {
 			fv := buildFeatureView(f, phase.Name, index[f.Name])
 			pv.Features = append(pv.Features, fv)
-			tally(&view.Counts, fv.Status)
+			// Reader 3 (JSON view): a draft is listed but never counted as
+			// committed work, mirroring Summary()'s exclusion.
+			if !f.Draft {
+				tally(&view.Counts, fv.Status)
+			}
 		}
 		view.Phases = append(view.Phases, pv)
 	}
@@ -49,6 +53,13 @@ func buildFeatureView(f Feature, phase string, fr FeatureReadiness) FeatureView 
 		Phase:     phase,
 		Status:    FeatureStatus(f.Name),
 		DependsOn: deps,
+	}
+	// Reader 4: a draft flows through with draft:true and readiness:"draft" — a
+	// non-empty, non-"ready" readiness the Magallanes Plan page renders distinctly.
+	if f.Draft {
+		fv.Draft = true
+		fv.Readiness = "draft"
+		return fv
 	}
 	if fr.State == "ready" || fr.State == "blocked" {
 		fv.Readiness = fr.State

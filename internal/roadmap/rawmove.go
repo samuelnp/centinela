@@ -32,21 +32,10 @@ func (d *rawDoc) findInBacklog(slug string) (json.RawMessage, int, error) {
 	return nil, -1, fmt.Errorf("%q is not a Backlog finding", slug)
 }
 
-// removeBacklogFeature drops the named finding from the Backlog phase.
+// removeBacklogFeature drops the named finding from the Backlog phase. It is a
+// thin alias over the generalized removeFeatureAt so both paths share one impl.
 func (d *rawDoc) removeBacklogFeature(idx int, slug string) error {
-	p, err := d.decodePhase(idx)
-	if err != nil {
-		return err
-	}
-	kept := p.Features[:0:0]
-	for _, f := range p.Features {
-		name, _ := featureName(f)
-		if name != slug {
-			kept = append(kept, f)
-		}
-	}
-	p.Features = kept
-	return d.setPhase(idx, p)
+	return d.removeFeatureAt(idx, slug)
 }
 
 // appendToPhase appends a name-only feature entry to the named non-Backlog

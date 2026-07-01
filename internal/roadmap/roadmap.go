@@ -63,6 +63,11 @@ func (r *Roadmap) Summary() (planned, inProgress, done int) {
 			continue
 		}
 		for _, f := range phase.Features {
+			// Reader 3: an unscored draft is authored but not yet committed work,
+			// so it is not tallied into any status count.
+			if f.Draft {
+				continue
+			}
 			switch FeatureStatus(f.Name) {
 			case "done":
 				done++

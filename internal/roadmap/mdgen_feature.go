@@ -15,6 +15,11 @@ func renderFeature(f Feature) []string {
 	if len(f.DependsOn) > 0 {
 		line += " (depends on " + strings.Join(f.DependsOn, ", ") + ")"
 	}
+	// A draft renders a deterministic trailing marker so the bullet line ends with
+	// " *(draft)*"; regenerating twice is byte-identical.
+	if f.Draft {
+		line += " *(draft)*"
+	}
 	out := []string{line}
 	if f.Fixes != "" {
 		out = append(out, "  *Fixes: "+f.Fixes+"*")
