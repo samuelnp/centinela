@@ -533,6 +533,19 @@
     "createdAt": "2026-06-29T20:25:51Z"
   },
   {
+    "id": "7fdf7fb1ded896d0",
+    "feature": "roadmap-crud-add-remove",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: roadmap-crud-add-remove",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/roadmap-crud-add-remove-gatekeeper.md",
+    "createdAt": "2026-07-01T17:21:39Z"
+  },
+  {
     "id": "8054a47cf854d7f8",
     "feature": "capability-calibration",
     "step": "validate",
