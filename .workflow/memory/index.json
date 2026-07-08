@@ -975,6 +975,19 @@
     "createdAt": "2026-06-19T15:17:21Z"
   },
   {
+    "id": "d1d1054bf03191c2",
+    "feature": "roadmap-edit-move",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: roadmap-edit-move",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/roadmap-edit-move-gatekeeper.md",
+    "createdAt": "2026-07-08T10:01:58Z"
+  },
+  {
     "id": "d9e90c3c18f6d565",
     "feature": "workflow-revise-loop",
     "step": "tests",

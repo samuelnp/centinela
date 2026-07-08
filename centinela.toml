@@ -6,9 +6,15 @@ use_worktrees = true
 step_confirmation_mode = "after_plan"
 
 [validate]
+# `go test ./...` already runs the acceptance tier (tests/acceptance is under
+# ./...) and satisfies the acceptance-execution gate; check-coverage.sh re-runs
+# the full suite under `set -e` (fails on any test failure) for the coverage
+# gate. A separate `go test ./tests/acceptance/...` would run the (uncacheable,
+# ~200s) acceptance tier a redundant extra time on every validate/complete —
+# removed to keep `centinela complete`'s claim-verification within the runner's
+# wall-clock budget. All tests, including acceptance, still execute every run.
 commands = [
   "go test ./...",
-  "go test ./tests/acceptance/...",
   "./scripts/check-coverage.sh",
   "./scripts/check-fmt.sh"
 ]

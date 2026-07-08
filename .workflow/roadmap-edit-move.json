@@ -1,14 +1,14 @@
 {
   "feature": "roadmap-edit-move",
   "startedAt": "2026-07-01T18:41:24.00703Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-07-01T20:23:40Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-07-01T21:13:55Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-08T10:01:58Z"
     }
   },
   "stepOrder": [
