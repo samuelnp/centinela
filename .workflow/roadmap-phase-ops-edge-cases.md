@@ -1,0 +1,47 @@
+# Edge Cases: roadmap-phase-ops
+
+## Covered
+
+### Dirty-map reindex (the make-or-break invariant)
+- Insert an earlier phase WHILE a later phase is already dirty → the dirty phase renders at its shifted (+1) index; the untouched middle phase stays byte-identical. Asserted against EXACT rendered bytes (`TestReindex_InsertEarlierWhileLaterDirty`).
+- Remove a middle phase WHILE a later phase is dirty → the dirty phase renders at its shifted (-1) index; untouched phase byte-identical. EXACT bytes (`TestReindex_RemoveMiddleWhileLaterDirty`).
+- `insertPhaseAt`/`removePhaseAt` bounds errors (negative/overflow) return errors, never panic (`TestReindex_BoundsErrors`).
+
+### phase add
+- `--after` first/middle anchor, no-`--after` before-Backlog, no-Backlog → last, `--after Backlog` → normal schedulable phase after Backlog, empty roadmap → first phase (`TestPhaseAdd_Positions`, `TestPhaseAdd_OnEmptyRoadmap`).
+- New phase carries `"features": []`; `--note` sets `"note"` (`TestPhaseAdd_EmptyFeaturesAndNote`).
+- Untouched phases byte-identical after insert (`TestPhaseAdd_UntouchedByteIdentical`).
+- Refusals (each byte-identical): duplicate, reserved Backlog, reserved Baseline, empty name, unknown `--after` anchor (`TestPhaseAdd_Refusals`).
+
+### phase rename
+- In-place rename keeps its features and leaves other phases byte-identical (`TestPhaseRename_InPlace`).
+- Same-name rename is a byte-identical no-op (`TestPhaseRename_SameNameNoop`).
+- Refusals (each byte-identical): unknown old name, collision, empty new name, reserved either side (`TestPhaseRename_Refusals`).
+
+### phase remove
+- Empty-phase remove; other phases byte-identical (`TestPhaseRemove_EmptyPhase`).
+- Non-empty without `--force` refused, naming the feature count ("2 features"), byte-identical (`TestPhaseRemove_NonEmptyRefused`).
+- Unknown → "not found"; Backlog/Baseline with and without `--force` → "reserved phase name"; all byte-identical (`TestPhaseRemove_UnknownAndReserved`).
+- Remove-only-phase → zero-phase empty roadmap (`TestPhaseRemove_OnlyPhase`).
+- `--force` removes phase + features + their analysis + quality entries, then ValidateAnalysis/ValidateQuality PASS (`TestPhaseRemove_ForcePrunesAndValidates`).
+- `--force` REFUSED byte-identical across roadmap + analysis + quality when a surviving feature dependsOn a removed one (`TestPhaseRemove_ForceRefusedOnSurvivingDep`).
+
+### artifact prune (`removeFeatureEntries`)
+- Prunes matched entries, leaves other entries and top-level fields verbatim (`TestRemoveFeatureEntries_PrunesMatchedLeavesRest`).
+- Missing artifact file is a no-op that does not create the file (`TestRemoveFeatureEntries_MissingFileNoop`).
+- Invalid JSON surfaces an error (`TestRemoveFeatureEntries_InvalidJSON`).
+
+### cmd layer
+- add `--after`/`--note`, rename, remove (empty), remove `--force` (draft feature so no coverage needed), plus package-rejection surfacing (`cmd/centinela/roadmap_phase_*_test.go`).
+
+### tests/ tier (binary + package)
+- Missing roadmap.json → error, file stays absent (`TestAcc_PhaseMissingRoadmap`).
+- Malformed roadmap.json → error, file byte-identical (`TestAcc_PhaseMalformedRoadmap`).
+- End-to-end add/rename/remove through a temp-built binary with position + note assertions.
+
+## Residual Risks
+
+- **Concurrent external writers** to roadmap.json between read and atomic write are out of scope: the mutation is single-process read-modify-write; a racing editor could lose changes. Mitigation: callers run the CLI serially; the write is atomic (temp + rename), so the file is never left half-written.
+- **`.md` provenance companions are intentionally NOT pruned** on `--force` (append-only provenance; not part of the coverage set the validators read). By design per senior-engineer notes; validators only read the `.json` coverage set.
+- **Spec's literal `{"phases":[]}`** for remove-only-phase is a Gherkin abstraction: the on-disk render is the canonical multi-line empty-phases form. Tests assert zero phases + no phase name rather than the compact literal, matching the shipped renderer.
+- **Non-ASCII / very long phase names** are not specifically fuzzed; they flow through the same JSON encode/decode path as feature names, which the sibling suites already exercise.

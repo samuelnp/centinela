@@ -780,6 +780,19 @@
     "createdAt": "2026-06-29T18:43:16Z"
   },
   {
+    "id": "ada12c00b3107f31",
+    "feature": "roadmap-phase-ops",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Insert an earlier phase WHILE a later phase is already dirty → the dirty phase renders at its shifted (+1) index; the untouched middle phase stays byte-identical. Asserted against EXACT rendered bytes (`TestReindex_InsertEarlierWhileLaterDirty`).",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/roadmap-phase-ops-edge-cases.md",
+    "createdAt": "2026-07-09T13:38:24Z"
+  },
+  {
     "id": "b5afec861b2222c7",
     "feature": "roadmap-doc-sync",
     "step": "validate",
