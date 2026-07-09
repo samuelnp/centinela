@@ -176,6 +176,7 @@
   *Fixes: the security gate scans for conventional vulnerabilities but not agent-native threats (prompt injection from fetched/MCP content, secret exfiltration in diffs), the attack surface that exists only because an autonomous agent wrote the code.*
 - **roadmap-crud-add-remove**
 - **roadmap-edit-move**
+- **roadmap-phase-ops**
 
 ## Phase 12: Self-Improvement
 
@@ -209,4 +210,3 @@
 - **unit-test-vuln-tool-external-seam** — Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam *(deferred 2026-06-30T08:12:27Z · coverage-hardening/big-thinker)*
 - **aider-local-provider-wiring** — Point the Aider/Claude harness at a local endpoint; local block currently wires only OpenCode's provider surface *(deferred 2026-06-30T14:45:14Z · local-harness-support/big-thinker)*
 - **workflow-save-atomic-write** — workflow.Save uses plain os.WriteFile; a crash mid-write can truncate .workflow/<feature>.json — make it write-temp-then-rename *(deferred 2026-06-30T17:52:51Z · workflow-revise-loop/validation-specialist)*
-- **roadmap-phase-ops** — roadmap phase add/rename/remove with dirty-map reindex in the raw layer; refuse non-empty phase remove unless --force. Highest raw-layer complexity, land last. *(deferred 2026-07-01T13:32:50Z · roadmap-editing-suite-design/big-thinker)*
