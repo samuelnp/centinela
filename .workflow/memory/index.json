@@ -234,6 +234,19 @@
     "createdAt": "2026-06-30T16:38:08Z"
   },
   {
+    "id": "302259546d6002f5",
+    "feature": "roadmap-phase-ops",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: roadmap-phase-ops",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/roadmap-phase-ops-gatekeeper.md",
+    "createdAt": "2026-07-09T14:08:08Z"
+  },
+  {
     "id": "32f04a9174b07dba",
     "feature": "spec-traceability-gate",
     "step": "validate",
@@ -778,6 +791,19 @@
     ],
     "sourceArtifact": ".workflow/mcp-governance-server-gatekeeper.md",
     "createdAt": "2026-06-29T18:43:16Z"
+  },
+  {
+    "id": "ada12c00b3107f31",
+    "feature": "roadmap-phase-ops",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Insert an earlier phase WHILE a later phase is already dirty → the dirty phase renders at its shifted (+1) index; the untouched middle phase stays byte-identical. Asserted against EXACT rendered bytes (`TestReindex_InsertEarlierWhileLaterDirty`).",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/roadmap-phase-ops-edge-cases.md",
+    "createdAt": "2026-07-09T13:38:24Z"
   },
   {
     "id": "b5afec861b2222c7",

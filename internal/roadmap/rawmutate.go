@@ -5,7 +5,10 @@ import "encoding/json"
 // rawPhase is a phase decoded for mutation: its name plus features as raw
 // per-entry bytes so untouched entries round-trip unchanged.
 type rawPhase struct {
-	Name     string            `json:"name"`
+	Name string `json:"name"`
+	// Note round-trips the optional phase rationale so a rename (which re-encodes
+	// via setPhase) preserves it; omitempty keeps note-less phases byte-identical.
+	Note     string            `json:"note,omitempty"`
 	Features []json.RawMessage `json:"features"`
 }
 
