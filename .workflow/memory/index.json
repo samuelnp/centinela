@@ -234,6 +234,19 @@
     "createdAt": "2026-06-30T16:38:08Z"
   },
   {
+    "id": "302259546d6002f5",
+    "feature": "roadmap-phase-ops",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: roadmap-phase-ops",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/roadmap-phase-ops-gatekeeper.md",
+    "createdAt": "2026-07-09T14:08:08Z"
+  },
+  {
     "id": "32f04a9174b07dba",
     "feature": "spec-traceability-gate",
     "step": "validate",
