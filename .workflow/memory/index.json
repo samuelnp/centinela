@@ -403,6 +403,19 @@
     "createdAt": "2026-06-05T15:34:55Z"
   },
   {
+    "id": "5d0c85e7774dbaa9",
+    "feature": "roadmap-edit-move",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Only the flags provided change; unspecified fields (archetype, dependsOn) stay intact.",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/roadmap-edit-move-edge-cases.md",
+    "createdAt": "2026-07-01T21:13:55Z"
+  },
+  {
     "id": "5d4bc36b16cccc92",
     "feature": "coverage-hardening",
     "step": "validate",
@@ -960,6 +973,19 @@
     ],
     "sourceArtifact": ".workflow/archetype-inference-project-synthesis-gatekeeper.md",
     "createdAt": "2026-06-19T15:17:21Z"
+  },
+  {
+    "id": "d1d1054bf03191c2",
+    "feature": "roadmap-edit-move",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Gatekeeper Report: roadmap-edit-move",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/roadmap-edit-move-gatekeeper.md",
+    "createdAt": "2026-07-08T10:01:58Z"
   },
   {
     "id": "d9e90c3c18f6d565",

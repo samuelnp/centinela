@@ -64,3 +64,20 @@ func (d *rawDoc) replaceFeatureAt(phaseIdx, featIdx int, entry json.RawMessage) 
 	p.Features[featIdx] = entry
 	return d.setPhase(phaseIdx, p)
 }
+
+// insertFeatureAt inserts entry into the phase at phaseIdx at position pos
+// (0 <= pos <= len). Existing entries round-trip byte-identically; the phase is
+// marked dirty. Callers resolve pos from an anchor via anchorPos.
+func (d *rawDoc) insertFeatureAt(phaseIdx, pos int, entry json.RawMessage) error {
+	p, err := d.decodePhase(phaseIdx)
+	if err != nil {
+		return err
+	}
+	if pos < 0 || pos > len(p.Features) {
+		return fmt.Errorf("insert position %d out of range in phase %d", pos, phaseIdx)
+	}
+	p.Features = append(p.Features, nil)
+	copy(p.Features[pos+1:], p.Features[pos:])
+	p.Features[pos] = entry
+	return d.setPhase(phaseIdx, p)
+}

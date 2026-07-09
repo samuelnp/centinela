@@ -1,0 +1,37 @@
+{
+  "feature": "roadmap-edit-move",
+  "startedAt": "2026-07-01T18:41:24.00703Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-01T20:23:40Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-09T08:45:48Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-01T20:12:50Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-01T21:13:55Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-08T10:01:58Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/roadmap-edit-move"
+}

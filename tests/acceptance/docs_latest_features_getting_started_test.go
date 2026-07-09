@@ -8,14 +8,19 @@ import (
 )
 
 // Acceptance: specs/docs-latest-features-getting-started.feature
+// Scenario: Getting-started docs and the generated story stay in sync
+// The getting-started prose moved from the README into docs/guides/getting-started.md
+// when the README was slimmed to a landing page; the generated-docs story
+// (render_story.go) still emits the Latest Features + Getting Started sections. This
+// test keeps the source guide and the generated story in sync.
 func TestDocsLatestFeaturesAndGettingStartedStayInSync(t *testing.T) {
-	readme, err := os.ReadFile(filepath.Join("..", "..", "README.md"))
+	guide, err := os.ReadFile(filepath.Join("..", "..", "docs", "guides", "getting-started.md"))
 	if err != nil {
-		t.Fatalf("read README: %v", err)
+		t.Fatalf("read getting-started guide: %v", err)
 	}
-	for _, want := range []string{"## Latest Features", "## Getting Started", "centinela roadmap validate", "centinela migrate docs", "2/5"} {
-		if !strings.Contains(string(readme), want) {
-			t.Fatalf("README missing %q", want)
+	for _, want := range []string{"Getting Started", "centinela roadmap validate", "centinela migrate docs"} {
+		if !strings.Contains(string(guide), want) {
+			t.Fatalf("getting-started guide missing %q", want)
 		}
 	}
 	story, err := os.ReadFile(filepath.Join("..", "..", "internal", "docgen", "render_story.go"))
