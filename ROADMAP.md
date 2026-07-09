@@ -191,6 +191,18 @@
 - **governance-roi-eval-harness** — Deterministic A/B evaluation over a committed fixture: a recorded multi-step agent transcript whose steps introduce planted, oracle-known bugs. The intervention model is veto-and-drop (no live agent, no corrective branching): the governed arm replays each recorded step and runs gates + claim-verification against that step's diff; a step whose diff fails a gate or makes a false claim is REJECTED and its diff is not applied to the accumulating tree, so the governed final diff omits the vetoed buggy steps. The ungoverned arm applies every recorded step unconditionally. Both arms are fully deterministic because the transcript is fixed and the gates are deterministic. Metrics: surviving-bug count (planted bugs present in each arm's final diff per the oracle test suite), plus vetoed-step count, claim-verification rejections, and token cost; output is a reviewable delta report. Acceptance: `centinela eval` yields identical results on repeated runs of the fixture; the governed arm's surviving-bug count is strictly lower than the ungoverned arm's because vetoed steps don't land; a deliberately weakened profile (fewer active gates) vetoes fewer steps and measurably raises the governed arm's surviving-bug count. (depends on governance-telemetry, centinela-insights)
   *Fixes: Centinela asserts it improves correctness but can't measure it, so there's no governed-vs-ungoverned baseline to prove ROI or catch governance regressions over time.*
 
+## Lighter Centinela
+
+> Retrospective-driven refactor (retrospective.md): verify the work, not artifacts about the work; process weight proportional to risk
+
+- **merge-truthful-delivery** — Fix deliver --via merge false success: resolve the primary worktree, verify the target ref advanced and the worktree was removed before reporting success
+- **truthful-validators** — Fix nil-uiPaths evidence validate, detect skipped acceptance scenarios (skips fail validate by default), honest quality-score shape errors, honest gate reporting for file-size cap and single-locale i18n
+- **guided-by-default** — Flip the default enforcement profile strict to guided, slim the greenfield cascade to PROJECT.md + roadmap.json, delete the self-graded quality threshold gate (depends on truthful-validators)
+- **coupled-steps-relaxation** — workflow.coupled_tests knob (auto-on for compiled languages): allow existing-test edits during code step and additive spec edits during tests step so the tree compiles at every step boundary; surface workflow archetypes at start
+- **token-diet** — Drop the O(N) plan-input glob, fix the UX evidence tag matcher, digest-dedup the per-prompt roadmap summary, replace dated model pins with family aliases
+- **roadmap-state-hygiene** — Every roadmap CLI mutation regenerates ROADMAP.md and auto-commits roadmap state (pathspec, respects disable_auto_commit); roadmap backlog --stale aging and a completion nudge for deferred findings
+- **smoke-verification** — First-class validate.smoke_commands that exercise the running product during validate and merge; smoke verify claim, scaffolded config examples, and a repo smoke script
+
 ## Backlog
 
 - **rawio-reformat-diff-churn** — First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn *(deferred 2026-06-12T16:29:13Z · deferred-findings-roadmap-capture/senior-engineer)*

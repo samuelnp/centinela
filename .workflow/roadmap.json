@@ -270,18 +270,81 @@
     {
       "name": "Phase 11: Ecosystem",
       "features": [
-        {"name":"host-harness-adapters","description":"Extend the hook/parity pattern (today Claude + OpenCode) to Cursor, Aider, Windsurf, and Copilot Workspace. Best done after a shared integration core, so adding a third target isn't a maintenance tax."},
-        {"name":"codex-support","dependsOn":["host-harness-adapters"],"description":"First-class support for OpenAI **Codex** as a host harness alongside Claude Code and OpenCode: wire Codex's config/integration surface to Centinela's prewrite enforcement, postwrite status tags, and prompt-context injection, generate the Codex-native rules file (e.g. `AGENTS.md`), and extend the parity tests so the three harnesses stay in lockstep through `init` and `migrate`. Codex has a large and growing user base, so dual-support with Claude Code materially widens who can adopt Centinela.","fixes":"Codex users locked out of Centinela's governance because enforcement is wired only for Claude Code / OpenCode."},
-        {"name":"local-harness-support","dependsOn":["host-harness-adapters","model-capability-profiles"],"description":"First-class local-model targets: OpenCode backed by Ollama, plus generic OpenAI-compatible endpoints (llama.cpp, vLLM, LM Studio). Acceptance bar: a small local model completes a governed feature end-to-end using the `strict` profile and deterministic scaffolds, with all gates and claim verification passing.","fixes":"local-model users \u2014 the fastest-growing segment that needs governance the most \u2014 can't adopt Centinela because integration and enforcement assume frontier cloud harnesses."},
-        {"name":"cross-project-memory","dependsOn":["governed-project-memory"],"description":"Promote governed-memory lessons from per-repo to an org-shared ledger, so a failure fixed in one repo warns every repo."},
-        {"name":"mcp-governance-server","dependsOn":["headless-governance"],"description":"Expose Centinela's rules, gate engine, and claim-verification as a versioned MCP server (v1 tools: read_rules, run_gates, verify_claims, workflow_state) reusing the headless-governance verdict packet as the wire payload. The MCP server is advisory-by-protocol: it returns a structured verdict (allow/warn/block) \u2014 it cannot itself stop a write \u2014 so enforcement stays harness-side via a thin shim that maps a block verdict onto the harness's existing pre-write deny (the same contract the native hook uses). The tool surface and verdict schema are explicitly versioned so harnesses pin a compatibility level. Acceptance: a harness with zero Centinela-specific code obtains a verdict purely through MCP tool calls; the shim test asserts a block verdict aborts the write while allow proceeds; a parity test asserts the MCP verdict and the native-hook verdict are identical for the same diff and workflow state.","fixes":"every new host harness needs a bespoke hook/parity adapter, so governance can only be consumed by harnesses Centinela has explicitly integrated."},
-        {"name":"agents-md-canonical-surface","dependsOn":[],"description":"Make AGENTS.md the canonical rules surface via a managed region fenced by `<!-- centinela:managed:start -->` / `<!-- centinela:managed:end -->`: init/migrate emit Centinela's hard rules and active profile into that region, and Centinela re-ingests a constrained, documented directive schema (rule toggles, profile, locales, layer dependency overrides) authored outside the managed block. Free-form prose outside the managed block and outside the known schema is preserved verbatim and ignored by the rule engine \u2014 never silently honored \u2014 and any directive that conflicts with a hard rule surfaces as a lint WARNING rather than an override. Acceptance: init produces a valid AGENTS.md with the fenced managed region; round-trip (emit -> hand-edit outside the region -> re-emit) preserves user content byte-for-byte; a known-schema directive is ingested into the rule set; a conflicting directive produces a lint warning; an unrecognized free-form line is preserved and ignored.","fixes":"Centinela's rules live in a Centinela-specific surface, so the 60K+ repos and AGENTS.md-reading harnesses cannot read or contribute to Centinela governance."},
-        {"name":"sdd-spec-kit-interop","dependsOn":["spec-traceability-gate"],"description":"Position Centinela as the enforcement layer for Spec-Driven Development with a pinned mapping: GitHub Spec Kit `spec.md` requirements -> Gherkin Scenarios in specs/*.feature, `plan.md` -> docs/plans, `tasks.md` -> step checklist; AWS Kiro requirements map the same way. Each imported requirement receives a stable traceability ID linked to its Scenario; 'links intact' means spec-traceability-gate tracks that ID and FAILS when no code/test covers it. Export regenerates a Spec-Kit-compatible `spec.md` from Centinela's Gherkin + plan artifacts, round-tripping lossily-mapped external fields (e.g. Kiro design rationale) through a preserved sidecar block. External formats are pinned to committed fixtures (Spec Kit v0.8.x and a Kiro schema snapshot under testdata). Acceptance: a fixture spec.md imports with traceability IDs attached; the gate fails when a tracked requirement loses coverage; export round-trips the fixture without dropping sidecar fields.","fixes":"teams adopting Spec-Driven Development (Spec Kit, Kiro) generate specs that nothing enforces, so spec and shipped code silently diverge."},
-        {"name":"agent-action-provenance","dependsOn":["governance-telemetry"],"description":"Produce a hash-chained, signed provenance trail of every gate verdict, claim-verification result, and step transition, exported as an in-toto Statement carrying a SLSA v1 provenance predicate. Signing uses a repo-scoped key created by `centinela attest init` (private key in durable .workflow state or a git-config-referenced path; public key committed for verification); org deployments may swap in a KMS/sigstore backend behind the same signer interface (interface only in v1). Each record names the model/harness that made the claim and the gate that cleared it. Acceptance: each completed step appends a hash-chained record; `centinela attest <feature>` emits a verifiable in-toto/SLSA bundle; verification passes on an untampered bundle and fails when any prior record is altered; the bundle attributes each claim to its model/harness.","fixes":"gate verdicts and claim-verification results aren't tamper-evident or exportable, so an enterprise can't audit or attest to what an agent was permitted to do."},
-        {"name":"agent-threat-security-gate","dependsOn":["security-gate"],"description":"Extend the security gate with per-class agent-native threat detection: (a) secret/credential exfiltration \u2014 deterministic regex+entropy signature scan over added diff lines, plus flagging new outbound-network calls introduced adjacent to a secret read; (b) prompt injection \u2014 a heuristic signature set over agent-fetched/MCP-sourced content, explicitly best-effort (WARNING, not a completeness claim); (c) unexpected capability \u2014 a diff introducing a new network/exec/credential API absent from the pre-change tree. Acceptance: runs against a committed corpus (testdata/agent-threats/ with planted-positive and clean cases); a planted exfiltration diff BLOCKs under the strict profile; an injected-instruction fixture WARNs; zero false positives on the existing security-gate clean corpus (the numeric bar = 0 FP on that fixed corpus).","fixes":"the security gate scans for conventional vulnerabilities but not agent-native threats (prompt injection from fetched/MCP content, secret exfiltration in diffs), the attack surface that exists only because an autonomous agent wrote the code."},
-        {"name":"roadmap-crud-add-remove"},
-        {"name":"roadmap-edit-move"},
-        {"name":"roadmap-phase-ops"}
+        {
+          "name": "host-harness-adapters",
+          "description": "Extend the hook/parity pattern (today Claude + OpenCode) to Cursor, Aider, Windsurf, and Copilot Workspace. Best done after a shared integration core, so adding a third target isn't a maintenance tax."
+        },
+        {
+          "name": "codex-support",
+          "dependsOn": [
+            "host-harness-adapters"
+          ],
+          "description": "First-class support for OpenAI **Codex** as a host harness alongside Claude Code and OpenCode: wire Codex's config/integration surface to Centinela's prewrite enforcement, postwrite status tags, and prompt-context injection, generate the Codex-native rules file (e.g. `AGENTS.md`), and extend the parity tests so the three harnesses stay in lockstep through `init` and `migrate`. Codex has a large and growing user base, so dual-support with Claude Code materially widens who can adopt Centinela.",
+          "fixes": "Codex users locked out of Centinela's governance because enforcement is wired only for Claude Code / OpenCode."
+        },
+        {
+          "name": "local-harness-support",
+          "dependsOn": [
+            "host-harness-adapters",
+            "model-capability-profiles"
+          ],
+          "description": "First-class local-model targets: OpenCode backed by Ollama, plus generic OpenAI-compatible endpoints (llama.cpp, vLLM, LM Studio). Acceptance bar: a small local model completes a governed feature end-to-end using the `strict` profile and deterministic scaffolds, with all gates and claim verification passing.",
+          "fixes": "local-model users \u2014 the fastest-growing segment that needs governance the most \u2014 can't adopt Centinela because integration and enforcement assume frontier cloud harnesses."
+        },
+        {
+          "name": "cross-project-memory",
+          "dependsOn": [
+            "governed-project-memory"
+          ],
+          "description": "Promote governed-memory lessons from per-repo to an org-shared ledger, so a failure fixed in one repo warns every repo."
+        },
+        {
+          "name": "mcp-governance-server",
+          "dependsOn": [
+            "headless-governance"
+          ],
+          "description": "Expose Centinela's rules, gate engine, and claim-verification as a versioned MCP server (v1 tools: read_rules, run_gates, verify_claims, workflow_state) reusing the headless-governance verdict packet as the wire payload. The MCP server is advisory-by-protocol: it returns a structured verdict (allow/warn/block) \u2014 it cannot itself stop a write \u2014 so enforcement stays harness-side via a thin shim that maps a block verdict onto the harness's existing pre-write deny (the same contract the native hook uses). The tool surface and verdict schema are explicitly versioned so harnesses pin a compatibility level. Acceptance: a harness with zero Centinela-specific code obtains a verdict purely through MCP tool calls; the shim test asserts a block verdict aborts the write while allow proceeds; a parity test asserts the MCP verdict and the native-hook verdict are identical for the same diff and workflow state.",
+          "fixes": "every new host harness needs a bespoke hook/parity adapter, so governance can only be consumed by harnesses Centinela has explicitly integrated."
+        },
+        {
+          "name": "agents-md-canonical-surface",
+          "dependsOn": [],
+          "description": "Make AGENTS.md the canonical rules surface via a managed region fenced by `<!-- centinela:managed:start -->` / `<!-- centinela:managed:end -->`: init/migrate emit Centinela's hard rules and active profile into that region, and Centinela re-ingests a constrained, documented directive schema (rule toggles, profile, locales, layer dependency overrides) authored outside the managed block. Free-form prose outside the managed block and outside the known schema is preserved verbatim and ignored by the rule engine \u2014 never silently honored \u2014 and any directive that conflicts with a hard rule surfaces as a lint WARNING rather than an override. Acceptance: init produces a valid AGENTS.md with the fenced managed region; round-trip (emit -> hand-edit outside the region -> re-emit) preserves user content byte-for-byte; a known-schema directive is ingested into the rule set; a conflicting directive produces a lint warning; an unrecognized free-form line is preserved and ignored.",
+          "fixes": "Centinela's rules live in a Centinela-specific surface, so the 60K+ repos and AGENTS.md-reading harnesses cannot read or contribute to Centinela governance."
+        },
+        {
+          "name": "sdd-spec-kit-interop",
+          "dependsOn": [
+            "spec-traceability-gate"
+          ],
+          "description": "Position Centinela as the enforcement layer for Spec-Driven Development with a pinned mapping: GitHub Spec Kit `spec.md` requirements -> Gherkin Scenarios in specs/*.feature, `plan.md` -> docs/plans, `tasks.md` -> step checklist; AWS Kiro requirements map the same way. Each imported requirement receives a stable traceability ID linked to its Scenario; 'links intact' means spec-traceability-gate tracks that ID and FAILS when no code/test covers it. Export regenerates a Spec-Kit-compatible `spec.md` from Centinela's Gherkin + plan artifacts, round-tripping lossily-mapped external fields (e.g. Kiro design rationale) through a preserved sidecar block. External formats are pinned to committed fixtures (Spec Kit v0.8.x and a Kiro schema snapshot under testdata). Acceptance: a fixture spec.md imports with traceability IDs attached; the gate fails when a tracked requirement loses coverage; export round-trips the fixture without dropping sidecar fields.",
+          "fixes": "teams adopting Spec-Driven Development (Spec Kit, Kiro) generate specs that nothing enforces, so spec and shipped code silently diverge."
+        },
+        {
+          "name": "agent-action-provenance",
+          "dependsOn": [
+            "governance-telemetry"
+          ],
+          "description": "Produce a hash-chained, signed provenance trail of every gate verdict, claim-verification result, and step transition, exported as an in-toto Statement carrying a SLSA v1 provenance predicate. Signing uses a repo-scoped key created by `centinela attest init` (private key in durable .workflow state or a git-config-referenced path; public key committed for verification); org deployments may swap in a KMS/sigstore backend behind the same signer interface (interface only in v1). Each record names the model/harness that made the claim and the gate that cleared it. Acceptance: each completed step appends a hash-chained record; `centinela attest <feature>` emits a verifiable in-toto/SLSA bundle; verification passes on an untampered bundle and fails when any prior record is altered; the bundle attributes each claim to its model/harness.",
+          "fixes": "gate verdicts and claim-verification results aren't tamper-evident or exportable, so an enterprise can't audit or attest to what an agent was permitted to do."
+        },
+        {
+          "name": "agent-threat-security-gate",
+          "dependsOn": [
+            "security-gate"
+          ],
+          "description": "Extend the security gate with per-class agent-native threat detection: (a) secret/credential exfiltration \u2014 deterministic regex+entropy signature scan over added diff lines, plus flagging new outbound-network calls introduced adjacent to a secret read; (b) prompt injection \u2014 a heuristic signature set over agent-fetched/MCP-sourced content, explicitly best-effort (WARNING, not a completeness claim); (c) unexpected capability \u2014 a diff introducing a new network/exec/credential API absent from the pre-change tree. Acceptance: runs against a committed corpus (testdata/agent-threats/ with planted-positive and clean cases); a planted exfiltration diff BLOCKs under the strict profile; an injected-instruction fixture WARNs; zero false positives on the existing security-gate clean corpus (the numeric bar = 0 FP on that fixed corpus).",
+          "fixes": "the security gate scans for conventional vulnerabilities but not agent-native threats (prompt injection from fetched/MCP content, secret exfiltration in diffs), the attack surface that exists only because an autonomous agent wrote the code."
+        },
+        {
+          "name": "roadmap-crud-add-remove"
+        },
+        {
+          "name": "roadmap-edit-move"
+        },
+        {
+          "name": "roadmap-phase-ops"
+        }
       ]
     },
     {
@@ -318,25 +381,174 @@
       ]
     },
     {
+      "name": "Lighter Centinela",
+      "note": "Retrospective-driven refactor (retrospective.md): verify the work, not artifacts about the work; process weight proportional to risk",
+      "features": [
+        {"name":"merge-truthful-delivery","archetype":"canonical","description":"Fix deliver --via merge false success: resolve the primary worktree, verify the target ref advanced and the worktree was removed before reporting success"},
+        {"name":"truthful-validators","archetype":"canonical","description":"Fix nil-uiPaths evidence validate, detect skipped acceptance scenarios (skips fail validate by default), honest quality-score shape errors, honest gate reporting for file-size cap and single-locale i18n"},
+        {"name":"guided-by-default","dependsOn":["truthful-validators"],"archetype":"canonical","description":"Flip the default enforcement profile strict to guided, slim the greenfield cascade to PROJECT.md + roadmap.json, delete the self-graded quality threshold gate"},
+        {"name":"coupled-steps-relaxation","archetype":"refactor","description":"workflow.coupled_tests knob (auto-on for compiled languages): allow existing-test edits during code step and additive spec edits during tests step so the tree compiles at every step boundary; surface workflow archetypes at start"},
+        {"name":"token-diet","archetype":"refactor","description":"Drop the O(N) plan-input glob, fix the UX evidence tag matcher, digest-dedup the per-prompt roadmap summary, replace dated model pins with family aliases"},
+        {"name":"roadmap-state-hygiene","archetype":"canonical","description":"Every roadmap CLI mutation regenerates ROADMAP.md and auto-commits roadmap state (pathspec, respects disable_auto_commit); roadmap backlog --stale aging and a completion nudge for deferred findings"},
+        {"name":"smoke-verification","archetype":"canonical","description":"First-class validate.smoke_commands that exercise the running product during validate and merge; smoke verify claim, scaffolded config examples, and a repo smoke script"}
+      ]
+    },
+    {
       "name": "Backlog",
       "features": [
-        {"name":"rawio-reformat-diff-churn","summary":"First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn","source":{"feature":"deferred-findings-roadmap-capture","role":"senior-engineer"},"deferredAt":"2026-06-12T16:29:13Z"},
-        {"name":"roadmap-import-graph-layer-mapping","summary":"Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2","source":{"feature":"roadmap-doc-sync","role":"gatekeeper"},"deferredAt":"2026-06-14T10:30:31Z"},
-        {"name":"non-go-source-import-graphs","summary":"Parse source-level import graphs for non-Go languages (JS/TS, Ruby, Rust, Python); analyze v1 records declared manifest deps only","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"brownfield-framework-fingerprinting","summary":"Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"incremental-codebase-analysis","summary":"Incremental/cached re-analysis that only re-scans changed directories in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"codebase-metrics-enrichment","summary":"Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"brownfield-route-flow-extraction","summary":"Framework-specific HTTP route and call-flow extraction for reconstructed specs; spec-reconstruction v1 ships package/manifest-derived targets only","source":{"feature":"spec-reconstruction","role":"big-thinker"},"deferredAt":"2026-06-22T07:52:17Z"},
-        {"name":"centinela-changelog-subcommand","summary":"Standalone centinela changelog subcommand for merge-path changelog parity (independent of PR delivery)","source":{"feature":"delivery-artifact-generation","role":"big-thinker"},"deferredAt":"2026-06-25T16:36:23Z"},
-        {"name":"gitignore-durable-state-guard","summary":"Add a test asserting durable .workflow state (roadmap{,-analysis,-quality}.json, audit-baseline.json) stays tracked/not-gitignored, so the evidence-footprint allow-list can't silently drop bootstrap state again (regression fixed in 420ab3c)","source":{"feature":"lean-evidence-footprint","role":"validation-specialist"},"deferredAt":"2026-06-29T15:08:01Z"},
-        {"name":"selfupdate-notice-http-timeout","summary":"centinela update + startup notice use http.DefaultClient (no timeout); a stalled GitHub connection can block session start indefinitely — give the production Updater a bounded client timeout (~5s) so the cold-cache notice fails fast and silent","source":{"feature":"cli-self-update","role":"gatekeeper"},"deferredAt":"2026-06-30T09:45:19Z"},
-        {"name":"brownfield-onboarding-docs","summary":"Document the brownfield onboarding path (analyze, synthesize, enrich, confirm) in new-project-guide.md","source":{"feature":"brownfield-setup-detection","role":"big-thinker"},"deferredAt":"2026-06-29T17:42:52Z"},
-        {"name":"brownfield-manifest-breadth","summary":"Extend HasSource manifest list to pom.xml, composer.json, build.gradle for broader ecosystem coverage","source":{"feature":"brownfield-setup-detection","role":"feature-specialist"},"deferredAt":"2026-06-29T17:46:35Z"},
-        {"name":"unit-test-mcp-server-in-memory-transport","summary":"Cover runMcpServe/mcpConnectSelf via an in-memory MCP transport","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"fault-inject-atomic-write-error-paths","summary":"Cover WriteBytesAtomic and low-level I/O error branches via fault injection","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"unit-test-vuln-tool-external-seam","summary":"Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"aider-local-provider-wiring","summary":"Point the Aider/Claude harness at a local endpoint; local block currently wires only OpenCode's provider surface","source":{"feature":"local-harness-support","role":"big-thinker"},"deferredAt":"2026-06-30T14:45:14Z"},
-        {"name":"workflow-save-atomic-write","summary":"workflow.Save uses plain os.WriteFile; a crash mid-write can truncate .workflow/<feature>.json — make it write-temp-then-rename","source":{"feature":"workflow-revise-loop","role":"validation-specialist"},"deferredAt":"2026-06-30T17:52:51Z"}
+        {
+          "name": "rawio-reformat-diff-churn",
+          "summary": "First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn",
+          "source": {
+            "feature": "deferred-findings-roadmap-capture",
+            "role": "senior-engineer"
+          },
+          "deferredAt": "2026-06-12T16:29:13Z"
+        },
+        {
+          "name": "roadmap-import-graph-layer-mapping",
+          "summary": "Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2",
+          "source": {
+            "feature": "roadmap-doc-sync",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-06-14T10:30:31Z"
+        },
+        {
+          "name": "non-go-source-import-graphs",
+          "summary": "Parse source-level import graphs for non-Go languages (JS/TS, Ruby, Rust, Python); analyze v1 records declared manifest deps only",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "brownfield-framework-fingerprinting",
+          "summary": "Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "incremental-codebase-analysis",
+          "summary": "Incremental/cached re-analysis that only re-scans changed directories in centinela analyze",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "codebase-metrics-enrichment",
+          "summary": "Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "brownfield-route-flow-extraction",
+          "summary": "Framework-specific HTTP route and call-flow extraction for reconstructed specs; spec-reconstruction v1 ships package/manifest-derived targets only",
+          "source": {
+            "feature": "spec-reconstruction",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-22T07:52:17Z"
+        },
+        {
+          "name": "centinela-changelog-subcommand",
+          "summary": "Standalone centinela changelog subcommand for merge-path changelog parity (independent of PR delivery)",
+          "source": {
+            "feature": "delivery-artifact-generation",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-25T16:36:23Z"
+        },
+        {
+          "name": "gitignore-durable-state-guard",
+          "summary": "Add a test asserting durable .workflow state (roadmap{,-analysis,-quality}.json, audit-baseline.json) stays tracked/not-gitignored, so the evidence-footprint allow-list can't silently drop bootstrap state again (regression fixed in 420ab3c)",
+          "source": {
+            "feature": "lean-evidence-footprint",
+            "role": "validation-specialist"
+          },
+          "deferredAt": "2026-06-29T15:08:01Z"
+        },
+        {
+          "name": "selfupdate-notice-http-timeout",
+          "summary": "centinela update + startup notice use http.DefaultClient (no timeout); a stalled GitHub connection can block session start indefinitely — give the production Updater a bounded client timeout (~5s) so the cold-cache notice fails fast and silent",
+          "source": {
+            "feature": "cli-self-update",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-06-30T09:45:19Z"
+        },
+        {
+          "name": "brownfield-onboarding-docs",
+          "summary": "Document the brownfield onboarding path (analyze, synthesize, enrich, confirm) in new-project-guide.md",
+          "source": {
+            "feature": "brownfield-setup-detection",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-29T17:42:52Z"
+        },
+        {
+          "name": "brownfield-manifest-breadth",
+          "summary": "Extend HasSource manifest list to pom.xml, composer.json, build.gradle for broader ecosystem coverage",
+          "source": {
+            "feature": "brownfield-setup-detection",
+            "role": "feature-specialist"
+          },
+          "deferredAt": "2026-06-29T17:46:35Z"
+        },
+        {
+          "name": "unit-test-mcp-server-in-memory-transport",
+          "summary": "Cover runMcpServe/mcpConnectSelf via an in-memory MCP transport",
+          "source": {
+            "feature": "coverage-hardening",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T08:12:27Z"
+        },
+        {
+          "name": "fault-inject-atomic-write-error-paths",
+          "summary": "Cover WriteBytesAtomic and low-level I/O error branches via fault injection",
+          "source": {
+            "feature": "coverage-hardening",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T08:12:27Z"
+        },
+        {
+          "name": "unit-test-vuln-tool-external-seam",
+          "summary": "Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam",
+          "source": {
+            "feature": "coverage-hardening",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T08:12:27Z"
+        },
+        {
+          "name": "aider-local-provider-wiring",
+          "summary": "Point the Aider/Claude harness at a local endpoint; local block currently wires only OpenCode's provider surface",
+          "source": {
+            "feature": "local-harness-support",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T14:45:14Z"
+        },
+        {
+          "name": "workflow-save-atomic-write",
+          "summary": "workflow.Save uses plain os.WriteFile; a crash mid-write can truncate .workflow/<feature>.json — make it write-temp-then-rename",
+          "source": {
+            "feature": "workflow-revise-loop",
+            "role": "validation-specialist"
+          },
+          "deferredAt": "2026-06-30T17:52:51Z"
+        }
       ]
     }
   ],

@@ -77,3 +77,10 @@
 - Promoted from Backlog: roadmap-crud-add-remove (source=roadmap-editing-suite-design/big-thinker, deferredAt=2026-07-01T13:32:50Z)
 - Promoted from Backlog: roadmap-edit-move (source=roadmap-editing-suite-design/big-thinker, deferredAt=2026-07-01T13:32:50Z)
 - Promoted from Backlog: roadmap-phase-ops (source=roadmap-editing-suite-design/big-thinker, deferredAt=2026-07-01T13:32:50Z)
+- Finalized draft in place: merge-truthful-delivery
+- Finalized draft in place: truthful-validators
+- Finalized draft in place: guided-by-default
+- Finalized draft in place: coupled-steps-relaxation
+- Finalized draft in place: token-diet
+- Finalized draft in place: roadmap-state-hygiene
+- Finalized draft in place: smoke-verification

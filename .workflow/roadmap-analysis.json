@@ -48,6 +48,13 @@
     {"name":"g2-multi-language-import-graph"},
     {"name":"roadmap-crud-add-remove"},
     {"name":"roadmap-edit-move"},
-    {"name":"roadmap-phase-ops"}
+    {"name":"roadmap-phase-ops"},
+    {"name":"merge-truthful-delivery"},
+    {"name":"truthful-validators"},
+    {"name":"guided-by-default"},
+    {"name":"coupled-steps-relaxation"},
+    {"name":"token-diet"},
+    {"name":"roadmap-state-hygiene"},
+    {"name":"smoke-verification"}
   ]
 }
