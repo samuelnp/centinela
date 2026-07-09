@@ -23,7 +23,7 @@ func renderDirtyPhase(raw json.RawMessage) (string, error) {
 	var buf bytes.Buffer
 	buf.WriteString("{")
 	first := true
-	for _, key := range []string{"name"} {
+	for _, key := range []string{"name", "note"} {
 		if v, ok := phase[key]; ok {
 			writePhaseKey(&buf, key, v, &first)
 		}
