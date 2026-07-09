@@ -41,10 +41,20 @@ func runMerge(_ *cobra.Command, args []string) error {
 	if mergeContinue {
 		return runMergeContinue(feature)
 	}
-	if conflicts := worktree.DetectSpecConflicts(".", feature); len(conflicts) > 0 {
+	// Resolve the primary working tree ONCE and merge there. From inside a
+	// feature worktree, repo="." would make `git merge` self-no-op and
+	// fabricate success (2048-rust retrospective, WS1.1). Never guess.
+	repo, err := worktree.PrimaryTree(".")
+	if err != nil {
+		return err
+	}
+	if worktree.IsInsideWorktree(".") {
+		fmt.Println(ui.RenderStep("Merging in primary working tree", repo))
+	}
+	if conflicts := worktree.DetectSpecConflicts(repo, feature); len(conflicts) > 0 {
 		return fmt.Errorf("spec conflicts block merge: %s", worktree.FormatSpecConflicts(conflicts))
 	}
-	outcome, err := worktree.Merge(".", feature, runValidateForMerge)
+	outcome, err := worktree.Merge(repo, feature, runValidateForMerge)
 	if err != nil {
 		return err
 	}
@@ -53,7 +63,7 @@ func runMerge(_ *cobra.Command, args []string) error {
 	}
 	// A clean merge supersedes any stale pending marker from a prior
 	// stalled attempt, so the hook stops re-emitting its directive.
-	if err := worktree.ClearPending(".", feature); err != nil {
+	if err := worktree.ClearPending(repo, feature); err != nil {
 		return err
 	}
 	// Refresh the portal once per delivery. Best-effort: docgen needs
@@ -62,8 +72,7 @@ func runMerge(_ *cobra.Command, args []string) error {
 	if err := docsPortalRegen(); err != nil {
 		fmt.Printf("notice: portal regen skipped: %v\n", err)
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Merged %q into main and removed its worktree.", feature)))
-	return nil
+	return reportMergeSuccess(outcome)
 }
 
 func runValidateForMerge(_ string) (bool, string) {
