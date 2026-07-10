@@ -897,6 +897,19 @@
     "createdAt": "2026-06-30T09:52:35Z"
   },
   {
+    "id": "c3fd0f0a354b5752",
+    "feature": "merge-truthful-delivery",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Case:** EC-01 Hardcoded \"main\" in success wording when the primary branch is renamed",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/merge-truthful-delivery-edge-cases.md",
+    "createdAt": "2026-07-10T11:43:30Z"
+  },
+  {
     "id": "c4212237ec169c57",
     "feature": "fix-init-managed-sync-drift",
     "step": "tests",

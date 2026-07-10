@@ -17,6 +17,10 @@ type MergeOutcome struct {
 	ConflictedPaths []string
 	RefAdvanced     bool
 	AlreadyMerged   bool
+	// TargetBranch is the branch checked out in the primary tree — the branch
+	// the feature actually merged into. Success wording must use it: a repo
+	// whose primary branch is not "main" would otherwise get a lying line.
+	TargetBranch string
 }
 
 // ValidateRunner runs `centinela validate` (or equivalent) against the merged
@@ -49,6 +53,7 @@ func Merge(repo, feature string, run ValidateRunner) (MergeOutcome, error) {
 	if current == out.Branch {
 		return out, fmt.Errorf("primary working tree %s has %q checked out — cannot merge a branch into itself", repo, out.Branch)
 	}
+	out.TargetBranch = current
 	before, err := headSHA(repo)
 	if err != nil {
 		return out, err

@@ -17,9 +17,9 @@ func reportMergeSuccess(o worktree.MergeOutcome) error {
 		return fmt.Errorf("merge of %q finished without verified ref advance — refusing to claim success", o.Feature)
 	}
 	if o.AlreadyMerged {
-		fmt.Println(ui.RenderSuccess(fmt.Sprintf("Branch %q was already merged into main — worktree cleaned up, nothing new delivered.", o.Feature)))
+		fmt.Println(ui.RenderSuccess(fmt.Sprintf("Branch %q was already merged into %s — worktree cleaned up, nothing new delivered.", o.Feature, o.TargetBranch)))
 		return nil
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Merged %q into main and removed its worktree.", o.Feature)))
+	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Merged %q into %s and removed its worktree.", o.Feature, o.TargetBranch)))
 	return nil
 }

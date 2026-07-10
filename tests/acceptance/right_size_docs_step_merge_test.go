@@ -42,7 +42,13 @@ func TestRDSPortalRegenFailureDoesNotFailMerge(t *testing.T) {
 	if !strings.Contains(tail, "notice: portal regen skipped") {
 		t.Fatal("a regen failure must emit a notice rather than fail the merge")
 	}
-	if strings.Contains(tail[:strings.Index(tail, "RenderSuccess")], "return err") {
+	// Success reporting now lives in reportMergeSuccess (merge_report.go);
+	// nothing between the regen call and that hand-off may return the error.
+	end := strings.Index(tail, "reportMergeSuccess")
+	if end < 0 {
+		t.Fatal("merge.go must hand off to reportMergeSuccess after portal regen")
+	}
+	if strings.Contains(tail[:end], "return err") {
 		t.Fatal("a regen failure must not return an error from the merge")
 	}
 }
