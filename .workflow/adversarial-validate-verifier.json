@@ -1,0 +1,37 @@
+{
+  "feature": "adversarial-validate-verifier",
+  "startedAt": "2026-07-28T16:11:25.581482Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-28T16:30:34Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/adversarial-validate-verifier"
+}
