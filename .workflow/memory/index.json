@@ -39,6 +39,19 @@
     "createdAt": "2026-06-30T09:36:29Z"
   },
   {
+    "id": "094b42550a621003",
+    "feature": "adversarial-validate-verifier",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Grounded SAFE verdict, matching revision/digest, advances `complete` —",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/adversarial-validate-verifier-edge-cases.md",
+    "createdAt": "2026-07-28T20:47:57Z"
+  },
+  {
     "id": "0cd0b9d5a3adf24f",
     "feature": "security-gate",
     "step": "tests",
