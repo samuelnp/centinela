@@ -55,6 +55,7 @@
     {"name":"coupled-steps-relaxation"},
     {"name":"token-diet"},
     {"name":"roadmap-state-hygiene"},
-    {"name":"smoke-verification"}
+    {"name":"smoke-verification"},
+    {"name":"adversarial-validate-verifier"}
   ]
 }

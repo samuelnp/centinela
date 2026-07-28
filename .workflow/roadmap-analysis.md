@@ -84,3 +84,4 @@
 - Finalized draft in place: token-diet
 - Finalized draft in place: roadmap-state-hygiene
 - Finalized draft in place: smoke-verification
+- Finalized draft in place: adversarial-validate-verifier
