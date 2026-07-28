@@ -7,7 +7,13 @@ import (
 )
 
 func ValidateStep(feature, step string, uiPaths []string) error {
-	roles := RequiredRolesForFeature(feature, step)
+	return ValidateRoles(feature, step, RequiredRolesForFeature(feature, step), uiPaths)
+}
+
+// ValidateRoles checks an EXPLICIT role set, so a caller holding state the
+// policy layer cannot see (e.g. a workflow's pinned validate contract) can
+// substitute the legacy role set without forking the validation itself.
+func ValidateRoles(feature, step string, roles []Role, uiPaths []string) error {
 	if len(roles) == 0 {
 		return nil
 	}

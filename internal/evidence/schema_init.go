@@ -17,7 +17,7 @@ func stepForRole(role Role) string {
 		return "code"
 	case orchestration.RoleQASeniorEngineer:
 		return "tests"
-	case orchestration.RoleValidationSpec, Role("gatekeeper"), Role("production-readiness"):
+	case orchestration.RoleValidationSpec, orchestration.RoleGatekeeper, Role("production-readiness"):
 		return "validate"
 	case orchestration.RoleDocsSpecialist:
 		return "docs"
@@ -39,7 +39,7 @@ func handoffForRole(role Role) string {
 		return string(orchestration.RoleQASeniorEngineer)
 	case orchestration.RoleQASeniorEngineer:
 		return string(orchestration.RoleValidationSpec)
-	case orchestration.RoleValidationSpec:
+	case orchestration.RoleGatekeeper, orchestration.RoleValidationSpec:
 		return string(orchestration.RoleDocsSpecialist)
 	case orchestration.RoleDocsSpecialist, orchestration.RoleMergeSteward:
 		return "complete"

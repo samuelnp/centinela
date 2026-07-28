@@ -18,7 +18,7 @@ var companionHeaders = map[Role][]string{
 	orchestration.RoleQASeniorEngineer: {"Test Inventory", "Coverage Gaps", "Acceptance Wiring", "Handoff"},
 	orchestration.RoleValidationSpec:   {"Gates Run", "Synthesis", "Decision"},
 	orchestration.RoleDocsSpecialist:   {"KB Pages", "project-docs Entries", "Outcome"},
-	Role("gatekeeper"):                 {"Analyzed Specs", "Findings", "Recommendation"},
+	orchestration.RoleGatekeeper:       {"Inputs Read", "Analyzed Specs", "Refutation Attempts", "Commands Run", "Findings", "Recommendation"},
 	Role("production-readiness"):       {"Files Reviewed", "Findings", "Recommendation"},
 }
 

@@ -27,6 +27,7 @@ func TestRunCompleteDoneAndValidatePath(t *testing.T) {
 	}
 
 	wf2 := workflow.New("f2")
+	wf2.ValidateContract = "" // legacy in-flight workflow: existence-only gate
 	wf2.CurrentStep = "validate"
 	wf2.Steps["plan"] = workflow.StepState{Status: "done"}
 	wf2.Steps["code"] = workflow.StepState{Status: "done"}

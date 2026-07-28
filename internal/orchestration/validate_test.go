@@ -20,8 +20,8 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	if len(RequiredRoles("plan")) != 2 || len(RequiredRoles("code")) != 1 || len(RequiredRoles("docs")) != 1 || len(RequiredRoles("validate")) != 1 {
 		t.Fatal("unexpected role mapping")
 	}
-	if RequiredRoles("validate")[0] != RoleValidationSpec {
-		t.Fatal("expected validation-specialist for validate step")
+	if RequiredRoles("validate")[0] != RoleGatekeeper {
+		t.Fatal("expected gatekeeper for validate step")
 	}
 	if err := ValidateStep("f", "plan", nil); err == nil {
 		t.Fatal("expected missing evidence failure")
@@ -41,7 +41,7 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	if err := ValidateStep("f", "validate", nil); err == nil {
 		t.Fatal("expected missing validate evidence failure")
 	}
-	writeEvidence(t, "f", "validate", RoleValidationSpec, false)
+	writeEvidence(t, "f", "validate", RoleGatekeeper, false)
 	if err := ValidateStep("f", "validate", nil); err != nil {
 		t.Fatalf("expected validate evidence success: %v", err)
 	}

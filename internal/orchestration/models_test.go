@@ -18,7 +18,7 @@ func TestDefaultTierForRole_Defaults(t *testing.T) {
 		{RoleDocsSpecialist, TierFast},
 		{RoleValidationSpec, TierFast},
 		{RoleMergeSteward, TierReasoning},
-		{Role("gatekeeper"), TierFast},
+		{RoleGatekeeper, TierReasoning},
 		{Role("edge-case-tester"), TierFast},
 	}
 	for _, tc := range cases {

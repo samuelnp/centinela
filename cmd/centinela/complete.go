@@ -47,16 +47,8 @@ func runComplete(_ *cobra.Command, args []string) error {
 	current := wf.CurrentStep
 	model := resolveEmitModel(wf, cfg)
 
-	// Validate step requires all gates to pass before advancing. Verification is
-	// CONSTANT across every profile — NO profile branch belongs here; profiles
-	// scale process, never proof.
 	if current == "validate" {
-		if err := executeValidation(); err != nil {
-			telemetry.RecordCompleteRejected(cfg, feature, current, "gates", model)
-			return err
-		}
-		if err := runClaimVerification(feature, current, model, cfg); err != nil {
-			telemetry.RecordCompleteRejected(cfg, feature, current, "verify", model)
+		if err := runValidateGates(feature, current, model, cfg); err != nil {
 			return err
 		}
 	}

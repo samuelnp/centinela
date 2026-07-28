@@ -9,7 +9,15 @@ const (
 	RoleUXUISpecialist   Role = "ux-ui-specialist"
 	RoleQASeniorEngineer Role = "qa-senior"
 	RoleDocsSpecialist   Role = "documentation-specialist"
-	RoleValidationSpec   Role = "validation-specialist"
+	// RoleGatekeeper is the validate step's adversarial verifier: a fresh
+	// context whose task is to refute the completion claim. It replaced
+	// RoleValidationSpec at validate; the slug is unchanged because
+	// `.workflow/<feature>-gatekeeper.md` is load-bearing across the codebase.
+	RoleGatekeeper Role = "gatekeeper"
+	// RoleValidationSpec is retained for LEGACY workflows only (pre
+	// adversarial-v1 evidence, config override keys, agent emitters). It is
+	// no longer required by any step.
+	RoleValidationSpec Role = "validation-specialist"
 	// RoleMergeSteward runs out-of-band on `centinela merge <feature>` and is
 	// not part of the 5-step workflow. It does not appear in RequiredRoles
 	// for any step but it MUST validate as evidence when the merger writes
@@ -28,7 +36,7 @@ func RequiredRoles(step string) []Role {
 	case "docs":
 		return []Role{RoleDocsSpecialist}
 	case "validate":
-		return []Role{RoleValidationSpec}
+		return []Role{RoleGatekeeper}
 	default:
 		return nil
 	}

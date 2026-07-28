@@ -107,7 +107,26 @@ rejected and rewritten.
 - `edgeCases` MUST be non-empty.
 - `handoffTo` → `validation-specialist`.
 
-### validation-specialist (step: validate)
+### gatekeeper (step: validate)
+
+The validate step's adversarial verifier. It is the only role
+`RequiredRolesForFeature(feature, "validate")` returns.
+
+- `outputs` MUST include `.workflow/<feature>-gatekeeper.md`.
+- That report carries the machine-readable grounding record the complete
+  gate enforces: a fenced ```` ```json centinela:verification ```` block
+  with the `revision` and `treeDigest` that were verified and a non-empty
+  `commands` array proving `centinela validate` was actually run. See
+  [gatekeeper-prompt.md](gatekeeper-prompt.md). The block lives in the
+  Markdown report, NOT in this JSON companion — the evidence schema is
+  unchanged.
+- `handoffTo` → `documentation-specialist`.
+
+### validation-specialist (step: validate) — LEGACY
+
+Retained for workflows started before the `adversarial-v1` validate
+contract. No step requires this role any more; new features write
+gatekeeper evidence instead.
 
 - Only the global rules apply (no role-specific output type).
 - `outputs` typically include `.workflow/<feature>-gatekeeper.md` and any

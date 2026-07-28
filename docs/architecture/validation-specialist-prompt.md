@@ -1,6 +1,13 @@
 <!-- centinela:doc-version=1 template=docs/architecture/validation-specialist-prompt.md -->
 # Validation-Specialist Subagent — Invocation Guide
 
+> **DEPRECATED — legacy workflows only.** Features started under the
+> `adversarial-v1` validate contract do NOT use this role; their validate
+> step is verified by the adversarial verifier in
+> [gatekeeper-prompt.md](gatekeeper-prompt.md), which refutes rather than
+> synthesises. This guide remains for workflows already in flight when that
+> contract shipped (empty `validateContract` in `.workflow/<feature>.json`).
+
 ## Purpose
 
 Use this subagent during the `validate` step to orchestrate the

@@ -12,21 +12,24 @@ const (
 	TierFast      Tier = "fast"
 )
 
-// defaultTierForRole encodes the locked role→tier defaults. The 7 step roles
-// are emitted by the orchestration hook; the out-of-band roles (gatekeeper,
-// edge-case-tester, merge-steward) are documented here for completeness but are
-// not injected by the directive in v1.
+// defaultTierForRole encodes the locked role→tier defaults. The step roles are
+// emitted by the orchestration hook; the remaining out-of-band roles
+// (edge-case-tester, merge-steward) are documented here for completeness but
+// are not injected by the directive in v1.
 var defaultTierForRole = map[Role]Tier{
-	RoleBigThinker:       TierReasoning,
-	RoleSeniorEngineer:   TierReasoning,
+	RoleBigThinker:     TierReasoning,
+	RoleSeniorEngineer: TierReasoning,
+	// Refutation is the hardest judgment in the workflow, and the verifier now
+	// replaces the validation-specialist context outright, so the net subagent
+	// spend still drops (D7).
+	RoleGatekeeper:       TierReasoning,
 	RoleFeatureSpecial:   TierBalanced,
 	RoleQASeniorEngineer: TierBalanced,
 	RoleUXUISpecialist:   TierBalanced,
 	RoleDocsSpecialist:   TierFast,
 	RoleValidationSpec:   TierFast,
 	RoleMergeSteward:     TierReasoning,
-	// Out-of-band roles not declared in policy.go as constants.
-	Role("gatekeeper"):       TierFast,
+	// Out-of-band role not declared in policy.go as a constant.
 	Role("edge-case-tester"): TierFast,
 }
 
@@ -74,7 +77,7 @@ func AllowedRoleSlugs() []string {
 		string(RoleDocsSpecialist),
 		string(RoleValidationSpec),
 		string(RoleMergeSteward),
-		"gatekeeper",
+		string(RoleGatekeeper),
 		"edge-case-tester",
 	}
 }

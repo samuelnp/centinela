@@ -142,7 +142,7 @@ Before advancing, Centinela validates required artifacts:
 | plan | `docs/features/<feature>.md`, `docs/plans/<feature>.md`, and at least one `specs/*.feature` |
 | code | none (architecture rules apply during implementation) |
 | tests | test files in `tests/unit` or `tests/integration`, executable acceptance files in `tests/acceptance`, at least one acceptance execution command in `[validate] commands`, and `.workflow/<feature>-edge-cases.md` |
-| validate | gatekeeper report at `.workflow/<feature>-gatekeeper.md` and `centinela validate` pass |
+| validate | gatekeeper report at `.workflow/<feature>-gatekeeper.md` — with a non-empty commands-run record and a current verified revision — and `centinela validate` pass |
 | docs | `.workflow/<feature>-documentation-specialist.md`, `.workflow/<feature>-documentation-specialist.json`, and `docs/project-docs/index.html` |
 
 In strict orchestration mode, `plan` evidence from `big-thinker` and

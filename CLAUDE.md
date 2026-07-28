@@ -40,7 +40,7 @@ centinela validate            # Run gate checks + validate commands
 | plan | Feature brief in `docs/features/` + plan file in `docs/plans/` + `.feature` spec in `specs/` |
 | code | Nothing — architecture rules govern this |
 | tests | Test suite files in `tests/unit/` or `tests/integration/` + executable acceptance artifacts in `tests/acceptance/` + `validate.commands` includes acceptance execution + `.workflow/<feature>-edge-cases.md` |
-| validate | Gatekeeper report at `.workflow/<feature>-gatekeeper.md` + `centinela validate` passes |
+| validate | Verifier report at `.workflow/<feature>-gatekeeper.md` (grounded: commands-run record + current verified revision) + `centinela validate` passes |
 | docs | `.workflow/<feature>-documentation-specialist.md` + `.workflow/<feature>-documentation-specialist.json` + `docs/project-docs/index.html` |
 
 **Hooks auto-inject** `[workflow: <feature> | step: <step> | X/5]` after every file write.
@@ -49,9 +49,12 @@ centinela validate            # Run gate checks + validate commands
 
 See PROJECT.md → Folder Structure.
 
-## Gatekeeper Subagent
+## Adversarial Verifier Subagent
 
 Invoke via Agent tool with the prompt in [gatekeeper-prompt.md](docs/architecture/gatekeeper-prompt.md).
+Spawn it in a FRESH context and pass ONLY the feature slug and file paths — never a
+summary of the implementation. It must run `centinela validate` and the test suite
+itself and record them, then run `centinela artifact stamp <feature>` last.
 Save report to `.workflow/<feature>-gatekeeper.md`. Required before completing `validate` step.
 
 ## Gate Keepers Checklist
@@ -61,7 +64,8 @@ Save report to `.workflow/<feature>-gatekeeper.md`. Required before completing `
 - [ ] `centinela validate` passes (lint + type check + full test suite)
 - [ ] No business logic in the outer layer (definition per archetype)
 - [ ] i18n keys present in all locales from PROJECT.md → Locales
-- [ ] Gatekeeper report: SAFE or WARNING
+- [ ] Verifier verdict: SAFE or WARNING (CRITICAL blocks), with a non-empty
+      commands-run record and a current verified revision
 - [ ] Production readiness: PASS or WARNING (if `gates.production_readiness = true`)
 
 ## Production Readiness Subagent
@@ -95,14 +99,14 @@ Save to `.workflow/<feature>-production-readiness.md`. Required when gate is ena
 | Artifact templates | [artifact-templates.md](docs/architecture/artifact-templates.md) |
 | i18n conventions | [i18n-strategy.md](docs/architecture/i18n-strategy.md) |
 | Workflow enforcement | [workflow-enforcement.md](docs/architecture/workflow-enforcement.md) |
-| Gatekeeper prompt | [gatekeeper-prompt.md](docs/architecture/gatekeeper-prompt.md) |
+| Validate agent — adversarial verifier | [gatekeeper-prompt.md](docs/architecture/gatekeeper-prompt.md) |
 | Orchestration evidence contract | [evidence-contract.md](docs/architecture/evidence-contract.md) |
 | Plan agent — big-thinker | [big-thinker-prompt.md](docs/architecture/big-thinker-prompt.md) |
 | Plan agent — feature-specialist | [feature-specialist-prompt.md](docs/architecture/feature-specialist-prompt.md) |
 | Code agent — senior-engineer | [senior-engineer-prompt.md](docs/architecture/senior-engineer-prompt.md) |
 | Code agent — ux-ui-specialist | [ux-ui-specialist-prompt.md](docs/architecture/ux-ui-specialist-prompt.md) |
 | Tests agent — qa-senior | [qa-senior-prompt.md](docs/architecture/qa-senior-prompt.md) |
-| Validate agent — validation-specialist | [validation-specialist-prompt.md](docs/architecture/validation-specialist-prompt.md) |
+| Validate agent — validation-specialist (legacy) | [validation-specialist-prompt.md](docs/architecture/validation-specialist-prompt.md) |
 | Example walkthrough | [example-feature-walkthrough.md](docs/architecture/example-feature-walkthrough.md) |
 | New project setup | [new-project-guide.md](docs/architecture/new-project-guide.md) |
 
