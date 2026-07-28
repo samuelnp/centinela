@@ -1,0 +1,1 @@
+- feat: recast the validate-step gatekeeper as a fresh-context adversarial verifier — refutation stance, mandatory self-run gates recorded in a machine-readable verification block, revision+tree-digest freshness binding enforced at complete, validation-specialist dropped for new workflows (legacy contract preserved)
