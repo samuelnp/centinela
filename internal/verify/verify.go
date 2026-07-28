@@ -24,6 +24,12 @@ type Deps struct {
 	// PriorTestRun, when non-nil, is reused by the tests-pass check instead of
 	// re-running the suite (the complete gate already ran it once).
 	PriorTestRun *RunOutcome
+	// Roles, when non-nil, are the roles to verify instead of the step's
+	// policy default. Callers that can see a workflow's pinned contract MUST
+	// pass it (workflow.RequiredEvidenceRoles): the policy layer is
+	// contract-blind, so a legacy workflow's validate claims would otherwise
+	// be looked up under the wrong role and silently go unverified.
+	Roles []orchestration.Role
 }
 
 // Verify re-derives ground truth for the claims in the feature's evidence for
@@ -34,7 +40,10 @@ func Verify(feature, step string, cfg *config.Config, deps Deps) VerificationRes
 		deps.Load = evidence.Read
 	}
 	res := VerificationResult{Feature: feature}
-	roles := orchestration.RequiredRoles(step)
+	roles := deps.Roles
+	if roles == nil {
+		roles = orchestration.RequiredRoles(step)
+	}
 	for _, role := range roles {
 		ev, err := deps.Load(feature, role)
 		if err != nil || ev == nil {

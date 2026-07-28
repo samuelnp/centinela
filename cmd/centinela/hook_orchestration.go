@@ -38,7 +38,10 @@ func runHookOrchestration(_ *cobra.Command, _ []string) error {
 		if wf.OrchestrationMode != workflow.StrictOrchestrationMode {
 			continue
 		}
-		roles := orchestration.RequiredRolesForFeature(wf.Feature, wf.CurrentStep)
+		// Contract-aware: the directive must name the SAME roles `complete`
+		// enforces, or a legacy workflow is told to write evidence the gate
+		// will then refuse.
+		roles := workflow.RequiredEvidenceRoles(wf.Feature, wf.CurrentStep)
 		if len(roles) == 0 {
 			continue
 		}
@@ -46,7 +49,9 @@ func runHookOrchestration(_ *cobra.Command, _ []string) error {
 		fmt.Printf("CENTINELA DIRECTIVE: orchestrator only for %q/%q; delegate to [%s].\n", wf.Feature, wf.CurrentStep, strings.Join(names, ", "))
 		fmt.Printf("Required evidence before centinela complete %s: %s\n", wf.Feature, strings.Join(files, ", "))
 		fmt.Printf("CENTINELA DIRECTIVE: model reference: %s\n", orchestration.ModelReference(tiers))
-		if contract := orchestration.DelegationContract(wf.CurrentStep); contract != "" {
+		// Only a workflow pinned to adversarial-v1 is told to spawn the
+		// verifier; a legacy one would be pointed at a role its gate refuses.
+		if contract := orchestration.DelegationContract(wf.CurrentStep); contract != "" && wf.UsesAdversarialVerifier() {
 			fmt.Printf("CENTINELA DIRECTIVE: %s\n", contract)
 		}
 	}

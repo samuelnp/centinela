@@ -9,14 +9,16 @@ import "fmt"
 // specs/*.feature and must stay deterministic (see analyzedSpecsList);
 // "Inputs Read" is the verifier's own account of what it opened.
 //
-// The verification block ships with an EMPTY commands array on purpose: a
-// freshly scaffolded stub must FAIL the gate until a verifier fills it and
+// The stub ships **Status:** CRITICAL and an EMPTY commands array on purpose:
+// a freshly scaffolded stub must FAIL the gate until a verifier fills it and
 // runs `centinela artifact stamp`. Fail-closed is the whole point — a stub
-// that passed would reintroduce the dead-subagent hole.
+// that passed would reintroduce the dead-subagent hole. CRITICAL rather than
+// SAFE because the delivery composer reads the RAW verdict with no Assess, so
+// a SAFE stub would surface there as a passing verdict.
 func gatekeeperBody(feature string) []byte {
 	return []byte(fmt.Sprintf(`### Adversarial Verifier Report: %s
 **Date:** %s
-**Status:** SAFE
+**Status:** CRITICAL
 
 #### Inputs Read
 - %s

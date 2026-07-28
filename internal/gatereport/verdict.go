@@ -30,6 +30,10 @@ func Verdict(report string) string {
 	return ""
 }
 
+// separators lets a legend line ("SAFE | WARNING | CRITICAL") resolve to its
+// leading token without treating the legend as three candidate verdicts.
+var separators = strings.NewReplacer("|", " ", ",", " ")
+
 // Normalize maps the accepted aliases onto the canonical vocabulary. An
 // unknown or empty token normalizes to "" — never to a passing verdict.
 func Normalize(verdict string) string {
@@ -43,14 +47,18 @@ func Normalize(verdict string) string {
 	}
 }
 
-// firstVerdict returns the first known verdict token appearing in s by word
-// position (treating | and , as separators), or "" when none is present.
+// firstVerdict matches the FIRST token of s and nothing else. Scanning further
+// would fail open on the most natural English hedge a failing verifier writes:
+// "NOT SAFE" and "not safe" must be unparseable (⇒ blocked), never SAFE.
 func firstVerdict(s string) string {
-	for _, w := range strings.Fields(strings.NewReplacer("|", " ", ",", " ").Replace(s)) {
-		for _, v := range knownVerdicts {
-			if w == v {
-				return v
-			}
+	fields := strings.Fields(separators.Replace(strings.TrimLeft(s, "*_` \t")))
+	if len(fields) == 0 {
+		return ""
+	}
+	token := strings.Trim(fields[0], "*_`.,;:")
+	for _, v := range knownVerdicts {
+		if token == v {
+			return v
 		}
 	}
 	return ""

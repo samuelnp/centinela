@@ -13,9 +13,16 @@ func TestVerdictTokens(t *testing.T) {
 		"## Status: SAFE":                       "SAFE",
 		"**Status:** safe":                      "SAFE",
 		"**Status:** SAFE | WARNING | CRITICAL": "SAFE",
-		"**Status:** mostly fine I think":       "",
-		"no status line here, all is warning":   "",
-		"":                                      "",
+		"**Status:** SAFE.":                     "SAFE",
+		"**Status:** **CRITICAL**":              "CRITICAL",
+		// The natural English hedge a failing verifier writes MUST NOT read as
+		// a pass: only the FIRST token is considered.
+		"**Status:** NOT SAFE":                "",
+		"**Status:** not safe":                "",
+		"**Status:** probably SAFE":           "",
+		"**Status:** mostly fine I think":     "",
+		"no status line here, all is warning": "",
+		"":                                    "",
 	}
 	for report, want := range cases {
 		if got := Verdict(report); got != want {

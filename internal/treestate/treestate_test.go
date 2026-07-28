@@ -29,7 +29,7 @@ func TestStampReadsRevisionAndDigest(t *testing.T) {
 	if snap.Revision != "9f2c1ab" {
 		t.Fatalf("revision = %q", snap.Revision)
 	}
-	if snap.Digest != Digest(" M internal/x.go\n", srcDiff) {
+	if snap.Digest != Digest(" M internal/x.go\n", srcDiff, nil) {
 		t.Fatalf("digest = %q", snap.Digest)
 	}
 }

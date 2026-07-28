@@ -10,14 +10,17 @@ import (
 // excluded is the output directory of verification, never its input (D3a).
 const excluded = ".workflow/"
 
-// Digest reduces `git status --porcelain=v1` and `git diff HEAD` to a stable
-// content hash, dropping every entry that only touches .workflow/. Status
-// lines are sorted so the digest is order-independent.
-func Digest(status, diff string) string {
+// Digest reduces `git status --porcelain=v1`, `git diff HEAD` and the
+// per-file hashes of untracked content to one stable value, dropping every
+// entry that only touches .workflow/. Status lines are sorted so the digest is
+// order-independent. This function stays pure: untracked hashes are computed
+// by the caller (see HashUntracked) and passed in.
+func Digest(status, diff string, untracked []string) string {
 	lines := filterStatus(status)
 	sort.Strings(lines)
-	sum := sha256.Sum256([]byte(strings.Join(lines, "\n") + "\x00" + filterDiff(diff)))
-	return fmt.Sprintf("sha256:%x", sum)
+	payload := strings.Join(lines, "\n") + "\x00" + filterDiff(diff) +
+		"\x00" + strings.Join(untracked, "\n")
+	return fmt.Sprintf("sha256:%x", sha256.Sum256([]byte(payload)))
 }
 
 // filterStatus drops porcelain entries whose every path lies under .workflow/.

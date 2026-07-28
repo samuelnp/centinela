@@ -4,6 +4,9 @@
 Slices 1–6 of `docs/plans/adversarial-validate-verifier.md` implemented.
 Slice 7 (acceptance e2e) belongs to the tests step and was not written.
 
+**Round 2** — a fresh-context adversarial verifier returned CRITICAL. All six
+findings are fixed; see "Verifier findings closed" below.
+
 ## Files Touched
 
 | Path | Reason |
@@ -74,6 +77,30 @@ Slice 7 (acceptance e2e) belongs to the tests step and was not written.
 - **`Analyzed Specs` kept as its own stub section.** It is mechanically
   derived from `specs/*.feature` and must stay deterministic, so it was not
   folded into the verifier-authored `Inputs Read`.
+
+## Verifier findings closed (round 2)
+
+| # | Finding | Fix |
+|---|---------|-----|
+| 1 | **Verdict fail-open.** `firstVerdict` scanned every word for the first RECOGNIZED token, so `**Status:** NOT SAFE` and `not safe` both read as SAFE. | Match ONLY `Fields()[0]` after separator + emphasis normalization, trimming trailing punctuation. `NOT SAFE`/`not safe`/`probably SAFE` ⇒ `""` ⇒ blocked. |
+| 2 | **Digest blind to untracked content.** `git status --porcelain=v1` collapses an untracked dir to one line, so an in-place fix landing as a new package left the digest byte-identical. | `--untracked-files=all` plus a per-file content hash for every `??` path outside `.workflow/` (`internal/treestate/untracked.go`). `Digest` stays pure — hashes are passed in. Gitignored paths remain outside the digest BY DESIGN, stated in the package doc. |
+| 3 | **Role-resolution divergence.** The hook used contract-blind `orchestration.RequiredRolesForFeature` while `complete` used the contract-aware resolver, so a legacy strict workflow was told to write gatekeeper evidence and then blocked for missing validation-specialist evidence. | Exported `workflow.RequiredEvidenceRoles(feature, step)` and routed the hook through it. The adversarial delegation contract line is now printed only for workflows actually pinned to `adversarial-v1`. |
+| 4 | **`hasPassingValidate` exact-match** refused an honestly recorded worktree-built binary. | Accept `len(argv)==2 && argv[1]=="validate"` when `basename(argv[0])` has prefix `centinela`. Prompt + mirror now tell verifiers to name scratch binaries `centinela-<suffix>`. |
+| 5 | **Stub failed open at the raw-verdict layer** — the delivery composer reads `Verdict` with no `Assess`, so a `SAFE` stub surfaced as a passing verdict. | The stub ships `**Status:** CRITICAL`. `Assess` now reports the grounding failure ALONGSIDE the CRITICAL finding, so the spec's "no commands-run record" message survives for a scaffolded stub. |
+| 6 | **Acceptance seeding gap** — every AVV scenario ran non-strict, the mode this repo does not use, which is why #3 survived. | New `adversarial_validate_verifier_strict_{helper,}_test.go`: three strict scenarios (legacy, adversarial, legacy-evidence-dodge). They extract the evidence paths the DIRECTIVE names and assert the GATE accepts exactly that set, so the two resolvers can never drift apart again. |
+
+Also: `centinela roadmap generate` run — `roadmap_drift` is now ✓.
+
+### One more instance of finding 3's root cause, found while fixing it
+
+`internal/verify.Verify` also resolved roles through contract-blind
+`orchestration.RequiredRoles(step)`. A test written to cover the
+claim-verification branch demonstrated the consequence: for a LEGACY workflow
+the validate step's claims were looked up under `gatekeeper`, found nothing,
+and went entirely unverified ("no claims to verify"). Fixed with an additive
+`verify.Deps.Roles` seam (nil ⇒ today's policy default), passed from
+`complete_verify.go` and `verify.go`. This keeps `internal/verify` free of any
+dependency on `internal/workflow`.
 
 ## Deferred Findings
 

@@ -70,8 +70,18 @@ Run, yourself, in this order:
    `[validate] commands` entry; do NOT re-run those individually.
 2. The project test suite (e.g. `go test ./...`).
 
-Record EVERY command you ran — argv, exit code, duration — in the
-verification block below. Budget note: these runs are additive to the runs
+Record EVERY command you ran — argv, exit code, duration — VERBATIM in the
+verification block below. Never record an argv you did not run.
+
+The installed `centinela` on PATH lags the branch and will not have
+subcommands the branch adds, so build a scratch binary from the worktree:
+`go build -o /tmp/centinela-verify ./cmd/centinela`. **Name it
+`centinela-<suffix>`.** The gate accepts any path whose basename starts with
+`centinela` (so `/tmp/centinela-verify validate` counts), and refuses one
+that does not (`/tmp/cent-verify validate` does NOT count) — that way your
+recorded argv stays truthful and still satisfies the gate.
+
+Budget note: these runs are additive to the runs
 `centinela complete` performs, and `verify.timeout_seconds` bounds a single
 verification command, not total wall clock. Run long suites in the
 background and poll rather than blocking.
@@ -155,7 +165,7 @@ following hold. None of them fail open.
 | A parseable `**Status:**` first token | A narrated report with no verdict |
 | Status is not CRITICAL (nor BLOCKING/UNSAFE) | A refuted feature shipping |
 | A non-empty `commands` array | A dead subagent's stub report |
-| One entry whose argv is `centinela validate` with `exitCode: 0` | A verdict reached without running the gates |
+| One entry `["<path>/centinela*", "validate"]` with `exitCode: 0` | A verdict reached without running the gates |
 | `revision` and `treeDigest` present and matching the current tree | A verdict from before the last fix |
 
 ## Re-Verification After a Block

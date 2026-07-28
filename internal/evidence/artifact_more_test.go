@@ -28,7 +28,9 @@ func TestWriteArtifactGatekeeperHasStatusLine(t *testing.T) {
 		t.Fatal(err)
 	}
 	body, _ := readPath(t, paths[0])
-	if !strings.Contains(body, "**Status:** SAFE") {
+	// Fail-closed: the scaffolded stub asserts nothing until a verifier edits
+	// it, so it must not surface as SAFE to the delivery composer either.
+	if !strings.Contains(body, "**Status:** CRITICAL") {
 		t.Fatalf("missing status line: %s", body)
 	}
 }

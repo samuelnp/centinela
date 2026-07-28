@@ -2,6 +2,7 @@ package gatereport
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 )
 
@@ -13,13 +14,32 @@ const remedy = "Re-run the verifier (see docs/architecture/gatekeeper-prompt.md)
 // Assess reports why a report is inadmissible as a validate-step verdict, or
 // nil when it is grounded. Every failure path blocks: a missing or unparseable
 // verdict is never treated as a pass.
+//
+// A CRITICAL verdict reports the grounding failure ALONGSIDE the finding, so a
+// fail-closed scaffolded stub (which ships CRITICAL and an empty commands
+// array) still tells the operator it has no commands-run record.
 func Assess(report string) error {
-	switch Normalize(Verdict(report)) {
-	case "":
+	verdict := Normalize(Verdict(report))
+	if verdict == "" {
 		return fmt.Errorf("gatekeeper verdict is missing or unparseable — expected a `**Status:** SAFE | WARNING | CRITICAL` line. %s", remedy)
-	case VerdictCritical:
-		return fmt.Errorf("gatekeeper verdict: CRITICAL — %s. Re-verify with a FRESH verifier context after fixing", FirstFinding(report))
 	}
+	grounding := assessGrounding(report)
+	if verdict == VerdictCritical {
+		return criticalError(report, grounding)
+	}
+	return grounding
+}
+
+func criticalError(report string, grounding error) error {
+	detail := ""
+	if grounding != nil {
+		detail = fmt.Sprintf(" (and %s)", grounding)
+	}
+	return fmt.Errorf("gatekeeper verdict: CRITICAL — %s%s. Re-verify with a FRESH verifier context after fixing",
+		FirstFinding(report), detail)
+}
+
+func assessGrounding(report string) error {
 	v, err := ParseVerification(report)
 	if err != nil {
 		return fmt.Errorf("gatekeeper report has no commands-run record — a narrated verdict is not evidence. %s", remedy)
@@ -49,9 +69,18 @@ func assessRecord(v Verification) error {
 	return nil
 }
 
+// hasPassingValidate accepts any PATH to a centinela binary, because a
+// verifier working in a worktree must build its own (the installed binary
+// lags the branch and lacks new subcommands). Requiring the literal
+// "centinela validate" would pressure an honest verifier into recording an
+// argv it did not run. The basename must still start with "centinela", so an
+// arbitrarily named scratch binary does not satisfy the check.
 func hasPassingValidate(commands []Command) bool {
 	for _, c := range commands {
-		if c.Line() == ValidateArgv && c.ExitCode == 0 {
+		if len(c.Argv) != 2 || c.Argv[1] != "validate" || c.ExitCode != 0 {
+			continue
+		}
+		if strings.HasPrefix(filepath.Base(c.Argv[0]), "centinela") {
 			return true
 		}
 	}

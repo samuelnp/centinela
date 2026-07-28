@@ -325,6 +325,19 @@
     "createdAt": "2026-06-12T12:17:49Z"
   },
   {
+    "id": "442f02b8af975c0a",
+    "feature": "adversarial-validate-verifier",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: adversarial-validate-verifier",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/adversarial-validate-verifier-gatekeeper.md",
+    "createdAt": "2026-07-28T22:50:43Z"
+  },
+  {
     "id": "47f88ed9b2258fb7",
     "feature": "right-size-docs-step",
     "step": "validate",
