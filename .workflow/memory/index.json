@@ -858,6 +858,19 @@
     "createdAt": "2026-06-29T18:43:16Z"
   },
   {
+    "id": "ad8520ef927870ef",
+    "feature": "dedupe-validate-suite-runs",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Case:** Stale/doctored coverage.out masks a failing suite",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/dedupe-validate-suite-runs-edge-cases.md",
+    "createdAt": "2026-07-29T21:20:01Z"
+  },
+  {
     "id": "ada12c00b3107f31",
     "feature": "roadmap-phase-ops",
     "step": "tests",
