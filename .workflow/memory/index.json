@@ -377,6 +377,19 @@
     "createdAt": "2026-06-12T15:18:51Z"
   },
   {
+    "id": "48089dac7e8c4568",
+    "feature": "token-diet",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Empty `inputs` list on otherwise-complete evidence trips the generic",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/token-diet-edge-cases.md",
+    "createdAt": "2026-07-29T19:29:36Z"
+  },
+  {
     "id": "480e173b8b7cd979",
     "feature": "configurable-model-routing",
     "step": "tests",
