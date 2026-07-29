@@ -1,7 +1,7 @@
 {
   "feature": "token-diet",
   "startedAt": "2026-07-29T17:02:59.976674Z",
-  "currentStep": "validate",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
@@ -16,8 +16,8 @@
       "completedAt": "2026-07-29T19:29:36Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-29T22:03:47Z"
     }
   },
   "stepOrder": [
