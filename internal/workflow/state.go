@@ -42,6 +42,10 @@ type Workflow struct {
 	// before this field existed and when no driver model was configured —
 	// EffectiveProfile simply skips the capability tier for those.
 	DriverModel string `json:"driverModel,omitempty"`
+	// ValidateContract pins the validate-step gate contract at start. Empty on
+	// workflows created before this field existed — those keep the historical
+	// existence-only gatekeeper check (see UsesAdversarialVerifier).
+	ValidateContract string `json:"validateContract,omitempty"`
 	// Revisions is the append-only audit log of backward transitions performed by
 	// `centinela revise`. Empty/absent on workflows that were never rewound
 	// (back-compat, like Archetype) — RevisionsSummary handles the empty case.

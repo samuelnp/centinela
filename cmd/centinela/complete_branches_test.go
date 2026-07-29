@@ -15,6 +15,7 @@ func TestRunCompleteValidateErrorAndWarningBranches(t *testing.T) {
 	os.Chdir(d)                             //nolint:errcheck
 	os.MkdirAll(workflow.WorkflowDir, 0755) //nolint:errcheck
 	wf := workflow.New("f")
+	wf.ValidateContract = "" // legacy in-flight workflow: existence-only gate
 	wf.CurrentStep = "validate"
 	wf.Steps["plan"] = workflow.StepState{Status: "done"}
 	wf.Steps["code"] = workflow.StepState{Status: "done"}

@@ -14,7 +14,12 @@ func InvalidationTargets(feature, step string) (roles []Role, artifacts []string
 	roles = append(roles, orchestration.RequiredRolesForFeature(feature, step)...)
 	switch step {
 	case "validate":
-		roles = append(roles, Role("gatekeeper"), Role("production-readiness"))
+		// gatekeeper arrives via RequiredRolesForFeature since adversarial-v1.
+		// production-readiness is out-of-band, and validation-specialist is
+		// shed even though no step requires it any more: a legacy in-flight
+		// workflow that rewinds past validate must not keep a stale legacy
+		// pair that would satisfy its legacy gate on the next pass.
+		roles = append(roles, Role("production-readiness"), orchestration.RoleValidationSpec)
 	case "tests":
 		artifacts = append(artifacts, "edge-cases.md")
 	}

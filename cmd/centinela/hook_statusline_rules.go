@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/orchestration"
@@ -27,16 +26,7 @@ func statusBlockAndNext(wf *workflow.Workflow, cfg *config.Config) (string, stri
 		return "MISSING_EDGE_CASES", "write-edge-cases"
 	}
 	if wf.CurrentStep == "validate" {
-		if !fileExists(".workflow/" + wf.Feature + "-gatekeeper.md") {
-			return "MISSING_GATEKEEPER", "run-gatekeeper"
-		}
-		if err := workflow.ValidateArtifacts(wf.Feature, "validate", cfg); err != nil {
-			if strings.Contains(err.Error(), "BLOCKING") {
-				return "PROD_BLOCKING", "harden-feature"
-			}
-			return "MISSING_PROD_READINESS", "run-production-readiness"
-		}
-		return "none", "run-validate"
+		return validateStatusBlock(wf.Feature, cfg)
 	}
 	if wf.CurrentStep == "docs" {
 		if orchestration.IsUserFacingFeature(wf.Feature) {

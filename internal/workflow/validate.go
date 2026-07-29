@@ -80,11 +80,3 @@ func ProductionReadinessWarning(feature string, cfg *config.Config) string {
 	}
 	return ""
 }
-
-func validateGatekeeper(feature string) error {
-	report := fmt.Sprintf(".workflow/%s-gatekeeper.md", feature)
-	if _, err := os.Stat(report); err != nil {
-		return fmt.Errorf("gatekeeper report not found: %s", report)
-	}
-	return nil
-}

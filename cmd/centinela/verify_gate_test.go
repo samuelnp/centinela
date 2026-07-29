@@ -24,7 +24,7 @@ func writeGateRepo(t *testing.T, validateCmd, evidence string) *config.Config {
 	wf := workflow.New("feat")
 	wf.CurrentStep = "validate"
 	_ = workflow.Save(wf)
-	_ = os.WriteFile(".workflow/feat-validation-specialist.json", []byte(evidence), 0o644)
+	_ = os.WriteFile(".workflow/feat-gatekeeper.json", []byte(evidence), 0o644)
 	cfg, err := config.Load()
 	if err != nil {
 		t.Fatal(err)
@@ -32,7 +32,7 @@ func writeGateRepo(t *testing.T, validateCmd, evidence string) *config.Config {
 	return cfg
 }
 
-const valEvidence = `{"feature":"feat","step":"validate","role":"validation-specialist","status":"done","generatedAt":"2026-05-29T00:00:00Z","inputs":["i"],"outputs":[],"edgeCases":[],"handoffTo":"orchestrator"}`
+const valEvidence = `{"feature":"feat","step":"validate","role":"gatekeeper","status":"done","generatedAt":"2026-05-29T00:00:00Z","inputs":["i"],"outputs":[],"edgeCases":[],"handoffTo":"orchestrator"}`
 
 func TestRunClaimVerificationHardBlocksOnFailedTests(t *testing.T) {
 	cfg := writeGateRepo(t, "false", valEvidence)

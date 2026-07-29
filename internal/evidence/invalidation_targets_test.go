@@ -17,6 +17,8 @@ func hasRole(roles []Role, r string) bool {
 func TestInvalidationTargetsValidate(t *testing.T) {
 	setupWF(t)
 	roles, artifacts := InvalidationTargets("f", "validate")
+	// gatekeeper now arrives via RequiredRolesForFeature (once, not twice);
+	// validation-specialist is shed as a legacy certification.
 	if !hasRole(roles, "validation-specialist") ||
 		!hasRole(roles, "gatekeeper") || !hasRole(roles, "production-readiness") {
 		t.Fatalf("validate roles = %v", roles)

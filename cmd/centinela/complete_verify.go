@@ -6,6 +6,7 @@ import (
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/verify"
+	"github.com/samuelnp/centinela/internal/workflow"
 )
 
 // runClaimVerification re-derives ground truth for the step's evidence claims
@@ -16,6 +17,9 @@ func runClaimVerification(feature, step, model string, cfg *config.Config) error
 	res := verify.Verify(feature, step, cfg, verify.Deps{
 		Root:   verifyRoot(),
 		Runner: verify.NewExecRunner(),
+		// Contract-aware, like the gate and the directive: a legacy workflow's
+		// validate claims live under validation-specialist, not gatekeeper.
+		Roles: workflow.RequiredEvidenceRoles(feature, step),
 	})
 	fmt.Println(ui.RenderVerification(res))
 	if res.HasFailures() {

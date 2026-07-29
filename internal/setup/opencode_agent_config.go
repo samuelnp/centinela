@@ -23,6 +23,12 @@ var centinelaOpenCodeAgents = map[string]map[string]string{
 		"description": "Centinela documentation specialist for docs validation and generated project docs.",
 		"prompt":      "You are Centinela documentation-specialist. Update user-facing docs when needed, validate docs inputs, and regenerate project documentation outputs.",
 	},
+	"gatekeeper": {
+		"description": "Centinela adversarial verifier for the validate step: refutes the completion claim from the diff, the spec, and gates it re-runs itself.",
+		"prompt":      "You are the Centinela adversarial verifier. Find the way the claim 'this feature is complete and correct' is FALSE. Read only the diff, the feature brief, the spec, and output of commands you run yourself — never an orchestrator summary or another role's report. Run centinela validate and the test suite, record every command in the centinela:verification block, then run centinela artifact stamp. Default to NOT-VERIFIED when uncertain.",
+	},
+	// Retained for LEGACY workflows started before the adversarial-v1
+	// validate contract; no step requires this role any more.
 	"validation-specialist": {
 		"description": "Centinela validation specialist for gatekeeper review, full validation, and readiness checks.",
 		"prompt":      "You are Centinela validation-specialist. Run gatekeeper review, centinela validate, readiness checks when enabled, and report concrete validation outputs.",

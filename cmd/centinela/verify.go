@@ -37,6 +37,7 @@ func runVerify(_ *cobra.Command, args []string) error {
 	res := verify.Verify(feature, wf.CurrentStep, cfg, verify.Deps{
 		Root:   verifyRoot(),
 		Runner: verify.NewExecRunner(),
+		Roles:  workflow.RequiredEvidenceRoles(feature, wf.CurrentStep),
 	})
 	fmt.Println(ui.RenderVerification(res))
 	if res.HasFailures() || res.HasWarnings() {

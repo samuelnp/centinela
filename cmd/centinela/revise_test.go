@@ -41,7 +41,7 @@ func TestRunReviseHappyPath(t *testing.T) {
 	if wf.CurrentStep != "code" || len(wf.Revisions) != 1 {
 		t.Fatalf("state = %+v", wf)
 	}
-	if _, err := os.Stat(".workflow/f-validation-specialist.json"); !os.IsNotExist(err) {
+	if _, err := os.Stat(".workflow/f-gatekeeper.json"); !os.IsNotExist(err) {
 		t.Fatal("validate evidence must be invalidated")
 	}
 	if _, err := os.Stat(".workflow/f-edge-cases.md"); !os.IsNotExist(err) {

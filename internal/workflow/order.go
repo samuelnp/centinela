@@ -40,6 +40,7 @@ func NewWithOrder(feature string, order []string, profile string) *Workflow {
 		StepOrder:          cloneOrder(order),
 		OrchestrationMode:  mode,
 		EnforcementProfile: profile,
+		ValidateContract:   ValidateContractAdversarial,
 	}
 }
 

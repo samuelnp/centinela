@@ -27,7 +27,7 @@ func TestCompanionSkeletonPerRoleHeaders(t *testing.T) {
 		orchestration.RoleValidationSpec:   "Gates Run",
 		orchestration.RoleUXUISpecialist:   "Flow Review",
 		orchestration.RoleDocsSpecialist:   "KB Pages",
-		Role("gatekeeper"):                 "Analyzed Specs",
+		orchestration.RoleGatekeeper:       "Refutation Attempts",
 	}
 	for role, header := range cases {
 		body, ok := companionSkeleton("demo", role)
