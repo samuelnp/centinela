@@ -6,16 +6,16 @@ import (
 )
 
 func TestResolveModel_DefaultAndOverride(t *testing.T) {
-	// Default: big-thinker → reasoning → claude-opus-4-7 (claude)
+	// Default: big-thinker → reasoning → the opus family alias (claude)
 	got, ok := ResolveModel(RoleBigThinker, nil, nil, RunnerClaude)
-	if !ok || got != "claude-opus-4-7" {
-		t.Errorf("expected (claude-opus-4-7, true), got (%q, %v)", got, ok)
+	if !ok || got != "opus" {
+		t.Errorf("expected (opus, true), got (%q, %v)", got, ok)
 	}
-	// Config override: big-thinker = fast → claude-haiku
+	// Config override: big-thinker = fast → the haiku family alias
 	models := RoleModels{"big-thinker": {Tier: "fast"}}
 	got, ok = ResolveModel(RoleBigThinker, models, nil, RunnerClaude)
-	if !ok || got != "claude-haiku-4-5-20251001" {
-		t.Errorf("override: expected (claude-haiku-4-5-20251001, true), got (%q, %v)", got, ok)
+	if !ok || got != "haiku" {
+		t.Errorf("override: expected (haiku, true), got (%q, %v)", got, ok)
 	}
 }
 
@@ -46,17 +46,17 @@ func TestResolveModel_UnknownRunnerFallback(t *testing.T) {
 
 func TestResolveModel_NilMapNoPanic(t *testing.T) {
 	got, ok := ResolveModel(RoleDocsSpecialist, nil, nil, RunnerClaude)
-	if !ok || got != "claude-haiku-4-5-20251001" {
-		t.Errorf("nil map: expected (claude-haiku-4-5-20251001, true), got (%q, %v)", got, ok)
+	if !ok || got != "haiku" {
+		t.Errorf("nil map: expected (haiku, true), got (%q, %v)", got, ok)
 	}
 }
 
 func TestModelReference_AllTiers(t *testing.T) {
 	ref := ModelReference([]Tier{TierReasoning, TierBalanced, TierFast})
 	for _, want := range []string{
-		"claude-opus-4-7", "anthropic/claude-opus-4-7",
-		"claude-sonnet-4-6", "anthropic/claude-sonnet-4-6",
-		"claude-haiku-4-5-20251001", "anthropic/claude-haiku-4-5",
+		"opus", "anthropic/claude-opus-4-7",
+		"sonnet", "anthropic/claude-sonnet-4-6",
+		"haiku", "anthropic/claude-haiku-4-5",
 	} {
 		if !strings.Contains(ref, want) {
 			t.Errorf("ModelReference missing %q; got: %s", want, ref)

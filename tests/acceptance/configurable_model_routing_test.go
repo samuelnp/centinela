@@ -43,7 +43,7 @@ func TestRouting_RoleOverrideBeatsTier(t *testing.T) {
 	if !strings.Contains(out, "model: deepseek/deepseek-coder (opencode)") {
 		t.Errorf("AC2: expected override for senior-engineer; got:\n%s", out)
 	}
-	if !strings.Contains(out, "senior-engineer (model: claude-opus-4-7 (claude)") {
+	if !strings.Contains(out, "senior-engineer (model: opus (claude)") {
 		t.Errorf("AC2: claude column should still show its default; got:\n%s", out)
 	}
 }
@@ -66,7 +66,7 @@ func TestRouting_OverrideBeatsModelMap(t *testing.T) {
 		"[orchestration.models]\nbig-thinker = { opencode = \"deepseek/deepseek-coder\" }\n"
 	d, bin := setupModelsRepo(t, toml)
 	out, _ := runBin(t, bin, d, "hook", "orchestration")
-	if !strings.Contains(out, "planner (model: claude-opus-4-7 (claude), model: deepseek/deepseek-coder (opencode)") {
+	if !strings.Contains(out, "planner (model: opus (claude), model: deepseek/deepseek-coder (opencode)") {
 		t.Errorf("edge: override should beat model_map; got:\n%s", out)
 	}
 }
@@ -75,7 +75,7 @@ func TestRouting_OverrideBeatsModelMap(t *testing.T) {
 func TestRouting_EmptyTablesDefault(t *testing.T) {
 	d, bin := setupModelsRepo(t, "[orchestration.model_map]\n[orchestration.models]\n")
 	out, _ := runBin(t, bin, d, "hook", "orchestration")
-	if !strings.Contains(out, "planner (model: claude-opus-4-7 (claude)") {
+	if !strings.Contains(out, "planner (model: opus (claude)") {
 		t.Errorf("edge: empty tables should default; got:\n%s", out)
 	}
 }

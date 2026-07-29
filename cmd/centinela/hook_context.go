@@ -2,14 +2,12 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 
 	"github.com/spf13/cobra"
 
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/orchestration"
-	"github.com/samuelnp/centinela/internal/roadmap"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/workflow"
 )
@@ -25,7 +23,7 @@ func init() {
 }
 
 func runHookContext(_ *cobra.Command, _ []string) error {
-	io.ReadAll(os.Stdin) //nolint:errcheck // drain stdin to avoid SIGPIPE on large prompts
+	sessionID := readHookSessionID(os.Stdin)
 	cfg, err := config.Load()
 	if err != nil {
 		// Hooks must never break the host session: degrade to defaults and
@@ -34,9 +32,7 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 		cfg = &config.Config{}
 	}
 	wfs := loadActiveWorkflows()
-	if r, err := roadmap.Load(); err == nil {
-		fmt.Println(ui.RenderRoadmapSummary(r))
-	}
+	emitRoadmapSummary(sessionID)
 	if len(wfs) == 0 {
 		fmt.Println("CENTINELA DIRECTIVE: no active workflow. Start a feature before implementation.")
 		fmt.Println(ui.RenderSuccess("No active workflows."))

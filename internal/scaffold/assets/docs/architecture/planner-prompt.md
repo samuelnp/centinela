@@ -114,8 +114,8 @@ The full schema and validator rules live in
 
 ### Rules that apply to this role (validator will check)
 
-- `inputs` MUST snapshot **every** `docs/features/*.md` in the repo plus
-  `docs/plans/<FEATURE_NAME>.md` (else `missing feature-doc snapshot inputs`).
+- `inputs` MUST include the feature-doc snapshot `docs/features/<feature>.md` plus
+  `docs/plans/<feature>.md`; more is fine — the rule is *include*, not *only*.
 - `outputs` MUST include at least one real file under `docs/plans/` or
   `specs/`; descriptive strings are rejected.
 - `edgeCases` MUST be non-empty — this role enumerates the scenarios the

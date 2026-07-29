@@ -2,6 +2,7 @@ package acceptance_test
 
 import (
 	"os"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -56,17 +57,23 @@ func TestDAS_PreFillIdempotentUnderForce(t *testing.T) {
 }
 
 // Acceptance: specs/deterministic-artifact-scaffolds.feature
-// Scenario: Init pre-fill includes a feature brief created after the first init
-func TestDAS_PreFillIncludesLateBrief(t *testing.T) {
+// Scenario: A brief created after the first init does not change the pre-fill
+// token-diet inverted this scenario: the pre-fill is construction-derived from
+// the feature name, so it is invariant to what else lands in docs/features/.
+func TestDAS_PreFillIgnoresLateSiblingBrief(t *testing.T) {
 	dasChdir(t, "demo.md")
 	dasInit(t, "demo", orchestration.RoleBigThinker)
+	_, before := dasReadJSON(t, "demo", orchestration.RoleBigThinker)
 	if err := os.WriteFile("docs/features/zzz-late.md", []byte("late"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	dasInit(t, "demo", orchestration.RoleBigThinker) // --force after late brief
-	_, e := dasReadJSON(t, "demo", orchestration.RoleBigThinker)
-	if !dasContains(e.Inputs, "docs/features/zzz-late.md") {
-		t.Fatalf("late brief not picked up: %v", e.Inputs)
+	_, after := dasReadJSON(t, "demo", orchestration.RoleBigThinker)
+	if dasContains(after.Inputs, "docs/features/zzz-late.md") {
+		t.Fatalf("late sibling brief leaked into the pre-fill: %v", after.Inputs)
+	}
+	if !reflect.DeepEqual(before.Inputs, after.Inputs) {
+		t.Fatalf("pre-fill changed with an unrelated brief: %v -> %v", before.Inputs, after.Inputs)
 	}
 }
 

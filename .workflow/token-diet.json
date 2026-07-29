@@ -1,18 +1,18 @@
 {
   "feature": "token-diet",
   "startedAt": "2026-07-29T17:02:59.976674Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-29T18:43:42Z"
     },
     "plan": {
       "status": "done",
       "completedAt": "2026-07-29T17:16:58Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {

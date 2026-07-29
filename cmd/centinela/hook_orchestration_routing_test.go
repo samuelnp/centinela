@@ -43,7 +43,7 @@ func TestRunHookOrchestration_ModelMapRemap(t *testing.T) {
 // AC2: role override flows through orchestrationRouting → directive.
 func TestRunHookOrchestration_RoleOverride(t *testing.T) {
 	out := setupRoutingRepo(t, "code", "[orchestration.models]\nsenior-engineer = { opencode = \"deepseek/deepseek-coder\" }\n")
-	if !strings.Contains(out, "senior-engineer (model: claude-opus-4-7 (claude)") {
+	if !strings.Contains(out, "senior-engineer (model: opus (claude)") {
 		t.Fatalf("expected claude default for senior-engineer, got: %s", out)
 	}
 	if !strings.Contains(out, "model: deepseek/deepseek-coder (opencode)") {
@@ -54,7 +54,7 @@ func TestRunHookOrchestration_RoleOverride(t *testing.T) {
 // AC6: absent tables → built-in defaults for all runners.
 func TestRunHookOrchestration_AbsentTablesDefault(t *testing.T) {
 	out := setupRoutingRepo(t, "plan", "")
-	if !strings.Contains(out, "model: claude-opus-4-7 (claude)") {
+	if !strings.Contains(out, "model: opus (claude)") {
 		t.Fatalf("expected default claude reasoning ID, got: %s", out)
 	}
 }
@@ -62,7 +62,7 @@ func TestRunHookOrchestration_AbsentTablesDefault(t *testing.T) {
 // Back-compat: a plain tier string flows through orchestrationRouting's tier loop.
 func TestRunHookOrchestration_PlainTierString(t *testing.T) {
 	out := setupRoutingRepo(t, "plan", "[orchestration.models]\nplanner = \"fast\"\n")
-	if !strings.Contains(out, "planner (model: claude-haiku-4-5-20251001 (claude)") {
+	if !strings.Contains(out, "planner (model: haiku (claude)") {
 		t.Fatalf("expected planner remapped to fast tier, got: %s", out)
 	}
 }
@@ -70,7 +70,7 @@ func TestRunHookOrchestration_PlainTierString(t *testing.T) {
 // Config error path: a malformed config falls back to defaults (zero-config safe).
 func TestRunHookOrchestration_ConfigErrorFallsBack(t *testing.T) {
 	out := setupRoutingRepo(t, "plan", "[orchestration.model_map.turbo]\nopencode = \"x\"\n")
-	if !strings.Contains(out, "planner (model: claude-opus-4-7 (claude)") {
+	if !strings.Contains(out, "planner (model: opus (claude)") {
 		t.Fatalf("expected fallback defaults on config error, got: %s", out)
 	}
 }

@@ -30,7 +30,7 @@ func TestRouting_ResolveNoMapEntryUsesDefault(t *testing.T) {
 	models := orchestration.RoleModels{"feature-specialist": {Tier: "balanced"}}
 	mm := orchestration.ModelMap{"balanced": {"opencode": "deepseek/deepseek-chat"}}
 	got, ok := orchestration.ResolveModel(orchestration.RoleFeatureSpecial, models, mm, orchestration.RunnerClaude)
-	if !ok || got != "claude-sonnet-4-6" {
+	if !ok || got != "sonnet" {
 		t.Errorf("AC3: got (%q, %v)", got, ok)
 	}
 }

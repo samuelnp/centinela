@@ -17,32 +17,6 @@ func AllowedCapabilityClasses() []string {
 	return []string{CapabilityFrontier, CapabilityCapable, CapabilityLimited}
 }
 
-// builtinModelCapability maps the known concrete model ids (both the claude and
-// the anthropic/... opencode forms from orchestration tierModels) to a class, so
-// opting in is a single driver_model line under either runner. Keys are exact
-// (model ids are case-sensitive opaque strings).
-var builtinModelCapability = map[string]string{
-	"claude-opus-4-7":             CapabilityFrontier,
-	"anthropic/claude-opus-4-7":   CapabilityFrontier,
-	"claude-sonnet-4-6":           CapabilityCapable,
-	"anthropic/claude-sonnet-4-6": CapabilityCapable,
-	"claude-haiku-4-5-20251001":   CapabilityLimited,
-	"anthropic/claude-haiku-4-5":  CapabilityLimited,
-}
-
-// defaultProfileForClass maps a class to its default enforcement profile:
-// frontier→outcome, capable→guided, limited→strict.
-func defaultProfileForClass(class string) string {
-	switch class {
-	case CapabilityFrontier:
-		return ProfileOutcome
-	case CapabilityCapable:
-		return ProfileGuided
-	default:
-		return ProfileStrict
-	}
-}
-
 // normClass normalizes a capability class: trim + lowercase (fixed vocabulary).
 func normClass(class string) string {
 	return strings.ToLower(strings.TrimSpace(class))

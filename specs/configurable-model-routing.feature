@@ -24,7 +24,7 @@ Feature: Configurable model routing
     And the role 'feature-specialist' resolves to the 'balanced' tier
     And the active runner is "claude"
     When the orchestration hook emits the plan-step directive
-    Then the directive contains an annotation for 'feature-specialist' with model 'claude-sonnet-4-6'
+    Then the directive contains an annotation for 'feature-specialist' with model 'sonnet'
 
   # AC4 — back-compat: plain tier string in [orchestration.models] still works
   Scenario: Plain tier string value in orchestration.models is accepted and behaves as before
@@ -63,9 +63,9 @@ Feature: Configurable model routing
     Given a centinela.toml with no '[orchestration.model_map]' section
     And a centinela.toml with no '[orchestration.models]' section
     When the orchestration hook emits the plan-step directive
-    Then the directive contains an annotation for 'big-thinker' with model 'claude-opus-4-7' for the 'claude' runner
-    And the directive contains an annotation for 'feature-specialist' with model 'claude-sonnet-4-6' for the 'claude' runner
-    And the directive contains an annotation for 'documentation-specialist' with model 'claude-haiku-4-5-20251001' for the 'claude' runner
+    Then the directive contains an annotation for 'big-thinker' with model 'opus' for the 'claude' runner
+    And the directive contains an annotation for 'feature-specialist' with model 'sonnet' for the 'claude' runner
+    And the directive contains an annotation for 'documentation-specialist' with model 'haiku' for the 'claude' runner
 
   # AC7 — no mapping for active runner: emits tier name + warning, never another runner's ID
   Scenario: Active runner with no mapping emits tier name and warning instead of another runner's concrete ID

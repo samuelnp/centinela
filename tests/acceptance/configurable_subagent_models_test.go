@@ -51,13 +51,13 @@ func TestOrchestrationHook_ConfiguredTierAnnotated(t *testing.T) {
 	out, _ := cmd.CombinedOutput()
 	s := string(out)
 	// New per-runner annotation format: model: <id> (<runner>) for each runner.
-	if !strings.Contains(s, "planner (model: claude-opus-4-7 (claude)") {
+	if !strings.Contains(s, "planner (model: opus (claude)") {
 		t.Errorf("AC1: expected per-runner annotation; got:\n%s", s)
 	}
 	if !strings.Contains(s, "model: anthropic/claude-opus-4-7 (opencode)") {
 		t.Errorf("AC1: expected opencode reasoning ID; got:\n%s", s)
 	}
-	if !strings.Contains(s, "claude-opus-4-7") || !strings.Contains(s, "anthropic/claude-opus-4-7") {
+	if !strings.Contains(s, "opus") || !strings.Contains(s, "anthropic/claude-opus-4-7") {
 		t.Errorf("AC6: expected both-runner IDs; got:\n%s", s)
 	}
 	if !strings.Contains(s, "model reference:") {
@@ -72,7 +72,7 @@ func TestOrchestrationHook_AbsentTableAllDefaults(t *testing.T) {
 	cmd.Dir = d
 	out, _ := cmd.CombinedOutput()
 	s := string(out)
-	if !strings.Contains(s, "planner (model: claude-opus-4-7 (claude)") {
+	if !strings.Contains(s, "planner (model: opus (claude)") {
 		t.Errorf("AC3: planner reasoning default; got:\n%s", s)
 	}
 	for _, retired := range []string{"big-thinker", "feature-specialist"} {
