@@ -12,10 +12,16 @@ import (
 // and hard-blocks completion on any failing claim. Warnings (e.g. the heuristic
 // edge-case-to-test mapping) are surfaced but do not block. On a hard block it
 // records a verify-rejection telemetry event before returning the error.
-func runClaimVerification(feature, step, model string, cfg *config.Config) error {
+//
+// prior, when non-nil, is the machine record of a suite run this same process
+// just completed (the validate gate's own executeValidation); it suppresses
+// the tests-pass re-run. Every other surface passes nil and re-runs for real.
+func runClaimVerification(feature, step, model string, cfg *config.Config, prior *verify.RunOutcome) error {
 	// Contract-aware, like the gate and the directive: a legacy workflow's
 	// validate claims live under validation-specialist, not gatekeeper.
-	res := verify.Verify(feature, step, cfg, verifyDepsFor(feature, step))
+	deps := verifyDepsFor(feature, step)
+	deps.PriorTestRun = prior
+	res := verify.Verify(feature, step, cfg, deps)
 	fmt.Println(ui.RenderVerification(res))
 	if res.HasFailures() {
 		emitVerifyRejection(cfg, feature, step, res, model)
