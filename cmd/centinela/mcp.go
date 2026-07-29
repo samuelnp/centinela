@@ -53,7 +53,7 @@ func mcpVerdict(feature string) (*verdict.Packet, error) {
 	deps := verdict.Deps{
 		Gates: gates.RunAll,
 		Verify: func(f, s string, c *config.Config) verify.VerificationResult {
-			return verify.Verify(f, s, c, verify.Deps{Root: verifyRoot(), Runner: verify.NewExecRunner()})
+			return verify.Verify(f, s, c, verifyDepsFor(f, s))
 		},
 		Evidence: verdict.EvidenceIndex,
 		Now:      time.Now().UTC().Format(time.RFC3339),

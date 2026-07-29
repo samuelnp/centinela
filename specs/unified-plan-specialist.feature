@@ -128,6 +128,29 @@ Feature: Unified plan specialist — one planner role replaces big-thinker + fea
       | pinned-workflow    | planner-v1   | planner                            |
       | unpinned-workflow   |              | big-thinker, feature-specialist   |
 
+  # D3 covers claim verification too, not just the directive and the gate.
+  # `centinela verdict` and the MCP verdict tool build verify.Deps themselves;
+  # omitting Deps.Roles there silently falls back to the contract-blind policy
+  # layer, so a legacy plan workflow reported "no claims to verify" while
+  # `centinela verify` checked the same tree in full. Every surface below must
+  # resolve the SAME set, so all of them route through one constructor.
+
+  Scenario Outline: Every claim-verification surface resolves the same required role set
+    Given a feature "<feature>" at the plan step
+    And its workflow's PlanContract is "<contract>"
+    When claim verification is prepared for the "<surface>" surface
+    Then the roles it verifies should equal "<roles>"
+    And it should never report "no claims to verify" for evidence that exists
+
+    Examples:
+      | feature           | contract     | surface        | roles                            |
+      | pinned-workflow   | planner-v1   | centinela verify | planner                        |
+      | pinned-workflow   | planner-v1   | centinela verdict | planner                       |
+      | pinned-workflow   | planner-v1   | mcp verdict tool | planner                        |
+      | unpinned-workflow |              | centinela verify | big-thinker, feature-specialist |
+      | unpinned-workflow |              | centinela verdict | big-thinker, feature-specialist |
+      | unpinned-workflow |              | mcp verdict tool | big-thinker, feature-specialist |
+
   # ── Guided/outcome profile still names the single planner ────────────────
 
   Scenario: A guided profile with no subagent evidence still names one planner
@@ -209,19 +232,33 @@ Feature: Unified plan specialist — one planner role replaces big-thinker + fea
     And internal/scaffold/assets/docs/architecture/feature-specialist-prompt.md
       should not exist
 
-  # ── Statusline shows planner ──────────────────────────────────────────────
+  # ── Statusline tracks the feature; the DIRECTIVE names the role ───────────
+  # Neither `centinela status` nor `hook statusline` has a per-step role field:
+  # the statusline protocol is WF/STEP/P + NEXT/BLOCK/MODE/RISK, and status
+  # prints step rows without roles. Adding one is deferred as
+  # `statusline-plan-role-display`. What these two scenarios assert is the
+  # behavior that DOES exist and that this feature changed: a `<feature>-<role>`
+  # sub-workflow state file is never promoted to the primary tracked workflow
+  # (isRoleWorkflow now covers "-planner"), and the role naming itself lives in
+  # the hook directive, resolved contract-awarely.
 
-  Scenario: The statusline names planner for plan-step delegation
-    Given a feature "new-widget" at the plan step with in-progress evidence
-    When the user runs "centinela status new-widget" or views the statusline
-    Then the displayed role for the plan step should be "planner"
-    And it should not display "big-thinker" or "feature-specialist" for a
-      "planner-v1" workflow
+  Scenario: A planner role sub-workflow never displaces the feature on the statusline
+    Given a feature "new-widget" at the plan step pinned to "planner-v1"
+    And a stray role sub-workflow state file for "new-widget-planner" exists
+    When the user views the statusline
+    Then the statusline should track "new-widget" as the primary workflow
+    And it should never promote "new-widget-planner" to primary
+    And the hook directive for "new-widget" should name the role "planner"
+    And the directive should not name "big-thinker" or "feature-specialist"
 
-  Scenario: The statusline still names the legacy pair for an unpinned workflow
+  Scenario: Legacy role sub-workflows never displace an unpinned feature
     Given a feature "already-in-flight" at the plan step with an empty
       PlanContract
-    When the user runs "centinela status already-in-flight" or views the
-      statusline
-    Then the displayed roles for the plan step should include "big-thinker"
-      and "feature-specialist"
+    And stray role sub-workflow state files for "already-in-flight-big-thinker"
+      and "already-in-flight-feature-specialist" exist
+    When the user views the statusline
+    Then the statusline should track "already-in-flight" as the primary workflow
+    And it should never promote either legacy role sub-workflow to primary
+    And the hook directive for "already-in-flight" should name both
+      "big-thinker" and "feature-specialist"
+    And the directive should not name "planner" as a role to delegate to

@@ -20,13 +20,13 @@ func InvalidationTargets(feature, step string) (roles []Role, artifacts []string
 		// workflow that rewinds past validate must not keep a stale legacy
 		// pair that would satisfy its legacy gate on the next pass.
 		roles = append(roles, Role("production-readiness"), orchestration.RoleValidationSpec)
-	case "plan":
-		// planner arrives via RequiredRolesForFeature since planner-v1. The two
-		// retired roles are shed as well, for the same reason validate sheds
-		// validation-specialist: a legacy in-flight workflow that rewinds past
-		// plan must not keep a stale legacy pair that would immediately satisfy
-		// its legacy gate on the next pass.
-		roles = append(roles, orchestration.RoleBigThinker, orchestration.RoleFeatureSpecial)
+	// NOTE: there is deliberately no "plan" case. `revise` is backward-only and
+	// reopenedSteps returns order[idx+1:], so with plan at index 0 of every step
+	// order this function is never called with step == "plan" — a branch here
+	// would be unreachable, and a unit test over it would assert dead code.
+	// Shedding plan evidence on a rewind TO plan needs invalidateDownstream to
+	// include the rewind target itself: deferred as
+	// `revise-to-plan-sheds-no-evidence`.
 	case "tests":
 		artifacts = append(artifacts, "edge-cases.md")
 	}

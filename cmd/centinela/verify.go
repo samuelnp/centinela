@@ -34,11 +34,7 @@ func runVerify(_ *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	res := verify.Verify(feature, wf.CurrentStep, cfg, verify.Deps{
-		Root:   verifyRoot(),
-		Runner: verify.NewExecRunner(),
-		Roles:  workflow.RequiredEvidenceRoles(feature, wf.CurrentStep),
-	})
+	res := verify.Verify(feature, wf.CurrentStep, cfg, verifyDepsFor(feature, wf.CurrentStep))
 	fmt.Println(ui.RenderVerification(res))
 	if res.HasFailures() || res.HasWarnings() {
 		return fmt.Errorf("verification did not pass cleanly for %q", feature)

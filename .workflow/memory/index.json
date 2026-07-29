@@ -806,6 +806,19 @@
     "createdAt": "2026-06-14T15:39:24Z"
   },
   {
+    "id": "9e3d0fb8b3d9b96a",
+    "feature": "unified-plan-specialist",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Adversarial Verifier Report — unified-plan-specialist (round 5, fresh context)",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/unified-plan-specialist-gatekeeper.md",
+    "createdAt": "2026-07-29T16:36:02Z"
+  },
+  {
     "id": "a861ca032b250c87",
     "feature": "configurable-model-routing",
     "step": "validate",

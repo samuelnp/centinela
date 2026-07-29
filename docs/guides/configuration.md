@@ -256,7 +256,7 @@ coverage_tolerance = 0.0005               # tighter than the 0.1% default
 ```toml
 # String form: set a tier for a role across all runners.
 [orchestration.models]
-big-thinker    = "reasoning"
+planner        = "reasoning"
 qa-senior      = "balanced"
 edge-case-tester = "fast"
 
@@ -273,6 +273,7 @@ opencode = "anthropic/claude-sonnet-4-6"
 
 **What it enables:** precise control over cost/quality per role — a `reasoning` model for planning and engineering, cheaper `fast` models for edge-case generation.
 **Trade-offs:** roles and runners are validated against fixed sets (see the [reference](configuration-reference.md#orchestrationmodelsrole)); a typo fails config load. Leave it unset to use the sensible built-in tiers.
+**Migrating from the two-role plan step:** the plan step is now one `planner` role. Existing `big-thinker` / `feature-specialist` keys still load and alias onto `planner` (`big-thinker` wins if both are set), so nothing breaks — `centinela doctor` and `centinela start` print a one-time notice suggesting the rename.
 
 ---
 

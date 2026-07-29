@@ -32,6 +32,7 @@ func scaffoldPromptPath(name string) string {
 	return filepath.Join("..", "..", "internal", "scaffold", "assets", "docs", "architecture", name)
 }
 
+// Scenario: Each orchestration role has a prompt file under docs/architecture/
 func TestPromoteOrchestrationAgents_FilesExist(t *testing.T) {
 	for _, name := range promotedPromptFiles {
 		if _, err := os.Stat(docsArchPromptPath(name)); err != nil {
@@ -40,6 +41,7 @@ func TestPromoteOrchestrationAgents_FilesExist(t *testing.T) {
 	}
 }
 
+// Scenario: Each new prompt declares Purpose, Prompt Template, and Required Artifact
 func TestPromoteOrchestrationAgents_RequiredSections(t *testing.T) {
 	required := []string{"## Purpose", "## Prompt Template", "## Required Artifact"}
 	for _, name := range promotedPromptFiles {
@@ -56,6 +58,7 @@ func TestPromoteOrchestrationAgents_RequiredSections(t *testing.T) {
 	}
 }
 
+// Scenario: Each new prompt is mirrored in the scaffold tree
 func TestPromoteOrchestrationAgents_MirrorByteIdentical(t *testing.T) {
 	for _, name := range promotedPromptFiles {
 		canonical, err := os.ReadFile(docsArchPromptPath(name))
@@ -72,6 +75,7 @@ func TestPromoteOrchestrationAgents_MirrorByteIdentical(t *testing.T) {
 	}
 }
 
+// Scenario: Per-file length budget is respected
 func TestPromoteOrchestrationAgents_LineBudget(t *testing.T) {
 	for _, name := range promotedPromptFiles {
 		data, err := os.ReadFile(docsArchPromptPath(name))

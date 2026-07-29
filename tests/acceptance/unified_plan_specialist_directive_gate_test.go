@@ -4,6 +4,9 @@ package acceptance_test
 import (
 	"os"
 	"os/exec"
+	"reflect"
+	"regexp"
+	"sort"
 	"strings"
 	"testing"
 
@@ -24,7 +27,36 @@ func upsDirective(t *testing.T, bin, dir string) string {
 	return string(out)
 }
 
+// upsEvidenceRoles extracts the role set an operator-facing surface actually
+// demands, by scanning the `.workflow/<feature>-<role>.{md,json}` paths BOTH the
+// directive ("Required evidence before ...") and the gate ("missing: ...") print.
+// Reading the evidence paths rather than substring-matching role names is what
+// makes set EQUALITY assertable: the unpinned gate's contract annotation mentions
+// the literal "planner-v1", which a naive !Contains("planner") would trip over.
+func upsEvidenceRoles(out, feature string) []string {
+	re := regexp.MustCompile(`\.workflow/` + regexp.QuoteMeta(feature) + `-([a-z0-9-]+)\.(?:md|json)`)
+	seen := map[string]bool{}
+	var roles []string
+	for _, m := range re.FindAllStringSubmatch(out, -1) {
+		if seen[m[1]] {
+			continue
+		}
+		seen[m[1]] = true
+		roles = append(roles, m[1])
+	}
+	sort.Strings(roles)
+	return roles
+}
+
 // Scenario: The hook directive and the complete gate name the same required set
+//
+// (a Scenario Outline in the spec; the traceability marker must read
+// "// Scenario:" verbatim — the gate's regex does not match "Scenario Outline:")
+//
+// The Then clauses say the sets are EQUAL, so this asserts equality in both
+// directions — the directive set == the gate set == the expected set — rather
+// than mere containment. A containment-only guard would not catch a directive
+// that named a SUPERSET, which is exactly the PR #83 divergence class.
 func TestUPS_DirectiveAndGateAgree(t *testing.T) {
 	bin := upsBuildBin(t)
 	cases := []struct {
@@ -44,13 +76,23 @@ func TestUPS_DirectiveAndGateAgree(t *testing.T) {
 		if code == 0 {
 			t.Fatalf("%s: complete with no evidence must fail: %s", tc.feature, gateOut)
 		}
-		for _, role := range tc.want {
-			if !strings.Contains(directive, role) {
-				t.Fatalf("%s: directive must name %q: %s", tc.feature, role, directive)
-			}
-			if !strings.Contains(gateOut, role) {
-				t.Fatalf("%s: gate must name %q: %s", tc.feature, role, gateOut)
-			}
+
+		want := append([]string(nil), tc.want...)
+		sort.Strings(want)
+		gotDirective := upsEvidenceRoles(directive, tc.feature)
+		gotGate := upsEvidenceRoles(gateOut, tc.feature)
+
+		if !reflect.DeepEqual(gotDirective, want) {
+			t.Fatalf("%s: directive role set = %v, want exactly %v\n%s",
+				tc.feature, gotDirective, want, directive)
+		}
+		if !reflect.DeepEqual(gotGate, want) {
+			t.Fatalf("%s: gate role set = %v, want exactly %v\n%s",
+				tc.feature, gotGate, want, gateOut)
+		}
+		// The equality that actually matters: the two surfaces to each other.
+		if !reflect.DeepEqual(gotDirective, gotGate) {
+			t.Fatalf("%s: directive %v and gate %v disagree", tc.feature, gotDirective, gotGate)
 		}
 	}
 }

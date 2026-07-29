@@ -6,7 +6,6 @@ import (
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/verify"
-	"github.com/samuelnp/centinela/internal/workflow"
 )
 
 // runClaimVerification re-derives ground truth for the step's evidence claims
@@ -14,13 +13,9 @@ import (
 // edge-case-to-test mapping) are surfaced but do not block. On a hard block it
 // records a verify-rejection telemetry event before returning the error.
 func runClaimVerification(feature, step, model string, cfg *config.Config) error {
-	res := verify.Verify(feature, step, cfg, verify.Deps{
-		Root:   verifyRoot(),
-		Runner: verify.NewExecRunner(),
-		// Contract-aware, like the gate and the directive: a legacy workflow's
-		// validate claims live under validation-specialist, not gatekeeper.
-		Roles: workflow.RequiredEvidenceRoles(feature, step),
-	})
+	// Contract-aware, like the gate and the directive: a legacy workflow's
+	// validate claims live under validation-specialist, not gatekeeper.
+	res := verify.Verify(feature, step, cfg, verifyDepsFor(feature, step))
 	fmt.Println(ui.RenderVerification(res))
 	if res.HasFailures() {
 		emitVerifyRejection(cfg, feature, step, res, model)
