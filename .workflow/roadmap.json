@@ -478,7 +478,8 @@
         {"name":"brownmap-roadmap-source-role-retired","summary":"brownmap baseline/gaps still stamp Source.Role=big-thinker on new entries","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
         {"name":"handoff-chain-unvalidated","summary":"Documented handoffTo chain is unenforced; handoffTo=banana completes a step","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
         {"name":"planner-stub-on-legacy-workflow-unguarded","summary":"evidence init planner on an unpinned workflow is unguarded","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"stamp-validates-commands-schema","summary":"artifact stamp should validate the centinela:verification commands schema and fail loudly at stamp time","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"}
+        {"name":"stamp-validates-commands-schema","summary":"artifact stamp should validate the centinela:verification commands schema and fail loudly at stamp time","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
+        {"name":"cross-process-suite-result-reuse","summary":"Reuse the gatekeeper's suite result in complete via a tamper-evident digest-keyed run record (any plain on-disk record is writable by the agent it would excuse)","source":{"feature":"dedupe-validate-suite-runs","role":"planner"},"deferredAt":"2026-07-29T20:26:54Z"}
       ]
     }
   ],
