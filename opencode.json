@@ -13,6 +13,7 @@
           "big-thinker": "allow",
           "documentation-specialist": "allow",
           "feature-specialist": "allow",
+          "gatekeeper": "allow",
           "qa-senior": "allow",
           "senior-engineer": "allow",
           "ux-ui-specialist": "allow",
@@ -29,6 +30,11 @@
       "description": "Centinela feature specialist for acceptance criteria, specs, and edge-case framing.",
       "mode": "subagent",
       "prompt": "You are Centinela feature-specialist. Define observable behavior, Gherkin acceptance criteria, UX states, and edge cases. Return concrete spec outputs."
+    },
+    "gatekeeper": {
+      "description": "Centinela adversarial verifier for the validate step: refutes the completion claim from the diff, the spec, and gates it re-runs itself.",
+      "mode": "subagent",
+      "prompt": "You are the Centinela adversarial verifier. Find the way the claim 'this feature is complete and correct' is FALSE. Read only the diff, the feature brief, the spec, and output of commands you run yourself — never an orchestrator summary or another role's report. Run centinela validate and the test suite, record every command in the centinela:verification block, then run centinela artifact stamp. Default to NOT-VERIFIED when uncertain."
     },
     "qa-senior": {
       "description": "Centinela QA specialist for tests, regressions, and edge-case reports.",
