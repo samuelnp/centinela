@@ -10,13 +10,12 @@ import (
 
 // Acceptance: specs/promote-orchestration-agents.feature
 //
-// Asserts the six promoted orchestration prompt files exist, contain the
+// Asserts the promoted orchestration prompt files exist, contain the
 // required section headings, are mirrored byte-identically into the
 // scaffold tree, and respect the per-file line budget.
 
 var promotedPromptFiles = []string{
-	"big-thinker-prompt.md",
-	"feature-specialist-prompt.md",
+	"planner-prompt.md",
 	"senior-engineer-prompt.md",
 	"qa-senior-prompt.md",
 	"ux-ui-specialist-prompt.md",

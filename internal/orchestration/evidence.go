@@ -55,6 +55,9 @@ func ValidateEvidence(path, feature, step string, role Role, uiPaths []string) e
 	return nil
 }
 
+// needsEdgeCases includes RolePlanner because the planner now carries the spec
+// lens that used to belong to the feature-specialist.
 func needsEdgeCases(role Role) bool {
-	return role == RoleFeatureSpecial || role == RoleQASeniorEngineer || role == RoleUXUISpecialist
+	return role == RolePlanner || role == RoleFeatureSpecial ||
+		role == RoleQASeniorEngineer || role == RoleUXUISpecialist
 }

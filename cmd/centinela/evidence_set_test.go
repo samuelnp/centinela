@@ -8,7 +8,7 @@ import (
 
 func TestEvidenceSetRequiresInit(t *testing.T) {
 	chdirEvidenceTemp(t)
-	err := runEvidenceSet(nil, []string{"alpha", "big-thinker", "status", "done"})
+	err := runEvidenceSet(nil, []string{"alpha", "planner", "status", "done"})
 	if err == nil || !strings.Contains(err.Error(), "evidence not found") {
 		t.Fatalf("expected missing-evidence, got %v", err)
 	}
@@ -17,14 +17,14 @@ func TestEvidenceSetRequiresInit(t *testing.T) {
 func TestEvidenceSetMutatesField(t *testing.T) {
 	chdirEvidenceTemp(t)
 	writeFakeWorkflow(t, "alpha")
-	if err := runEvidenceInit(nil, []string{"alpha", "big-thinker"}); err != nil {
+	if err := runEvidenceInit(nil, []string{"alpha", "planner"}); err != nil {
 		t.Fatal(err)
 	}
-	if err := runEvidenceSet(nil, []string{"alpha", "big-thinker", "handoffTo", "feature-specialist"}); err != nil {
+	if err := runEvidenceSet(nil, []string{"alpha", "planner", "handoffTo", "senior-engineer"}); err != nil {
 		t.Fatal(err)
 	}
-	data, _ := os.ReadFile(".workflow/alpha-big-thinker.json")
-	if !strings.Contains(string(data), `"handoffTo": "feature-specialist"`) {
+	data, _ := os.ReadFile(".workflow/alpha-planner.json")
+	if !strings.Contains(string(data), `"handoffTo": "senior-engineer"`) {
 		t.Fatalf("set did not persist: %s", data)
 	}
 	matches, _ := os.ReadDir(".workflow")
@@ -38,13 +38,13 @@ func TestEvidenceSetMutatesField(t *testing.T) {
 func TestEvidenceSetExtraPath(t *testing.T) {
 	chdirEvidenceTemp(t)
 	writeFakeWorkflow(t, "alpha")
-	if err := runEvidenceInit(nil, []string{"alpha", "big-thinker"}); err != nil {
+	if err := runEvidenceInit(nil, []string{"alpha", "planner"}); err != nil {
 		t.Fatal(err)
 	}
-	if err := runEvidenceSet(nil, []string{"alpha", "big-thinker", "extra.note", "reviewed by sam"}); err != nil {
+	if err := runEvidenceSet(nil, []string{"alpha", "planner", "extra.note", "reviewed by sam"}); err != nil {
 		t.Fatal(err)
 	}
-	data, _ := os.ReadFile(".workflow/alpha-big-thinker.json")
+	data, _ := os.ReadFile(".workflow/alpha-planner.json")
 	if !strings.Contains(string(data), `"note": "reviewed by sam"`) {
 		t.Fatalf("extra not stored: %s", data)
 	}

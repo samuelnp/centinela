@@ -15,7 +15,7 @@ rejected and rewritten.
 {
   "feature":     "<feature-slug>",
   "step":        "plan | code | tests | validate | docs",
-  "role":        "big-thinker | feature-specialist | senior-engineer | ux-ui-specialist | qa-senior | validation-specialist | documentation-specialist",
+  "role":        "planner | senior-engineer | ux-ui-specialist | qa-senior | gatekeeper | documentation-specialist (legacy: big-thinker, feature-specialist, validation-specialist)",
   "status":      "done",
   "generatedAt": "<RFC 3339 timestamp, e.g. 2026-05-12T14:30:00Z>",
   "inputs":      ["…repo-relative file paths the agent consulted…"],
@@ -51,25 +51,26 @@ rejected and rewritten.
 
 ## Per-role rules
 
-### big-thinker (step: plan)
+### planner (step: plan)
 
 - `inputs` MUST include **every** `docs/features/*.md` in the repo plus the
   current feature's plan at `docs/plans/<feature>.md`. The validator
   computes the required set via `requiredPlanInputs` and rejects any
   missing entries with `missing feature-doc snapshot inputs`.
 - `outputs` MUST include at least one real file under `docs/plans/` or
-  `specs/`. Typically: the feature brief at
-  `docs/features/<feature>.md` and the plan file at `docs/plans/<feature>.md`.
-- `handoffTo` → `feature-specialist`.
-
-### feature-specialist (step: plan)
-
-- Same snapshot-input rule as big-thinker.
-- `outputs` MUST include at least one of: `docs/plans/<feature>.md`,
-  `specs/<feature>.feature` (typically both, plus
-  `docs/features/<feature>.md`).
-- `edgeCases` MUST be non-empty.
+  `specs/`. Typically both the plan file at `docs/plans/<feature>.md` and
+  the Gherkin spec at `specs/<feature>.feature`.
+- `edgeCases` MUST be non-empty — the planner carries the spec lens.
 - `handoffTo` → `senior-engineer`.
+
+#### Legacy (pre `planner-v1`) workflows
+
+A workflow whose `.workflow/<feature>.json` has no `planContract` predates the
+unified planner and still requires the COMPLETE retired pair — `big-thinker`
+(same snapshot-input rule, `handoffTo` → `feature-specialist`) and
+`feature-specialist` (same snapshot rule, non-empty `edgeCases`, `handoffTo` →
+`senior-engineer`). A partial set fails, and a workflow pinned to `planner-v1`
+cannot satisfy its gate with legacy-named files.
 
 ### senior-engineer (step: code)
 
@@ -161,13 +162,13 @@ applies these rules:
 - All other global rules still apply.
 - `handoffTo` → `complete`.
 
-## Worked example — big-thinker
+## Worked example — planner
 
 ```json
 {
   "feature": "demo-feature",
   "step": "plan",
-  "role": "big-thinker",
+  "role": "planner",
   "status": "done",
   "generatedAt": "2026-05-12T14:30:00Z",
   "inputs": [
@@ -176,13 +177,13 @@ applies these rules:
     "docs/plans/demo-feature.md"
   ],
   "outputs": [
-    "docs/features/demo-feature.md",
-    "docs/plans/demo-feature.md"
+    "docs/plans/demo-feature.md",
+    "specs/demo-feature.feature"
   ],
   "edgeCases": [
     "Existing users keep working without migration"
   ],
-  "handoffTo": "feature-specialist"
+  "handoffTo": "senior-engineer"
 }
 ```
 

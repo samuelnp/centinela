@@ -9,16 +9,16 @@ import (
 func TestEvidenceReadField(t *testing.T) {
 	chdirEvidenceTemp(t)
 	writeFakeWorkflow(t, "alpha")
-	if err := runEvidenceInit(nil, []string{"alpha", "feature-specialist"}); err != nil {
+	if err := runEvidenceInit(nil, []string{"alpha", "planner"}); err != nil {
 		t.Fatal(err)
 	}
-	if err := runEvidenceAppend(nil, []string{"alpha", "feature-specialist", "outputs", "docs/plans/alpha.md"}); err != nil {
+	if err := runEvidenceAppend(nil, []string{"alpha", "planner", "outputs", "docs/plans/alpha.md"}); err != nil {
 		t.Fatal(err)
 	}
 	evidenceReadField = "outputs"
 	t.Cleanup(func() { evidenceReadField = "" })
 	out := captureStdout(t, func() {
-		if err := runEvidenceRead(nil, []string{"alpha", "feature-specialist"}); err != nil {
+		if err := runEvidenceRead(nil, []string{"alpha", "planner"}); err != nil {
 			t.Fatal(err)
 		}
 	})
@@ -41,11 +41,11 @@ func TestEvidenceReadMissingSuggestsInit(t *testing.T) {
 func TestEvidenceReadFullDocument(t *testing.T) {
 	chdirEvidenceTemp(t)
 	writeFakeWorkflow(t, "alpha")
-	if err := runEvidenceInit(nil, []string{"alpha", "big-thinker"}); err != nil {
+	if err := runEvidenceInit(nil, []string{"alpha", "planner"}); err != nil {
 		t.Fatal(err)
 	}
 	out := captureStdout(t, func() {
-		if err := runEvidenceRead(nil, []string{"alpha", "big-thinker"}); err != nil {
+		if err := runEvidenceRead(nil, []string{"alpha", "planner"}); err != nil {
 			t.Fatal(err)
 		}
 	})

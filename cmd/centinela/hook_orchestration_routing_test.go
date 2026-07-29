@@ -61,16 +61,16 @@ func TestRunHookOrchestration_AbsentTablesDefault(t *testing.T) {
 
 // Back-compat: a plain tier string flows through orchestrationRouting's tier loop.
 func TestRunHookOrchestration_PlainTierString(t *testing.T) {
-	out := setupRoutingRepo(t, "plan", "[orchestration.models]\nbig-thinker = \"fast\"\n")
-	if !strings.Contains(out, "big-thinker (model: claude-haiku-4-5-20251001 (claude)") {
-		t.Fatalf("expected big-thinker remapped to fast tier, got: %s", out)
+	out := setupRoutingRepo(t, "plan", "[orchestration.models]\nplanner = \"fast\"\n")
+	if !strings.Contains(out, "planner (model: claude-haiku-4-5-20251001 (claude)") {
+		t.Fatalf("expected planner remapped to fast tier, got: %s", out)
 	}
 }
 
 // Config error path: a malformed config falls back to defaults (zero-config safe).
 func TestRunHookOrchestration_ConfigErrorFallsBack(t *testing.T) {
 	out := setupRoutingRepo(t, "plan", "[orchestration.model_map.turbo]\nopencode = \"x\"\n")
-	if !strings.Contains(out, "big-thinker (model: claude-opus-4-7 (claude)") {
+	if !strings.Contains(out, "planner (model: claude-opus-4-7 (claude)") {
 		t.Fatalf("expected fallback defaults on config error, got: %s", out)
 	}
 }

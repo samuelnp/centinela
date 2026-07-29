@@ -101,8 +101,7 @@ Save to `.workflow/<feature>-production-readiness.md`. Required when gate is ena
 | Workflow enforcement | [workflow-enforcement.md](docs/architecture/workflow-enforcement.md) |
 | Validate agent — adversarial verifier | [gatekeeper-prompt.md](docs/architecture/gatekeeper-prompt.md) |
 | Orchestration evidence contract | [evidence-contract.md](docs/architecture/evidence-contract.md) |
-| Plan agent — big-thinker | [big-thinker-prompt.md](docs/architecture/big-thinker-prompt.md) |
-| Plan agent — feature-specialist | [feature-specialist-prompt.md](docs/architecture/feature-specialist-prompt.md) |
+| Plan agent — planner | [planner-prompt.md](docs/architecture/planner-prompt.md) |
 | Code agent — senior-engineer | [senior-engineer-prompt.md](docs/architecture/senior-engineer-prompt.md) |
 | Code agent — ux-ui-specialist | [ux-ui-specialist-prompt.md](docs/architecture/ux-ui-specialist-prompt.md) |
 | Tests agent — qa-senior | [qa-senior-prompt.md](docs/architecture/qa-senior-prompt.md) |

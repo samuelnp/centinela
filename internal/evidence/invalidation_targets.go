@@ -20,6 +20,13 @@ func InvalidationTargets(feature, step string) (roles []Role, artifacts []string
 		// workflow that rewinds past validate must not keep a stale legacy
 		// pair that would satisfy its legacy gate on the next pass.
 		roles = append(roles, Role("production-readiness"), orchestration.RoleValidationSpec)
+	case "plan":
+		// planner arrives via RequiredRolesForFeature since planner-v1. The two
+		// retired roles are shed as well, for the same reason validate sheds
+		// validation-specialist: a legacy in-flight workflow that rewinds past
+		// plan must not keep a stale legacy pair that would immediately satisfy
+		// its legacy gate on the next pass.
+		roles = append(roles, orchestration.RoleBigThinker, orchestration.RoleFeatureSpecial)
 	case "tests":
 		artifacts = append(artifacts, "edge-cases.md")
 	}

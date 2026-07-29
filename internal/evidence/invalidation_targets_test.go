@@ -64,7 +64,13 @@ func TestInvalidationTargetsPlanNoExtras(t *testing.T) {
 	if len(artifacts) != 0 {
 		t.Fatalf("plan artifacts = %v", artifacts)
 	}
+	// planner must arrive via RequiredRolesForFeature (not a hard-coded list),
+	// and the retired legacy pair is shed so a rewound legacy workflow cannot
+	// re-satisfy its gate with stale evidence.
+	if !hasRole(roles, "planner") {
+		t.Fatalf("plan roles must include planner: %v", roles)
+	}
 	if !hasRole(roles, "big-thinker") || !hasRole(roles, "feature-specialist") {
-		t.Fatalf("plan roles = %v", roles)
+		t.Fatalf("plan roles must shed the retired legacy pair: %v", roles)
 	}
 }

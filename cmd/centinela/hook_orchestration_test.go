@@ -20,7 +20,7 @@ func TestRunHookOrchestrationOutputsDirectiveForStrictWorkflow(t *testing.T) {
 	out := captureStdout(t, func() {
 		withStdin(t, "{}", func() { runHookOrchestration(nil, nil) }) //nolint:errcheck
 	})
-	if !strings.Contains(out, "orchestrator only") || !strings.Contains(out, "big-thinker") {
+	if !strings.Contains(out, "orchestrator only") || !strings.Contains(out, "planner") {
 		t.Fatalf("expected strict orchestration directive, got: %s", out)
 	}
 }

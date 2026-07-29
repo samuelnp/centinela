@@ -41,6 +41,7 @@ func NewWithOrder(feature string, order []string, profile string) *Workflow {
 		OrchestrationMode:  mode,
 		EnforcementProfile: profile,
 		ValidateContract:   ValidateContractAdversarial,
+		PlanContract:       PlanContractUnified,
 	}
 }
 

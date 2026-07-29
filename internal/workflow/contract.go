@@ -23,3 +23,28 @@ func featureUsesAdversarialVerifier(feature string) bool {
 	}
 	return wf.UsesAdversarialVerifier()
 }
+
+// PlanContractUnified is the plan-step contract pinned on every workflow
+// started after the unified planner shipped. Back-compat is state-dated, never
+// clock-dated (D2): an empty PlanContract means the workflow predates this
+// contract and keeps demanding the COMPLETE legacy big-thinker +
+// feature-specialist pair, so a fresh feature cannot dodge the new format by
+// hand-authoring legacy-named evidence files.
+const PlanContractUnified = "planner-v1"
+
+// UsesUnifiedPlanner reports whether the feature's plan step is governed by the
+// single planner role. A nil or unpinned workflow is legacy.
+func (wf *Workflow) UsesUnifiedPlanner() bool {
+	return wf != nil && wf.PlanContract == PlanContractUnified
+}
+
+// FeatureUsesUnifiedPlanner resolves the pinned plan contract from disk. An
+// unreadable or missing workflow is treated as legacy so a state-file problem
+// never invents a gate the operator cannot satisfy.
+func FeatureUsesUnifiedPlanner(feature string) bool {
+	wf, err := Load(feature)
+	if err != nil {
+		return false
+	}
+	return wf.UsesUnifiedPlanner()
+}

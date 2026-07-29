@@ -86,8 +86,8 @@ flowchart TB
 
         subgraph PLAN["1 · plan"]
             direction LR
-            BT["big-thinker<br/>reasoning · opus-4-7"] --> FS["feature-specialist<br/>balanced · sonnet-4-6"]
-            FS --> PLANART["docs/features/&lt;f&gt;.md<br/>docs/plans/&lt;f&gt;.md<br/>specs/&lt;f&gt;.feature"]
+            PL["planner<br/>reasoning · opus-4-7<br/>strategy + spec lenses"]
+            PL --> PLANART["docs/features/&lt;f&gt;.md<br/>docs/plans/&lt;f&gt;.md<br/>specs/&lt;f&gt;.feature"]
         end
 
         subgraph CODE["2 · code"]

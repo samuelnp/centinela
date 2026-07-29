@@ -32,17 +32,17 @@ func writeFakeWorkflow(t *testing.T, feature string) {
 func TestEvidenceInitWritesSkeleton(t *testing.T) {
 	chdirEvidenceTemp(t)
 	writeFakeWorkflow(t, "alpha")
-	if err := runEvidenceInit(nil, []string{"alpha", "big-thinker"}); err != nil {
+	if err := runEvidenceInit(nil, []string{"alpha", "planner"}); err != nil {
 		t.Fatal(err)
 	}
-	data, err := os.ReadFile(".workflow/alpha-big-thinker.json")
+	data, err := os.ReadFile(".workflow/alpha-planner.json")
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !strings.Contains(string(data), `"feature": "alpha"`) {
 		t.Fatalf("skeleton missing feature: %s", data)
 	}
-	if _, err := os.Stat(".workflow/alpha-big-thinker.md"); err != nil {
+	if _, err := os.Stat(".workflow/alpha-planner.md"); err != nil {
 		t.Fatalf("companion not written: %v", err)
 	}
 }

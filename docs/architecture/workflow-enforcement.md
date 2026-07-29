@@ -145,14 +145,15 @@ Before advancing, Centinela validates required artifacts:
 | validate | gatekeeper report at `.workflow/<feature>-gatekeeper.md` — with a non-empty commands-run record and a current verified revision — and `centinela validate` pass |
 | docs | `.workflow/<feature>-documentation-specialist.md`, `.workflow/<feature>-documentation-specialist.json`, and `docs/project-docs/index.html` |
 
-In strict orchestration mode, `plan` evidence from `big-thinker` and
-`feature-specialist` must include a full snapshot of `docs/features/*.md` paths in
-their JSON `inputs` list (including the current feature brief).
+In strict orchestration mode, `plan` evidence from `planner` (or, for a workflow
+started before the `planner-v1` contract, from `big-thinker` and
+`feature-specialist`) must include a full snapshot of `docs/features/*.md` paths in
+its JSON `inputs` list (including the current feature brief).
 
 Strict orchestration evidence must also be actionable. Required specialist JSON
 `outputs` must point to real repo files on disk rather than summary strings.
 
-- `big-thinker` and `feature-specialist` outputs must include a real `docs/plans/...` or `specs/...` artifact.
+- `planner` outputs must include a real `docs/plans/...` or `specs/...` artifact (same rule for the retired `big-thinker` / `feature-specialist` on legacy workflows).
 - `senior-engineer` outputs must include at least one real non-evidence implementation file.
 - `ux-ui-specialist` is required during `code` when `docs/features/<feature>.md` declares `surface: user-facing`; its outputs must include at least one real UI file under configured `ui_paths`, `mobileFirst: true`, and the required UX edge-case tag set.
 - `qa-senior` outputs must include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.

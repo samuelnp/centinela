@@ -112,7 +112,7 @@ Workflow state file created by `centinela start <feature>`.
 
 ### `.workflow/<feature>-<role>.md`
 
-Roles: `big-thinker`, `feature-specialist`, `senior-engineer`, `ux-ui-specialist`, `qa-senior`, `documentation-specialist`.
+Roles: `planner`, `senior-engineer`, `ux-ui-specialist`, `qa-senior`, `documentation-specialist`. Workflows started before the `planner-v1` plan contract use the retired pair `big-thinker` + `feature-specialist` instead of `planner`.
 
 ```md
 # Orchestration Evidence: <role>
@@ -143,7 +143,7 @@ Roles: `big-thinker`, `feature-specialist`, `senior-engineer`, `ux-ui-specialist
 For strict orchestration roles, `outputs` must be project-relative file paths that already
 exist on disk. Free-text summaries are not valid outputs.
 
-- `big-thinker` and `feature-specialist`: include a real `docs/plans/...` or `specs/...` file.
+- `planner` (and the retired `big-thinker` / `feature-specialist`): include a real `docs/plans/...` or `specs/...` file.
 - `senior-engineer`: include at least one real non-evidence implementation file.
 - `ux-ui-specialist`: required only for features whose brief includes `surface: user-facing`; include at least one real UI file under configured `ui_paths`, set `mobileFirst: true`, and include these tags in `edgeCases`: `mobile-first`, `visual-hierarchy`, `typography-hierarchy`, `responsive-layout`, `loading-state`, `empty-state`, `error-state`, `motion-and-reduced-motion`.
 - `qa-senior`: include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.
@@ -158,7 +158,7 @@ exist on disk. Free-text summaries are not valid outputs.
 ### Plan advisor behavior
 
 Plan advisor mode does not create a new orchestration evidence role. It changes prompt behavior
-during the `plan` step and orchestrates between `big-thinker` and `feature-specialist`.
+during the `plan` step and frames its questions as the planner's two lenses, strategy then spec.
 
 - `workflow.plan_advisor_mode = "missing_info"` (default): ask only the missing high-value questions.
 - `workflow.plan_advisor_mode = "always"`: always ask an advisor round during `plan`.

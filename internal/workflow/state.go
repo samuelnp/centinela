@@ -46,6 +46,10 @@ type Workflow struct {
 	// workflows created before this field existed — those keep the historical
 	// existence-only gatekeeper check (see UsesAdversarialVerifier).
 	ValidateContract string `json:"validateContract,omitempty"`
+	// PlanContract pins the plan-step role contract at start. Empty on workflows
+	// created before this field existed — those keep demanding the complete
+	// legacy big-thinker + feature-specialist pair (see UsesUnifiedPlanner).
+	PlanContract string `json:"planContract,omitempty"`
 	// Revisions is the append-only audit log of backward transitions performed by
 	// `centinela revise`. Empty/absent on workflows that were never rewound
 	// (back-compat, like Archetype) — RevisionsSummary handles the empty case.

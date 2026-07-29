@@ -30,6 +30,12 @@ func runEvidenceInit(_ *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	// Contract-aware (D7): a retired plan role is stubbed only for a workflow
+	// that predates planner-v1, so in-flight legacy features keep working while
+	// a fresh one cannot author old-format evidence.
+	if err := evidence.EnsureRoleAllowed(feature, role); err != nil {
+		return err
+	}
 	release, err := evidence.Lock(feature, role)
 	if err != nil {
 		return err

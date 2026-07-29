@@ -38,9 +38,10 @@ func ignored(t *testing.T, dir, rel string) bool {
 func TestEvidencePlumbingIgnored(t *testing.T) {
 	dir := seedIgnoreRepo(t)
 	for _, rel := range []string{
+		".workflow/f-planner.json",
 		".workflow/f-big-thinker.json",
 		".workflow/f-gatekeeper.json",
-		".workflow/f-big-thinker.lock",
+		".workflow/f-planner.lock",
 	} {
 		if !ignored(t, dir, rel) {
 			t.Errorf("expected %q to be ignored", rel)
@@ -56,7 +57,7 @@ func TestKbAndRoadmapNotIgnored(t *testing.T) {
 		".workflow/roadmap.json",
 		".workflow/roadmap-analysis.json",
 		".workflow/f.json",
-		".workflow/f-big-thinker.md",
+		".workflow/f-planner.md",
 	} {
 		if ignored(t, dir, rel) {
 			t.Errorf("expected %q to remain tracked (not ignored)", rel)

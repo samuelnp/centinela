@@ -17,7 +17,7 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	// documentation-specialist role (the internal path drops it).
 	os.MkdirAll("docs/features", 0755)                                         //nolint:errcheck
 	os.WriteFile("docs/features/f.md", []byte("surface: user-facing\n"), 0644) //nolint:errcheck
-	if len(RequiredRoles("plan")) != 2 || len(RequiredRoles("code")) != 1 || len(RequiredRoles("docs")) != 1 || len(RequiredRoles("validate")) != 1 {
+	if len(RequiredRoles("plan")) != 1 || len(RequiredRoles("code")) != 1 || len(RequiredRoles("docs")) != 1 || len(RequiredRoles("validate")) != 1 {
 		t.Fatal("unexpected role mapping")
 	}
 	if RequiredRoles("validate")[0] != RoleGatekeeper {
@@ -26,8 +26,7 @@ func TestRequiredRolesAndValidateStep(t *testing.T) {
 	if err := ValidateStep("f", "plan", nil); err == nil {
 		t.Fatal("expected missing evidence failure")
 	}
-	writeEvidence(t, "f", "plan", RoleBigThinker, false)
-	writeEvidence(t, "f", "plan", RoleFeatureSpecial, true)
+	writeEvidence(t, "f", "plan", RolePlanner, true)
 	if err := ValidateStep("f", "plan", nil); err != nil {
 		t.Fatalf("expected valid evidence: %v", err)
 	}
@@ -66,7 +65,7 @@ func writeEvidence(t *testing.T, f, s string, r Role, edge bool) {
 	edgeCases := `[]`
 	inputs := `"inputs":["i"]`
 	outputs := `"outputs":["docs/project-docs/index.html"]`
-	if s == "plan" && (r == RoleBigThinker || r == RoleFeatureSpecial) {
+	if s == "plan" && requiresPlanSnapshot(r) {
 		inputs = `"inputs":["docs/features/` + f + `.md","docs/plans/` + f + `.md"]`
 		os.MkdirAll("docs/plans", 0755)                              //nolint:errcheck
 		os.MkdirAll("specs", 0755)                                   //nolint:errcheck

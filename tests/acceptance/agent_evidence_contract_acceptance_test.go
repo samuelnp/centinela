@@ -12,8 +12,7 @@ import (
 const contractPath = "docs/architecture/evidence-contract.md"
 
 var rolePrompts = map[string]string{
-	"big-thinker":              "docs/architecture/big-thinker-prompt.md",
-	"feature-specialist":       "docs/architecture/feature-specialist-prompt.md",
+	"planner":                  "docs/architecture/planner-prompt.md",
 	"senior-engineer":          "docs/architecture/senior-engineer-prompt.md",
 	"qa-senior":                "docs/architecture/qa-senior-prompt.md",
 	"ux-ui-specialist":         "docs/architecture/ux-ui-specialist-prompt.md",
@@ -37,8 +36,9 @@ func TestEvidenceContract_DocumentsSchemaAndAllRoles(t *testing.T) {
 	for _, want := range []string{
 		`"feature"`, `"step"`, `"role"`, `"status"`, `"generatedAt"`,
 		`"inputs"`, `"outputs"`, `"edgeCases"`, `"mobileFirst"`, `"handoffTo"`,
-		"big-thinker", "feature-specialist", "senior-engineer", "qa-senior",
-		"ux-ui-specialist", "validation-specialist", "documentation-specialist",
+		"planner", "big-thinker", "feature-specialist", "senior-engineer",
+		"qa-senior", "ux-ui-specialist", "validation-specialist",
+		"documentation-specialist",
 		"RFC 3339",
 	} {
 		if !strings.Contains(body, want) {
@@ -85,7 +85,7 @@ func TestPromptsLinkToEvidenceContract(t *testing.T) {
 }
 
 func TestPlanStepPromptsRequireSnapshotInputs(t *testing.T) {
-	for _, role := range []string{"big-thinker", "feature-specialist"} {
+	for _, role := range []string{"planner"} {
 		b, err := os.ReadFile(repoRel(rolePrompts[role]))
 		if err != nil {
 			t.Fatalf("read %s prompt: %v", role, err)
@@ -137,7 +137,7 @@ func TestUXPromptListsAllEightTagsAndMobileFirst(t *testing.T) {
 func TestScaffoldMirrorParityForUpdatedPrompts(t *testing.T) {
 	files := []string{
 		"evidence-contract.md",
-		"big-thinker-prompt.md", "feature-specialist-prompt.md",
+		"planner-prompt.md",
 		"senior-engineer-prompt.md", "qa-senior-prompt.md",
 		"ux-ui-specialist-prompt.md", "validation-specialist-prompt.md",
 		"documentation-generator-prompt.md",

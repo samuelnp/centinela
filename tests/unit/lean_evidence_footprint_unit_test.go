@@ -23,6 +23,7 @@ func leanGitignore(t *testing.T) string {
 func TestGitignoreHasEvidencePatterns(t *testing.T) {
 	gi := leanGitignore(t)
 	for _, want := range []string{
+		".workflow/*-planner.json",
 		".workflow/*-big-thinker.json",
 		".workflow/*-gatekeeper.json",
 		".workflow/*.lock",

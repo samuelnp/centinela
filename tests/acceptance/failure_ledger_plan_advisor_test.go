@@ -232,7 +232,7 @@ func TestFL_PreWarningQuestionNamesGate(t *testing.T) {
 	if !strings.Contains(out, "recurring gate failures (worst: g1-file-size)") {
 		t.Fatalf("expected pre-warning question naming g1-file-size:\n%s", out)
 	}
-	if !strings.Contains(out, "[feature-specialist]") {
+	if !strings.Contains(out, "[spec]") {
 		t.Fatalf("pre-warning question must carry a lens tag:\n%s", out)
 	}
 }

@@ -36,6 +36,7 @@ ECOSYSTEM.md
 # memory/, and the -<role>.md narratives (reviewer + LLM knowledge base).
 # Ignoring by role suffix (never a bare *.json) fails safe: a new role at worst
 # leaks one evidence file, whereas a broad *.json silently drops durable state.
+.workflow/*-planner.json
 .workflow/*-big-thinker.json
 .workflow/*-feature-specialist.json
 .workflow/*-senior-engineer.json

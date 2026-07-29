@@ -58,7 +58,8 @@ func primaryWorkflow(wfs []*workflow.Workflow) *workflow.Workflow {
 }
 
 func isRoleWorkflow(feature string) bool {
-	return strings.HasSuffix(feature, "-big-thinker") ||
+	return strings.HasSuffix(feature, "-planner") ||
+		strings.HasSuffix(feature, "-big-thinker") ||
 		strings.HasSuffix(feature, "-feature-specialist") ||
 		strings.HasSuffix(feature, "-senior-engineer") ||
 		strings.HasSuffix(feature, "-qa-senior") ||

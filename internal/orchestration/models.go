@@ -17,6 +17,11 @@ const (
 // (edge-case-tester, merge-steward) are documented here for completeness but
 // are not injected by the directive in v1.
 var defaultTierForRole = map[Role]Tier{
+	// The merged planner context carries the strategy lens (already reasoning)
+	// plus the spec lens, so downgrading would regress the half that was
+	// reasoning-tier; net spend still drops because one reasoning context
+	// replaces one reasoning + one balanced context (D4).
+	RolePlanner:        TierReasoning,
 	RoleBigThinker:     TierReasoning,
 	RoleSeniorEngineer: TierReasoning,
 	// Refutation is the hardest judgment in the workflow, and the verifier now
@@ -69,6 +74,7 @@ func AllowedRunnerKeys() []string {
 // plus the out-of-band roles that carry a documented default tier.
 func AllowedRoleSlugs() []string {
 	return []string{
+		string(RolePlanner),
 		string(RoleBigThinker),
 		string(RoleFeatureSpecial),
 		string(RoleSeniorEngineer),

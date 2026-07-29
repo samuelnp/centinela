@@ -42,6 +42,7 @@ func OrchestrationModelTiers(cfg *Config) map[string]string {
 			out[role] = val.Tier
 		}
 	}
+	aliasPlanRole(cfg.Orchestration.Models, out)
 	return out
 }
 
@@ -57,6 +58,7 @@ func OrchestrationModelOverrides(cfg *Config) map[string]map[string]string {
 			out[role] = val.Overrides
 		}
 	}
+	aliasPlanRole(cfg.Orchestration.Models, out)
 	return out
 }
 

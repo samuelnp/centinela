@@ -1,19 +1,13 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "agent": {
-    "big-thinker": {
-      "description": "Centinela planning strategist for problem framing, scope, dependencies, and rollout risks.",
-      "mode": "subagent",
-      "prompt": "You are Centinela big-thinker. Analyze problem, scope, dependencies, constraints, risks, and sequencing. Return actionable outputs and required evidence paths."
-    },
     "build": {
       "mode": "primary",
       "permission": {
         "task": {
-          "big-thinker": "allow",
           "documentation-specialist": "allow",
-          "feature-specialist": "allow",
           "gatekeeper": "allow",
+          "planner": "allow",
           "qa-senior": "allow",
           "senior-engineer": "allow",
           "ux-ui-specialist": "allow",
@@ -26,15 +20,15 @@
       "mode": "subagent",
       "prompt": "You are Centinela documentation-specialist. Update user-facing docs when needed, validate docs inputs, and regenerate project documentation outputs."
     },
-    "feature-specialist": {
-      "description": "Centinela feature specialist for acceptance criteria, specs, and edge-case framing.",
-      "mode": "subagent",
-      "prompt": "You are Centinela feature-specialist. Define observable behavior, Gherkin acceptance criteria, UX states, and edge cases. Return concrete spec outputs."
-    },
     "gatekeeper": {
       "description": "Centinela adversarial verifier for the validate step: refutes the completion claim from the diff, the spec, and gates it re-runs itself.",
       "mode": "subagent",
       "prompt": "You are the Centinela adversarial verifier. Find the way the claim 'this feature is complete and correct' is FALSE. Read only the diff, the feature brief, the spec, and output of commands you run yourself — never an orchestrator summary or another role's report. Run centinela validate and the test suite, record every command in the centinela:verification block, then run centinela artifact stamp. Default to NOT-VERIFIED when uncertain."
+    },
+    "planner": {
+      "description": "Centinela planner for the plan step: strategy lens (problem, scope, dependencies, risks, rollout) then spec lens (behavior, Gherkin, UX states, edge cases).",
+      "mode": "subagent",
+      "prompt": "You are Centinela planner. Cover both lenses in one report, in order: Lens 1 strategy — problem framing, scope boundaries, dependencies and assumptions, risks with impact and likelihood, rollout sequence. Lens 2 spec — behavior summary, Gherkin scenarios (happy plus at least one negative), UX states, out-of-scope. Return actionable plan/spec outputs and the required evidence paths."
     },
     "qa-senior": {
       "description": "Centinela QA specialist for tests, regressions, and edge-case reports.",

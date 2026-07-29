@@ -36,7 +36,7 @@ func TestEvidenceValidateSucceedsWhenNoFiles(t *testing.T) {
 func TestEvidenceValidateEmitsFixHint(t *testing.T) {
 	chdirEvidenceTemp(t)
 	writeFakeWorkflow(t, "alpha")
-	if err := runEvidenceInit(nil, []string{"alpha", "big-thinker"}); err != nil {
+	if err := runEvidenceInit(nil, []string{"alpha", "planner"}); err != nil {
 		t.Fatal(err)
 	}
 	var validateErr error

@@ -21,6 +21,7 @@ type Role = orchestration.Role
 // roles in evidence-contract.md plus merge-steward (out-of-band).
 func AllRoles() []Role {
 	return []Role{
+		orchestration.RolePlanner,
 		orchestration.RoleBigThinker,
 		orchestration.RoleFeatureSpecial,
 		orchestration.RoleSeniorEngineer,

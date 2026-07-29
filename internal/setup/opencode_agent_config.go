@@ -3,13 +3,13 @@ package setup
 import "encoding/json"
 
 var centinelaOpenCodeAgents = map[string]map[string]string{
-	"big-thinker": {
-		"description": "Centinela planning strategist for problem framing, scope, dependencies, and rollout risks.",
-		"prompt":      "You are Centinela big-thinker. Analyze problem, scope, dependencies, constraints, risks, and sequencing. Return actionable outputs and required evidence paths.",
-	},
-	"feature-specialist": {
-		"description": "Centinela feature specialist for acceptance criteria, specs, and edge-case framing.",
-		"prompt":      "You are Centinela feature-specialist. Define observable behavior, Gherkin acceptance criteria, UX states, and edge cases. Return concrete spec outputs.",
+	// The plan step's single role: both lenses in one context. The two retired
+	// plan agents are NOT emitted any more; mergeOpenCodeAgents only adds
+	// missing keys, so an existing opencode.json keeps its legacy definitions
+	// untouched (no clobber) and simply gains "planner".
+	"planner": {
+		"description": "Centinela planner for the plan step: strategy lens (problem, scope, dependencies, risks, rollout) then spec lens (behavior, Gherkin, UX states, edge cases).",
+		"prompt":      "You are Centinela planner. Cover both lenses in one report, in order: Lens 1 strategy — problem framing, scope boundaries, dependencies and assumptions, risks with impact and likelihood, rollout sequence. Lens 2 spec — behavior summary, Gherkin scenarios (happy plus at least one negative), UX states, out-of-scope. Return actionable plan/spec outputs and the required evidence paths.",
 	},
 	"senior-engineer": {
 		"description": "Centinela implementation specialist for code changes within architecture rules.",

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -45,6 +44,8 @@ func runStart(_ *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+
+	printLegacyPlanRoleNotice(cfg)
 
 	wtPath, err := worktree.MaybeProvision(".", feature, cfg)
 	if err != nil {
@@ -88,8 +89,4 @@ func runStart(_ *cobra.Command, args []string) error {
 	fmt.Println(ui.StyleMuted.Render("Steps: " + stepArrow(order)))
 	fmt.Println(ui.RenderStep("Current step", order[0]))
 	return nil
-}
-
-func stepArrow(order []string) string {
-	return strings.Join(order, " → ")
 }

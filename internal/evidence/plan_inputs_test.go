@@ -42,6 +42,7 @@ func TestPlanInputsDelegatesForPlanRoles(t *testing.T) {
 func TestPlanInputsNilForNonPlanRoles(t *testing.T) {
 	chdirPlanTemp(t)
 	planRoles := map[Role]bool{
+		orchestration.RolePlanner:        true,
 		orchestration.RoleBigThinker:     true,
 		orchestration.RoleFeatureSpecial: true,
 	}
