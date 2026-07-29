@@ -47,8 +47,8 @@ func TestIntegPreWarningQuestionNamesWorstGate(t *testing.T) {
 	if !strings.Contains(out, "recurring gate failures (worst: coverage)") {
 		t.Fatalf("expected pre-warning question naming coverage, got:\n%s", out)
 	}
-	if !strings.Contains(out, "[feature-specialist]") {
-		t.Fatalf("expected feature-specialist lens tag on questions, got:\n%s", out)
+	if !strings.Contains(out, "[spec]") {
+		t.Fatalf("expected spec lens tag on questions, got:\n%s", out)
 	}
 }
 

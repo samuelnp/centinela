@@ -51,8 +51,7 @@ Expected outputs include:
 - `docs/features/landing-page-mvp.md`
 - `docs/plans/landing-page-mvp.md`
 - `specs/landing-page-mvp.feature`
-- `.workflow/landing-page-mvp-big-thinker.*`
-- `.workflow/landing-page-mvp-feature-specialist.*`
+- `.workflow/landing-page-mvp-planner.*`
 
 When the agent asks `Step plan complete — shall I advance to code?`, review the plan and approve only if it matches the MVP scope.
 

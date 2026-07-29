@@ -11,7 +11,7 @@ import (
 // "Agent prompts forbid hand-written JSON".
 
 var promptRoles = []string{
-	"big-thinker", "feature-specialist", "senior-engineer",
+	"planner", "senior-engineer",
 	"ux-ui-specialist", "qa-senior", "validation-specialist",
 	"gatekeeper", "documentation-generator", "production-readiness",
 }

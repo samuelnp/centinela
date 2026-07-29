@@ -1,7 +1,7 @@
 package acceptance_test
 
 // Acceptance: specs/deferred-findings-roadmap-capture.feature
-// Scenario: All eight role prompts and their scaffold mirrors contain the Deferred Findings section byte-identically
+// Scenario: All role prompts and their scaffold mirrors contain the Deferred Findings section byte-identically
 
 import (
 	"bytes"
@@ -12,8 +12,7 @@ import (
 )
 
 var dfrcPromptFiles = []string{
-	"big-thinker-prompt.md",
-	"feature-specialist-prompt.md",
+	"planner-prompt.md",
 	"senior-engineer-prompt.md",
 	"qa-senior-prompt.md",
 	"edge-case-tester-prompt.md",

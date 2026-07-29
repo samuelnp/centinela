@@ -28,12 +28,15 @@ func validatePlanSnapshotInputs(path, feature, step string, role Role, inputs []
 	return fmt.Errorf("missing feature-doc snapshot inputs: %s in: %s", strings.Join(missing, ", "), path)
 }
 
+// requiresPlanSnapshot covers the planner plus the two retired legacy plan
+// roles, so an in-flight legacy workflow is validated exactly as before. The
+// glob RULE itself is unchanged — only the set of roles it applies to grew.
 func requiresPlanSnapshot(role Role) bool {
-	return role == RoleBigThinker || role == RoleFeatureSpecial
+	return role == RolePlanner || role == RoleBigThinker || role == RoleFeatureSpecial
 }
 
-// RequiredPlanInputs returns the plan-snapshot input set the big-thinker and
-// feature-specialist must list: the feature's own brief, every docs/features/*.md,
+// RequiredPlanInputs returns the plan-snapshot input set every plan role
+// must list: the feature's own brief, every docs/features/*.md,
 // and the feature's plan at docs/plans/<feature>.md — normalized and sorted (the
 // set the evidence contract documents as required). The validator and the
 // evidence init pre-fill share this so a pre-filled init validates by construction.

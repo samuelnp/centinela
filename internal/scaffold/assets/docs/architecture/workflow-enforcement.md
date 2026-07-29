@@ -95,10 +95,6 @@ AFTER each step:
 1. Run `centinela complete <feature-name>`
 2. This validates the artifact exists and advances to next step
 3. Output the current workflow status to the user
-4. Respect `workflow.step_confirmation_mode` for review prompts:
-   - `every_step` (default): require explicit confirmation each step.
-   - `after_plan`: require confirmation only for plan -> code.
-   - `auto`: no review prompt; still run `centinela complete` explicitly.
 
 ## Validate Step
 
@@ -124,22 +120,72 @@ Commands run natively via the OS — no shell scripts required. This works on Wi
 All five steps are mandatory. No step can be skipped — this is enforced by the binary.
 Domain/core logic, tests, and validate are especially non-negotiable.
 
-In strict orchestration mode, `plan` evidence from `big-thinker` and
-`feature-specialist` must include all `docs/features/*.md` paths in JSON `inputs`
-(including the current feature brief).
+## Preserved Custom Sections
 
-Strict orchestration evidence must also be actionable. Specialist JSON `outputs`
-must be real repo files on disk, not free-text summaries.
+## Layer 1: Workflow State (`.workflow/`)
 
-- `big-thinker` and `feature-specialist` outputs must include a real `docs/plans/...` or `specs/...` artifact.
+Each feature has `.workflow/<feature>.json` with:
+
+- `currentStep` in `plan|code|tests|validate|docs|done`
+- per-step status (`pending|in-progress|done`)
+- completion timestamps
+
+This file is the source of truth for progress.
+
+
+## Layer 2: Artifact Validation (`centinela complete`)
+
+Before advancing, Centinela validates required artifacts:
+
+| Step | Required artifacts |
+|------|--------------------|
+| plan | `docs/features/<feature>.md`, `docs/plans/<feature>.md`, and at least one `specs/*.feature` |
+| code | none (architecture rules apply during implementation) |
+| tests | test files in `tests/unit` or `tests/integration`, executable acceptance files in `tests/acceptance`, at least one acceptance execution command in `[validate] commands`, and `.workflow/<feature>-edge-cases.md` |
+| validate | gatekeeper report at `.workflow/<feature>-gatekeeper.md` — with a non-empty commands-run record and a current verified revision — and `centinela validate` pass |
+| docs | `.workflow/<feature>-documentation-specialist.md`, `.workflow/<feature>-documentation-specialist.json`, and `docs/project-docs/index.html` |
+
+In strict orchestration mode, `plan` evidence from `planner` (or, for a workflow
+started before the `planner-v1` contract, from `big-thinker` and
+`feature-specialist`) must include a full snapshot of `docs/features/*.md` paths in
+its JSON `inputs` list (including the current feature brief).
+
+Strict orchestration evidence must also be actionable. Required specialist JSON
+`outputs` must point to real repo files on disk rather than summary strings.
+
+- `planner` outputs must include a real `docs/plans/...` or `specs/...` artifact (same rule for the retired `big-thinker` / `feature-specialist` on legacy workflows).
 - `senior-engineer` outputs must include at least one real non-evidence implementation file.
 - `ux-ui-specialist` is required during `code` when `docs/features/<feature>.md` declares `surface: user-facing`; its outputs must include at least one real UI file under configured `ui_paths`, `mobileFirst: true`, and the required UX edge-case tag set.
 - `qa-senior` outputs must include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.
 
-During `plan`, Centinela also runs plan-advisor mode by default. `workflow.plan_advisor_mode = "missing_info"`
-asks only missing high-value questions from `big-thinker` and `feature-specialist` lenses, while
-`workflow.plan_question_limit` caps each round at `4`.
+If validation fails, the step remains in progress.
 
-Advisor context uses current feature artifacts first, then roadmap dependencies, then same-phase siblings.
-Related edge-case lessons and roadmap quality notes may shape questions through summarized context,
-not raw file dumps.
+
+## Layer 3: Hook Enforcement
+
+Centinela hooks enforce write discipline and context:
+
+- `centinela hook prewrite` blocks out-of-step writes.
+- `centinela hook postwrite` emits compact workflow tags.
+- `centinela hook setup` injects setup guidance when required files are missing.
+- `centinela hook context` injects active workflow context.
+
+These hooks are wired by `centinela init` for Claude and OpenCode integrations.
+
+
+## Required Agent Behavior
+
+1. Start every feature with `centinela start <feature>`.
+2. Do work only for the active step.
+3. After producing artifacts, run `centinela complete <feature>`.
+4. Respect `workflow.step_confirmation_mode` for review prompts:
+   - `every_step` (default): require explicit user confirmation for each step.
+   - `after_plan`: require confirmation only for plan -> code transition.
+   - `auto`: no review prompt; still run `centinela complete <feature>` explicitly.
+5. During `plan`, Centinela runs plan-advisor mode by default:
+   - `workflow.plan_advisor_mode = "missing_info"` asks only missing high-value questions.
+   - `workflow.plan_advisor_mode = "always"` always asks an advisor round.
+   - `workflow.plan_advisor_mode = "off"` disables advisor prompting.
+   - `workflow.plan_question_limit` caps each advisor round and defaults to `4`.
+   - advisor context uses current feature artifacts first, then roadmap dependencies, then same-phase siblings.
+   - related edge-case lessons and roadmap quality notes can shape questions, but the hook emits summarized context instead of raw file dumps.

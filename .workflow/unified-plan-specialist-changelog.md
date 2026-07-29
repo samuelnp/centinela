@@ -1,0 +1,1 @@
+- feat: merge the plan-step big-thinker and feature-specialist roles into one reasoning-tier planner — single context, one evidence pair, both lenses as ordered prompt sections; PlanContract state-dated back-compat (legacy workflows keep the two-role set), contract-aware role resolution unified across directive, gate, verify, verdict, and MCP surfaces

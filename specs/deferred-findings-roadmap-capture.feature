@@ -269,10 +269,9 @@ Feature: Deferred findings roadmap capture
   # Slice 4 — prompt contract
   # ---------------------------------------------------------------------------
 
-  Scenario: All eight role prompts and their scaffold mirrors contain the Deferred Findings section byte-identically
+  Scenario: All role prompts and their scaffold mirrors contain the Deferred Findings section byte-identically
     Given the following source prompt files:
-      docs/architecture/big-thinker-prompt.md
-      docs/architecture/feature-specialist-prompt.md
+      docs/architecture/planner-prompt.md
       docs/architecture/senior-engineer-prompt.md
       docs/architecture/qa-senior-prompt.md
       docs/architecture/edge-case-tester-prompt.md
@@ -281,7 +280,7 @@ Feature: Deferred findings roadmap capture
       docs/architecture/gatekeeper-prompt.md
     And each has a corresponding mirror under internal/scaffold/assets/docs/architecture/
     When each source file is compared byte-for-byte against its mirror
-    Then all eight pairs are byte-identical
-    And each of the sixteen files contains the section heading "Deferred Findings"
-    And each of the sixteen files contains the text "centinela roadmap defer"
-    And each of the sixteen files references recording slugs or stating "none"
+    Then all seven pairs are byte-identical
+    And each of the fourteen files contains the section heading "Deferred Findings"
+    And each of the fourteen files contains the text "centinela roadmap defer"
+    And each of the fourteen files references recording slugs or stating "none"

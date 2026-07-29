@@ -167,13 +167,20 @@ AI model routing across subagent roles and runners.
 
 ### `[orchestration.models.<role>]`
 
-Roles: `big-thinker`, `feature-specialist`, `senior-engineer`, `ux-ui-specialist`, `qa-senior`, `documentation-specialist`, `validation-specialist`, `merge-steward`, `gatekeeper`, `edge-case-tester`.
+Roles: `planner`, `senior-engineer`, `ux-ui-specialist`, `qa-senior`, `documentation-specialist`, `merge-steward`, `gatekeeper`, `edge-case-tester`.
+
+**Retired keys (still accepted):** `big-thinker`, `feature-specialist` and
+`validation-specialist` remain valid so existing `centinela.toml` files keep
+loading. The two plan keys **alias onto `planner`** when no explicit `planner`
+entry is present (`big-thinker` wins over `feature-specialist`). `centinela
+doctor` and `centinela start` print a one-time notice suggesting the rename; the
+hook path never repeats it.
 
 Two forms:
 
 ```toml
 [orchestration.models]
-big-thinker = "reasoning"          # string form → tier for all runners (reasoning|balanced|fast)
+planner = "reasoning"              # string form → tier for all runners (reasoning|balanced|fast)
 
 [orchestration.models.senior-engineer]   # table form → per-runner model override
 claude   = "claude-opus-4-7"

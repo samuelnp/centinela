@@ -15,6 +15,10 @@ var allowedModelTiers = map[string]bool{
 }
 
 var allowedModelRoles = map[string]bool{
+	"planner": true,
+	// The two retired plan roles stay ALLOWED: removing them would make
+	// config.Load fail on every existing centinela.toml. They alias to
+	// "planner" in the leaf accessors instead (D8).
 	"big-thinker":              true,
 	"feature-specialist":       true,
 	"senior-engineer":          true,

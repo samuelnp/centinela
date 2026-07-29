@@ -11,6 +11,10 @@ import (
 // live *-prompt.md docs. Markdown-only; the validator enforces existence, not
 // these headers, so drift here is cosmetic.
 var companionHeaders = map[Role][]string{
+	// The planner's headers are the ordered union of both lenses: strategy
+	// first, then spec, matching docs/architecture/planner-prompt.md.
+	orchestration.RolePlanner: {"Problem", "Scope", "Dependencies & Assumptions", "Risks", "Rollout",
+		"Behavior Summary", "Acceptance Criteria (Gherkin)", "UX States", "Edge Cases", "Out-of-Scope", "Handoff"},
 	orchestration.RoleBigThinker:       {"Problem", "Scope", "Dependencies & Assumptions", "Risks", "Rollout", "Handoff"},
 	orchestration.RoleFeatureSpecial:   {"Behavior Summary", "Acceptance Criteria (Gherkin)", "UX States", "Edge Cases", "Out-of-Scope", "Handoff"},
 	orchestration.RoleSeniorEngineer:   {"Files Touched", "Architecture Compliance", "Type-Safety Notes", "Trade-Offs", "Handoff"},

@@ -7,8 +7,7 @@ Feature: Promote orchestration roles to standalone prompt files
   Scenario: Each orchestration role has a prompt file under docs/architecture/
     Given the orchestration roles defined in internal/orchestration/policy.go
     When the promote-orchestration-agents feature is implemented
-    Then docs/architecture/big-thinker-prompt.md should exist
-    And docs/architecture/feature-specialist-prompt.md should exist
+    Then docs/architecture/planner-prompt.md should exist
     And docs/architecture/senior-engineer-prompt.md should exist
     And docs/architecture/qa-senior-prompt.md should exist
     And docs/architecture/ux-ui-specialist-prompt.md should exist

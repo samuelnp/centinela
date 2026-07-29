@@ -239,3 +239,15 @@
 - **merge-pending-marker-dirties-primary-tree** — the pending marker and steward .md are untracked in repos that track .workflow/, so isDirty(primary) refuses merge --continue from both CWDs *(deferred 2026-07-29T07:55:04Z · merge-truthful-delivery/gatekeeper)*
 - **merge-validate-fail-leaves-main-advanced** — a post-merge validate failure leaves the merge commit on main unannounced and merge --continue closes it without re-validating *(deferred 2026-07-29T07:55:04Z · merge-truthful-delivery/gatekeeper)*
 - **merge-force-remove-locked-worktree** — the --force-remove retry advice does not work for a locked worktree (git needs -f -f or unlock) *(deferred 2026-07-29T07:55:04Z · merge-truthful-delivery/gatekeeper)*
+- **codex-claude-role-agent-registry** — Claude/Codex have no per-role agent registry; AC6 codex-equivalent emitter does not exist *(deferred 2026-07-29T16:50:42Z · unified-plan-specialist/gatekeeper)*
+- **managed-agent-retirement-sweep** — Managed-sync sweep to retire replaced agents from existing projects' opencode.json *(deferred 2026-07-29T16:50:42Z · unified-plan-specialist/gatekeeper)*
+- **prompt-doc-budget-ratchet** — Aggregate prompt-doc budget ratchet as fallback when a merged doc exceeds the 130-line cap *(deferred 2026-07-29T16:50:42Z · unified-plan-specialist/gatekeeper)*
+- **statusline-plan-role-display** — Statusline/status has no plan-step role display field *(deferred 2026-07-29T16:50:43Z · unified-plan-specialist/gatekeeper)*
+- **revise-to-plan-sheds-no-evidence** — revise --to plan invalidates no plan evidence; next complete re-passes on stale artifacts *(deferred 2026-07-29T16:50:43Z · unified-plan-specialist/gatekeeper)*
+- **legacy-plan-key-mixed-form-precedence** — Mixed legacy tier + override table inverts documented precedence and drops the configured tier *(deferred 2026-07-29T16:50:43Z · unified-plan-specialist/gatekeeper)*
+- **planner-skeleton-prompt-header-drift** — Planner companion-stub headers drift from planner-prompt.md sections *(deferred 2026-07-29T16:50:43Z · unified-plan-specialist/gatekeeper)*
+- **stale-spec-text-after-role-retirement** — Foreign specs still assert pre-retirement prompt-doc set (add-plan-advisor-mode, configurable-subagent-models, add-agent-evidence-contract, evidence-cli) *(deferred 2026-07-29T16:50:43Z · unified-plan-specialist/gatekeeper)*
+- **brownmap-roadmap-source-role-retired** — brownmap baseline/gaps still stamp Source.Role=big-thinker on new entries *(deferred 2026-07-29T16:50:43Z · unified-plan-specialist/gatekeeper)*
+- **handoff-chain-unvalidated** — Documented handoffTo chain is unenforced; handoffTo=banana completes a step *(deferred 2026-07-29T16:50:43Z · unified-plan-specialist/gatekeeper)*
+- **planner-stub-on-legacy-workflow-unguarded** — evidence init planner on an unpinned workflow is unguarded *(deferred 2026-07-29T16:50:43Z · unified-plan-specialist/gatekeeper)*
+- **stamp-validates-commands-schema** — artifact stamp should validate the centinela:verification commands schema and fail loudly at stamp time *(deferred 2026-07-29T16:50:43Z · unified-plan-specialist/gatekeeper)*

@@ -33,9 +33,9 @@ Authoring rules (REQUIRED):
   reformats your output and the orchestration validator rejects schema
   mismatches with no auto-repair.
 
-Read docs/plans/<FEATURE_NAME>.md, specs/<FEATURE_NAME>.feature, the
-big-thinker and feature-specialist evidence at
-.workflow/<FEATURE_NAME>-{big-thinker,feature-specialist}.md, and
+Read docs/plans/<FEATURE_NAME>.md, specs/<FEATURE_NAME>.feature, the planner
+evidence at .workflow/<FEATURE_NAME>-planner.md (on a workflow started before
+planner-v1, the big-thinker + feature-specialist pair instead), and
 PROJECT.md → Architecture Choice. Then implement and report.
 
 Required analysis:

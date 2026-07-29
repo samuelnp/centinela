@@ -43,20 +43,17 @@ func TestOrchestrationConfig_UnknownRoleRejected(t *testing.T) {
 
 // Normalization: "Reasoning" is accepted and normalized for a plan-step role.
 func TestOrchestrationHook_NormalizedTierAccepted(t *testing.T) {
-	// Plan step roles: big-thinker, feature-specialist.
+	// Retired plan keys still normalize and alias onto planner (big-thinker wins).
 	toml := "[orchestration.models]\nfeature-specialist = \"Reasoning\"\nbig-thinker = \" fast \"\n"
 	d, bin := setupModelsRepo(t, toml)
 	out, err := runBin(t, bin, d, "hook", "orchestration")
 	if err != nil {
 		t.Fatalf("hook failed with normalized tier: %v\n%s", err, out)
 	}
-	// 'Reasoning' normalizes to the reasoning tier → claude-opus-4-7 for claude.
-	if !strings.Contains(out, "feature-specialist (model: claude-opus-4-7 (claude)") {
-		t.Errorf("expected Reasoning normalized to reasoning; got:\n%s", out)
-	}
-	// ' fast ' normalizes to the fast tier → claude-haiku for claude.
-	if !strings.Contains(out, "big-thinker (model: claude-haiku-4-5-20251001 (claude)") {
-		t.Errorf("expected ' fast ' normalized to fast; got:\n%s", out)
+	// ' fast ' normalizes to the fast tier → claude-haiku, and big-thinker takes
+	// alias precedence over feature-specialist for the planner role.
+	if !strings.Contains(out, "planner (model: claude-haiku-4-5-20251001 (claude)") {
+		t.Errorf("expected ' fast ' normalized to fast on the aliased planner; got:\n%s", out)
 	}
 }
 

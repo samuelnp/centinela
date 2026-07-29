@@ -18,21 +18,21 @@ func seedFeatureBrief(t *testing.T, feature string) {
 	}
 }
 
-func TestEvidenceInitPreFillsPlanInputsForBigThinker(t *testing.T) {
+func TestEvidenceInitPreFillsPlanInputsForPlanner(t *testing.T) {
 	chdirEvidenceTemp(t)
 	writeFakeWorkflow(t, "demo")
 	seedFeatureBrief(t, "demo")
-	if err := runEvidenceInit(nil, []string{"demo", "big-thinker"}); err != nil {
+	if err := runEvidenceInit(nil, []string{"demo", "planner"}); err != nil {
 		t.Fatal(err)
 	}
-	data, err := os.ReadFile(".workflow/demo-big-thinker.json")
+	data, err := os.ReadFile(".workflow/demo-planner.json")
 	if err != nil {
 		t.Fatal(err)
 	}
 	s := string(data)
 	for _, want := range []string{"docs/plans/demo.md", "docs/features/demo.md"} {
 		if !strings.Contains(s, want) {
-			t.Fatalf("big-thinker init did not pre-fill %q: %s", want, s)
+			t.Fatalf("planner init did not pre-fill %q: %s", want, s)
 		}
 	}
 	if strings.Contains(s, "<FILL:") {

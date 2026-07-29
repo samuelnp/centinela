@@ -8,6 +8,7 @@ import (
 
 func TestAllRolesCoversContractRoster(t *testing.T) {
 	want := []Role{
+		orchestration.RolePlanner,
 		orchestration.RoleBigThinker, orchestration.RoleFeatureSpecial,
 		orchestration.RoleSeniorEngineer, orchestration.RoleUXUISpecialist,
 		orchestration.RoleQASeniorEngineer, orchestration.RoleValidationSpec,

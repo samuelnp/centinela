@@ -51,7 +51,7 @@ func TestOrchestrationHook_ConfiguredTierAnnotated(t *testing.T) {
 	out, _ := cmd.CombinedOutput()
 	s := string(out)
 	// New per-runner annotation format: model: <id> (<runner>) for each runner.
-	if !strings.Contains(s, "big-thinker (model: claude-opus-4-7 (claude)") {
+	if !strings.Contains(s, "planner (model: claude-opus-4-7 (claude)") {
 		t.Errorf("AC1: expected per-runner annotation; got:\n%s", s)
 	}
 	if !strings.Contains(s, "model: anthropic/claude-opus-4-7 (opencode)") {
@@ -72,11 +72,13 @@ func TestOrchestrationHook_AbsentTableAllDefaults(t *testing.T) {
 	cmd.Dir = d
 	out, _ := cmd.CombinedOutput()
 	s := string(out)
-	if !strings.Contains(s, "big-thinker (model: claude-opus-4-7 (claude)") {
-		t.Errorf("AC3: big-thinker default; got:\n%s", s)
+	if !strings.Contains(s, "planner (model: claude-opus-4-7 (claude)") {
+		t.Errorf("AC3: planner reasoning default; got:\n%s", s)
 	}
-	if !strings.Contains(s, "feature-specialist (model: claude-sonnet-4-6 (claude)") {
-		t.Errorf("AC3: feature-specialist default; got:\n%s", s)
+	for _, retired := range []string{"big-thinker", "feature-specialist"} {
+		if strings.Contains(s, retired) {
+			t.Errorf("AC3: retired plan role %q must not appear; got:\n%s", retired, s)
+		}
 	}
 }
 

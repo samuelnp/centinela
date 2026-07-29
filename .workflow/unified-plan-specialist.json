@@ -1,0 +1,38 @@
+{
+  "feature": "unified-plan-specialist",
+  "startedAt": "2026-07-29T08:54:50.53453Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-29T11:15:23Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-29T16:36:35Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-29T10:15:21Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-29T12:10:55Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-29T16:36:02Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/unified-plan-specialist",
+  "validateContract": "adversarial-v1"
+}

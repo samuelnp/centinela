@@ -46,7 +46,7 @@ func TestOpenCodeConfig_ExistingKeysRemain(t *testing.T) {
 	json.Unmarshal(build["permission"], &permission) //nolint:errcheck
 	var task map[string]string
 	json.Unmarshal(permission["task"], &task) //nolint:errcheck
-	if task["big-thinker"] != "allow" || task["qa-senior"] != "allow" || task["validation-specialist"] != "allow" {
+	if task["planner"] != "allow" || task["qa-senior"] != "allow" || task["validation-specialist"] != "allow" {
 		t.Fatalf("expected build task permissions for Centinela subagents: %#v", task)
 	}
 }

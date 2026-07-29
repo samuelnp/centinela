@@ -10,7 +10,9 @@ func TestEvidenceInitListsActiveOnUnknown(t *testing.T) {
 	chdirEvidenceTemp(t)
 	writeFakeWorkflow(t, "alpha")
 	writeFakeWorkflow(t, "beta")
-	err := runEvidenceInit(nil, []string{"ghost", "big-thinker"})
+	// "planner" (non-retired) so this exercises requireKnownFeature, not D7's
+	// retired-role refusal, which now runs first and would otherwise mask it.
+	err := runEvidenceInit(nil, []string{"ghost", "planner"})
 	if err == nil {
 		t.Fatal("expected error")
 	}

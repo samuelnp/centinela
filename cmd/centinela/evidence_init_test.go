@@ -32,24 +32,26 @@ func writeFakeWorkflow(t *testing.T, feature string) {
 func TestEvidenceInitWritesSkeleton(t *testing.T) {
 	chdirEvidenceTemp(t)
 	writeFakeWorkflow(t, "alpha")
-	if err := runEvidenceInit(nil, []string{"alpha", "big-thinker"}); err != nil {
+	if err := runEvidenceInit(nil, []string{"alpha", "planner"}); err != nil {
 		t.Fatal(err)
 	}
-	data, err := os.ReadFile(".workflow/alpha-big-thinker.json")
+	data, err := os.ReadFile(".workflow/alpha-planner.json")
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !strings.Contains(string(data), `"feature": "alpha"`) {
 		t.Fatalf("skeleton missing feature: %s", data)
 	}
-	if _, err := os.Stat(".workflow/alpha-big-thinker.md"); err != nil {
+	if _, err := os.Stat(".workflow/alpha-planner.md"); err != nil {
 		t.Fatalf("companion not written: %v", err)
 	}
 }
 
 func TestEvidenceInitRejectsUnknownFeature(t *testing.T) {
 	chdirEvidenceTemp(t)
-	err := runEvidenceInit(nil, []string{"ghost", "big-thinker"})
+	// "planner" (non-retired) so this exercises requireKnownFeature, not D7's
+	// retired-role refusal, which now runs first and would otherwise mask it.
+	err := runEvidenceInit(nil, []string{"ghost", "planner"})
 	if err == nil || !strings.Contains(err.Error(), "unknown feature") {
 		t.Fatalf("expected unknown-feature error, got %v", err)
 	}

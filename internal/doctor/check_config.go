@@ -34,6 +34,11 @@ func (configCheck) Run(ctx Context) Diagnosis {
 			t, verifyTimeoutFloor))
 	}
 	details = append(details, missingGateDirs(ctx.Config)...)
+	// One-time migration notice for the retired plan role keys (D8). It lives
+	// here and at `centinela start` only — never on the per-prompt hook path.
+	if notice := config.LegacyPlanModelRoleNotice(ctx.Config); notice != "" {
+		details = append(details, notice)
+	}
 	details = append(details, unknownConfigKeys()...)
 	if len(details) == 0 {
 		d.Status = OK

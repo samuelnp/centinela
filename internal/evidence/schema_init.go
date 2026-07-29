@@ -11,7 +11,7 @@ import (
 // skeleton always starts schema-valid for that role.
 func stepForRole(role Role) string {
 	switch role {
-	case orchestration.RoleBigThinker, orchestration.RoleFeatureSpecial:
+	case orchestration.RolePlanner, orchestration.RoleBigThinker, orchestration.RoleFeatureSpecial:
 		return "plan"
 	case orchestration.RoleSeniorEngineer, orchestration.RoleUXUISpecialist:
 		return "code"
@@ -31,6 +31,8 @@ func stepForRole(role Role) string {
 // handoffForRole returns the canonical next role per the contract.
 func handoffForRole(role Role) string {
 	switch role {
+	case orchestration.RolePlanner:
+		return string(orchestration.RoleSeniorEngineer)
 	case orchestration.RoleBigThinker:
 		return string(orchestration.RoleFeatureSpecial)
 	case orchestration.RoleFeatureSpecial:

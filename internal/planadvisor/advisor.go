@@ -19,7 +19,7 @@ func Directive(feature string, cfg *config.Config) string {
 	questions := selectQuestions(b, config.NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit), mode)
 	lines := []string{
 		fmt.Sprintf("CENTINELA PLAN ADVISOR: %q", feature),
-		"Operate in two lenses: big-thinker first, then feature-specialist.",
+		"One planner agent, two lenses: strategy first, then spec.",
 		"Ask only the missing high-value questions from existing docs/features, docs/plans, specs, roadmap context, and prior edge-case lessons.",
 		fmt.Sprintf("Ask at most %d questions this round. Do not jump to implementation.", config.NormalizePlanQuestionLimit(cfg.Workflow.PlanQuestionLimit)),
 	}

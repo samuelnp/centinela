@@ -20,7 +20,7 @@ plan → code → tests → validate → docs
 
 In strict orchestration mode, specialist evidence must be actionable:
 
-- `big-thinker` and `feature-specialist` outputs must point to real `docs/plans/...` or `specs/...` artifacts.
+- `planner` outputs must point to real `docs/plans/...` or `specs/...` artifacts.
 - `senior-engineer` outputs must include at least one real non-evidence implementation file.
 - `ux-ui-specialist` is required during `code` only for features whose brief declares `surface: user-facing`; its outputs must include at least one real UI file, `mobileFirst: true`, and the required UX review tags.
 - `qa-senior` outputs must include at least one real test file and `.workflow/<feature>-edge-cases.md`.
@@ -85,7 +85,7 @@ During the `plan` step, Centinela also injects a plan-advisor directive. By defa
 `missing_info` mode, inspects `docs/features/<feature>.md`, `docs/plans/<feature>.md`, and
 `specs/<feature>.feature`, then enriches that with roadmap dependencies, same-phase sibling
 features, roadmap quality notes, and related edge-case lessons. It asks up to 4 missing
-high-value questions through `big-thinker` and `feature-specialist` lenses. Dependency context is
+high-value questions through the planner's `strategy` and `spec` lenses. Dependency context is
 preferred before sibling context, and user-facing features receive UX/mobile-first questions only
 when those topics are still missing.
 

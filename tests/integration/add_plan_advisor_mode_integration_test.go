@@ -20,7 +20,15 @@ func TestPlanAdvisorAsksUserFacingMobileQuestionsWhenMissing(t *testing.T) {
 	if !strings.Contains(out, "mobile-first") || !strings.Contains(out, "loading, empty, and error") {
 		t.Fatalf("expected user-facing UX questions, got: %s", out)
 	}
-	if !strings.Contains(out, "big-thinker") || !strings.Contains(out, "feature-specialist") {
-		t.Fatalf("expected both advisor lenses, got: %s", out)
+	if !strings.Contains(out, "One planner agent, two lenses: strategy first, then spec.") {
+		t.Fatalf("expected the one-agent two-lens header, got: %s", out)
+	}
+	if !strings.Contains(out, "[spec]") {
+		t.Fatalf("expected spec lens tags on the UX questions, got: %s", out)
+	}
+	for _, retired := range []string{"[big-thinker]", "[feature-specialist]"} {
+		if strings.Contains(out, retired) {
+			t.Fatalf("advisor must not tag questions %s, got: %s", retired, out)
+		}
 	}
 }

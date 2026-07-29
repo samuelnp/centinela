@@ -3,7 +3,6 @@ package workflow
 import (
 	"os"
 	"testing"
-	"time"
 
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/orchestration"
@@ -26,27 +25,14 @@ func TestValidateArtifactsStrictOrchestrationAndLegacy(t *testing.T) {
 	if err := ValidateArtifacts("f", "plan", &config.Config{}); err == nil {
 		t.Fatal("expected strict orchestration evidence failure")
 	}
-	writePlanEvidence("f", orchestration.RoleBigThinker, false)
-	writePlanEvidence("f", orchestration.RoleFeatureSpecial, true)
+	writePlanEvidence(t, "f", orchestration.RolePlanner, "senior-engineer")
 	if err := ValidateArtifacts("f", "plan", &config.Config{}); err != nil {
 		t.Fatalf("expected strict plan success, got %v", err)
 	}
 	wf.OrchestrationMode = ""
-	Save(wf)                                                                 //nolint:errcheck
-	os.Remove(orchestration.MarkdownPath("f", orchestration.RoleBigThinker)) //nolint:errcheck
+	Save(wf)                                                              //nolint:errcheck
+	os.Remove(orchestration.MarkdownPath("f", orchestration.RolePlanner)) //nolint:errcheck
 	if err := ValidateArtifacts("f", "plan", &config.Config{}); err != nil {
 		t.Fatalf("legacy workflow should skip strict gate: %v", err)
 	}
-}
-
-func writePlanEvidence(feature string, role orchestration.Role, edge bool) {
-	os.WriteFile(orchestration.MarkdownPath(feature, role), []byte("# role"), 0644) //nolint:errcheck
-	edgeCases := `[]`
-	output := `"outputs":["docs/plans/` + feature + `.md"]`
-	if edge {
-		edgeCases = `["e"]`
-		output = `"outputs":["specs/` + feature + `.feature"]`
-	}
-	data := `{"feature":"` + feature + `","step":"plan","role":"` + string(role) + `","status":"done","generatedAt":"` + time.Now().UTC().Format(time.RFC3339) + `","inputs":["docs/features/` + feature + `.md","docs/plans/` + feature + `.md"],` + output + `,"edgeCases":` + edgeCases + `,"handoffTo":"orchestrator"}`
-	os.WriteFile(orchestration.JSONPath(feature, role), []byte(data), 0644) //nolint:errcheck
 }

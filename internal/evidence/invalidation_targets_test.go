@@ -3,6 +3,8 @@ package evidence
 import (
 	"os"
 	"testing"
+
+	"github.com/samuelnp/centinela/internal/workflow"
 )
 
 func hasRole(roles []Role, r string) bool {
@@ -58,13 +60,34 @@ func TestInvalidationTargetsCodeInternalVsUserFacing(t *testing.T) {
 	}
 }
 
+// InvalidationTargets has no "plan" branch and is never called with "plan":
+// revise is backward-only, so reopenedSteps (order[idx+1:]) can never yield the
+// index-0 step. This asserts the CURRENT behavior — planner arrives from
+// RequiredRolesForFeature and nothing extra is added — and deliberately does NOT
+// assert that a rewind to plan sheds anything, because it does not. That gap is
+// deferred as `revise-to-plan-sheds-no-evidence`.
 func TestInvalidationTargetsPlanNoExtras(t *testing.T) {
 	setupWF(t)
 	roles, artifacts := InvalidationTargets("f", "plan")
 	if len(artifacts) != 0 {
 		t.Fatalf("plan artifacts = %v", artifacts)
 	}
-	if !hasRole(roles, "big-thinker") || !hasRole(roles, "feature-specialist") {
-		t.Fatalf("plan roles = %v", roles)
+	if !hasRole(roles, "planner") {
+		t.Fatalf("plan roles must come from RequiredRolesForFeature: %v", roles)
+	}
+	if hasRole(roles, "big-thinker") || hasRole(roles, "feature-specialist") {
+		t.Fatalf("no retired-role branch exists for plan; got %v", roles)
+	}
+}
+
+// Guard for the dead-branch trap itself: plan must be index 0 of every step
+// order, which is WHY the function is unreachable for "plan". If a future step
+// order ever puts something before plan, this fails and the deferred fix
+// becomes live work rather than a silent no-op.
+func TestPlanIsFirstStepSoInvalidationNeverSeesIt(t *testing.T) {
+	for _, order := range [][]string{workflow.DefaultStepOrder, workflow.BootstrapStepOrder} {
+		if len(order) == 0 || order[0] != "plan" {
+			t.Fatalf("plan must be the first step for the no-plan-branch reasoning to hold: %v", order)
+		}
 	}
 }

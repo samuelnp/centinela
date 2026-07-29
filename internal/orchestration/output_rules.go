@@ -18,7 +18,7 @@ func validateActionableOutputs(path, feature string, role Role, outputs, uiPaths
 
 func dispatchRoleOutputs(path, feature string, role Role, files, uiPaths []string) error {
 	switch role {
-	case RoleBigThinker, RoleFeatureSpecial:
+	case RolePlanner, RoleBigThinker, RoleFeatureSpecial:
 		if hasPathPrefix(files, "docs/plans/") || hasPathPrefix(files, "specs/") {
 			return nil
 		}

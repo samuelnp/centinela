@@ -3,6 +3,13 @@ package orchestration
 type Role string
 
 const (
+	// RolePlanner is the plan step's single role: ONE context carrying both the
+	// strategy lens and the spec lens, because the two are sequential
+	// elaboration rather than independent judgment.
+	RolePlanner Role = "planner"
+	// RoleBigThinker and RoleFeatureSpecial are retained for LEGACY workflows
+	// only (pre planner-v1 evidence, config override keys, roadmap provenance
+	// records). Neither is required by any step any more.
 	RoleBigThinker       Role = "big-thinker"
 	RoleFeatureSpecial   Role = "feature-specialist"
 	RoleSeniorEngineer   Role = "senior-engineer"
@@ -28,7 +35,7 @@ const (
 func RequiredRoles(step string) []Role {
 	switch step {
 	case "plan":
-		return []Role{RoleBigThinker, RoleFeatureSpecial}
+		return []Role{RolePlanner}
 	case "code":
 		return []Role{RoleSeniorEngineer}
 	case "tests":
