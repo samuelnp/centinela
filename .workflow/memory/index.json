@@ -52,6 +52,19 @@
     "createdAt": "2026-07-28T20:47:57Z"
   },
   {
+    "id": "0ac545ddbe9cdd24",
+    "feature": "merge-truthful-delivery",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: merge-truthful-delivery",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/merge-truthful-delivery-gatekeeper.md",
+    "createdAt": "2026-07-29T08:49:05Z"
+  },
+  {
     "id": "0cd0b9d5a3adf24f",
     "feature": "security-gate",
     "step": "tests",
@@ -921,6 +934,19 @@
     ],
     "sourceArtifact": ".workflow/coverage-hardening-edge-cases.md",
     "createdAt": "2026-06-30T09:52:35Z"
+  },
+  {
+    "id": "c3fd0f0a354b5752",
+    "feature": "merge-truthful-delivery",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Case:** EC-01 Hardcoded \"main\" in success wording when the primary branch is renamed",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/merge-truthful-delivery-edge-cases.md",
+    "createdAt": "2026-07-10T11:43:30Z"
   },
   {
     "id": "c4212237ec169c57",

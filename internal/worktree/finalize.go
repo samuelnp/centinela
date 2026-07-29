@@ -1,9 +1,6 @@
 package worktree
 
-import (
-	"fmt"
-	"os"
-)
+import "fmt"
 
 // StewardEvidenceValidator re-validates `.workflow/<feature>-merge-steward.json`
 // and returns the steward verdict (the evidence `handoffTo` value:
@@ -18,6 +15,11 @@ type Resolution struct {
 	Escalated      bool
 	Verdict        string
 	EscalationNote string
+	// Outcome carries the same verified flags the direct merge path produces
+	// (RefAdvanced / AlreadyMerged / RemoveFailed / TargetBranch) so the CLI
+	// routes --continue through the identical success reporter. Without it,
+	// --continue printed the success line unconditionally.
+	Outcome MergeOutcome
 }
 
 // ResolveMerge gates finalization of a stalled merge on steward evidence.
@@ -25,9 +27,15 @@ type Resolution struct {
 //   - no pending marker            -> error (nothing to continue)
 //   - dirty main tree              -> error (blocked even on APPLY)
 //   - invalid/missing evidence     -> error (validator message surfaced)
-//   - valid + handoffTo "complete" -> finalize: remove worktree, clear marker
+//   - valid + handoffTo "complete" -> verify the branch actually landed in
+//     repo, then finalize: remove worktree, verify removal, clear marker
 //   - valid + handoffTo "user"     -> escalate: keep worktree + marker
-func ResolveMerge(repo, feature string, validate StewardEvidenceValidator) (Resolution, error) {
+//
+// repo MUST be the primary working tree (the tree the stalled merge lives
+// in). An APPLY verdict is the steward's claim, not proof: finalization is
+// gated on ancestry in repo so --continue can never print a success the ref
+// does not back.
+func ResolveMerge(repo, feature string, validate StewardEvidenceValidator, opts ...MergeOption) (Resolution, error) {
 	var r Resolution
 	m, err := LoadPending(repo, feature)
 	if err != nil {
@@ -51,30 +59,20 @@ func ResolveMerge(repo, feature string, validate StewardEvidenceValidator) (Reso
 		r.EscalationNote = stewardEscalationDetail(repo, feature)
 		return r, nil
 	}
-	if err := Remove(repo, feature, false); err != nil {
+	o := MergeOutcome{Feature: feature, Branch: branchName(feature)}
+	if o.TargetBranch, err = currentBranch(repo); err != nil {
+		return r, err
+	}
+	if err := verifyLanded(&o, repo, m.BaseSHA); err != nil {
+		return r, err
+	}
+	if err := finishMerge(&o, repo, resolveMergeOpts(opts)); err != nil {
+		r.Outcome = o
 		return r, err
 	}
 	if err := ClearPending(repo, feature); err != nil {
 		return r, err
 	}
-	r.Finalized = true
+	r.Outcome, r.Finalized = o, true
 	return r, nil
-}
-
-// stewardEscalationDetail returns the steward report plus its proposed
-// diff sibling (when present) so the caller can surface them to stderr.
-func stewardEscalationDetail(repo, feature string) string {
-	o := MergeOutcome{Feature: feature}
-	detail := readFileOr(o.StewardHint(), "(no steward report found)")
-	if diff, err := os.ReadFile(fmt.Sprintf(".workflow/%s-merge-steward.diff", feature)); err == nil {
-		detail += "\n\n--- proposed diff ---\n" + string(diff)
-	}
-	return detail
-}
-
-func readFileOr(path, fallback string) string {
-	if data, err := os.ReadFile(path); err == nil {
-		return string(data)
-	}
-	return fallback
 }

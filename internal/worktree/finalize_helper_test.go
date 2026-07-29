@@ -42,6 +42,18 @@ func resolveRepo(t *testing.T, feature string) string {
 	return d
 }
 
+// landBranch really merges feature into the primary tree's branch — what the
+// Merge Steward does before APPLY. ResolveMerge now proves ancestry, so a
+// finalize test that skips this is asserting a lie.
+func landBranch(t *testing.T, repo, feature string) {
+	t.Helper()
+	c := exec.Command("git", "merge", "--no-ff", "-m", "land "+feature, feature)
+	c.Dir = repo
+	if out, err := c.CombinedOutput(); err != nil {
+		t.Fatalf("land %s: %v\n%s", feature, err, out)
+	}
+}
+
 func writeMarker(t *testing.T, repo, feature string) {
 	t.Helper()
 	o := worktree.MergeOutcome{Feature: feature, TextConflict: true}

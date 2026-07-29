@@ -16,10 +16,9 @@ func TestRunMerge_InvalidSlug_Errors(t *testing.T) {
 }
 
 func TestRunMerge_SpecConflict_Blocks(t *testing.T) {
-	d := t.TempDir()
-	orig, _ := os.Getwd()
-	defer os.Chdir(orig) //nolint:errcheck
-	os.Chdir(d)          //nolint:errcheck
+	// A real git repo is required: runMerge now resolves the primary working
+	// tree BEFORE spec-conflict detection and refuses outside any repository.
+	d := seedCleanMergeRepo(t, "eta") // cwd = d
 
 	specs := filepath.Join(d, "specs")
 	_ = os.MkdirAll(specs, 0755)

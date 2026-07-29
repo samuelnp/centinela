@@ -1,0 +1,1 @@
+- fix: deliver --via merge is truthful — merges run in the resolved primary tree, success prints only after verified ref-advance (ancestry) and registry-verified worktree removal; merge --continue resumable from both CWDs with the same verification; busy-worktree failures report the merged-but-not-removed truth with a retry path

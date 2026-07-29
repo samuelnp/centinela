@@ -27,7 +27,7 @@ func TestDispatchSteward_WritePendingErrorSurfaced(t *testing.T) {
 	d := t.TempDir()
 	chdir(t, d)
 	_ = os.WriteFile(filepath.Join(d, ".workflow"), []byte("x"), 0o644)
-	err := dispatchSteward(worktree.MergeOutcome{
+	err := dispatchSteward(".", worktree.MergeOutcome{
 		Feature: "rho", TextConflict: true})
 	if err == nil {
 		t.Fatal("dispatchSteward must surface WritePending failure")
