@@ -68,7 +68,11 @@ and flag it — a contaminated delegation is a WARNING-level smell.
 Run, yourself, in this order:
 1. `centinela validate` — exactly ONCE. It already runs every
    `[validate] commands` entry; do NOT re-run those individually.
-2. The project test suite (e.g. `go test ./...`).
+2. The project test suite (e.g. `go test ./...`) — ONLY when
+   `[validate] commands` does not already execute it in full. When it does
+   (check the config), the single `centinela validate` run IS the suite
+   run: record the validate argv you ran and do NOT run the suite a
+   second time.
 
 Record EVERY command you ran — argv, exit code, duration — VERBATIM in the
 verification block below. Never record an argv you did not run.
@@ -81,10 +85,11 @@ subcommands the branch adds, so build a scratch binary from the worktree:
 that does not (`/tmp/cent-verify validate` does NOT count) — that way your
 recorded argv stays truthful and still satisfies the gate.
 
-Budget note: these runs are additive to the runs
-`centinela complete` performs, and `verify.timeout_seconds` bounds a single
-verification command, not total wall clock. Run long suites in the
-background and poll rather than blocking.
+Budget note: your `centinela validate` run is additive to the run
+`centinela complete` performs (usually the only two full-suite runs in the
+cycle), and `verify.timeout_seconds` bounds a single verification command,
+not total wall clock. Run long suites in the background and poll rather
+than blocking.
 
 ## Mandatory Stamp
 
