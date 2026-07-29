@@ -25,14 +25,21 @@ func init() {
 
 func runHookMerge(_ *cobra.Command, _ []string) error {
 	io.ReadAll(os.Stdin) //nolint:errcheck // drain stdin to avoid SIGPIPE
-	markers, _ := filepath.Glob(filepath.Join(".workflow", "*-merge-pending.json"))
+	// Markers live in the primary tree, so the hook must look there whatever
+	// the session CWD is. Outside a repo, fall back to the CWD.
+	repo, err := worktree.PrimaryTree(".")
+	if err != nil {
+		repo = "."
+	}
+	validate := stewardEvidenceValidatorFor(repo)
+	markers, _ := filepath.Glob(filepath.Join(repo, ".workflow", "*-merge-pending.json"))
 	for _, p := range markers {
 		feature := strings.TrimSuffix(filepath.Base(p), "-merge-pending.json")
-		m, err := worktree.LoadPending(".", feature)
+		m, err := worktree.LoadPending(repo, feature)
 		if err != nil || m == nil {
 			continue
 		}
-		if _, err := stewardEvidenceValidator(feature); err == nil {
+		if _, err := validate(feature); err == nil {
 			continue // valid steward evidence — stop re-emitting
 		}
 		fmt.Println(ui.RenderMergeStewardNeeded(m.Feature, m.Reason))

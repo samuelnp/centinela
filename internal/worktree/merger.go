@@ -15,6 +15,19 @@ type MergeOutcome struct {
 	ValidateOut     string
 	WorktreeKept    bool
 	ConflictedPaths []string
+	RefAdvanced     bool
+	AlreadyMerged   bool
+	// BaseSHA is the target's HEAD before the merge was attempted. It is
+	// persisted in the pending marker so a later `merge --continue` can tell
+	// "the steward landed it now" from "it was already in".
+	BaseSHA string
+	// RemoveFailed marks the half-success shape: the ref advanced but the
+	// worktree could not be removed. Callers must report both halves.
+	RemoveFailed bool
+	// TargetBranch is the branch checked out in the primary tree — the branch
+	// the feature actually merged into. Success wording must use it: a repo
+	// whose primary branch is not "main" would otherwise get a lying line.
+	TargetBranch string
 }
 
 // ValidateRunner runs `centinela validate` (or equivalent) against the merged
@@ -24,19 +37,35 @@ type ValidateRunner func(repo string) (bool, string)
 // Merge performs the hybrid merge sequence for a feature.
 //
 // Sequence:
-//  1. Verify main is clean.
+//  1. Verify main is clean, on a branch (not detached), and not sitting on
+//     the feature branch itself (a self-merge no-ops and a commit is its own
+//     ancestor, which would fabricate AlreadyMerged).
 //  2. Attempt `git merge --no-ff <branch>`.
 //  3. On clean text merge: run validate.
 //  4. On either text conflict OR validate failure: stop and return the
 //     outcome so the caller can invoke the Merge Steward.
-//  5. On full success: remove the worktree.
-func Merge(repo, feature string, run ValidateRunner) (MergeOutcome, error) {
+//  5. On full success: verify the ref actually advanced (or was already
+//     merged), then remove the worktree and verify it is really gone.
+func Merge(repo, feature string, run ValidateRunner, opts ...MergeOption) (MergeOutcome, error) {
 	out := MergeOutcome{Feature: feature, Branch: branchName(feature)}
 	if dirty, err := isDirty(repo); err != nil {
 		return out, err
 	} else if dirty {
 		return out, fmt.Errorf("main working tree is dirty — commit or stash before merging %q", feature)
 	}
+	current, err := currentBranch(repo)
+	if err != nil {
+		return out, err
+	}
+	if current == out.Branch {
+		return out, fmt.Errorf("primary working tree %s has %q checked out — cannot merge a branch into itself", repo, out.Branch)
+	}
+	out.TargetBranch = current
+	before, err := headSHA(repo)
+	if err != nil {
+		return out, err
+	}
+	out.BaseSHA = before
 	raw, err := gitRunner(repo, "merge", "--no-ff", out.Branch)
 	out.GitOutput = strings.TrimSpace(string(raw))
 	if err != nil {
@@ -52,8 +81,8 @@ func Merge(repo, feature string, run ValidateRunner) (MergeOutcome, error) {
 		out.WorktreeKept = true
 		return out, nil
 	}
-	if err := Remove(repo, feature, false); err != nil {
+	if err := verifyAdvance(&out, repo, before); err != nil {
 		return out, err
 	}
-	return out, nil
+	return out, finishMerge(&out, repo, resolveMergeOpts(opts))
 }

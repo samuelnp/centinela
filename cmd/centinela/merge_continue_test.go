@@ -12,7 +12,7 @@ import (
 func TestRunMergeContinue_NoMarkerCleanError(t *testing.T) {
 	d := stewardRepo(t, "xi", false)
 	chdir(t, d)
-	err := runMergeContinue("xi")
+	err := runMergeContinue(".", "xi")
 	if err == nil || !strings.Contains(err.Error(), "no pending merge to continue") {
 		t.Fatalf("no-marker continue must error clearly, got: %v", err)
 	}
@@ -21,12 +21,15 @@ func TestRunMergeContinue_NoMarkerCleanError(t *testing.T) {
 func TestRunMergeContinue_ApplyFinalizes(t *testing.T) {
 	d := stewardRepo(t, "iota", true)
 	chdir(t, d)
-	if err := dispatchSteward(worktree.MergeOutcome{
+	if err := dispatchSteward(".", worktree.MergeOutcome{
 		Feature: "iota", TextConflict: true}); err == nil {
 		t.Fatal("dispatch should report block")
 	}
+	// --continue may only claim delivery once the branch REALLY landed, so
+	// the steward's resolution has to exist in the primary tree first.
+	applyStewardResolution(t, d, "iota")
 	writeStewardEvidence(t, "iota", "complete")
-	if err := runMergeContinue("iota"); err != nil {
+	if err := runMergeContinue(".", "iota"); err != nil {
 		t.Fatalf("APPLY continue must finalize: %v", err)
 	}
 	if _, err := os.Stat(filepath.Join(d, ".worktrees", "iota")); !os.IsNotExist(err) {
@@ -40,12 +43,12 @@ func TestRunMergeContinue_ApplyFinalizes(t *testing.T) {
 func TestRunMergeContinue_EscalateBlocks(t *testing.T) {
 	d := stewardRepo(t, "kappa", true)
 	chdir(t, d)
-	if err := dispatchSteward(worktree.MergeOutcome{
+	if err := dispatchSteward(".", worktree.MergeOutcome{
 		Feature: "kappa", TextConflict: true}); err == nil {
 		t.Fatal("dispatch should report block")
 	}
 	writeStewardEvidence(t, "kappa", "user")
-	err := runMergeContinue("kappa")
+	err := runMergeContinue(".", "kappa")
 	if err == nil || !strings.Contains(err.Error(), "escalated") {
 		t.Fatalf("ESCALATE continue must stay blocked, got: %v", err)
 	}
@@ -60,12 +63,12 @@ func TestRunMergeContinue_EscalateBlocks(t *testing.T) {
 func TestRunMergeContinue_MissingEvidenceRefuses(t *testing.T) {
 	d := stewardRepo(t, "lambda", true)
 	chdir(t, d)
-	if err := dispatchSteward(worktree.MergeOutcome{
+	if err := dispatchSteward(".", worktree.MergeOutcome{
 		Feature: "lambda", TextConflict: true}); err == nil {
 		t.Fatal("dispatch should report block")
 	}
 	// No steward evidence written.
-	err := runMergeContinue("lambda")
+	err := runMergeContinue(".", "lambda")
 	if err == nil || !strings.Contains(err.Error(), "steward evidence required") {
 		t.Fatalf("missing evidence must refuse with actionable error, got: %v", err)
 	}

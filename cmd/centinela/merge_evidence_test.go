@@ -39,7 +39,7 @@ func TestReadStewardHandoff_CorruptJSONErrors(t *testing.T) {
 func TestRunMergeContinue_SchemaInvalidEvidenceRefuses(t *testing.T) {
 	d := stewardRepo(t, "mu", true)
 	chdir(t, d)
-	if err := dispatchSteward(worktree.MergeOutcome{
+	if err := dispatchSteward(".", worktree.MergeOutcome{
 		Feature: "mu", TextConflict: true}); err == nil {
 		t.Fatal("dispatch should report block")
 	}
@@ -48,7 +48,7 @@ func TestRunMergeContinue_SchemaInvalidEvidenceRefuses(t *testing.T) {
 	// (wrong role / missing required fields).
 	_ = os.WriteFile(".workflow/mu-merge-steward.json",
 		[]byte(`{"feature":"mu","step":"merge","role":"merge-steward"}`), 0o644)
-	err := runMergeContinue("mu")
+	err := runMergeContinue(".", "mu")
 	if err == nil || !strings.Contains(err.Error(), "steward evidence required") {
 		t.Fatalf("schema-invalid evidence must refuse, got: %v", err)
 	}

@@ -11,8 +11,12 @@ import (
 // CENTINELA DIRECTIVE so the orchestrator invokes the merge-steward
 // subagent. The worktree is kept and the command exits non-zero so CI
 // and the UserPromptSubmit hook surface the block.
-func dispatchSteward(o worktree.MergeOutcome) error {
-	if err := worktree.WritePending(".", o); err != nil {
+//
+// repo MUST be the primary working tree: the stalled merge lives there, so
+// the marker must too. Writing it relative to the invoking CWD desynchronised
+// the conflict from its marker and made `merge --continue` unresumable.
+func dispatchSteward(repo string, o worktree.MergeOutcome) error {
+	if err := worktree.WritePending(repo, o); err != nil {
 		return err
 	}
 	fmt.Println(ui.RenderMergeStewardNeeded(o.Feature, o.StewardReason()))
