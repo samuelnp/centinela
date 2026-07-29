@@ -49,6 +49,23 @@ func TestEvidenceInitAllowsRetiredRoleOnLegacyWorkflow(t *testing.T) {
 	}
 }
 
+// D7 no-workflow case: a retired role against a feature with NO workflow
+// state at all must still say "retired" + point at planner, not the generic
+// "unknown feature" message — EnsureRoleAllowed runs before requireKnownFeature.
+func TestEvidenceInitRefusesRetiredRoleWithNoWorkflowAtAll(t *testing.T) {
+	chdirEvidenceTemp(t)
+	err := runEvidenceInit(nil, []string{"ghost-feature", "feature-specialist"})
+	if err == nil {
+		t.Fatal("expected an error for a retired role with no workflow state")
+	}
+	if !strings.Contains(err.Error(), "retired") || !strings.Contains(err.Error(), "planner") {
+		t.Fatalf("error must be retired + planner pointer, got %v", err)
+	}
+	if strings.Contains(err.Error(), "unknown feature") {
+		t.Fatalf("must not fall back to the generic unknown-feature message: %v", err)
+	}
+}
+
 // The planner stub itself is always authorable and lands at the planner path.
 func TestEvidenceInitWritesPlannerStub(t *testing.T) {
 	chdirEvidenceTemp(t)

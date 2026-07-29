@@ -23,17 +23,20 @@ func init() {
 
 func runEvidenceInit(_ *cobra.Command, args []string) error {
 	feature, roleArg := args[0], args[1]
-	if err := requireKnownFeature(feature); err != nil {
-		return err
-	}
 	role, err := evidence.ParseRole(roleArg)
 	if err != nil {
 		return err
 	}
-	// Contract-aware (D7): a retired plan role is stubbed only for a workflow
-	// that predates planner-v1, so in-flight legacy features keep working while
-	// a fresh one cannot author old-format evidence.
+	// Contract-aware (D7): checked BEFORE requireKnownFeature so a retired role
+	// against a feature with NO workflow state at all still gets the "retired;
+	// use planner" message, not a generic "unknown feature" one — EnsureRoleAllowed
+	// already treats an unreadable/missing workflow as refused (D7's no-workflow
+	// case). In-flight legacy features keep working; a fresh one cannot author
+	// old-format evidence.
 	if err := evidence.EnsureRoleAllowed(feature, role); err != nil {
+		return err
+	}
+	if err := requireKnownFeature(feature); err != nil {
 		return err
 	}
 	release, err := evidence.Lock(feature, role)

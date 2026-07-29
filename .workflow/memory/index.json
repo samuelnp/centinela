@@ -91,6 +91,19 @@
     "createdAt": "2026-06-13T13:30:03Z"
   },
   {
+    "id": "1758f7366f132658",
+    "feature": "unified-plan-specialist",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- A pinned (`planner-v1`) workflow's plan gate rejects a hand-authored legacy",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/unified-plan-specialist-edge-cases.md",
+    "createdAt": "2026-07-29T12:10:55Z"
+  },
+  {
     "id": "191b174e960a77d3",
     "feature": "centinela-insights",
     "step": "validate",

@@ -49,7 +49,9 @@ func TestEvidenceInitWritesSkeleton(t *testing.T) {
 
 func TestEvidenceInitRejectsUnknownFeature(t *testing.T) {
 	chdirEvidenceTemp(t)
-	err := runEvidenceInit(nil, []string{"ghost", "big-thinker"})
+	// "planner" (non-retired) so this exercises requireKnownFeature, not D7's
+	// retired-role refusal, which now runs first and would otherwise mask it.
+	err := runEvidenceInit(nil, []string{"ghost", "planner"})
 	if err == nil || !strings.Contains(err.Error(), "unknown feature") {
 		t.Fatalf("expected unknown-feature error, got %v", err)
 	}

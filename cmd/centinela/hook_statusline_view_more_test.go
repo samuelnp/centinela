@@ -31,3 +31,15 @@ func TestPrimaryWorkflowFallsBackToSecondPass(t *testing.T) {
 		t.Fatalf("expected fallback workflow, got %#v", wf)
 	}
 }
+
+// isRoleWorkflow gained the "-planner" suffix for the unified planner role;
+// a planner role sub-workflow must never be picked as primary over the
+// feature it was delegated for.
+func TestPrimaryWorkflowSkipsPlannerRoleWorkflow(t *testing.T) {
+	role := workflow.New("alpha-planner")
+	main := workflow.New("alpha")
+	wf := primaryWorkflow([]*workflow.Workflow{role, main})
+	if wf == nil || wf.Feature != "alpha" {
+		t.Fatalf("expected alpha workflow, got %#v", wf)
+	}
+}
