@@ -478,7 +478,8 @@
         {"name":"brownmap-roadmap-source-role-retired","summary":"brownmap baseline/gaps still stamp Source.Role=big-thinker on new entries","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
         {"name":"handoff-chain-unvalidated","summary":"Documented handoffTo chain is unenforced; handoffTo=banana completes a step","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
         {"name":"planner-stub-on-legacy-workflow-unguarded","summary":"evidence init planner on an unpinned workflow is unguarded","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"stamp-validates-commands-schema","summary":"artifact stamp should validate the centinela:verification commands schema and fail loudly at stamp time","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"}
+        {"name":"stamp-validates-commands-schema","summary":"artifact stamp should validate the centinela:verification commands schema and fail loudly at stamp time","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
+        {"name":"hook-context-panel-diet","summary":"Measured: the per-prompt hook emits 23 lines/1538 bytes, of which the roadmap summary token-diet quiets is only 1 line/~56 bytes (~4%); the ACTIVE WORKFLOWS panel and the brief/edge-case/changelog nudge panels are the remaining ~96% and re-render unchanged on every prompt — extend the same session+digest seam to them","source":{"feature":"token-diet","role":"planner"},"deferredAt":"2026-07-29T17:13:45Z"}
       ]
     }
   ],

@@ -1,0 +1,34 @@
+{
+  "feature": "token-diet",
+  "startedAt": "2026-07-29T17:02:59.976674Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-29T17:16:58Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "refactor",
+  "worktreePath": ".worktrees/token-diet",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}
