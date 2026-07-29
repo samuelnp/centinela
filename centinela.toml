@@ -6,16 +6,18 @@ use_worktrees = true
 step_confirmation_mode = "after_plan"
 
 [validate]
-# `go test ./...` already runs the acceptance tier (tests/acceptance is under
-# ./...) and satisfies the acceptance-execution gate; check-coverage.sh re-runs
-# the full suite under `set -e` (fails on any test failure) for the coverage
-# gate. A separate `go test ./tests/acceptance/...` would run the (uncacheable,
-# ~200s) acceptance tier a redundant extra time on every validate/complete —
-# removed to keep `centinela complete`'s claim-verification within the runner's
-# wall-clock budget. All tests, including acceptance, still execute every run.
+# Single-run design: the profiled `go test ./...` run (acceptance tier included
+# — tests/acceptance is under ./...) is the ONE full-suite execution per
+# validate; it satisfies the acceptance-execution gate AND writes coverage.out.
+# check-coverage.sh then REUSES that same run's profile (COVERAGE_PROFILE set +
+# file present → skip its internal go test) instead of re-running the ~200s
+# uncacheable suite with different flags. Fail-safe: if the named profile is
+# missing, the script still runs the suite itself. The profile is written by
+# command 1 of the SAME run, so a stale/doctored coverage.out can never mask a
+# failure — command 1 rewrites it, and a command-1 failure fails validate.
 commands = [
-  "go test ./...",
-  "./scripts/check-coverage.sh",
+  "go test ./... -coverprofile=coverage.out",
+  "COVERAGE_PROFILE=coverage.out ./scripts/check-coverage.sh",
   "./scripts/check-fmt.sh"
 ]
 
@@ -155,10 +157,13 @@ name  = "cmd"
 paths = ["cmd/**"]
 allow = ["domain", "leaf", "aggregator"]
 
-# Claim verification re-runs the full `go test ./...` suite to confirm the
-# tests-pass claim. The suite (acceptance binary builds + cross-compile) grows
-# with each feature and now runs ~220s, so the default 60s timeout is far too
-# short. Raise it with margin to keep the verify re-run from flaking on wall-clock.
+# Standalone `centinela verify`/`verdict`/MCP re-run every validate command for
+# real to confirm the tests-pass claim; the suite (acceptance binary builds +
+# cross-compile) grows with each feature and runs ~220s, so the default 60s
+# timeout is far too short — this bounds a SINGLE verification command, with
+# margin. The validate-step `centinela complete` gate instead REUSES its own
+# just-completed executeValidation run (PriorTestRun, same process, tree
+# re-verified fresh), so no second suite run happens there at all.
 [verify]
 verify_timeout = 360
 
