@@ -1,15 +1,15 @@
 {
   "feature": "dedupe-validate-suite-runs",
   "startedAt": "2026-07-29T20:18:32.500127Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-07-29T20:57:21Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-29T22:24:07Z"
     },
     "plan": {
       "status": "done",
