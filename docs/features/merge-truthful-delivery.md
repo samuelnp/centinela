@@ -29,9 +29,18 @@ manual recovery. Root cause chain:
   the branch was already merged (`merge-base --is-ancestor`); verify the
   worktree directory is actually gone after `Remove`; success message only
   when `RefAdvanced || AlreadyMerged`, worded truthfully for already-merged.
+- **In (added after adversarial verification):** the same primary tree is
+  threaded through `WritePending`/`LoadPending`/`ResolveMerge`/`hook merge`, so
+  a stall started from a worktree CWD is resumable from either CWD and
+  `merge --continue` prints success only through the same verified reporter;
+  removal is verified against `git worktree list --porcelain` (the registry),
+  not the `.worktrees/<feature>` path convention; a merge that lands but
+  cannot remove the worktree reports both halves and offers `--force-remove`;
+  the post-merge `centinela validate` and the portal regen run in the primary
+  tree, with the gate scope forced full (the diff base already contains the
+  merge, so a diff-aware run gates nothing).
 - **Out:** PR delivery path; steward conflict/validate-fail dispatch logic;
-  running `centinela validate` against the merged primary tree instead of the
-  invoking CWD (pre-existing, deferred); roadmap-mutation atomicity (WS1.4).
+  roadmap-mutation atomicity (WS1.4).
 
 ## User Stories
 - As an operator finishing a feature from inside `.worktrees/<f>/`,
@@ -76,7 +85,13 @@ manual recovery. Root cause chain:
   idempotent success with the truthful wording.
 - Text conflict / validate failure outcomes keep today's steward dispatch —
   no success verification applies (nothing claims success).
-- `--continue` steward resume path unchanged (out of merge-verify scope).
+- `--continue` after a worktree-initiated stall: marker in the primary tree,
+  dirty-guard on the primary tree, ancestry proof before any success line;
+  resumable from the worktree CWD and from the primary CWD alike.
+- Worktree busy (untracked/modified files) after a verified advance →
+  truthful two-part outcome + `--force-remove` recovery, idempotent on re-run.
+- Worktree registered outside `.worktrees/<feature>` → really removed and
+  verified against the registry, never claimed by a passing `os.Stat`.
 - Run from the primary tree itself (not a worktree): behavior unchanged
   except verification now applies; no worktree notice printed.
 

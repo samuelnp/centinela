@@ -32,13 +32,39 @@ func isAncestor(repo, branch string) bool {
 	return err == nil
 }
 
-// verifyRemoved confirms the feature worktree directory is actually gone.
-// Remove is idempotent-by-design, so a wrong-CWD no-op looks identical to a
-// real removal unless the directory itself is checked.
+// verifyRemoved confirms the feature worktree is actually gone. It asks git's
+// registry first: a worktree registered outside `.worktrees/<feature>` passes
+// an os.Stat of the conventional path trivially, which let the CLI claim
+// "removed its worktree" while the worktree was still live and still listed.
 func verifyRemoved(repo, feature string) error {
+	path, registered, err := registeredWorktree(repo, branchName(feature))
+	if err != nil {
+		return fmt.Errorf("cannot verify worktree removal for %q: %w", feature, err)
+	}
+	if registered {
+		return fmt.Errorf("worktree %s is still registered for %q after removal — not claiming success", path, feature)
+	}
 	if Exists(repo, feature) {
 		return fmt.Errorf("worktree %s still exists after removal — not claiming success", Path(repo, feature))
 	}
+	return nil
+}
+
+// verifyLanded proves a steward-resolved merge (`merge --continue`) actually
+// delivered the branch. There is no in-process "before" SHA to compare, so
+// the proof is ancestry: the branch must be reachable from the target's HEAD.
+// base (recorded in the pending marker) only decides the wording.
+func verifyLanded(o *MergeOutcome, repo, base string) error {
+	if !isAncestor(repo, o.Branch) {
+		return fmt.Errorf("merge of %q was not completed in %s — %q is not an ancestor of %s; resolve and commit the merge before continuing",
+			o.Feature, repo, o.Branch, o.TargetBranch)
+	}
+	after, err := headSHA(repo)
+	if err != nil {
+		return err
+	}
+	o.RefAdvanced = base != after
+	o.AlreadyMerged = !o.RefAdvanced
 	return nil
 }
 

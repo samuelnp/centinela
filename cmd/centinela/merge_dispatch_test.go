@@ -40,7 +40,7 @@ func TestDispatchSteward_WritesMarkerAndDirective(t *testing.T) {
 	chdir(t, d)
 	o := worktree.MergeOutcome{Feature: "delta", TextConflict: true,
 		ConflictedPaths: []string{"shared.txt"}}
-	err := dispatchSteward(o)
+	err := dispatchSteward(".", o)
 	if err == nil {
 		t.Fatal("dispatchSteward must return a non-nil (non-zero) error")
 	}

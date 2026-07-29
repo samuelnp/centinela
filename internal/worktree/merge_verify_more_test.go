@@ -48,6 +48,7 @@ func TestIsAncestor_TrueAndFalse(t *testing.T) {
 // verifyRemoved errors while the worktree directory survives and clears
 // once it is actually gone — removal is a disk fact, not a git exit code.
 func TestVerifyRemoved_DirSurvivesThenGone(t *testing.T) {
+	porcelainStub(t, "") // registry knows no worktree for the branch
 	repo := t.TempDir()
 	dir := filepath.Join(repo, Dir, "feat")
 	if err := os.MkdirAll(dir, 0o755); err != nil {

@@ -17,6 +17,13 @@ type MergeOutcome struct {
 	ConflictedPaths []string
 	RefAdvanced     bool
 	AlreadyMerged   bool
+	// BaseSHA is the target's HEAD before the merge was attempted. It is
+	// persisted in the pending marker so a later `merge --continue` can tell
+	// "the steward landed it now" from "it was already in".
+	BaseSHA string
+	// RemoveFailed marks the half-success shape: the ref advanced but the
+	// worktree could not be removed. Callers must report both halves.
+	RemoveFailed bool
 	// TargetBranch is the branch checked out in the primary tree — the branch
 	// the feature actually merged into. Success wording must use it: a repo
 	// whose primary branch is not "main" would otherwise get a lying line.
@@ -39,7 +46,7 @@ type ValidateRunner func(repo string) (bool, string)
 //     outcome so the caller can invoke the Merge Steward.
 //  5. On full success: verify the ref actually advanced (or was already
 //     merged), then remove the worktree and verify it is really gone.
-func Merge(repo, feature string, run ValidateRunner) (MergeOutcome, error) {
+func Merge(repo, feature string, run ValidateRunner, opts ...MergeOption) (MergeOutcome, error) {
 	out := MergeOutcome{Feature: feature, Branch: branchName(feature)}
 	if dirty, err := isDirty(repo); err != nil {
 		return out, err
@@ -58,6 +65,7 @@ func Merge(repo, feature string, run ValidateRunner) (MergeOutcome, error) {
 	if err != nil {
 		return out, err
 	}
+	out.BaseSHA = before
 	raw, err := gitRunner(repo, "merge", "--no-ff", out.Branch)
 	out.GitOutput = strings.TrimSpace(string(raw))
 	if err != nil {
@@ -76,8 +84,5 @@ func Merge(repo, feature string, run ValidateRunner) (MergeOutcome, error) {
 	if err := verifyAdvance(&out, repo, before); err != nil {
 		return out, err
 	}
-	if err := Remove(repo, feature, false); err != nil {
-		return out, err
-	}
-	return out, verifyRemoved(repo, feature)
+	return out, finishMerge(&out, repo, resolveMergeOpts(opts))
 }

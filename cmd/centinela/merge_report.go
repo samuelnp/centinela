@@ -23,3 +23,20 @@ func reportMergeSuccess(o worktree.MergeOutcome) error {
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Merged %q into %s and removed its worktree.", o.Feature, o.TargetBranch)))
 	return nil
 }
+
+// reportMergeFailure states what IS true when the merge itself landed but a
+// later step failed. Exiting 1 with only the removal error told the operator
+// nothing about the advanced ref — the mirror image of the false success this
+// feature exists to kill — and left every re-run repeating the same failure.
+// retry is the command that resumes from here.
+func reportMergeFailure(o worktree.MergeOutcome, retry string, err error) error {
+	if !o.RemoveFailed || (!o.RefAdvanced && !o.AlreadyMerged) {
+		return err
+	}
+	landed := "merged into " + o.TargetBranch + " — verified"
+	if o.AlreadyMerged {
+		landed = "already merged into " + o.TargetBranch + " — verified"
+	}
+	return fmt.Errorf("%q %s; worktree removal failed: %w; re-run `%s --force-remove` to retry removal",
+		o.Feature, landed, err, retry)
+}

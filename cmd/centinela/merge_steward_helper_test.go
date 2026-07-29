@@ -48,6 +48,19 @@ func stewardRepo(t *testing.T, feature string, conflict bool) string {
 	return d
 }
 
+// applyStewardResolution emulates the Merge Steward applying its resolution:
+// the feature branch is really merged and committed in repo. Nothing else
+// makes a later `centinela merge --continue` truthful.
+func applyStewardResolution(t *testing.T, repo, feature string) {
+	t.Helper()
+	c := exec.Command("git", "merge", "--no-ff", "-X", "theirs",
+		"-m", "steward resolution for "+feature, feature)
+	c.Dir = repo
+	if out, err := c.CombinedOutput(); err != nil {
+		t.Fatalf("apply steward resolution: %v\n%s", err, out)
+	}
+}
+
 func chdir(t *testing.T, dir string) {
 	t.Helper()
 	orig, _ := os.Getwd()

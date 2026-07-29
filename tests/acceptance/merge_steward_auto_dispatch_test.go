@@ -59,7 +59,7 @@ func TestAcceptance_ContinueApplyFinalizes(t *testing.T) {
 	if _, err := runBin(t, bin, repo, "merge", "iota"); err == nil {
 		t.Fatal("expected conflict dispatch to exit non-zero")
 	}
-	abortRepoMerge(t, repo)
+	applyRepoMergeResolution(t, repo)
 	writeMergeEvidence(t, repo, "iota", "complete")
 	out, err := runBin(t, bin, repo, "merge", "--continue", "iota")
 	if err != nil {

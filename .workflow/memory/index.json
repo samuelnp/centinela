@@ -52,6 +52,19 @@
     "createdAt": "2026-07-28T20:47:57Z"
   },
   {
+    "id": "0ac545ddbe9cdd24",
+    "feature": "merge-truthful-delivery",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: merge-truthful-delivery",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/merge-truthful-delivery-gatekeeper.md",
+    "createdAt": "2026-07-29T08:49:05Z"
+  },
+  {
     "id": "0cd0b9d5a3adf24f",
     "feature": "security-gate",
     "step": "tests",

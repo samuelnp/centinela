@@ -25,7 +25,7 @@ func stubPortalRegen(t *testing.T) {
 	t.Helper()
 	orig := docsPortalRegen
 	t.Cleanup(func() { docsPortalRegen = orig })
-	docsPortalRegen = func() error { return nil }
+	docsPortalRegen = func(string) error { return nil }
 }
 
 // THE regression at the cmd layer: runMerge invoked with the CWD inside the

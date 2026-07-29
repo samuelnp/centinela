@@ -14,7 +14,7 @@ func TestRunMergeCleanInvokesPortalRegen(t *testing.T) {
 	orig := docsPortalRegen
 	defer func() { docsPortalRegen = orig }()
 	called := 0
-	docsPortalRegen = func() error { called++; return nil }
+	docsPortalRegen = func(string) error { called++; return nil }
 
 	if err := runMerge(nil, []string{"omega"}); err != nil {
 		t.Fatalf("clean merge should succeed: %v", err)
@@ -31,7 +31,7 @@ func TestRunMergeCleanToleratesPortalRegenFailure(t *testing.T) {
 
 	orig := docsPortalRegen
 	defer func() { docsPortalRegen = orig }()
-	docsPortalRegen = func() error { return errors.New("roadmap.json missing") }
+	docsPortalRegen = func(string) error { return errors.New("roadmap.json missing") }
 
 	out := captureStdout(t, func() {
 		if err := runMerge(nil, []string{"omega"}); err != nil {

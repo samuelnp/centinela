@@ -22,8 +22,8 @@ func rdsMergeSource(t *testing.T) string {
 func TestRDSCleanMergeRegeneratesPortal(t *testing.T) {
 	src := rdsMergeSource(t)
 	// The clean-merge path must invoke the portal-regen seam.
-	if !strings.Contains(src, "docsPortalRegen()") {
-		t.Fatal("a clean merge must call docsPortalRegen() to refresh the portal")
+	if !strings.Contains(src, "docsPortalRegen(repo)") {
+		t.Fatal("a clean merge must call docsPortalRegen(repo) to refresh the portal")
 	}
 	if !strings.Contains(src, "docgen.Generate(") {
 		t.Fatal("the regen seam must be wired to docgen.Generate")
@@ -34,7 +34,7 @@ func TestRDSCleanMergeRegeneratesPortal(t *testing.T) {
 func TestRDSPortalRegenFailureDoesNotFailMerge(t *testing.T) {
 	src := rdsMergeSource(t)
 	// On a regen error the merge prints a notice and continues (no return err).
-	idx := strings.Index(src, "docsPortalRegen()")
+	idx := strings.Index(src, "docsPortalRegen(repo)")
 	if idx < 0 {
 		t.Fatal("docsPortalRegen call not found")
 	}

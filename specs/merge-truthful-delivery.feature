@@ -156,3 +156,78 @@ Feature: centinela merge / deliver --via merge — truthful delivery
     Then the merge stops on the validate-fail outcome as today
     And the worktree ".worktrees/high-score" is kept
     And no success message is printed
+
+  # ---------------------------------------------------------------------------
+  # the resume path — a stall this feature made reachable must be resumable,
+  # and `--continue` must obey the same "assert on the ref" rule
+  # ---------------------------------------------------------------------------
+
+  Scenario: merge --continue never claims success while the target ref is unmoved
+    Given a merge stalled on a text conflict, started from ".worktrees/high-score"
+    And valid Merge Steward evidence exists but the conflict is NOT resolved
+    When the operator runs:
+      centinela merge --continue high-score
+    Then the command exits with a non-zero code
+    And stdout does not contain "and removed its worktree"
+    And "git rev-parse main" in the primary tree is unchanged
+    And the directory ".worktrees/high-score" still exists
+      # an APPLY verdict is the steward's CLAIM; ancestry in the primary tree
+      # is the proof, and only the proof may print the success line
+
+  Scenario: a merge stalled from a worktree CWD is resumable from that same worktree CWD
+    Given a merge stalled on a text conflict, started from ".worktrees/high-score"
+    And the Merge Steward resolved and committed the merge in the primary tree
+    When the operator runs, still from ".worktrees/high-score":
+      centinela merge --continue high-score
+    Then the command exits with code 0
+    And "git rev-parse main" in the primary tree advanced
+    And the branch "high-score" is an ancestor of main
+    And "git worktree list" no longer lists ".worktrees/high-score"
+    And stdout contains the success message naming "high-score"
+
+  Scenario: a merge stalled from a worktree CWD is resumable from the primary CWD
+    Given a merge stalled on a text conflict, started from ".worktrees/high-score"
+    And the Merge Steward resolved and committed the merge in the primary tree
+    When the operator runs, from the primary working tree:
+      centinela merge --continue high-score
+    Then the command exits with code 0
+    And the delivery is verified on the ref and on the worktree registry
+      # the pending marker lives in the primary tree, so it is discoverable
+      # from BOTH CWDs — a worktree-initiated stall is never orphaned
+
+  # ---------------------------------------------------------------------------
+  # half-success and verification scope
+  # ---------------------------------------------------------------------------
+
+  Scenario: a merge that lands but cannot remove the worktree reports both halves and stays recoverable
+    Given ".worktrees/high-score" contains an untracked file
+    When the operator runs:
+      centinela merge high-score
+    Then the command exits with a non-zero code
+    And stderr states the merge is verified AND that worktree removal failed
+    And stderr names the command to re-run to retry removal
+    And a plain re-run repeats the same truthful two-part outcome
+    And re-running with "--force-remove" exits 0 with the worktree actually gone
+      # an advanced main plus a bare error left the operator with no way out
+
+  Scenario: removal is verified against git's worktree registry, not a path convention
+    Given the feature worktree is registered outside ".worktrees/high-score"
+    When the operator runs:
+      centinela merge high-score
+    Then removal is never claimed while "git worktree list" still lists it
+    And the registered worktree is actually removed
+
+  Scenario: the post-merge validate runs against the merged primary tree
+    Given the operator's CWD is ".worktrees/high-score"
+    When the operator runs:
+      centinela merge high-score
+    Then the built-in gates report a full scan, not "0 files changed"
+      # a diff-aware run against a target that already absorbed the branch
+      # gates nothing
+
+  Scenario: the documentation portal is regenerated in the primary tree
+    Given docgen inputs exist only in the primary working tree
+    And the operator's CWD is ".worktrees/high-score"
+    When the operator runs:
+      centinela merge high-score
+    Then "docs/project-docs/index.html" exists in the primary working tree

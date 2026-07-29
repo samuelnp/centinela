@@ -12,6 +12,7 @@ import (
 func TestResolveMerge_ApplyCleanFinalizes(t *testing.T) {
 	repo := resolveRepo(t, "iota")
 	writeMarker(t, repo, "iota")
+	landBranch(t, repo, "iota")
 	res, err := worktree.ResolveMerge(repo, "iota", okValidator("complete"))
 	if err != nil {
 		t.Fatalf("ResolveMerge: %v", err)

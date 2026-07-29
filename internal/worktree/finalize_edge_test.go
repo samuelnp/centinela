@@ -14,6 +14,7 @@ import (
 func TestResolveMerge_WorktreeGoneStillFinalizes(t *testing.T) {
 	repo := resolveRepo(t, "sigma")
 	writeMarker(t, repo, "sigma")
+	landBranch(t, repo, "sigma")
 	if err := worktree.Remove(repo, "sigma", true); err != nil {
 		t.Fatalf("pre-remove worktree: %v", err)
 	}

@@ -58,10 +58,30 @@ advanced, sets `AlreadyMerged = isAncestor(repo, o.Branch)`; when neither →
 - If the message block outgrows 100 lines, split a `mergeSuccessLine(outcome)`
   helper into `cmd/centinela/merge_report.go`.
 
+### Post-verification round (adversarial verifier, findings 1–4)
+- `internal/worktree/registry.go` (new): `registeredWorktree` /
+  `findRegisteredWorktree` parse `git worktree list --porcelain` for the
+  branch's live (non-prunable) worktree. `verifyRemoved` asks the registry
+  first; `Remove` removes the registered path. A registry read failure is a
+  refusal, never an assumed removal.
+- `internal/worktree/merge_finish.go` (new): `MergeOption` /
+  `WithForceRemove` / `finishMerge`, which flags `RemoveFailed` so a merge
+  that landed but could not clean up reports both halves.
+- `internal/worktree/merge_verify.go`: `verifyLanded` — the `--continue`
+  proof is ancestry in the primary tree (an APPLY verdict is a claim).
+- `internal/worktree/finalize.go`: `ResolveMerge` verifies target branch,
+  ancestry and removal, and returns the verified `MergeOutcome`.
+- `MergeOutcome.BaseSHA` is persisted in the pending marker so `--continue`
+  can word "merged now" vs "already merged" from evidence.
+- `cmd/centinela`: `repo` threaded into `dispatchSteward`, `runMergeContinue`,
+  `hook merge` and the steward-evidence lookup; `--force-remove` flag;
+  `reportMergeFailure` for the truthful two-part outcome; `inDir` +
+  `config.FlagForceFull` so the post-merge validate and the portal regen run
+  on the merged primary tree instead of the invoking CWD.
+
 ### Unchanged
-`deliver.go` (routes into fixed `runMerge`), `merge_continue.go`,
-`merge_dispatch.go`, `remove.go`, `path.go` (its `IsInsideWorktree` finally
-gets a caller).
+`deliver.go` (routes into fixed `runMerge`), `path.go` (its
+`IsInsideWorktree` finally gets a caller).
 
 ## Constraints
 - Every source + `_test.go` ≤100 lines (G1 applies to test files too).

@@ -1,14 +1,14 @@
 {
   "feature": "merge-truthful-delivery",
   "startedAt": "2026-07-09T18:21:37.096699Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-07-09T21:08:54Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-07-10T11:43:30Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-29T08:49:05Z"
     }
   },
   "stepOrder": [

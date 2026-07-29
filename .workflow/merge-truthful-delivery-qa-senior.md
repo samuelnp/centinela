@@ -63,3 +63,96 @@ Process note: the qa subagent stalled after authoring all test files; the
 orchestrator ran the three mandated verification commands, fixed the stale
 sibling fixture, added the EC-01 wording fix (code+test, allowed in tests
 step), and re-ran everything green before recording this evidence.
+
+---
+
+## Post-Verification Round — regression tests per fix
+
+Every fix from the verifier round carries a test at the tier that caught it.
+
+**Finding 1 (CRITICAL) — acceptance, binary-driven, real induced conflict,
+temp repos only (no network, no remote):**
+`tests/acceptance/merge_truthful_delivery_continue_test.go` +
+`_continue_helper_test.go`
+- `TestAccMergeContinueFromWorktreeCwdNeverFakesSuccess` — stall from the
+  worktree CWD on a real text conflict, valid steward evidence, conflict NOT
+  resolved: asserts non-zero exit, no `and removed its worktree` anywhere in
+  the output, `git rev-parse main` byte-identical, worktree still on disk.
+  This is the exact command/CWD pair that printed the fabricated line.
+- `TestAccMergeContinueResumesFromWorktreeCwd` — same stall, conflict really
+  resolved and committed: exits 0, main advanced, `merge-base --is-ancestor`
+  holds, the worktree is gone from disk AND from `git worktree list
+  --porcelain`, and only then is the success line present.
+- `TestAccMergeContinueResumesFromPrimaryCwd` — the same worktree-initiated
+  stall resumed from the primary CWD, proving the marker is discoverable
+  from both.
+- The helper asserts, on every stall, that the pending marker lands in the
+  PRIMARY tree — the desync at the root of the finding.
+- cmd tier: `cmd/centinela/merge_continue_worktree_test.go`.
+- unit tier: `internal/worktree/finalize_verify_test.go`
+  (`ApplyWithoutLandedBranch_Refuses` and the landed/half-success cases),
+  `merge_verify_registry_test.go` (`TestVerifyLanded_*`).
+
+**Finding 2 — registry-verified removal:**
+`internal/worktree/registry_test.go` (porcelain parsing incl. paths with
+spaces, prunable entries, CRLF, runner failure),
+`merge_verify_registry_test.go` (`StillRegisteredElsewhere_Refuses`,
+`RegistryUnreadable_Refuses`), `merge_removal_test.go`
+(`WorktreeOutsideConvention_ReallyRemoved`, real `git worktree move`), and
+acceptance `TestAccMergeWorktreeOutsideConventionIsReallyRemoved`.
+
+**Finding 3 — busy worktree half-success:**
+`internal/worktree/merge_removal_test.go`
+(`BusyWorktree_HalfSuccessThenForceRemoveRecovers`),
+`internal/worktree/finalize_verify_test.go`
+(`BusyWorktree_ReportsLandedMerge`), `cmd/centinela/merge_recovery_test.go`
+(message shape, pass-through cases, `--force-remove` flag plumbing), and
+acceptance `TestAccMergeBusyWorktreeReportsBothHalvesAndRecovers`, which
+drives the full loop: half-success -> idempotent re-run -> forced recovery.
+
+**Finding 4 — validate/portal scope:**
+acceptance `TestAccMergeValidatesMergedPrimaryTreeNotInvokingCwd` (asserts
+`Built-in Gates (full scan)` and the absence of `0 files changed`) and
+`TestAccMergePortalRegenTargetsPrimaryTree` (docgen inputs reachable only
+from the primary tree; the portal must appear there).
+
+Tests changed rather than added: `TestResolveMerge_ApplyCleanFinalizes`,
+`TestResolveMerge_WorktreeGoneStillFinalizes` and
+`TestAcceptance_ContinueApplyFinalizes` previously finalized a merge that had
+never landed (one of them aborted the merge outright). They now apply a real
+steward resolution first — the old assertions were asserting the defect.
+
+---
+
+## Traceability Closure Round (re-verifier Finding 1)
+
+All 21 spec scenarios now carry an executing acceptance marker; the
+`spec-traceability-gate` reports `Pass — All 21 scenarios have acceptance
+coverage.` (previously `Warn`, 15/21).
+
+| Scenario | Test |
+|---|---|
+| a text conflict still dispatches the Merge Steward with no success claim | `TestAccMergeTextConflictKeepsWorktreeAndClaimsNothing` (`_steward_test.go`) |
+| a validate failure after a clean text merge still dispatches the steward | `TestAccMergeValidateFailureDispatchesStewardWithoutClaim` (`_steward_test.go`) |
+| merge refuses when the primary tree is in detached HEAD state | `TestAccMergeDetachedPrimaryHeadRefused` (`_primary_refusals_test.go`) |
+| merge refuses when the primary working tree is bare | `TestAccMergeBarePrimaryRefused` (`_primary_refusals_test.go`) |
+| removal is only claimed when the worktree directory is actually gone | `TestAccMergeSurvivingWorktreeIsNeverClaimedRemoved` (`_noclaim_test.go`) |
+| the success message is never printed when the ref did not advance | `TestAccMergeNoRefAdvanceNeverPrintsSuccess` (`_noclaim_test.go`) |
+
+Fixture notes (`merge_truthful_delivery_fixtures_test.go`):
+- `mtdfBarePrimaryRepo` clones a fixture into a LOCAL bare repo (`git clone
+  --bare <local dir>` — no network) and registers a linked worktree, so the
+  first porcelain entry carries `bare`.
+- `mtdfValidateFailRepo` commits `validate.commands = ["exit 1"]` on main and a
+  non-conflicting change on the branch, so the merge is text-clean and the
+  post-merge validate genuinely fails.
+- `mtdfNoOpMergeGit` writes a `git` shim that no-ops ONLY `merge --no-ff` and
+  `exec`s the real binary for everything else. Real git cannot produce "merge
+  exits 0, HEAD unmoved, branch NOT an ancestor" — the two conditions are
+  coupled — so the shim manufactures that one shape while the shipped guard is
+  still exercised end-to-end through the real `centinela` binary. No scenario
+  was demoted to a lower tier.
+
+Each test asserts the behaviour, not merely the exit code: the ref before/after,
+worktree survival, the pending-marker reason (`post-merge-validate-failed`),
+git's own worktree registry, and the absence of any success wording.
