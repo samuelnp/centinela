@@ -85,3 +85,4 @@
 - Finalized draft in place: roadmap-state-hygiene
 - Finalized draft in place: smoke-verification
 - Finalized draft in place: adversarial-validate-verifier
+- Finalized draft in place: unified-plan-specialist
