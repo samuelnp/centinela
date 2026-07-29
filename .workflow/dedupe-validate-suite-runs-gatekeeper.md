@@ -1,0 +1,174 @@
+# dedupe-validate-suite-runs — gatekeeper
+
+### Adversarial Verifier Report: dedupe-validate-suite-runs
+**Date:** 2026-07-29
+**Status:** WARNING
+
+#### Inputs Read
+- `git diff main...HEAD` (31 files; working tree clean at f24f4ef)
+- docs/features/dedupe-validate-suite-runs.md
+- specs/dedupe-validate-suite-runs.feature
+- docs/plans/dedupe-validate-suite-runs.md
+- Source under test: scripts/check-coverage.sh, centinela.toml,
+  cmd/centinela/{complete_validate_gates,complete_verify,complete_validation_outcome,validate,validate_runner,complete}.go,
+  internal/verify/{claim_tests,claim_coverage,runner}.go, internal/ui/render_gates.go,
+  .github/workflows/validate.yml, both prompt copies + scaffold mirrors
+- New/updated tests: tests/unit/coverage_reuse_{branch,helper}_test.go,
+  tests/acceptance/dedupe_validate_suite_runs_{script,config,prompts,complete}_test.go,
+  tests/integration/{coverage_validate_config,ci_validate_workflow_integration}_test.go,
+  cmd/centinela/complete_validation_outcome_test.go, cmd/centinela/verify_gate_test.go
+- .workflow/dedupe-validate-suite-runs-edge-cases.md (risk matrix only, not
+  treated as evidence)
+- Output of the commands I executed myself (below)
+- Contamination note: the delegation prompt contained the slug, paths, and
+  operational notes (validate wall-clock, scratch-binary location) — no
+  narrative summary of the implementation. Not contaminated.
+
+#### Refutation Attempts
+- **Claim attacked:** "A stale/doctored coverage.out can never mask a failing suite."
+  **How:** Read `runValidateCommands` (cmd/centinela/validate.go:84-99) — it
+  runs ALL `validate.commands` and aggregates `allPassed`; the reuse branch in
+  check-coverage.sh requires `COVERAGE_PROFILE` explicitly set AND the file
+  present; command 1 (`go test ./... -coverprofile=coverage.out`) rewrites the
+  profile before the script reads it. Also observed LIVE in my second validate
+  run: the suite command failed while the coverage script reused a profile and
+  passed — validate still exited 1. Behavioral proof at unit tier: a failing
+  test added after the profile was recorded does not fail the reuse branch
+  (proving the internal go test is skipped), and a missing named profile
+  triggers a real, failing suite run (fail-safe, never fail-open).
+  **Result:** could not refute.
+- **Claim attacked:** "complete's synthesized PriorTestRun cannot vouch for a suite that never ran."
+  **How:** Checked whether `executeValidation()` (FlagNone) could diff-skip the
+  suite: diff-aware mode filters only built-in gates (`gates.RunWithFilter`);
+  `runValidateCommands` unconditionally executes every entry.
+  `completedValidationOutcome()` is reachable only after `executeValidation()`
+  returned nil AND a second `workflow.VerificationFresh` re-check (ordering
+  pinned by TestTreeChangeDuringSuiteRunBlocksCompletion and
+  TestFailingValidateBlocksCompletionBeforeReuse). No on-disk, agent-writable
+  state is involved.
+  **Result:** could not refute.
+- **Claim attacked:** "Standalone verify/verdict/MCP still re-run the suite for real."
+  **How:** Grepped every `verifyDepsFor`/`PriorTestRun` reference:
+  `verifyDepsFor` (cmd/centinela/verify_deps.go) never sets `PriorTestRun`;
+  verify.go, verdict.go, mcp.go call `verify.Verify(..., verifyDepsFor(...))`
+  directly, bypassing `runClaimVerification` entirely; only `runValidateGates`
+  passes a non-nil prior. `internal/verify` is untouched by this branch (empty
+  diff), so the suppression seam and its guard test
+  (internal/verify/claim_tests_test.go) are verbatim.
+  **Result:** could not refute.
+- **Claim attacked:** "Both prompt copies are byte-identical and carry the new mandates."
+  **How:** `cmp` on gatekeeper-prompt.md and qa-senior-prompt.md against their
+  scaffold mirrors — both identical; read the diff hunks for the conditional
+  suite mandate and the one-full-run guidance.
+  **Result:** could not refute.
+- **Claim attacked:** "Guard-rail literals and tests are untouched."
+  **How:** `MIN_COVERAGE:-95.0` and the `COVERAGE_VALUE` fast path survive
+  verbatim in check-coverage.sh (fast path also proven live by the acceptance
+  test running the script in an empty dir); `internal/verify/claim_tests_test.go`
+  is not in the diff; the coverage gate passed with per-package figures well
+  above the floor (cmd/centinela 96.5%).
+  **Result:** could not refute.
+- **Claim attacked:** "centinela validate passes on this tree."
+  **How:** Built a scratch binary from the worktree and ran validate in the
+  foreground three times. Run 1 passed ("All gates passed."; my macOS zsh
+  timing wrapper broke, so its duration went uncaptured — recorded in prose
+  only, excluded from the JSON block rather than given an invented duration).
+  Run 2 (timed) FAILED: `go test ./... -coverprofile=coverage.out` exited
+  non-zero while every rendered package line was `ok` and no FAIL line
+  appeared — the tests-tier package results never printed. I reproduced the
+  exact suite argv (run 3): exit 0 in 343.6s; the tests tier passes standalone
+  (1056 tests); the branch's new tests are stable under `-count=3` (12 unit +
+  45 acceptance + 3 colocated). Run 4 (timed) passed: exit 0 in 319.8s. The
+  run-2 failure is a transient, unattributable suite flake — real, but not
+  reproducible and not traceable to this branch's changes.
+  **Result:** partially refuted (non-blocking): the gates pass on this tree
+  (2 timed-or-observed passes, 1 transient failure), and the flake's
+  undiagnosability is a finding below.
+
+#### Commands Run
+All from the worktree root at f24f4ef; scratch binary
+`/private/tmp/claude-501/-Users-samuelnp-projects-personal-centinela/b08625f9-cd36-4962-b53d-a44975feb565/scratchpad/centinela-verify`
+built from `./cmd/centinela`. Because `[validate] commands` runs the full
+suite, each validate run IS a suite run under the new conditional mandate;
+runs 3 and 4 were deliberate refutation re-runs of a failure, not routine
+duplicates.
+
+- `go build -o .../centinela-verify ./cmd/centinela` — exit 0.
+- `.../centinela-verify validate` (run 1) — success path observed ("All gates
+  passed.", exit 0); duration uncaptured (timing-wrapper bug), prose-only.
+- `.../centinela-verify validate` (run 2) — exit 1, 304,758 ms (transient
+  suite-command failure; coverage + fmt commands passed; validate correctly
+  failed overall).
+- `go test ./tests/...` — exit 0 (1056 tests, 3 packages; duration not
+  captured, prose-only).
+- `go test ./... -coverprofile=coverage.out` (run 3, exact failing argv) —
+  exit 0, 343,572 ms.
+- `go test ./tests/unit/ -run 'TestCoverageScript' -count=3 -v` — exit 0 (12).
+- `go test ./tests/acceptance/ -run '<new dedupe scenario tests>' -count=3` —
+  exit 0 (45).
+- `go test ./cmd/centinela/ -run 'TestCompletedValidationOutcome' -count=3` —
+  exit 0 (3).
+- `.../centinela-verify validate` (run 4) — exit 0, 319,812 ms.
+- `cmp` on both prompt pairs vs scaffold mirrors — exit 0 (byte-identical).
+- `git check-ignore coverage.out` — exit 0 (ignored; the profile write cannot
+  stale a freshness stamp).
+- `.../centinela-verify roadmap defer validate-flake-diagnosability ...` — exit 0.
+- `.../centinela-verify evidence init/set/append` + `artifact stamp` (below).
+
+#### Findings
+- **Affected spec:** dedupe-validate-suite-runs.feature
+  **Affected scenario:** validate runs the suite exactly once
+  **Risk:** Transient suite flake with zero diagnosis trail: one of four
+  full-suite executions failed (`go test ./... -coverprofile=coverage.out`
+  non-zero) and the rendered command output contained only `ok` lines — no
+  FAIL line, no failing package. `runCommand` keeps output in memory only, so
+  nothing survives for post-mortem. A flake at `complete` time wastes a full
+  gate cycle undiagnosed.
+  **Suggestion:** Persist the suite command's full output to a log file (or
+  run with `-json`) on failure. Deferred as `validate-flake-diagnosability`.
+- **Affected spec:** dedupe-validate-suite-runs.feature
+  **Affected scenario:** (repo hygiene — validate's warning gates)
+  **Risk:** The `roadmap_drift` warning is branch-caused: the plan-step
+  deferral `cross-process-suite-result-reuse` (and now my gatekeeper deferral)
+  are in `.workflow/roadmap.json` but ROADMAP.md was not regenerated.
+  **Suggestion:** Run `centinela roadmap generate` during the docs step.
+- **Affected spec:** dedupe-validate-suite-runs.feature
+  **Affected scenario:** complete's claim verification reuses the gate's own run
+  **Risk:** If gatekeeper evidence ever carries a `coverage` claim,
+  `checkCoverage` (internal/verify/claim_coverage.go) runs its own hard-coded
+  `go test -cover ./...` — an extra full-suite run inside `complete` that
+  `PriorTestRun` does not suppress. Not triggered here (no coverage claim in
+  this evidence; absent claim → SKIP), but the 2-run budget silently breaks
+  whenever one is set.
+  **Suggestion:** Note in the gatekeeper prompt that setting a coverage claim
+  re-triggers a suite run at complete time, or extend the reuse seam to the
+  coverage check in a follow-up.
+
+#### Deferred Findings
+- `validate-flake-diagnosability` — recorded via
+  `centinela-verify roadmap defer validate-flake-diagnosability --summary "..."
+  --source dedupe-validate-suite-runs/gatekeeper`.
+- (`cross-process-suite-result-reuse` was pre-recorded at the plan step, per
+  the plan's Non-goals — not a gatekeeper deferral.)
+
+#### Recommendation
+- WARNING: I attempted to refute the completion claim on every trust
+  invariant — profile masking, skipped-suite vouching, standalone-surface
+  leakage, prompt parity, guard-rail literals, gate ordering — and could not.
+  The refuted point is non-blocking: one transient, non-reproducible
+  full-suite failure (unattributable to this branch; its own new tests are
+  stable under repetition) plus a branch-caused roadmap_drift warning.
+  Proceed; clear the drift at the docs step and track the diagnosability
+  deferral.
+
+```json centinela:verification
+{
+  "revision": "f24f4efbd8c9cf42aa265cfb2c2a096e11835c52",
+  "treeDigest": "sha256:96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+  "commands": [
+    {"argv": ["/private/tmp/claude-501/-Users-samuelnp-projects-personal-centinela/b08625f9-cd36-4962-b53d-a44975feb565/scratchpad/centinela-verify", "validate"], "exitCode": 1, "durationMs": 304758},
+    {"argv": ["go", "test", "./...", "-coverprofile=coverage.out"], "exitCode": 0, "durationMs": 343572},
+    {"argv": ["/private/tmp/claude-501/-Users-samuelnp-projects-personal-centinela/b08625f9-cd36-4962-b53d-a44975feb565/scratchpad/centinela-verify", "validate"], "exitCode": 0, "durationMs": 319812}
+  ]
+}
+```

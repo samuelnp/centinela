@@ -416,6 +416,19 @@
     "createdAt": "2026-06-26T14:10:18Z"
   },
   {
+    "id": "49aa285afa5fd827",
+    "feature": "dedupe-validate-suite-runs",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# dedupe-validate-suite-runs — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/dedupe-validate-suite-runs-gatekeeper.md",
+    "createdAt": "2026-07-29T22:20:31Z"
+  },
+  {
     "id": "516c1dba5657b901",
     "feature": "g2-multi-language-import-graph",
     "step": "validate",
