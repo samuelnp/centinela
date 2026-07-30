@@ -4,12 +4,12 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
 // seedCleanMergeRepo provisions a git repo with a committed feature worktree so
-// runMerge takes the clean-merge path that fires docsPortalRegen. Returns the
-// repo root (cwd is set to it).
+// runMerge takes the clean-merge path. Returns the repo root (cwd is set to it).
 func seedCleanMergeRepo(t *testing.T, feature string) string {
 	t.Helper()
 	d := t.TempDir()
@@ -45,4 +45,22 @@ func seedCleanMergeRepo(t *testing.T, feature string) string {
 	git(wt, "add", ".")
 	git(wt, "commit", "-q", "-m", feature+" commit")
 	return d
+}
+
+// The docsPortalRegen seam is deleted: a clean merge must neither mention a
+// portal regeneration nor materialize docs/project-docs/index.html.
+func TestRunMergeCleanDoesNotRegeneratePortal(t *testing.T) {
+	d := seedCleanMergeRepo(t, "omega")
+
+	out := captureStdout(t, func() {
+		if err := runMerge(nil, []string{"omega"}); err != nil {
+			t.Fatalf("clean merge should succeed: %v", err)
+		}
+	})
+	if strings.Contains(out, "portal regen") {
+		t.Fatalf("merge output must not mention portal regeneration: %s", out)
+	}
+	if _, err := os.Stat(filepath.Join(d, "docs", "project-docs", "index.html")); !os.IsNotExist(err) {
+		t.Fatalf("no code path may regenerate docs/project-docs/index.html at merge time (stat err=%v)", err)
+	}
 }

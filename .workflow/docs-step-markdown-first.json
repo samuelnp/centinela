@@ -1,7 +1,7 @@
 {
   "feature": "docs-step-markdown-first",
   "startedAt": "2026-07-30T08:28:31.783402Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -16,11 +16,11 @@
       "completedAt": "2026-07-30T09:00:09Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-30T12:23:05Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },

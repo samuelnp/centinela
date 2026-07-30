@@ -64,7 +64,7 @@ func writeEvidence(t *testing.T, f, s string, r Role, edge bool) {
 	os.WriteFile(MarkdownPath(f, r), []byte("# evidence"), 0644) //nolint:errcheck
 	edgeCases := `[]`
 	inputs := `"inputs":["i"]`
-	outputs := `"outputs":["docs/project-docs/index.html"]`
+	outputs := `"outputs":["docs/guides/guide.md"]`
 	if s == "plan" && requiresPlanSnapshot(r) {
 		inputs = `"inputs":["docs/features/` + f + `.md","docs/plans/` + f + `.md"]`
 		os.MkdirAll("docs/plans", 0755)                              //nolint:errcheck
@@ -76,13 +76,9 @@ func writeEvidence(t *testing.T, f, s string, r Role, edge bool) {
 			outputs = `"outputs":["specs/` + f + `.feature"]`
 		}
 	}
-	if s == "docs" {
-		os.MkdirAll("docs/project-docs", 0755)                             //nolint:errcheck
-		os.WriteFile("docs/project-docs/index.html", []byte("html"), 0644) //nolint:errcheck
-	}
-	if s == "validate" {
-		os.MkdirAll("docs/project-docs", 0755)                             //nolint:errcheck
-		os.WriteFile("docs/project-docs/index.html", []byte("html"), 0644) //nolint:errcheck
+	if s == "docs" || s == "validate" {
+		os.MkdirAll("docs/guides", 0755)                            //nolint:errcheck
+		os.WriteFile("docs/guides/guide.md", []byte("guide"), 0644) //nolint:errcheck
 	}
 	if edge {
 		edgeCases = `["e"]`

@@ -42,8 +42,16 @@ func TestValidateActionableOutputsRoleRules(t *testing.T) {
 	if err := validateActionableOutputs("x", "f", RoleQASeniorEngineer, []string{"tests/unit/f_test.go", ".workflow/f-edge-cases.md"}, nil); err != nil {
 		t.Fatalf("expected qa success, got %v", err)
 	}
-	if err := validateActionableOutputs("x", "f", RoleDocsSpecialist, []string{"summary only"}, nil); err != nil {
-		t.Fatalf("expected docs specialist bypass, got %v", err)
+	// The docs-specialist exemption is gone: a descriptive string fails the
+	// real-file check, and real-but-non-doc outputs fail the docs-file rule.
+	if err := validateActionableOutputs("x", "f", RoleDocsSpecialist, []string{"summary only"}, nil); err == nil || !strings.Contains(err.Error(), "real files") {
+		t.Fatalf("expected docs specialist real-file error, got %v", err)
+	}
+	if err := validateActionableOutputs("x", "f", RoleDocsSpecialist, []string{".workflow/f-edge-cases.md"}, nil); err == nil || !strings.Contains(err.Error(), "docs/ or README.md") {
+		t.Fatalf("expected docs-file rule error, got %v", err)
+	}
+	if err := validateActionableOutputs("x", "f", RoleDocsSpecialist, []string{"docs/plans/f.md"}, nil); err != nil {
+		t.Fatalf("expected docs specialist success with a docs/ file, got %v", err)
 	}
 	if err := validateActionableOutputs("x", "f", RoleUXUISpecialist, []string{"internal/demo/file.go"}, []string{"src/ui"}); err == nil || !strings.Contains(err.Error(), "real UI file") {
 		t.Fatalf("expected ux-ui-specialist ui path error, got %v", err)
