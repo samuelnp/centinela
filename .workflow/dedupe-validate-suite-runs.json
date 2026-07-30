@@ -1,0 +1,39 @@
+{
+  "feature": "dedupe-validate-suite-runs",
+  "startedAt": "2026-07-29T20:18:32.500127Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-29T20:57:21Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-29T22:24:07Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-29T20:46:35Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-29T21:20:01Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-29T22:20:31Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/dedupe-validate-suite-runs",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}

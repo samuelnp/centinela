@@ -27,9 +27,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      - name: Run test suite
-        run: go test ./...
-
+      # The suite runs INSIDE centinela validate: validate.commands executes
+      # the single profiled `go test ./...` run and the coverage gate reuses
+      # its profile. No bare suite step — one full-suite execution per push.
       - name: Run centinela validate
         run: go run ./cmd/centinela validate
 

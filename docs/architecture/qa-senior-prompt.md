@@ -42,6 +42,15 @@ Read docs/plans/<FEATURE_NAME>.md, specs/<FEATURE_NAME>.feature, the
 senior-engineer report at .workflow/<FEATURE_NAME>-senior-engineer.md,
 and the edge-case report at .workflow/<FEATURE_NAME>-edge-cases.md.
 
+Working method — test execution discipline:
+- While iterating, run ONLY the affected packages' tests (e.g.
+  `go test ./tests/acceptance/... ./cmd/centinela/...`); the full suite is
+  slow and its acceptance tier is uncacheable.
+- Before declaring the tests step done, run exactly ONE full profiled run:
+  `go test ./... -coverprofile=coverage.out` followed by
+  `COVERAGE_PROFILE=coverage.out ./scripts/check-coverage.sh`. That single
+  run is your suite-green and coverage evidence — do not repeat it.
+
 Required analysis:
 1. Test inventory by tier — list every unit, integration, and acceptance
    test added or modified for this feature.

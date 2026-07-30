@@ -416,6 +416,19 @@
     "createdAt": "2026-06-26T14:10:18Z"
   },
   {
+    "id": "49aa285afa5fd827",
+    "feature": "dedupe-validate-suite-runs",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# dedupe-validate-suite-runs — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/dedupe-validate-suite-runs-gatekeeper.md",
+    "createdAt": "2026-07-29T22:20:31Z"
+  },
+  {
     "id": "516c1dba5657b901",
     "feature": "g2-multi-language-import-graph",
     "step": "validate",
@@ -856,6 +869,19 @@
     ],
     "sourceArtifact": ".workflow/mcp-governance-server-gatekeeper.md",
     "createdAt": "2026-06-29T18:43:16Z"
+  },
+  {
+    "id": "ad8520ef927870ef",
+    "feature": "dedupe-validate-suite-runs",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Case:** Stale/doctored coverage.out masks a failing suite",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/dedupe-validate-suite-runs-edge-cases.md",
+    "createdAt": "2026-07-29T21:20:01Z"
   },
   {
     "id": "ada12c00b3107f31",

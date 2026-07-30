@@ -24,7 +24,13 @@ func runValidateGates(feature, step, model string, cfg *config.Config) error {
 		telemetry.RecordCompleteRejected(cfg, feature, step, "gates", model)
 		return err
 	}
-	if err := runClaimVerification(feature, step, model, cfg); err != nil {
+	// Second freshness check: the suite run above takes ~200s; a tree mutated
+	// mid-run would make the reused outcome vouch for the wrong tree.
+	if err := workflow.VerificationFresh(feature, ".", treestate.NewExecRunner()); err != nil {
+		telemetry.RecordCompleteRejected(cfg, feature, step, "gates", model)
+		return err
+	}
+	if err := runClaimVerification(feature, step, model, cfg, completedValidationOutcome()); err != nil {
 		telemetry.RecordCompleteRejected(cfg, feature, step, "verify", model)
 		return err
 	}
