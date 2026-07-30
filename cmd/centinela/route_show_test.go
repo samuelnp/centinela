@@ -3,6 +3,8 @@ package main
 import (
 	"strings"
 	"testing"
+
+	"github.com/samuelnp/centinela/internal/workflow"
 )
 
 func TestRunRouteShow_EffectiveTableMixesRoutedAndStaticRows(t *testing.T) {
@@ -51,5 +53,32 @@ func TestRunRouteShow_LegacyWorkflowIsAllStatic(t *testing.T) {
 	}
 	if !strings.Contains(out, "gatekeeper") || !strings.Contains(out, "reasoning") {
 		t.Fatalf("the gatekeeper row must show its static tier and floor: %s", out)
+	}
+}
+
+// The table must report what the hook EMITS: a route the overlay ignores (a
+// corrupt tier, or one below the role's floor) renders as the static tier
+// flagged "ignored", never as the effective one.
+func TestRunRouteShow_UnhonoredRoutesRenderAsIgnored(t *testing.T) {
+	wf := routeRepo(t, "code", dynamicToml)
+	wf.SetModelRoute("senior-engineer", workflow.ModelRoute{Tier: "ultra", DecidedAt: "x"})
+	wf.SetModelRoute("gatekeeper", workflow.ModelRoute{Tier: "fast", DecidedAt: "x"})
+	if err := workflow.Save(wf); err != nil {
+		t.Fatalf("save: %v", err)
+	}
+	out := captureStdout(t, func() {
+		if err := runRouteShow(nil, []string{"f"}); err != nil {
+			t.Fatalf("show: %v", err)
+		}
+	})
+	if strings.Contains(out, "ultra") {
+		t.Fatalf("a corrupt tier must never render as effective: %s", out)
+	}
+	if strings.Count(out, "ignored") != 2 {
+		t.Fatalf("both unhonored routes must be flagged ignored: %s", out)
+	}
+	// The hint line legitimately says "unrouted", so only the table is checked.
+	if table, _, _ := strings.Cut(out, "\n\n"); strings.Contains(table, "routed") {
+		t.Fatalf("no route here is honored: %s", out)
 	}
 }

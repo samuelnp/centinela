@@ -3,6 +3,7 @@ package workflow
 import (
 	"os"
 	"testing"
+	"time"
 
 	"github.com/samuelnp/centinela/internal/orchestration"
 )
@@ -49,5 +50,35 @@ func TestRoleStepUnderway_PastCurrentDoneAndUnscheduled(t *testing.T) {
 	wf.CurrentStep = "done"
 	if !RoleStepUnderway(wf, orchestration.RoleGatekeeper) {
 		t.Fatal("a completed workflow leaves every step underway")
+	}
+}
+
+// A stub predating StartedAt is left over from an earlier run of the same slug
+// and must not close the sanctioned start-time routing window.
+func TestRoleStepUnderway_StaleEvidencePredatingStartedAt(t *testing.T) {
+	wf := underwayRepo(t, "code")
+	path := orchestration.JSONPath("f", orchestration.RoleSeniorEngineer)
+	os.WriteFile(path, []byte("{}"), 0644) //nolint:errcheck
+	stale := wf.StartedAt.Add(-time.Hour)
+	os.Chtimes(path, stale, stale) //nolint:errcheck
+	if RoleStepUnderway(wf, orchestration.RoleSeniorEngineer) {
+		t.Fatal("a leftover stub is not evidence that THIS run delegated")
+	}
+	fresh := wf.StartedAt.Add(time.Minute)
+	os.Chtimes(path, fresh, fresh) //nolint:errcheck
+	if !RoleStepUnderway(wf, orchestration.RoleSeniorEngineer) {
+		t.Fatal("an artifact written since startedAt means delegation began")
+	}
+}
+
+// A cursor off the step order proves nothing; the fail-safe reading is underway.
+func TestRoleStepUnderway_CurrentStepOutsideTheOrder(t *testing.T) {
+	wf := underwayRepo(t, "code")
+	wf.CurrentStep = "foo"
+	if !RoleStepUnderway(wf, orchestration.RoleSeniorEngineer) {
+		t.Fatal("an unreadable cursor must not disarm the downgrade refusal")
+	}
+	if RoleStepUnderway(wf, orchestration.RoleMergeSteward) {
+		t.Fatal("an unscheduled role is still never underway")
 	}
 }

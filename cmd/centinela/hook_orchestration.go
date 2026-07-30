@@ -53,10 +53,12 @@ func runHookOrchestration(_ *cobra.Command, _ []string) error {
 			continue
 		}
 		// Per-workflow overlay: routes belong to ONE feature, so the shared
-		// models map must never be mutated across the loop.
+		// models map must never be mutated across the loop. Floors travel INTO
+		// the overlay: state is agent-writable, so the floor must bind where the
+		// model is resolved, not only where a route is recorded.
 		wfModels := models
 		if dynamic {
-			wfModels = orchestration.ApplyRoutes(models, workflow.RouteTiers(wf))
+			wfModels = orchestration.ApplyRoutes(models, workflow.RouteTiers(wf), floors)
 		}
 		names, files, tiers := annotateRoles(wf.Feature, roles, wfModels, modelMap)
 		fmt.Printf("CENTINELA DIRECTIVE: orchestrator only for %q/%q; delegate to [%s].\n", wf.Feature, wf.CurrentStep, strings.Join(names, ", "))

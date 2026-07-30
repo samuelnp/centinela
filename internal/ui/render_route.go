@@ -10,14 +10,17 @@ import (
 type RouteRow struct {
 	Role      string
 	Tier      string
-	Source    string // "routed" or "static"
+	Source    string // "routed", "static", or "ignored" (recorded but not honored)
 	Floor     string // "" when the role is floorless
 	Reason    string
 	DecidedAt string
 }
 
-// routeColumns are the table headers, in display order.
-var routeColumns = []string{"Role", "Tier", "Source", "Floor", "Reason", "Decided"}
+// routeColumns are the table headers, in display order. The floor column is
+// labelled "Route floor" on purpose: a floor bounds what a ROUTE may set, it
+// does not raise a static tier the project configured — a bare "Floor" beside a
+// lower static tier read as an enforcement claim the static path never makes.
+var routeColumns = []string{"Role", "Tier", "Source", "Route floor", "Reason", "Decided"}
 
 // RenderRouteTable renders the effective routing table for a feature. hint is
 // the optional dynamic-routing directive appended below the table when roles are

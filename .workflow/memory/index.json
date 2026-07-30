@@ -455,6 +455,19 @@
     "createdAt": "2026-07-30T12:23:05Z"
   },
   {
+    "id": "4dd9f741c73c5691",
+    "feature": "dynamic-model-routing",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **R1 — The state file is the routing authority and is agent-writable.** Even with E1 fixed",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/dynamic-model-routing-edge-cases.md",
+    "createdAt": "2026-07-30T18:43:57Z"
+  },
+  {
     "id": "516c1dba5657b901",
     "feature": "g2-multi-language-import-graph",
     "step": "validate",

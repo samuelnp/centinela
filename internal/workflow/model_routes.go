@@ -1,10 +1,6 @@
 package workflow
 
-import (
-	"os"
-
-	"github.com/samuelnp/centinela/internal/orchestration"
-)
+import "github.com/samuelnp/centinela/internal/orchestration"
 
 // ModelRoute is one role's recorded routing decision. Exactly one route is
 // effective per role: an upgrade overwrites in place, and the append-only
@@ -64,35 +60,4 @@ func RoleScheduledStep(wf *Workflow, role orchestration.Role) (string, bool) {
 	return "", false
 }
 
-// RoleStepUnderway reports whether delegation for the role's scheduled step has
-// begun. A pure "in-progress" status cannot answer this: the first step is
-// in-progress from `start`, which is exactly the sanctioned routing window.
-// Underway = the step is behind the cursor (or the workflow is done), or it is
-// the current step AND an evidence artifact exists — `evidence init` writes both
-// stubs, so either one proves delegation began.
-func RoleStepUnderway(wf *Workflow, role orchestration.Role) bool {
-	step, ok := RoleScheduledStep(wf, role)
-	if !ok {
-		return false
-	}
-	if wf.CurrentStep == "done" {
-		return true
-	}
-	order := wf.OrderedSteps()
-	if stepIndexIn(step, order) < stepIndexIn(wf.CurrentStep, order) {
-		return true
-	}
-	if step != wf.CurrentStep {
-		return false
-	}
-	return roleEvidenceExists(wf.Feature, role)
-}
-
-func roleEvidenceExists(feature string, role orchestration.Role) bool {
-	for _, path := range []string{orchestration.MarkdownPath(feature, role), orchestration.JSONPath(feature, role)} {
-		if _, err := os.Stat(path); err == nil {
-			return true
-		}
-	}
-	return false
-}
+// RoleStepUnderway lives in model_routes_underway.go.

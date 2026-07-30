@@ -11,12 +11,13 @@ import (
 func buildRouteRequest(wf *workflow.Workflow, cfg *config.Config, role orchestration.Role, tier orchestration.Tier, reason string) orchestration.RouteRequest {
 	models, _ := orchestrationRouting(cfg)
 	static := orchestration.RoleTier(role, models)
-	floor, hasFloor := orchestration.EffectiveFloor(role, config.OrchestrationFloors(cfg))
+	floors := config.OrchestrationFloors(cfg)
+	floor, hasFloor := orchestration.EffectiveFloor(role, floors)
 	step, scheduled := workflow.RoleScheduledStep(wf, role)
 	return orchestration.RouteRequest{
 		Role:         role,
 		NewTier:      tier,
-		CurrentTier:  currentEffectiveTier(wf, role, static),
+		CurrentTier:  currentEffectiveTier(wf, role, static, floors),
 		StaticTier:   static,
 		Floor:        floor,
 		HasFloor:     hasFloor,
@@ -28,14 +29,15 @@ func buildRouteRequest(wf *workflow.Workflow, cfg *config.Config, role orchestra
 }
 
 // currentEffectiveTier is the tier a role resolves to TODAY: an already-recorded
-// route wins, else the static default. A corrupt recorded tier falls back to the
-// static default so a bad state file cannot fake an upgrade past rule 6.
-func currentEffectiveTier(wf *workflow.Workflow, role orchestration.Role, static orchestration.Tier) orchestration.Tier {
+// route wins ONLY where the overlay would honor it, else the static default. A
+// corrupt or below-floor recorded tier therefore cannot fake an upgrade past
+// rule 6 — the comparison matches what the hook actually emits.
+func currentEffectiveTier(wf *workflow.Workflow, role orchestration.Role, static orchestration.Tier, floors map[string]string) orchestration.Tier {
 	route, ok := wf.ModelRouteFor(string(role))
 	if !ok {
 		return static
 	}
-	if tier, valid := orchestration.NormalizeTier(route.Tier); valid {
+	if tier, honored := orchestration.HonoredRouteTier(role, route.Tier, floors); honored {
 		return tier
 	}
 	return static

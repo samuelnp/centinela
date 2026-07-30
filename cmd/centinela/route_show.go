@@ -68,8 +68,16 @@ func routeRows(wf *workflow.Workflow, roles []orchestration.Role, models orchest
 	for _, role := range roles {
 		row := ui.RouteRow{Role: string(role), Source: "static", Tier: string(orchestration.RoleTier(role, models))}
 		if route, ok := wf.ModelRouteFor(string(role)); ok {
-			row.Source, row.Tier = "routed", route.Tier
 			row.Reason, row.DecidedAt = route.Reason, route.DecidedAt
+			// The table must report what the hook EMITS, never the raw stored
+			// string: a corrupt or below-floor route is ignored by the overlay,
+			// so it renders as the static tier flagged "ignored" rather than
+			// masquerading as the effective one.
+			if tier, honored := orchestration.HonoredRouteTier(role, route.Tier, floors); honored {
+				row.Source, row.Tier = "routed", string(tier)
+			} else {
+				row.Source = "ignored"
+			}
 		}
 		if floor, ok := orchestration.EffectiveFloor(role, floors); ok {
 			row.Floor = string(floor)

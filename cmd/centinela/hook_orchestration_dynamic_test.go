@@ -33,7 +33,7 @@ func TestRunHookOrchestration_StaticModeIsByteIdentical(t *testing.T) {
 func TestRunHookOrchestration_DynamicEmitsDirectiveUntilRouted(t *testing.T) {
 	routeRepo(t, "plan", dynamicToml)
 	out := hookOut(t)
-	for _, want := range []string{"routing (dynamic): unrouted [planner]", "floors: planner>=balanced", "centinela route set f"} {
+	for _, want := range []string{"routing (dynamic): unrouted [planner]", "floors (routes only): planner>=balanced", "centinela route set f"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("dynamic directive missing %q: %s", want, out)
 		}

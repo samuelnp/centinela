@@ -81,8 +81,11 @@ func aliasPlanFloor(out map[string]string) {
 // validates against so the two vocabularies can never drift.
 func validateOrchestrationFloors(cfg *Config) error {
 	for roleKey, tierValue := range cfg.Orchestration.Floors {
-		role := strings.ToLower(strings.TrimSpace(roleKey))
-		if !allowedModelRoles[role] {
+		// The key is checked RAW, exactly as validateOrchestrationModels does:
+		// one vocabulary must not give two answers. Accepting "Gatekeeper" here
+		// while [orchestration.models] rejects it taught operators a casing the
+		// rest of the file refuses.
+		if !allowedModelRoles[roleKey] {
 			return fmt.Errorf("orchestration.floors: unknown role key %q", roleKey)
 		}
 		tier := strings.ToLower(strings.TrimSpace(tierValue))

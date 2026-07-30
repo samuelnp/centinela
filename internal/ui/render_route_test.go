@@ -14,7 +14,8 @@ func TestRenderRouteTable_AlignsColumnsAndDashesEmptyCells(t *testing.T) {
 	if !strings.Contains(out, "Model routing — f") {
 		t.Fatalf("missing the table title: %s", out)
 	}
-	for _, want := range []string{"Role", "Tier", "Source", "Floor", "Reason", "Decided", "—"} {
+	// "Route floor", not "Floor": the column bounds routes, not the static tier.
+	for _, want := range []string{"Role", "Tier", "Source", "Route floor", "Reason", "Decided", "—"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("table missing %q: %s", want, out)
 		}

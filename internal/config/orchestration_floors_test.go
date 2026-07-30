@@ -44,3 +44,17 @@ func TestValidateOrchestrationFloors(t *testing.T) {
 		t.Fatalf("an unknown tier must be refused listing the tiers, got %v", err)
 	}
 }
+
+// One vocabulary, two validators: a key [orchestration.models] rejects must not
+// be accepted — and silently applied — by [orchestration.floors].
+func TestValidateOrchestrationFloors_KeyCasingMatchesModels(t *testing.T) {
+	for _, key := range []string{"Gatekeeper", "GATEKEEPER", " gatekeeper "} {
+		cfg := floorsConfig(map[string]string{key: "reasoning"})
+		cfg.Orchestration.Models = map[string]RoleModelValue{key: {Tier: "reasoning"}}
+		floorsErr := validateOrchestrationFloors(cfg)
+		modelsErr := validateOrchestrationModels(cfg)
+		if (floorsErr == nil) != (modelsErr == nil) {
+			t.Fatalf("key %q disagrees: floors=%v models=%v", key, floorsErr, modelsErr)
+		}
+	}
+}

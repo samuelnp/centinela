@@ -32,17 +32,37 @@ func DefaultFloors() map[Role]Tier {
 	return out
 }
 
+// floorSuccessor maps a RETIRED role onto the role that replaced it, so a legacy
+// workflow's plan/validate roles inherit their successor's floor instead of
+// running floorless. internal/config already aliases retired config KEYS onto
+// "planner" (D8); this is that alias in the direction a legacy workflow needs —
+// without it, `big-thinker`/`feature-specialist`/`validation-specialist` are a
+// standing bypass of the shipped planner and gatekeeper floors.
+var floorSuccessor = map[Role]Role{
+	RoleBigThinker:     RolePlanner,
+	RoleFeatureSpecial: RolePlanner,
+	RoleValidationSpec: RoleGatekeeper,
+}
+
 // EffectiveFloor resolves a role's minimum tier: an explicit, valid config entry
 // REPLACES the shipped default (a project may lower it), else the default, else
-// no floor at all. cfgFloors is the normalized map from config.OrchestrationFloors.
+// no floor at all. A retired role falls through to its successor's config entry
+// and then to its successor's default. cfgFloors is the normalized map from
+// config.OrchestrationFloors.
 func EffectiveFloor(role Role, cfgFloors map[string]string) (Tier, bool) {
-	if raw, ok := cfgFloors[string(role)]; ok {
-		if tier, valid := NormalizeTier(raw); valid {
+	candidates := []Role{role}
+	if successor, ok := floorSuccessor[role]; ok {
+		candidates = append(candidates, successor)
+	}
+	for _, candidate := range candidates {
+		if tier, ok := NormalizeTier(cfgFloors[string(candidate)]); ok {
 			return tier, true
 		}
 	}
-	if tier, ok := defaultFloors[role]; ok {
-		return tier, true
+	for _, candidate := range candidates {
+		if tier, ok := defaultFloors[candidate]; ok {
+			return tier, true
+		}
 	}
 	return "", false
 }
