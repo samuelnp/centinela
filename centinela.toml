@@ -21,6 +21,17 @@ commands = [
   "./scripts/check-fmt.sh"
 ]
 
+# acceptance_skip_policy: what an acceptance-classified command that exits 0
+# while REPORTING skipped / pending / undefined scenarios does to the run.
+#   fail (default) — a suite that asserted nothing is not a pass
+#   warn           — surface the counts without failing
+#   off            — exit-code-only, the pre-truthful-validators behavior
+# Only acceptance-classified commands are parsed at all, so a unit or
+# integration command that legitimately skips is never affected. Output that
+# matches no supported runner shape is reported as an undetermined WARNING,
+# never as a pass and never as a failure.
+# acceptance_skip_policy = "fail"
+
 [gates]
 file_size = true
 
@@ -83,10 +94,14 @@ enabled = true
 # also a leaf: the `centinela update` self-updater (release resolution, asset
 # download, SHA256SUMS verify, atomic binary replace) + the SessionStart update
 # notice. It imports only the standard library — computing its XDG cache path
-# from env directly — so it adds no internal edge. See PROJECT.md G2.
+# from env directly — so it adds no internal edge. internal/acceptance is also a
+# leaf: the acceptance-command classifier + runner-report parser, imported by
+# cmd/, internal/verify AND internal/workflow alike. It imports only the
+# standard library, precisely so that sharing it cannot create an
+# internal/verify → internal/workflow edge. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "leaf"
-paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**", "internal/selfupdate/**"]
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**", "internal/selfupdate/**", "internal/acceptance/**"]
 allow = []
 
 # internal/analyze is a domain package (deterministic codebase inventory for

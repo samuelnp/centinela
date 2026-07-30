@@ -14,6 +14,7 @@ func applyDefaults(cfg *Config) {
 	cfg.Workflow.PlanAdvisorFailureTopN = NormalizePlanAdvisorFailureTopN(cfg.Workflow.PlanAdvisorFailureTopN)
 	cfg.Validate.DiffMode = NormalizeDiffMode(cfg.Validate.DiffMode)
 	cfg.Validate.DiffBase = NormalizeDiffBase(cfg.Validate.DiffBase)
+	cfg.Validate.AcceptanceSkipPolicy = NormalizeAcceptanceSkipPolicy(cfg.Validate.AcceptanceSkipPolicy)
 	applyMemoryDefaults(cfg)
 	if cfg.Verify.TimeoutSeconds <= 0 {
 		cfg.Verify.TimeoutSeconds = 60

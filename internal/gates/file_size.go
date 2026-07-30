@@ -14,21 +14,26 @@ const maxLines = 100
 var sourceRoots = []string{"src", "internal", "cmd", "lib", "app", "pkg"}
 var ignoreDirs = []string{".git", "node_modules", "vendor", "dist", ".next", "target", "build"}
 
+// checkFileSize reports what it actually inspected. An empty diff scope means
+// zero files were read, which is a Skip — a green ✓ for a gate that inspected
+// nothing is a false assurance. The cap and the Fail severity are unchanged.
 func checkFileSize(cfg *config.Config, filter *gitdiff.Set) Result {
+	if filter != nil && filter.Len() == 0 {
+		return Result{Name: fileSizeGate, Status: Skip, Message: fileSizeNothingInspected}
+	}
 	violations, justified := findOversizedFiles(cfg, filter)
 	if len(violations) == 0 {
-		msg := "All files under 100 lines."
-		if filter != nil && filter.Len() == 0 {
-			msg = "No relevant changes — gate skipped."
-		} else if len(justified) > 0 {
-			msg = "All files meet G1 (including justified exceptions)."
+		return Result{
+			Name:    fileSizeGate,
+			Status:  Pass,
+			Message: fileSizePassMessage(justified),
+			Details: justified,
 		}
-		return Result{Name: "G1: File Size", Status: Pass, Message: msg, Details: justified}
 	}
 	return Result{
-		Name:    "G1: File Size",
+		Name:    fileSizeGate,
 		Status:  Fail,
-		Message: "Files exceeding 100 lines must be split unless explicitly justified.",
+		Message: fileSizeFailMessage(),
 		Details: violations,
 	}
 }

@@ -64,6 +64,20 @@ commands = [
   # "npx vitest run",
 ]
 
+# acceptance_skip_policy: what an acceptance-classified command that exits 0
+# while REPORTING skipped / pending / undefined scenarios (or "0 scenarios")
+# does to the run.
+#   fail (default) — a suite that asserted nothing is not a pass
+#   warn           — surface the counts without failing the run
+#   off            — exit-code-only judging
+# Only acceptance-classified commands are parsed, so a unit or integration
+# command that legitimately skips (build tags, --short, platform gates) is
+# never affected. Output matching no supported runner shape is reported as an
+# undetermined WARNING — never a silent pass, never an unproven failure.
+# Supported report shapes: `go test -json`, `go test -v`, and the
+# "N scenarios (…)" summary cucumber-js and godog both emit.
+# acceptance_skip_policy = "fail"
+
 # ---------------------------------------------------------------------------
 # Built-in gate configuration
 # ---------------------------------------------------------------------------
