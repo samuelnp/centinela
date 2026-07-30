@@ -18,8 +18,14 @@ Feature: Capability calibration — per-model governance friction analysis
   Background:
     Given a Centinela-governed project with telemetry enabled
     And the telemetry log is at ".workflow/telemetry/events.jsonl"
+    # token-diet made this map a strict superset: the undated family aliases are
+    # the built-in tier defaults, and every retired pin below is retained so a
+    # telemetry log naming one still classifies exactly as it did before.
     And the built-in capability map includes:
       | model id          | class    | default profile |
+      | opus              | frontier | outcome         |
+      | sonnet            | capable  | guided          |
+      | haiku             | limited  | strict          |
       | claude-opus-4-7   | frontier | outcome         |
       | claude-sonnet-4-6 | capable  | guided          |
       | claude-haiku-4-5  | limited  | strict          |

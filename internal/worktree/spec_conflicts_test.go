@@ -9,6 +9,7 @@ import (
 	"github.com/samuelnp/centinela/internal/worktree"
 )
 
+// writeSpec writes a spec into the main checkout.
 func writeSpec(t *testing.T, root, name, body string) {
 	t.Helper()
 	dir := filepath.Join(root, "specs")
@@ -20,6 +21,7 @@ func writeSpec(t *testing.T, root, name, body string) {
 	}
 }
 
+// makeWorktreeSpec writes a spec into one feature worktree.
 func makeWorktreeSpec(t *testing.T, repo, feat, name, body string) {
 	t.Helper()
 	dir := filepath.Join(repo, ".worktrees", feat, "specs")
@@ -31,25 +33,29 @@ func makeWorktreeSpec(t *testing.T, repo, feat, name, body string) {
 	}
 }
 
-func TestDetectSpecConflicts_DifferentThenSameGiven_Flags(t *testing.T) {
+// TRUE POSITIVE: two in-flight worktrees carry the same (file, scenario) with
+// different outcomes — merging one silently overwrites the other.
+func TestDetectSpecConflicts_TwoWorktreesDivergentThen_Flags(t *testing.T) {
 	repo := t.TempDir()
-	writeSpec(t, repo, "zeta", `Feature: Z
+	makeWorktreeSpec(t, repo, "zeta", "login", `Feature: Login
   Scenario: shared
     Given the same context
     Then result is A
 `)
-	makeWorktreeSpec(t, repo, "eta", "eta", `Feature: E
+	makeWorktreeSpec(t, repo, "eta", "login", `Feature: Login
   Scenario: shared
     Given the same context
     Then result is B
 `)
 	conflicts := worktree.DetectSpecConflicts(repo, "zeta")
-	if len(conflicts) == 0 {
-		t.Fatal("expected conflict, got none")
+	if len(conflicts) != 1 {
+		t.Fatalf("expected exactly one conflict, got %d: %v", len(conflicts), conflicts)
 	}
 	got := worktree.FormatSpecConflicts(conflicts)
-	if !strings.Contains(got, "the same context") {
-		t.Fatalf("formatter missing Given context: %q", got)
+	for _, want := range []string{"the same context", "shared", "zeta", "eta", "login.feature"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("formatted conflict missing %q: %q", want, got)
+		}
 	}
 }
 

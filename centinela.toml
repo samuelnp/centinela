@@ -176,4 +176,13 @@ verify_timeout = 360
 # step_token_budget = 200000       # per-step token budget (0 = off)
 # feature_token_budget = 1000000   # per-feature token budget (0 = off)
 # [cost.tier_budgets]              # optional, keyed by model id
-# "claude-opus-4-7" = 800000
+# "opus" = 800000
+
+# [orchestration.model_map] — remap a tier to a concrete model id per runner,
+# WITHOUT waiting for a Centinela release. This is precedence rule 2: it wins
+# over the built-in tier defaults (rule 3), which are undated family aliases
+# (reasoning→opus, balanced→sonnet, fast→haiku on the claude runner) precisely
+# so a provider's model refresh never strands the defaults on a retired pin.
+# [orchestration.model_map.reasoning]
+# claude = "opus"
+# opencode = "anthropic/claude-opus-4-7"

@@ -2,69 +2,62 @@ package worktree
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 )
 
-// SpecConflict names two feature spec files and the scenario whose Given
-// clauses diverge between them.
+// SpecConflict names the spec file and scenario that two in-flight worktrees
+// define differently. OwnerA is always the feature being merged.
 type SpecConflict struct {
-	FeatureA string
-	FeatureB string
+	FeatureA string // spec file name as seen in the merging worktree
+	OwnerA   string // feature slug that owns FeatureA (the merging feature)
+	FeatureB string // spec file name as seen in the other worktree
+	OwnerB   string // feature slug of the other in-flight worktree
 	Scenario string
 	Given    string
 }
 
-// DetectSpecConflicts loads `specs/*.feature` from the main checkout and from
-// each active worktree, and reports scenarios where the same Given context
-// asserts different observable outcomes. mergingFeature is the feature about
-// to be merged — it is included in the comparison set.
+// maxFormattedConflicts caps FormatSpecConflicts output; the formatted string
+// is embedded in a CLI error message, so an unbounded list is unreadable.
+const maxFormattedConflicts = 10
+
+// DetectSpecConflicts reports *parallel divergence*: a scenario that the
+// merging feature's worktree and a DIFFERENT in-flight worktree both edited
+// away from main, in the same spec file, into different content. That is the
+// only case where merging one feature silently overwrites another's work.
+//
+// Deliberately NOT conflicts (each was a false positive before the
+// spec-conflict-false-positives hotfix):
+//   - main vs. the merging worktree — that is supersession, which the merge
+//     exists to apply;
+//   - a bystander worktree still carrying main's untouched copy;
+//   - byte-identical copies of a spec carried by several worktrees;
+//   - two companion scenarios inside one file sharing a Given clause;
+//   - two different files sharing a Given clause.
 func DetectSpecConflicts(repo, mergingFeature string) []SpecConflict {
-	scenarios := collectScenarios(repo, mergingFeature)
-	return scenariosConflicts(scenarios)
-}
-
-// FormatSpecConflicts produces a human-readable list of conflicts.
-func FormatSpecConflicts(conflicts []SpecConflict) string {
-	lines := make([]string, 0, len(conflicts))
-	for _, c := range conflicts {
-		lines = append(lines, fmt.Sprintf("%s ↔ %s — scenario %q (Given: %s)",
-			c.FeatureA, c.FeatureB, c.Scenario, c.Given))
-	}
-	return strings.Join(lines, "; ")
-}
-
-// collectScenarios reads every .feature it can reach for the comparison set.
-func collectScenarios(repo, mergingFeature string) []scenarioRecord {
-	var out []scenarioRecord
-	out = append(out, readSpecsFrom(filepath.Join(repo, "specs"), "main")...)
-	worktreeRoots, _ := filepath.Glob(filepath.Join(repo, Dir, "*"))
-	for _, root := range worktreeRoots {
-		feat := filepath.Base(root)
-		out = append(out, readSpecsFrom(filepath.Join(root, "specs"), feat)...)
-	}
-	_ = mergingFeature
-	return out
-}
-
-// readSpecsFrom parses every .feature file in dir into scenarioRecords.
-// Returns an empty slice when the directory does not exist.
-func readSpecsFrom(dir, owner string) []scenarioRecord {
-	entries, err := os.ReadDir(dir)
-	if err != nil {
+	merging := readSpecsFrom(worktreeSpecsDir(repo, mergingFeature), mergingFeature)
+	if len(merging) == 0 {
 		return nil
 	}
-	var recs []scenarioRecord
-	for _, e := range entries {
-		if e.IsDir() || !strings.HasSuffix(e.Name(), ".feature") {
-			continue
-		}
-		data, err := os.ReadFile(filepath.Join(dir, e.Name()))
-		if err != nil {
-			continue
-		}
-		recs = append(recs, parseScenarios(string(data), owner, e.Name())...)
+	baseline := mainSpecIndex(repo)
+	var conflicts []SpecConflict
+	seen := map[string]bool{}
+	for _, other := range otherWorktreeSpecs(repo, mergingFeature) {
+		conflicts = appendDivergences(conflicts, seen, merging, other, baseline)
 	}
-	return recs
+	return conflicts
+}
+
+// FormatSpecConflicts produces a human-readable, capped conflict list.
+func FormatSpecConflicts(conflicts []SpecConflict) string {
+	shown, suffix := conflicts, ""
+	if len(shown) > maxFormattedConflicts {
+		suffix = fmt.Sprintf("; … and %d more", len(shown)-maxFormattedConflicts)
+		shown = shown[:maxFormattedConflicts]
+	}
+	lines := make([]string, 0, len(shown))
+	for _, c := range shown {
+		lines = append(lines, fmt.Sprintf("%s (%s) ↔ %s (%s) — scenario %q (Given: %s)",
+			c.FeatureA, c.OwnerA, c.FeatureB, c.OwnerB, c.Scenario, c.Given))
+	}
+	return strings.Join(lines, "; ") + suffix
 }

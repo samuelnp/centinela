@@ -377,6 +377,19 @@
     "createdAt": "2026-06-12T15:18:51Z"
   },
   {
+    "id": "48089dac7e8c4568",
+    "feature": "token-diet",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Empty `inputs` list on otherwise-complete evidence trips the generic",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/token-diet-edge-cases.md",
+    "createdAt": "2026-07-29T19:29:36Z"
+  },
+  {
     "id": "480e173b8b7cd979",
     "feature": "configurable-model-routing",
     "step": "tests",
@@ -635,6 +648,32 @@
     ],
     "sourceArtifact": ".workflow/brownfield-setup-detection-gatekeeper.md",
     "createdAt": "2026-06-29T20:25:51Z"
+  },
+  {
+    "id": "7c5d3bdd9f572d50",
+    "feature": "spec-conflict-false-positives",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Byte-identical spec copied by an idle bystander worktree —",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/spec-conflict-false-positives-edge-cases.md",
+    "createdAt": "2026-07-30T08:30:18Z"
+  },
+  {
+    "id": "7d6650a55435d935",
+    "feature": "spec-conflict-false-positives",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# spec-conflict-false-positives — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/spec-conflict-false-positives-gatekeeper.md",
+    "createdAt": "2026-07-30T09:04:13Z"
   },
   {
     "id": "7fdf7fb1ded896d0",
@@ -1168,6 +1207,19 @@
     ],
     "sourceArtifact": ".workflow/adoption-baseline-edge-cases.md",
     "createdAt": "2026-06-24T11:20:51Z"
+  },
+  {
+    "id": "df3ccd01744788c8",
+    "feature": "token-diet",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: token-diet",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/token-diet-gatekeeper.md",
+    "createdAt": "2026-07-29T22:03:47Z"
   },
   {
     "id": "dfb681078078fa80",

@@ -60,7 +60,7 @@ func TestRouting_ConfigToResolver_AbsentDefaults(t *testing.T) {
 	cfg := loadAt(t, "")
 	models, mm := routingFromConfig(cfg)
 	got, ok := orchestration.ResolveModel(orchestration.RoleBigThinker, models, mm, orchestration.RunnerClaude)
-	if !ok || got != "claude-opus-4-7" {
+	if !ok || got != "opus" {
 		t.Errorf("AC6 e2e: got (%q, %v)", got, ok)
 	}
 }

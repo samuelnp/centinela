@@ -15,17 +15,21 @@ func TestParseConflictedPaths_NonRepoReturnsNil(t *testing.T) {
 	}
 }
 
-// scenariosConflicts skips records with an empty Given or Then, so a lone
-// usable record yields no conflict.
-func TestScenariosConflicts_SkipsEmptyFields(t *testing.T) {
+// Replaces TestScenariosConflicts_SkipsEmptyFields, dropped with the
+// Given-only pairing removed by the spec-conflict-false-positives hotfix.
+// indexByKey keeps the first record when a file repeats a scenario name, so a
+// duplicate cannot manufacture extra pairings.
+func TestIndexByKey_FirstRecordWins(t *testing.T) {
 	recs := []scenarioRecord{
-		{Owner: "main", Given: "x", Then: ""},
-		{Owner: "a", Given: "x", Then: ""},
-		{Owner: "b", Given: "", Then: "y"},
-		{Owner: "c", Given: "x", Then: "z"},
+		{Owner: "a", File: "f.feature", Scenario: "s", Given: "g", Then: "1"},
+		{Owner: "a", File: "f.feature", Scenario: "s", Given: "g", Then: "2"},
 	}
-	if got := scenariosConflicts(recs); len(got) != 0 {
-		t.Fatalf("scenariosConflicts = %v, want none (incomplete records skipped)", got)
+	idx := indexByKey(recs)
+	if len(idx) != 1 {
+		t.Fatalf("indexByKey = %d entries, want 1", len(idx))
+	}
+	if got := idx["f.feature\x00s"].Then; got != "1" {
+		t.Fatalf("first record should win, got Then=%q", got)
 	}
 }
 

@@ -7,12 +7,31 @@ Feature: Model capability profiles
   driver model resolves byte-identically to how it does today (strict default).
 
   Background:
-    Given the built-in capability map covers the three Anthropic tier models:
-      | model id          | class    | default profile |
-      | claude-opus-4-7   | frontier | outcome         |
-      | claude-sonnet-4-6 | capable  | guided          |
-      | claude-haiku-4-5  | limited  | strict          |
+    Given the built-in capability map covers the three Anthropic tier families:
+      | model id | class    | default profile |
+      | opus     | frontier | outcome         |
+      | sonnet   | capable  | guided          |
+      | haiku    | limited  | strict          |
     And the default class-to-profile mapping is frontier→outcome, capable→guided, limited→strict
+
+  # token-diet: the built-in tier defaults became undated family aliases. The
+  # capability map is a strict SUPERSET — it only ever GROWS — so an operator
+  # whose driver_model still names a retired pin keeps its class and therefore
+  # keeps its default enforcement profile, with no config edit and no warning.
+  Scenario Outline: The capability map retains every retired pinned model id
+    Given no capability override in centinela.toml
+    When the capability class is resolved for model id "<model>"
+    Then the class should be "<class>"
+    And the default profile should be the same one "<alias>" resolves to
+
+    Examples:
+      | model                       | class    | alias  |
+      | claude-opus-4-7             | frontier | opus   |
+      | anthropic/claude-opus-4-7   | frontier | opus   |
+      | claude-sonnet-4-6           | capable  | sonnet |
+      | anthropic/claude-sonnet-4-6 | capable  | sonnet |
+      | claude-haiku-4-5-20251001   | limited  | haiku  |
+      | anthropic/claude-haiku-4-5  | limited  | haiku  |
 
   # ---------------------------------------------------------------------------
   # Precedence tier 4 — back-compat default (the load-bearing guarantee)

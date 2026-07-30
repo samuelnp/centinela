@@ -16,7 +16,7 @@ func TestResolveModel_RoleOverrideWins(t *testing.T) {
 func TestResolveModel_EmptyOverrideFallsThrough(t *testing.T) {
 	models := RoleModels{"big-thinker": {Overrides: map[string]string{"claude": ""}}}
 	got, ok := ResolveModel(RoleBigThinker, models, nil, RunnerClaude)
-	if !ok || got != "claude-opus-4-7" {
+	if !ok || got != "opus" {
 		t.Errorf("empty override should fall through: got (%q, %v)", got, ok)
 	}
 }
@@ -35,7 +35,7 @@ func TestResolveModel_TierOverrideNoMapEntry(t *testing.T) {
 	models := RoleModels{"feature-specialist": {Tier: "balanced"}}
 	mm := ModelMap{"balanced": {"opencode": "deepseek/deepseek-chat"}}
 	got, ok := ResolveModel(RoleFeatureSpecial, models, mm, RunnerClaude)
-	if !ok || got != "claude-sonnet-4-6" {
+	if !ok || got != "sonnet" {
 		t.Errorf("no claude map entry → built-in default: got (%q, %v)", got, ok)
 	}
 }
@@ -47,7 +47,7 @@ func TestResolveModel_CodexRule4NoLeak(t *testing.T) {
 	if ok || got != "reasoning" {
 		t.Errorf("codex should fall to tier name: got (%q, %v)", got, ok)
 	}
-	if got == "moonshotai/kimi-k2" || got == "claude-opus-4-7" {
+	if got == "moonshotai/kimi-k2" || got == "opus" {
 		t.Errorf("codex must not leak another runner's ID: %q", got)
 	}
 }

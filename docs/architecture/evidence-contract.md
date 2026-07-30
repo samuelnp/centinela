@@ -53,10 +53,12 @@ rejected and rewritten.
 
 ### planner (step: plan)
 
-- `inputs` MUST include **every** `docs/features/*.md` in the repo plus the
-  current feature's plan at `docs/plans/<feature>.md`. The validator
-  computes the required set via `requiredPlanInputs` and rejects any
-  missing entries with `missing feature-doc snapshot inputs`.
+- `inputs` MUST include the feature's own brief `docs/features/<feature>.md`
+  and its plan `docs/plans/<feature>.md`. Additional inputs are allowed — the
+  rule is *include*, not *only* — so evidence written before this rule shrank
+  still validates. The validator computes the required set via
+  `RequiredPlanInputs` (construction-derived, no filesystem glob) and rejects
+  any missing entries with `missing feature-doc snapshot inputs`.
 - `outputs` MUST include at least one real file under `docs/plans/` or
   `specs/`. Typically both the plan file at `docs/plans/<feature>.md` and
   the Gherkin spec at `specs/<feature>.feature`.
@@ -176,7 +178,6 @@ applies these rules:
   "generatedAt": "2026-05-12T14:30:00Z",
   "inputs": [
     "docs/features/demo-feature.md",
-    "docs/features/another-feature.md",
     "docs/plans/demo-feature.md"
   ],
   "outputs": [
@@ -190,5 +191,7 @@ applies these rules:
 }
 ```
 
-The `inputs` list must enumerate **every** `docs/features/*.md` in the
-repo — abbreviated above for brevity.
+The `inputs` list must include the feature's own brief
+`docs/features/<feature>.md` and its plan `docs/plans/<feature>.md`.
+Additional inputs are allowed — the rule is *include*, not *only* — so
+evidence written before this rule shrank still validates.

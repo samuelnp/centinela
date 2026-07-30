@@ -18,17 +18,20 @@ func TestRunMerge_InvalidSlug_Errors(t *testing.T) {
 func TestRunMerge_SpecConflict_Blocks(t *testing.T) {
 	// A real git repo is required: runMerge now resolves the primary working
 	// tree BEFORE spec-conflict detection and refuses outside any repository.
-	d := seedCleanMergeRepo(t, "eta") // cwd = d
+	d := seedCleanMergeRepo(t, "zeta") // cwd = d
 
-	specs := filepath.Join(d, "specs")
-	_ = os.MkdirAll(specs, 0755)
-	_ = os.WriteFile(filepath.Join(specs, "zeta.feature"),
-		[]byte("Feature: Z\n  Scenario: clash\n    Given ctx\n    Then A\n"), 0644)
-
-	other := filepath.Join(d, ".worktrees", "eta", "specs")
-	_ = os.MkdirAll(other, 0755)
-	_ = os.WriteFile(filepath.Join(other, "eta.feature"),
-		[]byte("Feature: E\n  Scenario: clash\n    Given ctx\n    Then B\n"), 0644)
+	// Parallel divergence: two in-flight worktrees carry the SAME spec file
+	// with the SAME scenario resolved differently. Narrowed by the
+	// spec-conflict-false-positives hotfix — main-vs-branch differences and
+	// differently-named files are supersession, not conflicts.
+	spec := func(feat, then string) {
+		dir := filepath.Join(d, ".worktrees", feat, "specs")
+		_ = os.MkdirAll(dir, 0755)
+		_ = os.WriteFile(filepath.Join(dir, "login.feature"),
+			[]byte("Feature: L\n  Scenario: clash\n    Given ctx\n    Then "+then+"\n"), 0644)
+	}
+	spec("zeta", "A")
+	spec("eta", "B")
 
 	err := runMerge(nil, []string{"zeta"})
 	if err == nil {
