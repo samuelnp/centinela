@@ -15,8 +15,8 @@ type scenarioRecord struct {
 }
 
 // parseScenarios is a deliberately small Gherkin reader: it pulls Scenario,
-// Given, and Then lines per scenario block. It is good enough to flag
-// contradictions; it is NOT a full Gherkin parser.
+// Given, and Then lines per scenario block. It is good enough to compare two
+// copies of the same scenario; it is NOT a full Gherkin parser.
 func parseScenarios(text, owner, file string) []scenarioRecord {
 	var recs []scenarioRecord
 	var cur scenarioRecord
@@ -43,35 +43,4 @@ func parseScenarios(text, owner, file string) []scenarioRecord {
 	}
 	flush()
 	return recs
-}
-
-// scenariosConflicts groups records by their Given clause; if two records
-// share a Given but disagree on Then, that is a conflict.
-func scenariosConflicts(recs []scenarioRecord) []SpecConflict {
-	byGiven := map[string][]scenarioRecord{}
-	for _, r := range recs {
-		if r.Given == "" || r.Then == "" {
-			continue
-		}
-		byGiven[r.Given] = append(byGiven[r.Given], r)
-	}
-	var conflicts []SpecConflict
-	for given, group := range byGiven {
-		for i := 0; i < len(group); i++ {
-			for j := i + 1; j < len(group); j++ {
-				if group[i].Owner == group[j].Owner {
-					continue
-				}
-				if group[i].Then != group[j].Then {
-					conflicts = append(conflicts, SpecConflict{
-						FeatureA: group[i].File,
-						FeatureB: group[j].File,
-						Scenario: group[i].Scenario,
-						Given:    given,
-					})
-				}
-			}
-		}
-	}
-	return conflicts
 }

@@ -56,11 +56,20 @@ Feature: Parallel feature worktrees with merge steward
 
   Scenario: Spec conflict across in-flight worktrees is detected before merging
     Given two in-flight features "zeta" and "eta" each have a worktree
-    And "specs/zeta.feature" and "specs/eta.feature" both assert different observable outcomes for the same Given context
+    And both worktrees carry "specs/login.feature" with the scenario "clash" edited away from main into different outcomes
     When the user runs "centinela merge zeta"
     Then the spec-conflict pre-check should fail before git merge runs
-    And the output should name both feature files and the conflicting scenario
+    And the output should name both worktrees, the spec file and the conflicting scenario
+    And each conflicting scenario should be reported at most once
     And no commits should be added to main
+
+  Scenario: Superseding and identical specs never block a merge
+    Given an in-flight feature "eta" has a worktree that edits "specs/login.feature" away from main
+    And a bystander worktree still carries main's untouched copy of "specs/login.feature"
+    And a spec file declares two companion scenarios that share one Given clause
+    When the user runs "centinela merge eta"
+    Then the spec-conflict pre-check should report no conflicts
+    And the merge should proceed
 
   Scenario: Merge Steward escalates uncertain resolutions to the user
     Given the Merge Steward is invoked for feature "theta"
