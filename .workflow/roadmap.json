@@ -509,7 +509,9 @@
         {"name":"legacy-model-specs-have-no-scenario-markers","summary":"28 pre-existing legacy model spec scenarios have no acceptance markers","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:14Z"},
         {"name":"plan-empty-inputs-message-masked","summary":"E4 empty-inputs message unreachable behind snapshot check","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:14Z"},
         {"name":"summary-digest-hashes-nonschedulable-phases","summary":"roadmap summary digest over-renders on Backlog-only changes","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:14Z"},
-        {"name":"hook-context-panel-diet","summary":"ACTIVE WORKFLOWS + nudge panels are 96% of hook context bytes; diet them next","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:15Z"}
+        {"name":"hook-context-panel-diet","summary":"ACTIVE WORKFLOWS + nudge panels are 96% of hook context bytes; diet them next","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:15Z"},
+        {"name":"acceptance-skip-parser-breadth","summary":"behave is classified as an acceptance runner but gets no summary parser in v1 (nor pytest-bdd/RSpec/Jest/Playwright), so those projects sit permanently in the undetermined-warning bucket","source":{"feature":"truthful-validators","role":"planner"},"deferredAt":"2026-07-30T12:12:15Z"},
+        {"name":"self-validate-acceptance-report-shape","summary":"Centinela's own 'go test ./... -coverprofile' emits no skip information, so its own acceptance gate is permanently undetermined; choosing -json/-v/a separate acceptance command interacts with the single-run coverage-profile reuse","source":{"feature":"truthful-validators","role":"planner"},"deferredAt":"2026-07-30T12:12:15Z"}
       ]
     }
   ],
