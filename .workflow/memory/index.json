@@ -1274,6 +1274,19 @@
     "createdAt": "2026-06-18T10:50:33Z"
   },
   {
+    "id": "f637a1e862133491",
+    "feature": "docs-step-markdown-first",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# docs-step-markdown-first — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/docs-step-markdown-first-gatekeeper.md",
+    "createdAt": "2026-07-30T12:52:08Z"
+  },
+  {
     "id": "fd962adabbaacf20",
     "feature": "custom-gate-sdk",
     "step": "tests",

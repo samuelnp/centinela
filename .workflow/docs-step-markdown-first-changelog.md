@@ -1,1 +1,1 @@
-- <FILL: type>: <FILL: one-line summary of the change>
+- feat: markdown-first docs step — HTML pipeline (docgen, docs generate/validate, project-docs portal) removed; docs gate now requires a non-empty changelog for every feature and, for user-facing features, documentation-specialist evidence listing ≥1 real updated file under docs/ or README.md; new `centinela docs context <feature>` prints the curated feature-scale inputs; surface-line parser now recognizes `> surface:` and `- surface:` brief formats
