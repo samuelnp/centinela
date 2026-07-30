@@ -57,6 +57,7 @@
     {"name":"roadmap-state-hygiene"},
     {"name":"smoke-verification"},
     {"name":"adversarial-validate-verifier"},
-    {"name":"unified-plan-specialist"}
+    {"name":"unified-plan-specialist"},
+    {"name":"spec-conflict-false-positives"}
   ]
 }

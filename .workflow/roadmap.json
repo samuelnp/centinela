@@ -384,103 +384,435 @@
       "name": "Phase 13: Lighter Centinela",
       "note": "Retrospective-driven refactor (retrospective.md): verify the work, not artifacts about the work; process weight proportional to risk",
       "features": [
-        {
-          "name": "merge-truthful-delivery",
-          "archetype": "canonical",
-          "description": "Fix deliver --via merge false success: resolve the primary worktree, verify the target ref advanced and the worktree was removed before reporting success"
-        },
-        {
-          "name": "truthful-validators",
-          "archetype": "canonical",
-          "description": "Fix nil-uiPaths evidence validate, detect skipped acceptance scenarios (skips fail validate by default), honest quality-score shape errors, honest gate reporting for file-size cap and single-locale i18n"
-        },
-        {
-          "name": "guided-by-default",
-          "dependsOn": [
-            "truthful-validators"
-          ],
-          "archetype": "canonical",
-          "description": "Flip the default enforcement profile strict to guided, slim the greenfield cascade to PROJECT.md + roadmap.json, delete the self-graded quality threshold gate"
-        },
-        {
-          "name": "coupled-steps-relaxation",
-          "archetype": "refactor",
-          "description": "workflow.coupled_tests knob (auto-on for compiled languages): allow existing-test edits during code step and additive spec edits during tests step so the tree compiles at every step boundary; surface workflow archetypes at start"
-        },
-        {
-          "name": "token-diet",
-          "archetype": "refactor",
-          "description": "Drop the O(N) plan-input glob, fix the UX evidence tag matcher, digest-dedup the per-prompt roadmap summary, replace dated model pins with family aliases"
-        },
-        {
-          "name": "roadmap-state-hygiene",
-          "archetype": "canonical",
-          "description": "Every roadmap CLI mutation regenerates ROADMAP.md and auto-commits roadmap state (pathspec, respects disable_auto_commit); roadmap backlog --stale aging and a completion nudge for deferred findings"
-        },
-        {
-          "name": "smoke-verification",
-          "archetype": "canonical",
-          "description": "First-class validate.smoke_commands that exercise the running product during validate and merge; smoke verify claim, scaffolded config examples, and a repo smoke script"
-        },
-        {
-          "name": "unified-plan-specialist",
-          "description": "Merge the plan-step big-thinker and feature-specialist roles into one reasoning-tier planner: a single subagent context whose prompt carries both lenses as ordered sections (strategy/scope/risks, then acceptance criteria/edge cases/spec), producing one evidence pair instead of two; keeps the after-plan human confirmation and accepts legacy two-role evidence for in-flight workflows."
-        },
-        {
-          "name": "adversarial-validate-verifier",
-          "description": "Recast the validate-step gatekeeper as a fresh-context adversarial verifier: refutation stance (find why the completion claim is false; default to not-done when uncertain), evidence-only inputs (diff vs base, frozen spec, gate outputs — never role reports or orchestrator narrative), and it re-runs centinela validate and the test suite itself instead of trusting reports; drops the validation-specialist role; CRITICAL verdict blocks complete."
-        }
+        {"name":"merge-truthful-delivery","archetype":"canonical","description":"Fix deliver --via merge false success: resolve the primary worktree, verify the target ref advanced and the worktree was removed before reporting success"},
+        {"name":"truthful-validators","archetype":"canonical","description":"Fix nil-uiPaths evidence validate, detect skipped acceptance scenarios (skips fail validate by default), honest quality-score shape errors, honest gate reporting for file-size cap and single-locale i18n"},
+        {"name":"guided-by-default","dependsOn":["truthful-validators"],"archetype":"canonical","description":"Flip the default enforcement profile strict to guided, slim the greenfield cascade to PROJECT.md + roadmap.json, delete the self-graded quality threshold gate"},
+        {"name":"coupled-steps-relaxation","archetype":"refactor","description":"workflow.coupled_tests knob (auto-on for compiled languages): allow existing-test edits during code step and additive spec edits during tests step so the tree compiles at every step boundary; surface workflow archetypes at start"},
+        {"name":"token-diet","archetype":"refactor","description":"Drop the O(N) plan-input glob, fix the UX evidence tag matcher, digest-dedup the per-prompt roadmap summary, replace dated model pins with family aliases"},
+        {"name":"roadmap-state-hygiene","archetype":"canonical","description":"Every roadmap CLI mutation regenerates ROADMAP.md and auto-commits roadmap state (pathspec, respects disable_auto_commit); roadmap backlog --stale aging and a completion nudge for deferred findings"},
+        {"name":"smoke-verification","archetype":"canonical","description":"First-class validate.smoke_commands that exercise the running product during validate and merge; smoke verify claim, scaffolded config examples, and a repo smoke script"},
+        {"name":"unified-plan-specialist","description":"Merge the plan-step big-thinker and feature-specialist roles into one reasoning-tier planner: a single subagent context whose prompt carries both lenses as ordered sections (strategy/scope/risks, then acceptance criteria/edge cases/spec), producing one evidence pair instead of two; keeps the after-plan human confirmation and accepts legacy two-role evidence for in-flight workflows."},
+        {"name":"adversarial-validate-verifier","description":"Recast the validate-step gatekeeper as a fresh-context adversarial verifier: refutation stance (find why the completion claim is false; default to not-done when uncertain), evidence-only inputs (diff vs base, frozen spec, gate outputs — never role reports or orchestrator narrative), and it re-runs centinela validate and the test suite itself instead of trusting reports; drops the validation-specialist role; CRITICAL verdict blocks complete."},
+        {"name":"spec-conflict-false-positives","archetype":"hotfix","description":"Fix DetectSpecConflicts false positives that block deliver --via merge: byte-identical spec copies across trees conflict with themselves, and any two scenarios sharing a Given with different outcomes are flagged even within one file (normal companion Gherkin); conflict only on same (file, scenario) diverging across different owners, and dedupe the report (was 720KB of repeats)"}
       ]
     },
     {
       "name": "Backlog",
       "features": [
-        {"name":"rawio-reformat-diff-churn","summary":"First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn","source":{"feature":"deferred-findings-roadmap-capture","role":"senior-engineer"},"deferredAt":"2026-06-12T16:29:13Z"},
-        {"name":"roadmap-import-graph-layer-mapping","summary":"Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2","source":{"feature":"roadmap-doc-sync","role":"gatekeeper"},"deferredAt":"2026-06-14T10:30:31Z"},
-        {"name":"non-go-source-import-graphs","summary":"Parse source-level import graphs for non-Go languages (JS/TS, Ruby, Rust, Python); analyze v1 records declared manifest deps only","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"brownfield-framework-fingerprinting","summary":"Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"incremental-codebase-analysis","summary":"Incremental/cached re-analysis that only re-scans changed directories in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"codebase-metrics-enrichment","summary":"Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"brownfield-route-flow-extraction","summary":"Framework-specific HTTP route and call-flow extraction for reconstructed specs; spec-reconstruction v1 ships package/manifest-derived targets only","source":{"feature":"spec-reconstruction","role":"big-thinker"},"deferredAt":"2026-06-22T07:52:17Z"},
-        {"name":"centinela-changelog-subcommand","summary":"Standalone centinela changelog subcommand for merge-path changelog parity (independent of PR delivery)","source":{"feature":"delivery-artifact-generation","role":"big-thinker"},"deferredAt":"2026-06-25T16:36:23Z"},
-        {"name":"gitignore-durable-state-guard","summary":"Add a test asserting durable .workflow state (roadmap{,-analysis,-quality}.json, audit-baseline.json) stays tracked/not-gitignored, so the evidence-footprint allow-list can't silently drop bootstrap state again (regression fixed in 420ab3c)","source":{"feature":"lean-evidence-footprint","role":"validation-specialist"},"deferredAt":"2026-06-29T15:08:01Z"},
-        {"name":"selfupdate-notice-http-timeout","summary":"centinela update + startup notice use http.DefaultClient (no timeout); a stalled GitHub connection can block session start indefinitely — give the production Updater a bounded client timeout (~5s) so the cold-cache notice fails fast and silent","source":{"feature":"cli-self-update","role":"gatekeeper"},"deferredAt":"2026-06-30T09:45:19Z"},
-        {"name":"brownfield-onboarding-docs","summary":"Document the brownfield onboarding path (analyze, synthesize, enrich, confirm) in new-project-guide.md","source":{"feature":"brownfield-setup-detection","role":"big-thinker"},"deferredAt":"2026-06-29T17:42:52Z"},
-        {"name":"brownfield-manifest-breadth","summary":"Extend HasSource manifest list to pom.xml, composer.json, build.gradle for broader ecosystem coverage","source":{"feature":"brownfield-setup-detection","role":"feature-specialist"},"deferredAt":"2026-06-29T17:46:35Z"},
-        {"name":"unit-test-mcp-server-in-memory-transport","summary":"Cover runMcpServe/mcpConnectSelf via an in-memory MCP transport","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"fault-inject-atomic-write-error-paths","summary":"Cover WriteBytesAtomic and low-level I/O error branches via fault injection","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"unit-test-vuln-tool-external-seam","summary":"Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"aider-local-provider-wiring","summary":"Point the Aider/Claude harness at a local endpoint; local block currently wires only OpenCode's provider surface","source":{"feature":"local-harness-support","role":"big-thinker"},"deferredAt":"2026-06-30T14:45:14Z"},
-        {"name":"workflow-save-atomic-write","summary":"workflow.Save uses plain os.WriteFile; a crash mid-write can truncate .workflow/<feature>.json — make it write-temp-then-rename","source":{"feature":"workflow-revise-loop","role":"validation-specialist"},"deferredAt":"2026-06-30T17:52:51Z"},
-        {"name":"verify-crosscheck-verifier-commands","summary":"Have centinela verify cross-check the verifier's recorded argv/exit codes against its own claim-verification runs; v1 enforces the commands-run record's shape, not its truthfulness","source":{"feature":"adversarial-validate-verifier","role":"big-thinker"},"deferredAt":"2026-07-28T16:23:12Z"},
-        {"name":"typed-gate-error-codes","summary":"hook_statusline_rules classifies validate failures by substring-matching error text, misreporting any non-BLOCKING error as MISSING_PROD_READINESS; replace with typed gate error codes","source":{"feature":"adversarial-validate-verifier","role":"big-thinker"},"deferredAt":"2026-07-28T16:23:12Z"},
-        {"name":"reuse-prior-test-run-in-complete-verify","summary":"complete_verify.go never sets verify.Deps.PriorTestRun, so complete re-runs the suite executeValidation just ran; wiring the existing seam is the cheapest cut to validate-step wall clock","source":{"feature":"adversarial-validate-verifier","role":"big-thinker"},"deferredAt":"2026-07-28T16:23:20Z"},
-        {"name":"mirror-workflow-enforcement-doc","summary":"workflow-enforcement.md sits on mirrorParityAllowlist as 'not mirrored', so scaffolded projects get no copy and edits to it silently never reach them","source":{"feature":"adversarial-validate-verifier","role":"big-thinker"},"deferredAt":"2026-07-28T16:23:20Z"},
-        {"name":"verifier-template-status-fail-closed","summary":"gatekeeper-prompt.md Output Format ships '**Status:** SAFE | WARNING | CRITICAL' plus a fully-formed example commands array, so an unedited verbatim copy plus the mandated artifact stamp passes every gate; make the template Status fail-closed (CRITICAL) and the legend unparseable","source":{"feature":"adversarial-validate-verifier","role":"gatekeeper"},"deferredAt":"2026-07-28T22:21:04Z"},
-        {"name":"assess-report-before-full-validate-run","summary":"runValidateGates runs executeValidation + claim verification before wf.Complete reaches gatereport.Assess, so an ungrounded stub costs a full validate run (~9 min here) before being refused; hoist the pure-file-read admissibility check ahead of the suite","source":{"feature":"adversarial-validate-verifier","role":"gatekeeper"},"deferredAt":"2026-07-28T22:21:04Z"},
-        {"name":"stale-verification-statusline-unreachable","summary":"validateStatusBlock only calls ValidateArtifacts, which never runs the git-backed freshness check, so STALE_VERIFICATION is unreachable and a stale verification shows as 'none / run-validate' while complete hard-blocks","source":{"feature":"adversarial-validate-verifier","role":"gatekeeper"},"deferredAt":"2026-07-28T22:21:04Z"},
-        {"name":"merge-assert-branch-ancestor","summary":"RefAdvanced should also assert the feature branch is an ancestor of the advanced target","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:17:21Z"},
-        {"name":"render-warn-gate-details","summary":"Surface WARN gate details in deliver output","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:17:28Z"},
-        {"name":"merge-dirty-error-names-cause","summary":"Dirty-primary refusal should name the offending paths (e.g. unignored .worktrees/) not just say commit-or-stash","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:17:28Z"},
-        {"name":"merge-distinguish-missing-branch","summary":"Nonexistent branch is reported as git-text-conflict; report branch-not-found","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:17:28Z"},
-        {"name":"merge-prunable-registry-false-removal","summary":"merge claims 'removed its worktree' while git worktree list still lists the branch's worktree as prunable and the directory survives elsewhere","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:55:04Z"},
-        {"name":"merge-pending-marker-dirties-primary-tree","summary":"the pending marker and steward .md are untracked in repos that track .workflow/, so isDirty(primary) refuses merge --continue from both CWDs","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:55:04Z"},
-        {"name":"merge-validate-fail-leaves-main-advanced","summary":"a post-merge validate failure leaves the merge commit on main unannounced and merge --continue closes it without re-validating","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:55:04Z"},
-        {"name":"merge-force-remove-locked-worktree","summary":"the --force-remove retry advice does not work for a locked worktree (git needs -f -f or unlock)","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:55:04Z"},
-        {"name":"codex-claude-role-agent-registry","summary":"Claude/Codex have no per-role agent registry; AC6 codex-equivalent emitter does not exist","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:42Z"},
-        {"name":"managed-agent-retirement-sweep","summary":"Managed-sync sweep to retire replaced agents from existing projects' opencode.json","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:42Z"},
-        {"name":"prompt-doc-budget-ratchet","summary":"Aggregate prompt-doc budget ratchet as fallback when a merged doc exceeds the 130-line cap","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:42Z"},
-        {"name":"statusline-plan-role-display","summary":"Statusline/status has no plan-step role display field","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"revise-to-plan-sheds-no-evidence","summary":"revise --to plan invalidates no plan evidence; next complete re-passes on stale artifacts","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"legacy-plan-key-mixed-form-precedence","summary":"Mixed legacy tier + override table inverts documented precedence and drops the configured tier","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"planner-skeleton-prompt-header-drift","summary":"Planner companion-stub headers drift from planner-prompt.md sections","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"stale-spec-text-after-role-retirement","summary":"Foreign specs still assert pre-retirement prompt-doc set (add-plan-advisor-mode, configurable-subagent-models, add-agent-evidence-contract, evidence-cli)","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"brownmap-roadmap-source-role-retired","summary":"brownmap baseline/gaps still stamp Source.Role=big-thinker on new entries","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"handoff-chain-unvalidated","summary":"Documented handoffTo chain is unenforced; handoffTo=banana completes a step","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"planner-stub-on-legacy-workflow-unguarded","summary":"evidence init planner on an unpinned workflow is unguarded","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"stamp-validates-commands-schema","summary":"artifact stamp should validate the centinela:verification commands schema and fail loudly at stamp time","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"cross-process-suite-result-reuse","summary":"Reuse the gatekeeper's suite result in complete via a tamper-evident digest-keyed run record (any plain on-disk record is writable by the agent it would excuse)","source":{"feature":"dedupe-validate-suite-runs","role":"planner"},"deferredAt":"2026-07-29T20:26:54Z"},
-        {"name":"validate-flake-diagnosability","summary":"A validate suite command can fail without naming any failing test in the rendered output (observed once: go test ./... -coverprofile exit!=0 with only ok lines shown); persist full suite output to a log for diagnosis","source":{"feature":"dedupe-validate-suite-runs","role":"gatekeeper"},"deferredAt":"2026-07-29T21:48:21Z"}
+        {
+          "name": "rawio-reformat-diff-churn",
+          "summary": "First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn",
+          "source": {
+            "feature": "deferred-findings-roadmap-capture",
+            "role": "senior-engineer"
+          },
+          "deferredAt": "2026-06-12T16:29:13Z"
+        },
+        {
+          "name": "roadmap-import-graph-layer-mapping",
+          "summary": "Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2",
+          "source": {
+            "feature": "roadmap-doc-sync",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-06-14T10:30:31Z"
+        },
+        {
+          "name": "non-go-source-import-graphs",
+          "summary": "Parse source-level import graphs for non-Go languages (JS/TS, Ruby, Rust, Python); analyze v1 records declared manifest deps only",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "brownfield-framework-fingerprinting",
+          "summary": "Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "incremental-codebase-analysis",
+          "summary": "Incremental/cached re-analysis that only re-scans changed directories in centinela analyze",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "codebase-metrics-enrichment",
+          "summary": "Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "brownfield-route-flow-extraction",
+          "summary": "Framework-specific HTTP route and call-flow extraction for reconstructed specs; spec-reconstruction v1 ships package/manifest-derived targets only",
+          "source": {
+            "feature": "spec-reconstruction",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-22T07:52:17Z"
+        },
+        {
+          "name": "centinela-changelog-subcommand",
+          "summary": "Standalone centinela changelog subcommand for merge-path changelog parity (independent of PR delivery)",
+          "source": {
+            "feature": "delivery-artifact-generation",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-25T16:36:23Z"
+        },
+        {
+          "name": "gitignore-durable-state-guard",
+          "summary": "Add a test asserting durable .workflow state (roadmap{,-analysis,-quality}.json, audit-baseline.json) stays tracked/not-gitignored, so the evidence-footprint allow-list can't silently drop bootstrap state again (regression fixed in 420ab3c)",
+          "source": {
+            "feature": "lean-evidence-footprint",
+            "role": "validation-specialist"
+          },
+          "deferredAt": "2026-06-29T15:08:01Z"
+        },
+        {
+          "name": "selfupdate-notice-http-timeout",
+          "summary": "centinela update + startup notice use http.DefaultClient (no timeout); a stalled GitHub connection can block session start indefinitely — give the production Updater a bounded client timeout (~5s) so the cold-cache notice fails fast and silent",
+          "source": {
+            "feature": "cli-self-update",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-06-30T09:45:19Z"
+        },
+        {
+          "name": "brownfield-onboarding-docs",
+          "summary": "Document the brownfield onboarding path (analyze, synthesize, enrich, confirm) in new-project-guide.md",
+          "source": {
+            "feature": "brownfield-setup-detection",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-29T17:42:52Z"
+        },
+        {
+          "name": "brownfield-manifest-breadth",
+          "summary": "Extend HasSource manifest list to pom.xml, composer.json, build.gradle for broader ecosystem coverage",
+          "source": {
+            "feature": "brownfield-setup-detection",
+            "role": "feature-specialist"
+          },
+          "deferredAt": "2026-06-29T17:46:35Z"
+        },
+        {
+          "name": "unit-test-mcp-server-in-memory-transport",
+          "summary": "Cover runMcpServe/mcpConnectSelf via an in-memory MCP transport",
+          "source": {
+            "feature": "coverage-hardening",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T08:12:27Z"
+        },
+        {
+          "name": "fault-inject-atomic-write-error-paths",
+          "summary": "Cover WriteBytesAtomic and low-level I/O error branches via fault injection",
+          "source": {
+            "feature": "coverage-hardening",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T08:12:27Z"
+        },
+        {
+          "name": "unit-test-vuln-tool-external-seam",
+          "summary": "Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam",
+          "source": {
+            "feature": "coverage-hardening",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T08:12:27Z"
+        },
+        {
+          "name": "aider-local-provider-wiring",
+          "summary": "Point the Aider/Claude harness at a local endpoint; local block currently wires only OpenCode's provider surface",
+          "source": {
+            "feature": "local-harness-support",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T14:45:14Z"
+        },
+        {
+          "name": "workflow-save-atomic-write",
+          "summary": "workflow.Save uses plain os.WriteFile; a crash mid-write can truncate .workflow/<feature>.json — make it write-temp-then-rename",
+          "source": {
+            "feature": "workflow-revise-loop",
+            "role": "validation-specialist"
+          },
+          "deferredAt": "2026-06-30T17:52:51Z"
+        },
+        {
+          "name": "verify-crosscheck-verifier-commands",
+          "summary": "Have centinela verify cross-check the verifier's recorded argv/exit codes against its own claim-verification runs; v1 enforces the commands-run record's shape, not its truthfulness",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-07-28T16:23:12Z"
+        },
+        {
+          "name": "typed-gate-error-codes",
+          "summary": "hook_statusline_rules classifies validate failures by substring-matching error text, misreporting any non-BLOCKING error as MISSING_PROD_READINESS; replace with typed gate error codes",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-07-28T16:23:12Z"
+        },
+        {
+          "name": "reuse-prior-test-run-in-complete-verify",
+          "summary": "complete_verify.go never sets verify.Deps.PriorTestRun, so complete re-runs the suite executeValidation just ran; wiring the existing seam is the cheapest cut to validate-step wall clock",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-07-28T16:23:20Z"
+        },
+        {
+          "name": "mirror-workflow-enforcement-doc",
+          "summary": "workflow-enforcement.md sits on mirrorParityAllowlist as 'not mirrored', so scaffolded projects get no copy and edits to it silently never reach them",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-07-28T16:23:20Z"
+        },
+        {
+          "name": "verifier-template-status-fail-closed",
+          "summary": "gatekeeper-prompt.md Output Format ships '**Status:** SAFE | WARNING | CRITICAL' plus a fully-formed example commands array, so an unedited verbatim copy plus the mandated artifact stamp passes every gate; make the template Status fail-closed (CRITICAL) and the legend unparseable",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-28T22:21:04Z"
+        },
+        {
+          "name": "assess-report-before-full-validate-run",
+          "summary": "runValidateGates runs executeValidation + claim verification before wf.Complete reaches gatereport.Assess, so an ungrounded stub costs a full validate run (~9 min here) before being refused; hoist the pure-file-read admissibility check ahead of the suite",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-28T22:21:04Z"
+        },
+        {
+          "name": "stale-verification-statusline-unreachable",
+          "summary": "validateStatusBlock only calls ValidateArtifacts, which never runs the git-backed freshness check, so STALE_VERIFICATION is unreachable and a stale verification shows as 'none / run-validate' while complete hard-blocks",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-28T22:21:04Z"
+        },
+        {
+          "name": "merge-assert-branch-ancestor",
+          "summary": "RefAdvanced should also assert the feature branch is an ancestor of the advanced target",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:17:21Z"
+        },
+        {
+          "name": "render-warn-gate-details",
+          "summary": "Surface WARN gate details in deliver output",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:17:28Z"
+        },
+        {
+          "name": "merge-dirty-error-names-cause",
+          "summary": "Dirty-primary refusal should name the offending paths (e.g. unignored .worktrees/) not just say commit-or-stash",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:17:28Z"
+        },
+        {
+          "name": "merge-distinguish-missing-branch",
+          "summary": "Nonexistent branch is reported as git-text-conflict; report branch-not-found",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:17:28Z"
+        },
+        {
+          "name": "merge-prunable-registry-false-removal",
+          "summary": "merge claims 'removed its worktree' while git worktree list still lists the branch's worktree as prunable and the directory survives elsewhere",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:55:04Z"
+        },
+        {
+          "name": "merge-pending-marker-dirties-primary-tree",
+          "summary": "the pending marker and steward .md are untracked in repos that track .workflow/, so isDirty(primary) refuses merge --continue from both CWDs",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:55:04Z"
+        },
+        {
+          "name": "merge-validate-fail-leaves-main-advanced",
+          "summary": "a post-merge validate failure leaves the merge commit on main unannounced and merge --continue closes it without re-validating",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:55:04Z"
+        },
+        {
+          "name": "merge-force-remove-locked-worktree",
+          "summary": "the --force-remove retry advice does not work for a locked worktree (git needs -f -f or unlock)",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:55:04Z"
+        },
+        {
+          "name": "codex-claude-role-agent-registry",
+          "summary": "Claude/Codex have no per-role agent registry; AC6 codex-equivalent emitter does not exist",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:42Z"
+        },
+        {
+          "name": "managed-agent-retirement-sweep",
+          "summary": "Managed-sync sweep to retire replaced agents from existing projects' opencode.json",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:42Z"
+        },
+        {
+          "name": "prompt-doc-budget-ratchet",
+          "summary": "Aggregate prompt-doc budget ratchet as fallback when a merged doc exceeds the 130-line cap",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:42Z"
+        },
+        {
+          "name": "statusline-plan-role-display",
+          "summary": "Statusline/status has no plan-step role display field",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "revise-to-plan-sheds-no-evidence",
+          "summary": "revise --to plan invalidates no plan evidence; next complete re-passes on stale artifacts",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "legacy-plan-key-mixed-form-precedence",
+          "summary": "Mixed legacy tier + override table inverts documented precedence and drops the configured tier",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "planner-skeleton-prompt-header-drift",
+          "summary": "Planner companion-stub headers drift from planner-prompt.md sections",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "stale-spec-text-after-role-retirement",
+          "summary": "Foreign specs still assert pre-retirement prompt-doc set (add-plan-advisor-mode, configurable-subagent-models, add-agent-evidence-contract, evidence-cli)",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "brownmap-roadmap-source-role-retired",
+          "summary": "brownmap baseline/gaps still stamp Source.Role=big-thinker on new entries",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "handoff-chain-unvalidated",
+          "summary": "Documented handoffTo chain is unenforced; handoffTo=banana completes a step",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "planner-stub-on-legacy-workflow-unguarded",
+          "summary": "evidence init planner on an unpinned workflow is unguarded",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "stamp-validates-commands-schema",
+          "summary": "artifact stamp should validate the centinela:verification commands schema and fail loudly at stamp time",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "cross-process-suite-result-reuse",
+          "summary": "Reuse the gatekeeper's suite result in complete via a tamper-evident digest-keyed run record (any plain on-disk record is writable by the agent it would excuse)",
+          "source": {
+            "feature": "dedupe-validate-suite-runs",
+            "role": "planner"
+          },
+          "deferredAt": "2026-07-29T20:26:54Z"
+        },
+        {
+          "name": "validate-flake-diagnosability",
+          "summary": "A validate suite command can fail without naming any failing test in the rendered output (observed once: go test ./... -coverprofile exit!=0 with only ok lines shown); persist full suite output to a log for diagnosis",
+          "source": {
+            "feature": "dedupe-validate-suite-runs",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T21:48:21Z"
+        }
       ]
     }
   ],

@@ -204,6 +204,7 @@
 - **smoke-verification** — First-class validate.smoke_commands that exercise the running product during validate and merge; smoke verify claim, scaffolded config examples, and a repo smoke script
 - **unified-plan-specialist** — Merge the plan-step big-thinker and feature-specialist roles into one reasoning-tier planner: a single subagent context whose prompt carries both lenses as ordered sections (strategy/scope/risks, then acceptance criteria/edge cases/spec), producing one evidence pair instead of two; keeps the after-plan human confirmation and accepts legacy two-role evidence for in-flight workflows.
 - **adversarial-validate-verifier** — Recast the validate-step gatekeeper as a fresh-context adversarial verifier: refutation stance (find why the completion claim is false; default to not-done when uncertain), evidence-only inputs (diff vs base, frozen spec, gate outputs — never role reports or orchestrator narrative), and it re-runs centinela validate and the test suite itself instead of trusting reports; drops the validation-specialist role; CRITICAL verdict blocks complete.
+- **spec-conflict-false-positives** — Fix DetectSpecConflicts false positives that block deliver --via merge: byte-identical spec copies across trees conflict with themselves, and any two scenarios sharing a Given with different outcomes are flagged even within one file (normal companion Gherkin); conflict only on same (file, scenario) diverging across different owners, and dedupe the report (was 720KB of repeats)
 
 ## Backlog
 
