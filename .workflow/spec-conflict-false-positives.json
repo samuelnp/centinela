@@ -1,18 +1,18 @@
 {
   "feature": "spec-conflict-false-positives",
   "startedAt": "2026-07-30T07:10:42.23527Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-07-30T08:05:50Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-30T08:30:18Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },
