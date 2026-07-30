@@ -35,9 +35,11 @@ func TestRDSIntegration_InternalLightPath(t *testing.T) {
 	}
 }
 
-// A user-facing feature still needs the full bundle: documentation-specialist
-// role plus portal + knowledge-base. A bare changelog is not enough.
-func TestRDSIntegration_UserFacingNeedsFullBundle(t *testing.T) {
+// A user-facing feature still requires the documentation-specialist role, and
+// under strict orchestration its evidence must exist: a bare changelog is not
+// enough. The portal/KB bundle is gone — the missing piece is the evidence
+// pair whose outputs name real doc files.
+func TestRDSIntegration_UserFacingNeedsSpecialistEvidence(t *testing.T) {
 	t.Chdir(t.TempDir())
 	rdsIntWrite(t, "docs/features/uf.md", "# uf\nsurface: user-facing\n")
 	rdsIntWrite(t, workflow.WorkflowDir+"/uf-changelog.md", "- feat: x\n")
@@ -45,8 +47,13 @@ func TestRDSIntegration_UserFacingNeedsFullBundle(t *testing.T) {
 	if roles := orchestration.RequiredRolesForFeature("uf", "docs"); len(roles) == 0 {
 		t.Fatal("user-facing docs step must still require the documentation-specialist role")
 	}
+	wf := workflow.New("uf")
+	wf.CurrentStep = "docs"
+	if err := workflow.Save(wf); err != nil {
+		t.Fatal(err)
+	}
 	err := workflow.ValidateArtifacts("uf", "docs", nil)
-	if err == nil || !strings.Contains(err.Error(), "documentation output") {
-		t.Fatalf("user-facing docs step must demand the portal/KB bundle, got %v", err)
+	if err == nil || !strings.Contains(err.Error(), "documentation-specialist") {
+		t.Fatalf("user-facing docs step must demand the specialist evidence, got %v", err)
 	}
 }

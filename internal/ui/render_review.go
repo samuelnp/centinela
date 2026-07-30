@@ -33,9 +33,9 @@ func RenderDocumentationNeeded(feature string) string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
 		StyleYellow.Render("⚠ Documentation output missing: "+feature),
 		"",
-		"Docs step requires generated human-facing documentation.",
-		StyleMuted.Render("Run docs specialist using docs/architecture/documentation-generator-prompt.md"),
-		StyleMuted.Render("Then write: docs/project-docs/index.html"),
+		"Docs step requires real updated markdown documentation.",
+		StyleMuted.Render("Run: centinela docs context "+feature),
+		StyleMuted.Render("Update docs/guides/ or README.md, then write evidence listing the real files."),
 	)
 	return renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body)
 }

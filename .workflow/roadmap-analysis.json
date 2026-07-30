@@ -58,6 +58,8 @@
     {"name":"smoke-verification"},
     {"name":"adversarial-validate-verifier"},
     {"name":"unified-plan-specialist"},
-    {"name":"spec-conflict-false-positives"}
+    {"name":"spec-conflict-false-positives"},
+    {"name":"docs-step-markdown-first"},
+    {"name":"docstring-gate"}
   ]
 }

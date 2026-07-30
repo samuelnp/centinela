@@ -1,0 +1,39 @@
+{
+  "feature": "docs-step-markdown-first",
+  "startedAt": "2026-07-30T08:28:31.783402Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-30T11:45:25Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-30T12:52:22Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-30T09:00:09Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-30T12:23:05Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-30T12:52:08Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/docs-step-markdown-first",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}

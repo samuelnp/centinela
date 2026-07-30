@@ -29,8 +29,7 @@ This project uses Centinela workflow enforcement.
 - centinela complete <feature>
 - centinela status <feature>
 - centinela validate
-- centinela docs validate
-- centinela docs generate --out docs/project-docs/index.html
+- centinela docs context <feature>
 `
 
 // EnsureAgentsFile writes AGENTS.md for OpenCode if missing.

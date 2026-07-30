@@ -147,13 +147,16 @@ exist on disk. Free-text summaries are not valid outputs.
 - `senior-engineer`: include at least one real non-evidence implementation file.
 - `ux-ui-specialist`: required only for features whose brief includes `surface: user-facing`; include at least one real UI file under configured `ui_paths`, set `mobileFirst: true`, and include these tags in `edgeCases`: `mobile-first`, `visual-hierarchy`, `typography-hierarchy`, `responsive-layout`, `loading-state`, `empty-state`, `error-state`, `motion-and-reduced-motion`.
 - `qa-senior`: include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.
+- `documentation-specialist`: include at least one real updated file under `docs/` or exactly `README.md`.
 
 ### Other workflow outputs
 
 - `.workflow/<feature>-edge-cases.md`
 - `.workflow/<feature>-gatekeeper.md`
 - `.workflow/<feature>-production-readiness.md` when enabled
-- `docs/project-docs/index.html` after the docs step
+- `.workflow/<feature>-changelog.md` after the docs step
+- real updated doc files under `docs/guides/` or `README.md` for
+  user-facing features (listed in the documentation-specialist `outputs`)
 
 ### Plan advisor behavior
 

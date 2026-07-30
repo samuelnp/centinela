@@ -438,8 +438,7 @@
         {
           "name": "docs-step-markdown-first",
           "archetype": "canonical",
-          "description": "Redesign the docs step around markdown for humans: delete the HTML pipeline (internal/docgen, docs generate, KB html, portal index), gate on real updated doc files (docs/guides/, README) instead, and add a curated 'docs context' command so the specialist reads feature-scale inputs instead of crawling the repo",
-          "draft": true
+          "description": "Redesign the docs step around markdown for humans: delete the HTML pipeline (internal/docgen, docs generate, KB html, portal index), gate on real updated doc files (docs/guides/, README) instead, and add a curated 'docs context' command so the specialist reads feature-scale inputs instead of crawling the repo"
         },
         {
           "name": "docstring-gate",
@@ -447,8 +446,7 @@
             "docs-step-markdown-first"
           ],
           "archetype": "canonical",
-          "description": "Deterministic docstring gate: 'centinela docs lint' walks the AST and fails on exported identifiers without doc comments, changed-files ratchet scope; senior-engineer prompt gains the write-doc-comments-in-code-step duty so a Docusaurus/godoc pipeline can consume the codebase later",
-          "draft": true
+          "description": "Deterministic docstring gate: 'centinela docs lint' walks the AST and fails on exported identifiers without doc comments, changed-files ratchet scope; senior-engineer prompt gains the write-doc-comments-in-code-step duty so a Docusaurus/godoc pipeline can consume the codebase later"
         }
       ]
     },
@@ -501,6 +499,14 @@
         {"name":"stamp-validates-commands-schema","summary":"artifact stamp should validate the centinela:verification commands schema and fail loudly at stamp time","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
         {"name":"cross-process-suite-result-reuse","summary":"Reuse the gatekeeper's suite result in complete via a tamper-evident digest-keyed run record (any plain on-disk record is writable by the agent it would excuse)","source":{"feature":"dedupe-validate-suite-runs","role":"planner"},"deferredAt":"2026-07-29T20:26:54Z"},
         {"name":"validate-flake-diagnosability","summary":"A validate suite command can fail without naming any failing test in the rendered output (observed once: go test ./... -coverprofile exit!=0 with only ok lines shown); persist full suite output to a log for diagnosis","source":{"feature":"dedupe-validate-suite-runs","role":"gatekeeper"},"deferredAt":"2026-07-29T21:48:21Z"},
+        {"name":"migrate-prune-project-docs","summary":"centinela migrate leaves stale generated docs/project-docs/ output in downstream projects after the HTML pipeline removal; add a migrate cleanup that prunes it","source":{"feature":"docs-step-markdown-first","role":"planner"},"deferredAt":"2026-07-30T08:39:23Z"},
+        {"name":"migrate-doc-version-refresh","summary":"Rewritten managed docs (documentation-generator-prompt.md et al) never reach downstream repos: migrate drift detection is doc-version-only (CurrentDocVersion stays 1), so content rewrites under the same version are invisible to BuildPlan; needs a content-hash or version-bump strategy","source":{"feature":"docs-step-markdown-first","role":"senior-engineer"},"deferredAt":"2026-07-30T11:42:16Z"},
+        {"name":"surface-line-format-detection","summary":"IsUserFacingFeature misses 'surface:' lines in blockquote/bullet/bold form (e.g. landing-page.md '> surface: user-facing'), silently downgrading user-facing features to the internal docs contract","source":{"feature":"docs-step-markdown-first","role":"edge-case-tester"},"deferredAt":"2026-07-30T11:50:54Z"},
+        {"name":"stale-project-docs-pruning","summary":"Downstream repos keep a stale generated docs/project-docs/ portal after portal regen removal; add migrate-time pruning","source":{"feature":"docs-step-markdown-first","role":"edge-case-tester"},"deferredAt":"2026-07-30T11:50:54Z"},
+        {"name":"changelog-scanner-line-limit","summary":"validateChangelog ignores bufio.Scanner errors, so a >64KB single-line changelog is misreported as empty","source":{"feature":"docs-step-markdown-first","role":"edge-case-tester"},"deferredAt":"2026-07-30T11:50:54Z"},
+        {"name":"legacy-docs-spec-scenarios-cleanup","summary":"Legacy spec scenario rewrites (right-size-docs-step, docs-knowledge-base-pages, generate-html-project-docs, improve-docs-llm-hybrid-ui, docs-latest-features-getting-started, merge-truthful-delivery portal scenario) still describe the deleted HTML/KB pipeline; prewrite hook blocks specs/ writes during the tests step, so the contradicted scenarios must be rewritten in a plan-step-capable follow-up.","source":{"feature":"docs-step-markdown-first","role":"qa-senior"},"deferredAt":"2026-07-30T12:15:01Z"},
+        {"name":"legacy-docs-specs-contradiction","summary":"Rewrite legacy spec scenarios still pinning deleted docs generate/validate + portal regen (right-size-docs-step, docs-knowledge-base-pages, generate-html-project-docs, improve-docs-llm-hybrid-ui, merge-truthful-delivery)","source":{"feature":"docs-step-markdown-first","role":"gatekeeper"},"deferredAt":"2026-07-30T12:38:31Z"},
+        {"name":"changelog-template-placeholder-passes-gate","summary":"validateChangelog accepts an unfilled FILL template line as a non-empty changelog; require a filled entry","source":{"feature":"docs-step-markdown-first","role":"gatekeeper"},"deferredAt":"2026-07-30T12:38:31Z"},
         {"name":"spec-conflict-scenario-deletion-detection","summary":"Spec-conflict detector ignores scenario deletion: a worktree that removes a scenario another worktree edited is invisible to DetectSpecConflicts","source":{"feature":"spec-conflict-false-positives","role":"senior-engineer"},"deferredAt":"2026-07-30T07:54:20Z"},
         {"name":"spec-conflict-deep-gherkin-diff","summary":"Spec-conflict detector compares only the first Given and first Then per scenario; divergence in When/And/second-Then steps is not detected","source":{"feature":"spec-conflict-false-positives","role":"senior-engineer"},"deferredAt":"2026-07-30T07:54:24Z"},
         {"name":"spec-conflict-precheck-requires-merging-worktree","summary":"centinela merge's spec-conflict pre-check is silently disarmed whenever .worktrees/<merging-feature>/specs is absent (worktree already removed by a prior partial merge, --force-remove, or raw-PR delivery): DetectSpecConflicts returns nil before reading any other worktree, so a genuine two-worktree divergence merges unblocked","source":{"feature":"spec-conflict-false-positives","role":"gatekeeper"},"deferredAt":"2026-07-30T08:53:19Z"},

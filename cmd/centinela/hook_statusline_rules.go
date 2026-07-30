@@ -30,7 +30,7 @@ func statusBlockAndNext(wf *workflow.Workflow, cfg *config.Config) (string, stri
 	}
 	if wf.CurrentStep == "docs" {
 		if orchestration.IsUserFacingFeature(wf.Feature) {
-			if !fileExists("docs/project-docs/index.html") {
+			if !fileExists(".workflow/" + wf.Feature + "-documentation-specialist.md") {
 				return "MISSING_DOCS_OUTPUT", "run-documentation-specialist"
 			}
 		} else if !fileExists(".workflow/" + wf.Feature + "-changelog.md") {

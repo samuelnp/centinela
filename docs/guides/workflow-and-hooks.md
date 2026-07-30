@@ -16,7 +16,7 @@ plan → code → tests → validate → docs
 | **code** | Implementation | Nothing — architecture rules govern this step |
 | **tests** | Unit, integration, acceptance + edge-case analysis | Test files exist + `.workflow/<feature>-edge-cases.md` exists |
 | **validate** | Gatekeeper conflict report | All gate checks pass + all `centinela.toml` commands exit 0 |
-| **docs** | Human-facing project documentation | `.workflow/<feature>-documentation-specialist.md` + `.workflow/<feature>-documentation-specialist.json` + `docs/project-docs/index.html` |
+| **docs** | Human-facing markdown documentation | Non-empty `.workflow/<feature>-changelog.md`; user-facing features also need the `.workflow/<feature>-documentation-specialist.{md,json}` evidence pair whose outputs include a real updated file under `docs/` or `README.md` |
 
 In strict orchestration mode, specialist evidence must be actionable:
 
@@ -24,6 +24,7 @@ In strict orchestration mode, specialist evidence must be actionable:
 - `senior-engineer` outputs must include at least one real non-evidence implementation file.
 - `ux-ui-specialist` is required during `code` only for features whose brief declares `surface: user-facing`; its outputs must include at least one real UI file, `mobileFirst: true`, and the required UX review tags.
 - `qa-senior` outputs must include at least one real test file and `.workflow/<feature>-edge-cases.md`.
+- `documentation-specialist` outputs must include at least one real updated file under `docs/` or exactly `README.md`.
 
 UI path enforcement is configurable:
 
@@ -57,8 +58,7 @@ centinela validate              # Run gate checks manually
 centinela migrate               # Preview full managed docs + setup migration
 centinela migrate docs          # Preview managed docs migration only
 centinela migrate setup         # Preview setup migration only
-centinela docs validate         # Validate inputs for project documentation report
-centinela docs generate         # Generate HTML docs with Mermaid diagrams
+centinela docs context <feature>  # Print the curated docs-step inputs as markdown
 ```
 
 ## How the hooks work

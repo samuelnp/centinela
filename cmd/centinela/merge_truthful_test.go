@@ -20,20 +20,11 @@ func gitOutTruthful(t *testing.T, dir string, args ...string) string {
 	return strings.TrimSpace(string(out))
 }
 
-// stubPortalRegen swaps the docs-portal seam for the duration of a test.
-func stubPortalRegen(t *testing.T) {
-	t.Helper()
-	orig := docsPortalRegen
-	t.Cleanup(func() { docsPortalRegen = orig })
-	docsPortalRegen = func(string) error { return nil }
-}
-
 // THE regression at the cmd layer: runMerge invoked with the CWD inside the
 // feature worktree must merge in the PRIMARY tree (advancing main), remove
 // the worktree, and print the one-line primary-tree notice.
 func TestRunMerge_FromInsideWorktree_AdvancesMainAndPrintsNotice(t *testing.T) {
 	d := seedCleanMergeRepo(t, "omega") // cwd = d, worktree omega committed
-	stubPortalRegen(t)
 	before := gitOutTruthful(t, d, "rev-parse", "main")
 	wt := filepath.Join(d, ".worktrees", "omega")
 	if err := os.Chdir(wt); err != nil { // the old-bug CWD shape

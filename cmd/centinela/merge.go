@@ -5,7 +5,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/samuelnp/centinela/internal/docgen"
 	"github.com/samuelnp/centinela/internal/ui"
 	"github.com/samuelnp/centinela/internal/worktree"
 )
@@ -14,19 +13,6 @@ var (
 	mergeContinue    bool
 	mergeForceRemove bool
 )
-
-const mergePortalTitle = "Centinela Project Documentation"
-
-// docsPortalRegen regenerates the documentation portal after a clean merge.
-// It is a package-level seam so tests can swap it; production wiring calls
-// docgen.Generate in the primary tree (docgen reads CWD-relative inputs and
-// used to write into the worktree that was about to be deleted), and is
-// best-effort because its inputs may be absent.
-var docsPortalRegen = func(repo string) error {
-	return inDir(repo, func() error {
-		return docgen.Generate("docs/project-docs/index.html", mergePortalTitle)
-	})
-}
 
 var mergeCmd = &cobra.Command{
 	Use:   "merge <feature>",
@@ -74,12 +60,6 @@ func runMerge(_ *cobra.Command, args []string) error {
 	// stalled attempt, so the hook stops re-emitting its directive.
 	if err := worktree.ClearPending(repo, feature); err != nil {
 		return err
-	}
-	// Refresh the portal once per delivery. Best-effort: docgen needs
-	// PROJECT.md/ROADMAP.md/roadmap.json, which may be absent, so a regen
-	// failure must never fail an otherwise-clean merge.
-	if err := docsPortalRegen(repo); err != nil {
-		fmt.Printf("notice: portal regen skipped: %v\n", err)
 	}
 	return reportMergeSuccess(outcome)
 }

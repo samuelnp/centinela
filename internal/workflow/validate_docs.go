@@ -6,42 +6,20 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/samuelnp/centinela/internal/orchestration"
 )
-
-const kbDir = "docs/project-docs/kb"
 
 func validateDocsOutput(feature string) error {
 	if feature == "" {
 		return fmt.Errorf("feature is required for docs validation")
 	}
-	if orchestration.IsUserFacingFeature(feature) {
-		return validateDocsUserFacing(feature)
-	}
-	return validateDocsInternal(feature)
+	return validateChangelog(feature)
 }
 
-// validateDocsUserFacing keeps the full knowledge-base contract: the portal,
-// the per-feature markdown guide, and its rendered page must all exist.
-func validateDocsUserFacing(feature string) error {
-	if _, err := os.Stat("docs/project-docs/index.html"); err != nil {
-		return fmt.Errorf("documentation output not found: docs/project-docs/index.html")
-	}
-	kbMD := filepath.Join(kbDir, feature+".md")
-	if _, err := os.Stat(kbMD); err != nil {
-		return fmt.Errorf("knowledge base markdown missing for %q: %s (write a plain-language end-user guide with sections: What it does, When you'd use it, How it behaves)", feature, kbMD)
-	}
-	kbHTML := filepath.Join(kbDir, feature+".html")
-	if _, err := os.Stat(kbHTML); err != nil {
-		return fmt.Errorf("knowledge base page missing for %q: %s (run: centinela docs generate)", feature, kbHTML)
-	}
-	return nil
-}
-
-// validateDocsInternal requires only a one-line changelog entry; no
-// knowledge-base guide or portal regeneration is needed for internal features.
-func validateDocsInternal(feature string) error {
+// validateChangelog requires a non-empty changelog entry for every feature.
+// The real-updated-doc-file rule for user-facing features lives in
+// orchestration evidence validation (documentation-specialist outputs), not
+// here.
+func validateChangelog(feature string) error {
 	path := filepath.Join(WorkflowDir, feature+"-changelog.md")
 	f, err := os.Open(path)
 	if err != nil {
