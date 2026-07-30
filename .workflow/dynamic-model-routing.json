@@ -1,0 +1,39 @@
+{
+  "feature": "dynamic-model-routing",
+  "startedAt": "2026-07-30T17:01:22.799061Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-30T17:22:00Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/dynamic-model-routing",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}
