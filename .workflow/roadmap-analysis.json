@@ -60,6 +60,7 @@
     {"name":"unified-plan-specialist"},
     {"name":"spec-conflict-false-positives"},
     {"name":"docs-step-markdown-first"},
-    {"name":"docstring-gate"}
+    {"name":"docstring-gate"},
+    {"name":"dynamic-model-routing"}
   ]
 }
