@@ -481,6 +481,19 @@
     "createdAt": "2026-06-30T17:28:39Z"
   },
   {
+    "id": "58535c8b2c8a7ac3",
+    "feature": "truthful-validators",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Malformed `centinela.toml` on `evidence validate` surfaces as a config",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/truthful-validators-edge-cases.md",
+    "createdAt": "2026-07-30T17:28:44Z"
+  },
+  {
     "id": "5c1ccba03ee6b28f",
     "feature": "g2-import-graph-gate",
     "step": "validate",
