@@ -104,29 +104,75 @@ func TestParallelWorktrees_MigrateSyncsIgnoreFilesIdempotently(t *testing.T) {
 	}
 }
 
-// Acceptance: Scenario: Spec conflict across in-flight worktrees is detected
-// before merging.
+// writeWorktreeSpec drops a spec file into an in-flight feature worktree.
+func writeWorktreeSpec(t *testing.T, repo, feat, name, body string) {
+	t.Helper()
+	dir := filepath.Join(repo, ".worktrees", feat, "specs")
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		t.Fatalf("mkdir %s: %v", dir, err)
+	}
+	if err := os.WriteFile(filepath.Join(dir, name), []byte(body), 0644); err != nil {
+		t.Fatalf("write %s: %v", name, err)
+	}
+}
+
+func loginSpec(then string) string {
+	return "Feature: Login\n  Scenario: clash\n    Given user has account\n" +
+		"    When user logs in\n    Then app routes to " + then + "\n"
+}
+
+// Acceptance: specs/parallel-feature-worktrees.feature
+// Scenario: Spec conflict across in-flight worktrees is detected before merging
 func TestParallelWorktrees_SpecConflictDetectedPreMerge(t *testing.T) {
 	repo := initSeedRepo(t)
-	// Two worktrees, each with a contradictory scenario keyed off the same Given.
-	specsMain := filepath.Join(repo, "specs")
-	_ = os.MkdirAll(specsMain, 0755)
-	zeta := "Feature: Zeta\n  Scenario: clash\n    Given user has account\n    When user logs in\n    Then app routes to dashboard\n"
-	_ = os.WriteFile(filepath.Join(specsMain, "zeta.feature"), []byte(zeta), 0644)
-
-	// Simulate an in-flight 'eta' worktree with a clashing scenario.
-	etaWT := filepath.Join(repo, ".worktrees", "eta", "specs")
-	_ = os.MkdirAll(etaWT, 0755)
-	eta := "Feature: Eta\n  Scenario: clash\n    Given user has account\n    When user logs in\n    Then app routes to onboarding\n"
-	_ = os.WriteFile(filepath.Join(etaWT, "eta.feature"), []byte(eta), 0644)
+	// Two in-flight worktrees resolve the SAME scenario in the SAME spec file
+	// differently — merging one would silently overwrite the other.
+	writeWorktreeSpec(t, repo, "zeta", "login.feature", loginSpec("dashboard"))
+	writeWorktreeSpec(t, repo, "eta", "login.feature", loginSpec("onboarding"))
 
 	conflicts := worktree.DetectSpecConflicts(repo, "eta")
-	if len(conflicts) == 0 {
-		t.Fatal("expected at least one spec conflict, got none")
+	if len(conflicts) != 1 {
+		t.Fatalf("expected exactly one spec conflict, got %d: %v", len(conflicts), conflicts)
 	}
 	msg := worktree.FormatSpecConflicts(conflicts)
-	if !contains(msg, "clash") {
-		t.Fatalf("formatted conflicts should name the scenario: %q", msg)
+	for _, want := range []string{"clash", "zeta", "eta"} {
+		if !contains(msg, want) {
+			t.Fatalf("formatted conflicts should name %q: %q", want, msg)
+		}
+	}
+}
+
+// Acceptance: specs/parallel-feature-worktrees.feature
+// Scenario: Superseding and identical specs never block a merge
+// Regression for the spec-conflict-false-positives hotfix, where any existing
+// worktree made `centinela merge` unusable.
+func TestParallelWorktrees_IdenticalAndSupersedingSpecsDoNotBlock(t *testing.T) {
+	repo := initSeedRepo(t)
+	specs := filepath.Join(repo, "specs")
+	if err := os.MkdirAll(specs, 0755); err != nil {
+		t.Fatalf("mkdir specs: %v", err)
+	}
+	// main carries the old outcome; the merging worktree supersedes it.
+	if err := os.WriteFile(filepath.Join(specs, "login.feature"),
+		[]byte(loginSpec("dashboard")), 0644); err != nil {
+		t.Fatalf("write main spec: %v", err)
+	}
+	writeWorktreeSpec(t, repo, "eta", "login.feature", loginSpec("onboarding"))
+	// A bystander worktree carries a byte-identical copy of main's spec.
+	writeWorktreeSpec(t, repo, "bystander", "login.feature", loginSpec("dashboard"))
+	// A companion scenario sharing a Given inside one file is normal Gherkin.
+	companion := "Feature: Archetypes\n" +
+		"  Scenario: hotfix archetype resolves to code-tests-validate\n" +
+		"    Given a feature started with the hotfix archetype\n" +
+		"    Then the step list is code, tests, validate\n" +
+		"  Scenario: active archetype is pinned\n" +
+		"    Given a feature started with the hotfix archetype\n" +
+		"    Then the archetype is recorded in the workflow state\n"
+	writeWorktreeSpec(t, repo, "eta", "archetypes.feature", companion)
+	writeWorktreeSpec(t, repo, "bystander", "archetypes.feature", companion)
+
+	if got := worktree.DetectSpecConflicts(repo, "eta"); len(got) != 0 {
+		t.Fatalf("supersession and identical copies must not block: %v", got)
 	}
 }
 

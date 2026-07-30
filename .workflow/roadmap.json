@@ -429,6 +429,11 @@
         {
           "name": "adversarial-validate-verifier",
           "description": "Recast the validate-step gatekeeper as a fresh-context adversarial verifier: refutation stance (find why the completion claim is false; default to not-done when uncertain), evidence-only inputs (diff vs base, frozen spec, gate outputs — never role reports or orchestrator narrative), and it re-runs centinela validate and the test suite itself instead of trusting reports; drops the validation-specialist role; CRITICAL verdict blocks complete."
+        },
+        {
+          "name": "spec-conflict-false-positives",
+          "archetype": "hotfix",
+          "description": "Fix DetectSpecConflicts false positives that block deliver --via merge: byte-identical spec copies across trees conflict with themselves, and any two scenarios sharing a Given with different outcomes are flagged even within one file (normal companion Gherkin); conflict only on same (file, scenario) diverging across different owners, and dedupe the report (was 720KB of repeats)"
         }
       ]
     },
@@ -480,7 +485,11 @@
         {"name":"planner-stub-on-legacy-workflow-unguarded","summary":"evidence init planner on an unpinned workflow is unguarded","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
         {"name":"stamp-validates-commands-schema","summary":"artifact stamp should validate the centinela:verification commands schema and fail loudly at stamp time","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
         {"name":"cross-process-suite-result-reuse","summary":"Reuse the gatekeeper's suite result in complete via a tamper-evident digest-keyed run record (any plain on-disk record is writable by the agent it would excuse)","source":{"feature":"dedupe-validate-suite-runs","role":"planner"},"deferredAt":"2026-07-29T20:26:54Z"},
-        {"name":"validate-flake-diagnosability","summary":"A validate suite command can fail without naming any failing test in the rendered output (observed once: go test ./... -coverprofile exit!=0 with only ok lines shown); persist full suite output to a log for diagnosis","source":{"feature":"dedupe-validate-suite-runs","role":"gatekeeper"},"deferredAt":"2026-07-29T21:48:21Z"}
+        {"name":"validate-flake-diagnosability","summary":"A validate suite command can fail without naming any failing test in the rendered output (observed once: go test ./... -coverprofile exit!=0 with only ok lines shown); persist full suite output to a log for diagnosis","source":{"feature":"dedupe-validate-suite-runs","role":"gatekeeper"},"deferredAt":"2026-07-29T21:48:21Z"},
+        {"name":"spec-conflict-scenario-deletion-detection","summary":"Spec-conflict detector ignores scenario deletion: a worktree that removes a scenario another worktree edited is invisible to DetectSpecConflicts","source":{"feature":"spec-conflict-false-positives","role":"senior-engineer"},"deferredAt":"2026-07-30T07:54:20Z"},
+        {"name":"spec-conflict-deep-gherkin-diff","summary":"Spec-conflict detector compares only the first Given and first Then per scenario; divergence in When/And/second-Then steps is not detected","source":{"feature":"spec-conflict-false-positives","role":"senior-engineer"},"deferredAt":"2026-07-30T07:54:24Z"},
+        {"name":"spec-conflict-precheck-requires-merging-worktree","summary":"centinela merge's spec-conflict pre-check is silently disarmed whenever .worktrees/<merging-feature>/specs is absent (worktree already removed by a prior partial merge, --force-remove, or raw-PR delivery): DetectSpecConflicts returns nil before reading any other worktree, so a genuine two-worktree divergence merges unblocked","source":{"feature":"spec-conflict-false-positives","role":"gatekeeper"},"deferredAt":"2026-07-30T08:53:19Z"},
+        {"name":"spec-conflict-cross-file-contradiction-unbacked","summary":"Cross-file spec contradictions (two spec files asserting opposite outcomes for the same Given) are no longer detected and no gate backstops them: centinela validate runs file_size/build/import_graph/spec_traceability plus go test+coverage+fmt, none of which compares Gherkin semantics across files; the trade-off is sound but the documented backstop does not exist","source":{"feature":"spec-conflict-false-positives","role":"gatekeeper"},"deferredAt":"2026-07-30T08:53:19Z"}
       ]
     }
   ],

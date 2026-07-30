@@ -624,6 +624,32 @@
     "createdAt": "2026-06-29T20:25:51Z"
   },
   {
+    "id": "7c5d3bdd9f572d50",
+    "feature": "spec-conflict-false-positives",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Byte-identical spec copied by an idle bystander worktree —",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/spec-conflict-false-positives-edge-cases.md",
+    "createdAt": "2026-07-30T08:30:18Z"
+  },
+  {
+    "id": "7d6650a55435d935",
+    "feature": "spec-conflict-false-positives",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# spec-conflict-false-positives — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/spec-conflict-false-positives-gatekeeper.md",
+    "createdAt": "2026-07-30T09:04:13Z"
+  },
+  {
     "id": "7fdf7fb1ded896d0",
     "feature": "roadmap-crud-add-remove",
     "step": "validate",

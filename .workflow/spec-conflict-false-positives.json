@@ -1,0 +1,29 @@
+{
+  "feature": "spec-conflict-false-positives",
+  "startedAt": "2026-07-30T07:10:42.23527Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-30T08:05:50Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-30T08:30:18Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-30T09:04:13Z"
+    }
+  },
+  "stepOrder": [
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "hotfix",
+  "worktreePath": ".worktrees/spec-conflict-false-positives",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}
