@@ -17,6 +17,7 @@ const (
 	TypeStepAdvanced     = "step-advanced"
 	TypeStepRevised      = "step-revised"
 	TypeCostSample       = "cost-sample"
+	TypeRouteDecision    = "route-decision"
 )
 
 // Event is one governance event, serialized as a single JSON line in
@@ -39,6 +40,9 @@ type Event struct {
 	Checks       []CheckRef `json:"checks,omitempty"`       // verify-rejection
 	InputTokens  int        `json:"inputTokens,omitempty"`  // cost-sample (back-compat: old lines → 0)
 	OutputTokens int        `json:"outputTokens,omitempty"` // cost-sample
+	Role         string     `json:"role,omitempty"`         // route-decision: the routed subagent role
+	Tier         string     `json:"tier,omitempty"`         // route-decision: the tier decided
+	PrevTier     string     `json:"prevTier,omitempty"`     // route-decision: the effective tier it replaced
 }
 
 // CheckRef is a failing claim check (telemetry's own copy of verify's shape).

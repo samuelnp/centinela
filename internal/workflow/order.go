@@ -14,6 +14,12 @@ const StrictOrchestrationMode = "strict-subagents-v1"
 
 var StepOrder = DefaultStepOrder
 
+// New creates a fresh workflow starting at the "plan" step under the strict
+// (back-compat default) profile.
+func New(feature string) *Workflow {
+	return NewWithOrder(feature, DefaultStepOrder, config.ProfileStrict)
+}
+
 // NewWithOrder builds a workflow under the given enforcement profile. The
 // profile is pinned on the workflow and decides orchestration evidence: only
 // strict (RequireSubagentEvidence) sets StrictOrchestrationMode, so guided and

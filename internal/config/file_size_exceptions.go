@@ -38,6 +38,12 @@ func validateConfig(cfg *Config) error {
 	if err := validateOrchestrationModelMap(cfg); err != nil {
 		return err
 	}
+	if err := validateRoutingMode(cfg); err != nil {
+		return err
+	}
+	if err := validateOrchestrationFloors(cfg); err != nil {
+		return err
+	}
 	if err := validateCapabilities(cfg); err != nil {
 		return err
 	}

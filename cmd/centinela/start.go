@@ -88,5 +88,6 @@ func runStart(_ *cobra.Command, args []string) error {
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Workflow started for %q.", feature)))
 	fmt.Println(ui.StyleMuted.Render("Steps: " + stepArrow(order)))
 	fmt.Println(ui.RenderStep("Current step", order[0]))
+	printRoutingDirective(wf, cfg)
 	return nil
 }

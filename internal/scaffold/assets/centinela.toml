@@ -65,6 +65,26 @@ commands = [
 ]
 
 # ---------------------------------------------------------------------------
+# Subagent model routing
+#
+# routing_mode = "static" (default, and what an absent key means) resolves every
+# role's model from [orchestration.models] project-wide. "dynamic" additionally
+# lets the orchestrator route a role for ONE feature with `centinela route set`,
+# so a trivial change need not pay reasoning-tier prices. Un-routed roles always
+# fall back to the static chain, so partial decisions are safe.
+#
+# [orchestration.floors] is role -> minimum tier: `route set` refuses anything
+# below it. Shipped defaults are gatekeeper = "reasoning" and planner =
+# "balanced"; an explicit entry here REPLACES the default, so lowering a floor is
+# always a conscious, reviewable config change.
+# ---------------------------------------------------------------------------
+# [orchestration]
+# routing_mode = "dynamic"
+# [orchestration.floors]
+# gatekeeper = "reasoning"
+# planner    = "balanced"
+
+# ---------------------------------------------------------------------------
 # Built-in gate configuration
 # ---------------------------------------------------------------------------
 [gates]

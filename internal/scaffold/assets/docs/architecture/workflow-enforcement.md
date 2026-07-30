@@ -115,6 +115,32 @@ commands = [
 
 Commands run natively via the OS — no shell scripts required. This works on Windows, macOS, and Linux.
 
+## Dynamic Model Routing (optional)
+
+By default (`[orchestration] routing_mode = "static"`, which is also what an
+absent key means) every role's model comes from `[orchestration.models]`
+project-wide, and all directive output is unchanged.
+
+With `routing_mode = "dynamic"` the orchestrator may route a role's tier for ONE
+feature. `centinela start` and the orchestration hook then emit a single extra
+directive line while any of the current step's roles are still un-routed —
+naming those roles, their floors, the static defaults, and the command to
+record the decision:
+
+```bash
+centinela route set <feature> <role> <tier> [--reason "..."]
+centinela route show <feature>
+```
+
+`route set` is refused for an unknown role or tier, a role no step of this
+workflow schedules, a tier below the role's floor (the error names the floor), a
+downgrade below the static default with no `--reason`, and any downgrade once
+the role's step is underway or completed. Upgrades are allowed anytime. Floors
+come from `[orchestration.floors]` (shipped defaults: `gatekeeper = "reasoning"`,
+`planner = "balanced"`); an explicit entry replaces the default. Un-routed roles
+always fall back to the static chain, and every accepted decision is recorded as
+a `route-decision` telemetry event.
+
 ## Skip Rules
 
 All five steps are mandatory. No step can be skipped — this is enforced by the binary.

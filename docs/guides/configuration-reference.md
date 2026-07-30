@@ -164,6 +164,8 @@ AI model routing across subagent roles and runners.
 | `capabilities` | table | `{}` | Model id → capability class override (`frontier`/`capable`/`limited`) |
 | `capability_profiles` | table | `{}` | Capability class → enforcement profile remap |
 | `driver_model` | string | `""` | Model id keying the workflow's default profile |
+| `routing_mode` | string | `"static"` | `static` or `dynamic` — see [Dynamic model routing](#dynamic-model-routing) |
+| `floors` | table | `{}` | Role → minimum tier enforced by `centinela route set` |
 
 ### `[orchestration.models.<role>]`
 
@@ -219,6 +221,56 @@ An unmapped local `model` defaults to the `limited` capability class → `strict
 | `limited` | `claude-haiku-4-5` | `strict` |
 
 Override a model's class with `[orchestration.capabilities]`, or a class's profile with `[orchestration.capability_profiles]`.
+
+### Dynamic model routing
+
+`routing_mode` is `static` by default, and an absent key means exactly that:
+every role resolves through `[orchestration.models]` project-wide and all
+command and hook output is unchanged.
+
+```toml
+[orchestration]
+routing_mode = "dynamic"
+
+[orchestration.floors]
+gatekeeper = "reasoning"   # shipped default
+planner    = "balanced"    # shipped default
+```
+
+Any other value fails at config load. With `dynamic`, `centinela start` and the
+orchestration hook emit ONE extra directive line while any of the current step's
+roles are un-routed, and the `centinela route` group becomes available:
+
+```bash
+centinela route set <feature> <role> <tier> [--reason "..."]
+centinela route show <feature>
+```
+
+`route set` records `role → {tier, reason, decidedAt}` into
+`.workflow/<feature>.json` (`modelRoutes`) and appends a `route-decision`
+telemetry event carrying the previous effective tier. It is refused, in order,
+when:
+
+1. `routing_mode` is not `dynamic` (the error names the key).
+2. The workflow is already complete.
+3. The role or the tier is unknown (the error lists the allowed values).
+4. No step of this workflow schedules the role — e.g. `ux-ui-specialist` on a
+   feature that is not user-facing, or the out-of-band `merge-steward`.
+5. The tier is below the role's effective floor (the error names the floor).
+6. It is a downgrade and the role's step is already underway or completed — the
+   step is behind the cursor, the workflow is done, or an evidence artifact for
+   the role already exists. **Upgrades are always allowed.**
+7. It is a tier below the static default and no `--reason` was given.
+
+An explicit `[orchestration.floors]` entry **replaces** the shipped default, so
+lowering the gatekeeper floor is a deliberate, reviewable config change. Roles
+with no route fall back to the static chain unchanged, so partial decisions are
+always safe, and a workflow JSON written before `modelRoutes` existed loads with
+no routes at all.
+
+`route show` renders the effective table — role, tier, source (`routed` or
+`static`), floor, reason, decided-at — plus the routing hint while decisions are
+still open.
 
 ## `[memory]`
 
