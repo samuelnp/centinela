@@ -187,7 +187,8 @@ For standard product features, follow the same path every time:
 3. Implement the change, then advance to `tests`.
 4. Add unit, integration, acceptance, and edge-case coverage, then advance to `validate`.
 5. Run `centinela validate`, resolve any gate failures, then advance to `docs`.
-6. Run `centinela docs validate` and `centinela docs generate` to publish the project-facing HTML output.
+6. Run `centinela docs context <feature>`, update `docs/guides/` or
+   `README.md` where behavior changed, and write the changelog entry.
 
 For a complete agent-collaboration example, see [`HOWTO.md`](../../HOWTO.md). It walks through using Centinela to generate a small landing page MVP without skipping the required workflow steps.
 
@@ -197,7 +198,7 @@ Proper use checklist:
 - Keep all feature work inside the current step; if a write is blocked, create the missing artifact or advance the workflow instead of forcing the edit.
 - Treat `complete` prompts as review gates. Approve advancement only after the current step artifacts exist and match the plan.
 - Put acceptance tests in `tests/acceptance/` and ensure `[validate].commands` runs them.
-- Finish with `centinela validate`, `centinela docs validate`, and `centinela docs generate --out docs/project-docs/index.html`.
+- Finish with `centinela validate`, then complete the docs step: `centinela docs context <feature>`, real doc updates, and the changelog entry.
 
 ## 5. Migrate managed assets
 
@@ -227,11 +228,10 @@ centinela migrate setup --agent opencode
 centinela migrate setup --agent both --apply
 ```
 
-Regenerate the HTML presentation explicitly when needed:
+Print the curated docs-step inputs for a feature when needed:
 
 ```bash
-centinela docs validate
-centinela docs generate --out docs/project-docs/index.html --title "Centinela Project Documentation"
+centinela docs context <feature>
 ```
 
 ## Generated project structure

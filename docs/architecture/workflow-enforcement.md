@@ -143,7 +143,7 @@ Before advancing, Centinela validates required artifacts:
 | code | none (architecture rules apply during implementation) |
 | tests | test files in `tests/unit` or `tests/integration`, executable acceptance files in `tests/acceptance`, at least one acceptance execution command in `[validate] commands`, and `.workflow/<feature>-edge-cases.md` |
 | validate | gatekeeper report at `.workflow/<feature>-gatekeeper.md` — with a non-empty commands-run record and a current verified revision — and `centinela validate` pass |
-| docs | `.workflow/<feature>-documentation-specialist.md`, `.workflow/<feature>-documentation-specialist.json`, and `docs/project-docs/index.html` |
+| docs | non-empty `.workflow/<feature>-changelog.md`; user-facing features also require the `.workflow/<feature>-documentation-specialist.{md,json}` evidence pair whose `outputs` include a real updated file under `docs/` or `README.md` |
 
 In strict orchestration mode, `plan` evidence from `planner` (or, for a workflow
 started before the `planner-v1` contract, from `big-thinker` and
@@ -157,6 +157,7 @@ Strict orchestration evidence must also be actionable. Required specialist JSON
 - `senior-engineer` outputs must include at least one real non-evidence implementation file.
 - `ux-ui-specialist` is required during `code` when `docs/features/<feature>.md` declares `surface: user-facing`; its outputs must include at least one real UI file under configured `ui_paths`, `mobileFirst: true`, and the required UX edge-case tag set.
 - `qa-senior` outputs must include at least one real `tests/...` file and `.workflow/<feature>-edge-cases.md`.
+- `documentation-specialist` outputs must include at least one real updated file under `docs/` or exactly `README.md`.
 
 If validation fails, the step remains in progress.
 

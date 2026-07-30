@@ -30,7 +30,7 @@ centinela validate            # Run gate checks + validate commands
 2. **code** -> Write code in any layer. Architecture rules enforce correctness.
 3. **tests** -> Unit + integration + acceptance tests. All three must exist.
 4. **validate** -> Gatekeeper report + full test suite. All pass or it doesn't ship.
-5. **docs** -> Documentation specialist output + generated docs HTML.
+5. **docs** -> Updated `docs/guides/` or `README.md` + changelog entry.
 
 **No steps can be skipped. No skip command exists.**
 
@@ -41,7 +41,7 @@ centinela validate            # Run gate checks + validate commands
 | code | Nothing — architecture rules govern this |
 | tests | Test suite files in `tests/unit/` or `tests/integration/` + executable acceptance artifacts in `tests/acceptance/` + `validate.commands` includes acceptance execution + `.workflow/<feature>-edge-cases.md` |
 | validate | Verifier report at `.workflow/<feature>-gatekeeper.md` (grounded: commands-run record + current verified revision) + `centinela validate` passes |
-| docs | `.workflow/<feature>-documentation-specialist.md` + `.workflow/<feature>-documentation-specialist.json` + `docs/project-docs/index.html` |
+| docs | Non-empty `.workflow/<feature>-changelog.md`; user-facing features also need the `.workflow/<feature>-documentation-specialist.{md,json}` evidence pair whose outputs include a real updated file under `docs/` or `README.md` |
 
 **Hooks auto-inject** `[workflow: <feature> | step: <step> | X/5]` after every file write.
 

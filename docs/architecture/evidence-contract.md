@@ -35,7 +35,7 @@ rejected and rewritten.
 3. `generatedAt` MUST parse as RFC 3339 (e.g. `2026-05-12T14:30:00Z`).
 4. `inputs`, `outputs`, and `handoffTo` MUST be non-empty.
 5. `outputs` entries MUST be real file paths that exist on disk **when
-   `centinela complete` runs** — every role except documentation-specialist.
+   `centinela complete` runs** — every role, no exemptions.
    Descriptive strings like `"Updated workflow"` will be rejected as
    `actionable outputs must be real files`.
 6. `mobileFirst` is omitted unless the role is `ux-ui-specialist`.
@@ -157,8 +157,11 @@ applies these rules:
 
 ### documentation-specialist (step: docs)
 
-- Exempt from the "outputs must be real files" check (the validator skips
-  `validateActionableOutputs` for this role).
+- `outputs` MUST include at least one real updated file under `docs/` or
+  exactly `README.md` — the role is NOT exempt from the "outputs must be
+  real files" check. Pointing only at evidence files fails with
+  `documentation-specialist outputs must include a real updated file under
+  docs/ or README.md`.
 - All other global rules still apply.
 - `handoffTo` → `complete`.
 

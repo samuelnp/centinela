@@ -52,6 +52,15 @@ func containsPath(paths []string, want string) bool {
 	return false
 }
 
+func hasDocsOutput(paths []string) bool {
+	for _, path := range paths {
+		if strings.HasPrefix(path, "docs/") || path == "README.md" {
+			return true
+		}
+	}
+	return false
+}
+
 func hasImplementationOutput(paths []string) bool {
 	for _, path := range paths {
 		if !hasPathPrefix([]string{path}, ".workflow/") && !hasPathPrefix([]string{path}, "tests/") &&
