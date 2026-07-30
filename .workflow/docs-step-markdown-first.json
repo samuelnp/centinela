@@ -1,15 +1,15 @@
 {
   "feature": "docs-step-markdown-first",
   "startedAt": "2026-07-30T08:28:31.783402Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-07-30T11:45:25Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-30T12:52:22Z"
     },
     "plan": {
       "status": "done",
