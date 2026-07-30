@@ -377,6 +377,19 @@
     "createdAt": "2026-06-12T15:18:51Z"
   },
   {
+    "id": "48089dac7e8c4568",
+    "feature": "token-diet",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Empty `inputs` list on otherwise-complete evidence trips the generic",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/token-diet-edge-cases.md",
+    "createdAt": "2026-07-29T19:29:36Z"
+  },
+  {
     "id": "480e173b8b7cd979",
     "feature": "configurable-model-routing",
     "step": "tests",
@@ -1181,6 +1194,19 @@
     ],
     "sourceArtifact": ".workflow/adoption-baseline-edge-cases.md",
     "createdAt": "2026-06-24T11:20:51Z"
+  },
+  {
+    "id": "df3ccd01744788c8",
+    "feature": "token-diet",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: token-diet",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/token-diet-gatekeeper.md",
+    "createdAt": "2026-07-29T22:03:47Z"
   },
   {
     "id": "dfb681078078fa80",

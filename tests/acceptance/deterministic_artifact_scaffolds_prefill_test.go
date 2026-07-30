@@ -18,10 +18,18 @@ func TestDAS_InitPreFillsBigThinker(t *testing.T) {
 	if !reflect.DeepEqual(e.Inputs, orchestration.RequiredPlanInputs("demo")) {
 		t.Fatalf("inputs != RequiredPlanInputs: %v", e.Inputs)
 	}
-	for _, want := range []string{"docs/features/demo.md", "docs/features/other.md", "docs/plans/demo.md"} {
+	// token-diet: the pre-fill is the feature's OWN brief + plan only. A sibling
+	// brief on disk must NOT be pulled in — that repo-wide glob was the leak.
+	for _, want := range []string{"docs/features/demo.md", "docs/plans/demo.md"} {
 		if !dasContains(e.Inputs, want) {
 			t.Fatalf("inputs missing %q: %v", want, e.Inputs)
 		}
+	}
+	if dasContains(e.Inputs, "docs/features/other.md") {
+		t.Fatalf("sibling brief leaked into the pre-fill: %v", e.Inputs)
+	}
+	if len(e.Inputs) != 2 {
+		t.Fatalf("expected exactly 2 pre-filled inputs, got %v", e.Inputs)
 	}
 }
 

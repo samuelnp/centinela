@@ -1,0 +1,324 @@
+### Adversarial Verifier Report: token-diet
+**Date:** 2026-07-29
+**Status:** WARNING
+
+#### Inputs Read
+
+- `git diff origin/main...HEAD` (80 files) + the uncommitted tree (clean at start)
+- `docs/features/token-diet.md`, `docs/plans/token-diet.md`, `specs/token-diet.feature`
+- Implementation read directly: `internal/orchestration/plan_snapshot.go`,
+  `evidence_ux.go`, `resolve.go`, `tier_models.go`,
+  `internal/roadmap/summary_digest.go`, `summary_state.go`, `roadmap.go`,
+  `internal/config/capability.go`, `capability_models.go`,
+  `internal/evidence/plan_inputs.go`, `cmd/centinela/hook_context.go`,
+  `hook_context_roadmap.go`, `.gitignore`, `centinela.toml`
+- Supporting surfaces read to test the dangerous directions:
+  `internal/ui/render_roadmap.go`, `internal/orchestration/model_routing.go`,
+  `output_rules.go`, `output_helpers.go`, `internal/gates/spec_traceability.go`,
+  `spec_traceability_match.go`
+- Output of every command I ran myself (below)
+
+No role narrative or orchestrator summary was read. The
+`.workflow/token-diet-{planner,senior-engineer,qa-senior}.md` narratives were
+deliberately **not** opened. No contamination to flag.
+
+#### Refutation Attempts
+
+**Claim attacked:** "The plan-snapshot relaxation only loosens — it cannot let plan
+evidence pass that omits its own brief or plan."
+**How:** Built a throwaway git repo and drove the real `centinela evidence validate`
+against nine hand-crafted evidence fixtures: brief-only, plan-only, empty inputs,
+another feature's brief+plan only, `./`-prefixed, deep-prefixed, absolute,
+backslash-separated, near-miss (`docs/plans/<f>.md.bak`), and the legacy superset.
+**Result:** REFUTATION FAILED. Brief-only fails naming `docs/plans/token-diet.md`;
+plan-only fails naming `docs/features/token-diet.md`; the `.bak` near-miss fails;
+normalization variants pass; superset passes. The rule is genuinely include-not-equal
+and the omission direction is closed.
+
+**Claim attacked:** "A feature can now validate against a *different* feature's brief
+and plan." (the dangerous direction of a construction-derived set)
+**How:** Fixture whose `inputs` were exactly `docs/features/other-feature.md` and
+`docs/plans/other-feature.md`, validated as feature `token-diet`.
+**Result:** REFUTATION FAILED. Rejected, naming **both** required token-diet paths.
+The required set is keyed to the feature slug, so a foreign brief buys nothing.
+
+**Claim attacked:** "This feature's own plan evidence — written under the old
+120-brief rule — silently stops validating after slice A lands." (R1, the
+self-referential validator)
+**How:** Read `.workflow/token-diet-planner.json` via `evidence read --field inputs`
+(122 entries: 120 briefs + own brief + own plan), then ran the branch-built binary's
+`evidence validate token-diet`.
+**Result:** REFUTATION FAILED. Exit 0. The pinned `planner-v1` legacy-superset
+dogfood case still validates under the new rule.
+
+**Claim attacked:** "`centinela evidence init` and the validator have drifted, so a
+pre-filled stub does not validate by construction." (AC5)
+**How:** Ran `evidence init token-diet planner` in the throwaway; inspected the
+pre-fill; completed the unrelated required fields and re-validated.
+**Result:** REFUTATION FAILED. Pre-fill is exactly the two required paths and
+satisfies the snapshot rule; both sides share `RequiredPlanInputs`.
+
+**Claim attacked:** "The first-colon cut makes different UX tags collide, or makes
+previously-passing evidence start failing." (the dangerous direction of AC9/AC10)
+**How:** Copied the real `evidence_ux.go` verbatim into a standalone Go module and ran
+my own adversarial table: 14 normalization cases; a *strictly-loosening property test*
+comparing the old normalizer against the new one over a fuzz set; a collision test
+cross-producting all 8 required tags with 4 suffix shapes; and validator-level sets
+(all-descriptive, all-bare regression, one-absent, degenerate-only,
+same-tag-repeated-three-times, non-UX role).
+**Result:** REFUTATION FAILED (4/4 probe tests pass). No required tag contains a colon,
+so any colon-bearing string could never have matched before — the change is provably
+additive. `error-state:` and `empty-state:` stay distinct. Three `error-state: …`
+entries do **not** cover three requirements. Degenerate `":"`, `": text"`, `""`,
+`"   "`, `":x"` all normalize to `""`, match nothing, never panic, and the error still
+names all eight missing tags.
+
+**Claim attacked:** "The digest can suppress a roadmap line that actually changed."
+(the only direction that would make the hook lie)
+**How:** Read `ui.RenderRoadmapSummary` and compared its inputs against
+`SummaryDigest`'s projection.
+**Result:** REFUTATION FAILED. The rendered line is a pure function of `r.Summary()`'s
+three counts, and those counts are hashed verbatim into the digest alongside
+phase/feature/status detail. The digest is a strict superset of what is rendered, so no
+visible change can escape it. Over-render is possible; under-render is not.
+(See Finding 4 for the over-render cost.)
+
+**Claim attacked:** "Digest dedup breaks the hook's fail-open contract — it blocks,
+errors, suppresses more than the roadmap line, or dirties the tree." (AC13–AC18)
+**How:** End-to-end against the branch-built binary in throwaway git repos, 20+ hook
+fires: first call / same-session repeat ×2 / different session / return to the first
+session; corrupt state; truncated state; `chmod 000` state; empty, non-JSON,
+`session_id`-absent, `null` and `""` stdin; `chmod 500 .workflow`; a real status
+mutation via a workflow ledger and the re-suppression after it; missing roadmap;
+corrupt roadmap; a copied second worktree; and 8 concurrent hook processes.
+**Result:** REFUTATION FAILED on every one. Exit 0 in all cases. Render → suppress →
+suppress → render(new session) → render behaves exactly as specified. Every failure
+path renders (never quieter than correct). An unwritable `.workflow/` renders on
+*every* call and surfaces nothing. `diff` of a render vs a suppressed run shows
+**exactly one** differing line — the ROADMAP line; the directive and CLI panels are
+byte-identical. `git status --porcelain` is empty after hook fires. The second worktree
+keeps independent state. 8 concurrent fires left one valid JSON state file and zero
+stray temp files. Missing/corrupt roadmap prints no line and writes no state.
+
+**Claim attacked:** "The digest state file, or its atomic-write temp file, lands in git."
+**How:** `git status --porcelain` after fires, plus `git check-ignore -v` on both the
+state path and a synthetic temp name.
+**Result:** REFUTATION FAILED. `.gitignore:55` covers `.workflow/.roadmap-digest` and
+`:56` covers `.workflow/.roadmap-digest-*`, matching
+`os.CreateTemp(dir, ".roadmap-digest-*")`. Both sit inside the `.workflow/` allow-list
+block without disturbing its negations.
+
+**Claim attacked:** "A dated model pin survives somewhere and will silently rot."
+(AC19/AC20, and the dangerous direction across every emitter)
+**How:** Repo-wide sweep for `-YYYYMMDD` across `*.go`/`*.md`/`*.toml`/`*.feature`;
+extraction of every `tierModels` value; inspection of `internal/setup`,
+`internal/scaffold`, `cmd/`, `centinela.toml`; and a regex scan of the live output of
+`centinela hook context` and `centinela hook orchestration`.
+**Result:** REFUTATION FAILED. Zero built-in defaults match `-\d{8}$`; the claude column
+(`opus`/`sonnet`/`haiku`) contains no digits at all; no hook or directive output
+contains a dated id. Every surviving `claude-haiku-4-5-20251001` occurrence is a
+*deliberately retained* legacy-pin reference (capability map, its tests, specs) or a
+frozen historical record — not a live default. `centinela.toml`'s quota comment and the
+new commented `[orchestration.model_map]` example use aliases.
+
+**Claim attacked:** "`[orchestration.model_map]` no longer overrides the built-in alias
+— the operator's no-release escape hatch is broken." (AC21/E27)
+**How:** This produced my one false positive and I re-ran it five ways. Initially the
+override appeared ignored, because I was grepping only the `model reference:` line. I
+re-tested in fresh repos reading full output: (a) minimal toml with
+`[orchestration.model_map.reasoning] claude = "my-custom-frontier-model"`, (b) the same
+override appended to the *real* full `centinela.toml`, (c) an opencode remap mirroring
+the repo's own test, (d) a role-level override, and (e) an invalid tier key to prove the
+config was actually being parsed.
+**Result:** REFUTATION FAILED. The delegate annotation correctly prints
+`model: my-custom-frontier-model (claude)` under both the minimal and the full config,
+`moonshotai/kimi-k2 (opencode)` for the opencode remap, and `role-level-custom (claude)`
+for the role override. `ResolveModel`'s precedence 1→2→3→4 is untouched by this branch
+(`resolve.go`'s diff is a pure −9-line table move). The `model reference:` line showing
+built-ins is documented, intentional, pre-existing behaviour — not a regression. The
+invalid-tier probe confirmed the config is genuinely read and validated.
+
+**Claim attacked:** "The capability map lost a key, so an operator's retired
+`driver_model` pin silently loses its default enforcement profile." (R3/AC22/E25 — the
+silent one)
+**How:** Extracted every `tierModels` value and every `builtinModelCapability` key,
+computed the set difference, and diffed the current key set against
+`origin/main:internal/config/capability.go`'s key set.
+**Result:** REFUTATION FAILED. Zero `tierModels` values are unclassified. Zero keys
+present on main are missing now. The map grew by exactly four (`opus`, `sonnet`,
+`haiku`, `claude-haiku-4-5`) to a 10-key strict superset that still carries
+`claude-opus-4-7`, `claude-sonnet-4-6` and `claude-haiku-4-5-20251001`.
+
+**Claim attacked:** "The codex rule-4 fallback leaks another runner's concrete id."
+(AC23/E26)
+**How:** Live `centinela hook orchestration` output inspection.
+**Result:** REFUTATION FAILED. Codex renders the **tier name** (`reasoning`), never
+`opus` or the opencode id.
+
+**Claim attacked:** "The three architecture docs still state the old rule, or drifted
+from their scaffold mirrors." (AC8/R7)
+**How:** `diff` of each doc against its `internal/scaffold/assets/` twin; read of the
+rule paragraph in all three; repo-wide grep for surviving `docs/features/*.md` glob
+wording under `docs/architecture/`.
+**Result:** REFUTATION FAILED. All three byte-identical to their mirrors; all three
+state the include-not-only rule; zero surviving glob wording.
+
+**Claim attacked:** "The 35 spec scenarios do not all have honest executing coverage."
+**How:** Extracted all `Scenario`/`Scenario Outline` names from `specs/token-diet.feature`
+and all `// Scenario:` markers under the `// Acceptance: specs/token-diet.feature`
+header, normalized and set-diffed both ways; then read six marked tests to confirm the
+body exercises the scenario text; then replicated the gate's matcher across every
+`.feature` file this branch changed.
+**Result:** PARTIALLY REFUTED. For token-diet itself REFUTATION FAILED: exact 35/35 1:1
+match, no orphan markers, no uncovered scenarios, and the spot-checks are honest (e.g.
+"required set does not grow with the number of briefs" really writes 120 briefs and
+asserts the set is 2 and contains no `brief-`; "reformatting alone does not force a
+re-render" really primes state, rewrites the roadmap reformatted, and asserts the line
+is **absent**; "a changed roadmap is rendered again" primes a stale digest and asserts
+both the line and the state update). **However**, the cross-spec replication found a
+genuine gap this branch introduced — see Finding 1.
+
+**Claim attacked:** "`centinela validate` or the suite is actually red and was narrated
+green."
+**How:** Ran both myself, once each, and read the raw logs.
+**Result:** REFUTATION FAILED. `centinela validate` exit 0, "All gates passed", with
+three ⚠ warnings (import_graph, spec-traceability, roadmap_drift). `go test ./...`
+exit 0, 45 packages ok, zero `FAIL` lines.
+
+#### Commands Run
+
+| Command | Exit | Wall |
+|---|---|---|
+| `centinela validate` (once, backgrounded + polled) | 0 | ~634 s |
+| `go test ./...` | 0 | 331 s |
+| `go build -o /tmp/centinela-verify-td ./cmd/centinela` | 0 | 0.4 s |
+| `git rev-parse HEAD` | 0 | 0.05 s |
+
+Recorded in the machine-readable block below. Additionally executed, but described in
+prose rather than fabricated as single-command argv rows: nine hand-crafted
+plan-evidence fixtures driven through `centinela evidence validate` in a throwaway
+repo; ~20 `centinela hook context` fires across corrupt / unreadable / unwritable /
+concurrent / second-worktree states; five `centinela hook orchestration` config
+permutations; a standalone Go probe module running four adversarial tests over the real
+`normalizeUXTag`/`missingUXTags` source; `git check-ignore -v`; repo-wide `grep` sweeps
+for dated ids, glob wording and coverage markers; `diff` of the three docs against their
+scaffold mirrors; and a replication of the spec-traceability matcher over every changed
+`.feature` file.
+
+Note: a stale `go test ./... -coverprofile=coverage.out` process (PID 30806) from an
+earlier step, 4h40m old, was found in the worktree and killed. Its child carried
+`-test.timeout=10m` yet had not fired, which is consistent with machine sleep rather
+than a live hang; both of my clean full runs above passed, so I could not reproduce a
+hang and do not treat it as a defect in this feature.
+
+#### Findings
+
+**Affected spec:** `specs/model-capability-profiles.feature`
+**Affected scenario:** `Scenario Outline: The capability map retains every retired pinned model id`
+**Risk:** LOW — traceability regression introduced by this branch; ships silently.
+The branch **adds** that scenario but adds no `// Scenario:` marker for it anywhere
+under `tests/acceptance/`. Replicating the gate's matcher shows it is the one uncovered
+scenario in that spec (24/25 covered), and it is why `centinela validate` reports
+`⚠ spec-traceability-gate`. The *behaviour* is genuinely tested — by
+`tests/acceptance/token_diet_capability_test.go` and
+`internal/config/capability_models_test.go` — but those sit under the token-diet spec
+header, so the scenario itself is untraceable. The gate is `severity = warn`, so nothing
+blocks and the gap merges unnoticed.
+**Suggestion:** Add `// Scenario: The capability map retains every retired pinned model id`
+above the retired-pin test in a file carrying
+`// Acceptance: specs/model-capability-profiles.feature`, or move that assertion into
+such a file. One comment line closes it.
+
+**Affected spec:** `.workflow/roadmap.json` / `ROADMAP.md`
+**Affected scenario:** n/a — repo state, `roadmap_drift` gate
+**Risk:** LOW–MEDIUM — ships stale and warns for everyone afterwards.
+The branch appends two Backlog entries to `.workflow/roadmap.json`
+(`hook-context-panel-diet`, `code-step-cannot-repair-stale-tier-tests`) without
+regenerating `ROADMAP.md`. `centinela validate` reports
+`⚠ roadmap_drift  ROADMAP.md drifted at line 254`. The two deferred findings this
+feature itself produced are therefore invisible in the human-facing roadmap.
+**Suggestion:** Run `centinela roadmap generate` and commit `ROADMAP.md` before merge —
+**after** the deferrals below, so one regeneration clears all of them.
+
+**Affected spec:** `specs/token-diet.feature:72`, brief edge case E4
+**Affected scenario:** `Scenario: Evidence with an empty inputs list is rejected naming both paths`
+**Risk:** LOW — documentation/observability inaccuracy; fail-closed, no safety impact.
+The scenario and E4 assert that empty `inputs` fails "naming both required paths". At
+the function level `validatePlanSnapshotInputs` does exactly that, but through the real
+`centinela evidence validate` an empty `inputs` list trips the earlier generic
+`incomplete evidence fields:` check and short-circuits — the operator never sees
+`missing feature-doc snapshot inputs` nor either path name. I confirmed this end-to-end.
+Evidence is still correctly **rejected**, so the gate is not weakened; the stated
+message is simply unreachable from the CLI.
+**Suggestion:** Either scope the scenario's wording to the validator function, or let
+the snapshot check contribute its message alongside the completeness check so the
+operator gets the actionable path names.
+
+**Affected spec:** `internal/roadmap/summary_digest.go`
+**Affected scenario:** `Scenario: An unchanged roadmap is not re-rendered in the same session` (adjacent)
+**Risk:** INFO — fail-open; erodes the feature's own saving, never correctness.
+`SummaryDigest` iterates **all** phases, while the rendered line derives from
+`r.Summary()`, which excludes non-schedulable Backlog/Baseline phases. Any deferred
+finding therefore changes the digest and forces a re-render of a byte-identical line.
+The direction is safe (over-render, never under-render), but the workflow that touches
+the roadmap most often — a verifier filing deferrals, exactly what this report does — is
+the one that defeats the dedup.
+**Suggestion:** Skip `isNonSchedulablePhase(phase.Name)` in the digest projection to
+match `Summary()`. Optional; a deliberate "any roadmap change re-renders" policy is also
+defensible if documented.
+
+**Affected spec:** `specs/configurable-model-routing.feature`, `specs/configurable-subagent-models.feature`
+**Affected scenario:** all 16 + 12 scenarios respectively
+**Risk:** LOW — pre-existing, newly surfaced; not caused by this branch.
+Their acceptance files carry an `// Acceptance:` header but **zero** `// Scenario:`
+markers, so all 28 scenarios are uncovered by the gate's matcher. This predates the
+branch, but because the branch edits both spec files they are pulled into the
+diff-aware gate's scope, which is the bulk of the `⚠ spec-traceability-gate` warning.
+**Suggestion:** Backfill `// Scenario:` markers in those four acceptance files.
+Deferred rather than fixed here — unrelated to this feature's diet.
+
+#### Deferred Findings
+
+Executed via `centinela roadmap defer … --source token-diet/gatekeeper`:
+
+- `model-capability-spec-scenario-uncovered`
+- `legacy-model-specs-have-no-scenario-markers`
+- `plan-empty-inputs-message-masked`
+- `summary-digest-hashes-nonschedulable-phases`
+
+#### Recommendation
+
+**WARNING — safe to merge once `centinela roadmap generate` is run.**
+
+I attacked all four slices from both directions and could not break any of them. The
+plan-snapshot relaxation is genuinely include-not-equal: omission of either own-brief or
+own-plan is rejected by name, a foreign feature's brief buys nothing, and this feature's
+own 122-input legacy evidence — the R1 self-referential case — still validates. The UX
+colon cut is *provably* additive (no required tag contains a colon), tags do not collide,
+and degenerate entries match nothing without panicking. The hook dedup fails open on
+every uncertainty I could manufacture — corrupt, truncated, unreadable and unwritable
+state, five malformed stdin shapes, concurrency, a second worktree — always exit 0,
+always rendering rather than going quiet, and suppression removes exactly one line and
+nothing else. The model aliases carry no dated pin on any live surface, the capability
+map is a verified strict superset that lost nothing from main, and the `model_map`
+escape hatch demonstrably still wins.
+
+Nothing found is a correctness or safety defect. The two items that keep this from SAFE
+are hygiene regressions the branch introduces which ship silently because both gates are
+warn-level: a spec scenario added without a traceability marker, and a roadmap whose
+human-facing `ROADMAP.md` was never regenerated. Both are one-line fixes. I recommend
+clearing the roadmap drift before merge (it will also absorb the four deferrals above)
+and adding the single missing `// Scenario:` marker.
+
+```json centinela:verification
+{
+  "revision": "40df4b59a8100ccf53e59f83a9851dedf4e5cfe8",
+  "treeDigest": "sha256:96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+  "commands": [
+    {"argv": ["centinela", "validate"], "exitCode": 0, "durationMs": 634000},
+    {"argv": ["go", "test", "./..."], "exitCode": 0, "durationMs": 331000},
+    {"argv": ["go", "build", "-o", "/tmp/centinela-verify-td", "./cmd/centinela"], "exitCode": 0, "durationMs": 379},
+    {"argv": ["git", "rev-parse", "HEAD"], "exitCode": 0, "durationMs": 49}
+  ]
+}
+```

@@ -39,6 +39,18 @@ func TestPlanInputsDelegatesForPlanRoles(t *testing.T) {
 	}
 }
 
+// The pre-fill is exactly the two construction-derived paths, so an init'd
+// evidence file satisfies the snapshot rule by construction and does not grow
+// with the number of sibling briefs on disk.
+func TestPlanInputsPrefillsExactlyTwoOwnPaths(t *testing.T) {
+	chdirPlanTemp(t)
+	got := PlanInputs("demo", orchestration.RolePlanner)
+	want := []string{"docs/features/demo.md", "docs/plans/demo.md"}
+	if len(got) != 2 || got[0] != want[0] || got[1] != want[1] {
+		t.Fatalf("prefill = %v, want %v", got, want)
+	}
+}
+
 func TestPlanInputsNilForNonPlanRoles(t *testing.T) {
 	chdirPlanTemp(t)
 	planRoles := map[Role]bool{

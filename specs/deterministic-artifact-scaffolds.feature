@@ -12,8 +12,11 @@ Feature: Deterministic artifact scaffolds
   Scenario: Init pre-fills plan-snapshot inputs for big-thinker
     When I run "centinela evidence init demo big-thinker"
     Then ".workflow/demo-big-thinker.json" inputs equal RequiredPlanInputs("demo")
-    And inputs contain every "docs/features/*.md" path
+    And inputs contain "docs/features/demo.md"
     And inputs contain "docs/plans/demo.md"
+    And inputs contain no other feature's brief
+      # token-diet: the pre-fill is the feature's OWN brief + plan, never a
+      # repo-wide docs/features/*.md glob
 
   Scenario: Init pre-fill lets big-thinker pass plan-snapshot validation with zero appends
     Given I run "centinela evidence init demo big-thinker"
@@ -76,11 +79,14 @@ Feature: Deterministic artifact scaffolds
     When I run "centinela evidence init demo big-thinker --force"
     Then the inputs list is identical, sorted, and de-duplicated
 
-  Scenario: Init pre-fill includes a feature brief created after the first init
+  Scenario: A brief created after the first init does not change the pre-fill
     Given I run "centinela evidence init demo big-thinker"
     And a new "docs/features/zzz-late.md" brief is added afterward
     When I run "centinela evidence init demo big-thinker --force"
-    Then inputs contain "docs/features/zzz-late.md"
+    Then inputs do not contain "docs/features/zzz-late.md"
+    And inputs are unchanged from the first init
+      # token-diet: the set is construction-derived, so it is invariant to what
+      # else lands in docs/features/ — the assertion that fails if the glob returns
 
   # --- Slice 2: FILL marker + companion skeletons ---
 

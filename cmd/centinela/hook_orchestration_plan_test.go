@@ -62,7 +62,7 @@ func TestHookDirective_UnpinnedPlanNamesLegacyPair(t *testing.T) {
 // the way from TOML to the directive's model reference.
 func TestHookDirective_LegacyModelKeyAliasesToPlanner(t *testing.T) {
 	out := setupRoutingRepo(t, "plan", "[orchestration.models]\nbig-thinker = \"fast\"\n")
-	if !strings.Contains(out, "planner (model: claude-haiku-4-5-20251001 (claude)") {
+	if !strings.Contains(out, "planner (model: haiku (claude)") {
 		t.Fatalf("legacy big-thinker key must alias onto planner: %s", out)
 	}
 }

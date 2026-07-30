@@ -52,7 +52,7 @@ func TestOrchestrationHook_NormalizedTierAccepted(t *testing.T) {
 	}
 	// ' fast ' normalizes to the fast tier → claude-haiku, and big-thinker takes
 	// alias precedence over feature-specialist for the planner role.
-	if !strings.Contains(out, "planner (model: claude-haiku-4-5-20251001 (claude)") {
+	if !strings.Contains(out, "planner (model: haiku (claude)") {
 		t.Errorf("expected ' fast ' normalized to fast on the aliased planner; got:\n%s", out)
 	}
 }

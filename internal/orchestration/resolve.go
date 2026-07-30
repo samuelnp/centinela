@@ -22,15 +22,6 @@ const (
 // all-runners reference line.
 var referenceRunners = []Runner{RunnerClaude, RunnerOpenCode, RunnerCodex}
 
-// tierModels maps each tier to its per-runner built-in model IDs. A model
-// refresh edits only this table. The codex column is intentionally empty until
-// codex-support lands; a missing codex entry falls through to precedence rule 4.
-var tierModels = map[Tier]map[Runner]string{
-	TierReasoning: {RunnerClaude: "claude-opus-4-7", RunnerOpenCode: "anthropic/claude-opus-4-7"},
-	TierBalanced:  {RunnerClaude: "claude-sonnet-4-6", RunnerOpenCode: "anthropic/claude-sonnet-4-6"},
-	TierFast:      {RunnerClaude: "claude-haiku-4-5-20251001", RunnerOpenCode: "anthropic/claude-haiku-4-5"},
-}
-
 // ModelReference renders ONE compact line listing each tier in play with every
 // runner's built-in ID. Tiers are deduped and emitted in stable order so the
 // orchestrator can pick the ID for its runner. A runner with no built-in entry

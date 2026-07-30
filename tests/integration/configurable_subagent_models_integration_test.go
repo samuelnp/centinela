@@ -42,10 +42,10 @@ func TestAnnotateRoles_WithConfigOverride(t *testing.T) {
 	models, modelMap := routingFromConfig(cfg)
 	roles := []orchestration.Role{orchestration.RoleBigThinker, orchestration.RoleFeatureSpecial}
 	names, tiers := annotateRolesHelper(roles, models, modelMap)
-	if !strings.Contains(names[0], "big-thinker (model: claude-haiku-4-5-20251001 (claude)") {
+	if !strings.Contains(names[0], "big-thinker (model: haiku (claude)") {
 		t.Errorf("expected big-thinker annotated with fast→haiku, got %q", names[0])
 	}
-	if !strings.Contains(names[1], "feature-specialist (model: claude-sonnet-4-6 (claude)") {
+	if !strings.Contains(names[1], "feature-specialist (model: sonnet (claude)") {
 		t.Errorf("expected feature-specialist annotated with balanced default, got %q", names[1])
 	}
 	if ref := orchestration.ModelReference(tiers); !strings.Contains(ref, "fast:") {
@@ -75,7 +75,7 @@ func TestAnnotateRoles_NoConfig_AllDefaults(t *testing.T) {
 func TestAnnotateRoles_ModelReferenceLineContainsBothRunners(t *testing.T) {
 	tiers := []orchestration.Tier{orchestration.TierReasoning}
 	ref := orchestration.ModelReference(tiers)
-	if !strings.Contains(ref, "claude-opus-4-7") {
+	if !strings.Contains(ref, "opus") {
 		t.Errorf("reference missing claude ID: %s", ref)
 	}
 	if !strings.Contains(ref, "anthropic/claude-opus-4-7") {

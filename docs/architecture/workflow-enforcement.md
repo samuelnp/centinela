@@ -147,8 +147,10 @@ Before advancing, Centinela validates required artifacts:
 
 In strict orchestration mode, `plan` evidence from `planner` (or, for a workflow
 started before the `planner-v1` contract, from `big-thinker` and
-`feature-specialist`) must include a full snapshot of `docs/features/*.md` paths in
-its JSON `inputs` list (including the current feature brief).
+`feature-specialist`) MUST include the feature's own brief
+`docs/features/<feature>.md` and its plan `docs/plans/<feature>.md` in its JSON
+`inputs` list. Additional inputs are allowed — the rule is *include*, not
+*only* — so evidence written before this rule shrank still validates.
 
 Strict orchestration evidence must also be actionable. Required specialist JSON
 `outputs` must point to real repo files on disk rather than summary strings.

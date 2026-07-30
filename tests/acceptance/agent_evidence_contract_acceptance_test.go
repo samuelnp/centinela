@@ -50,7 +50,11 @@ func TestEvidenceContract_DocumentsSchemaAndAllRoles(t *testing.T) {
 func TestEvidenceContract_PerRoleRulesPresent(t *testing.T) {
 	body := readContract(t)
 	rules := []string{
-		"`docs/features/*.md`",
+		// token-diet: the plan snapshot is the feature's OWN brief + plan, and
+		// the rule is include-not-only so legacy superset evidence still passes.
+		"`docs/features/<feature>.md`",
+		"`docs/plans/<feature>.md`",
+		"*include*, not *only*",
 		"real implementation file",
 		"at least one path under `tests/`",
 		"mobileFirst",
@@ -91,8 +95,14 @@ func TestPlanStepPromptsRequireSnapshotInputs(t *testing.T) {
 			t.Fatalf("read %s prompt: %v", role, err)
 		}
 		s := string(b)
-		if !strings.Contains(s, "`docs/features/*.md`") || !strings.Contains(s, "snapshot") {
+		if !strings.Contains(s, "`docs/features/<feature>.md`") ||
+			!strings.Contains(s, "`docs/plans/<feature>.md`") ||
+			!strings.Contains(s, "snapshot") {
 			t.Fatalf("%s prompt missing feature-doc snapshot rule", role)
+		}
+		// The O(N) repo-wide glob must never come back (token-diet AC1).
+		if strings.Contains(s, "**every** `docs/features/*.md`") {
+			t.Fatalf("%s prompt still demands a repo-wide docs/features glob", role)
 		}
 	}
 }

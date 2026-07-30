@@ -56,9 +56,9 @@ func TestModelReference_ListsAllTiersInPlay(t *testing.T) {
 		orchestration.TierReasoning, orchestration.TierBalanced, orchestration.TierFast,
 	})
 	for _, want := range []string{
-		"claude-opus-4-7", "anthropic/claude-opus-4-7",
-		"claude-sonnet-4-6", "anthropic/claude-sonnet-4-6",
-		"claude-haiku-4-5-20251001", "anthropic/claude-haiku-4-5",
+		"opus", "anthropic/claude-opus-4-7",
+		"sonnet", "anthropic/claude-sonnet-4-6",
+		"haiku", "anthropic/claude-haiku-4-5",
 	} {
 		if !strings.Contains(ref, want) {
 			t.Errorf("ModelReference missing %q; got: %s", want, ref)

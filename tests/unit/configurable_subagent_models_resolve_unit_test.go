@@ -9,8 +9,8 @@ import (
 func TestResolveModel_ConfigOverrideBeatsDefault(t *testing.T) {
 	models := orchestration.RoleModels{"big-thinker": {Tier: "fast"}}
 	got, ok := orchestration.ResolveModel(orchestration.RoleBigThinker, models, nil, orchestration.RunnerClaude)
-	if !ok || got != "claude-haiku-4-5-20251001" {
-		t.Errorf("expected claude-haiku-4-5-20251001, got (%q, %v)", got, ok)
+	if !ok || got != "haiku" {
+		t.Errorf("expected haiku, got (%q, %v)", got, ok)
 	}
 }
 
@@ -20,11 +20,11 @@ func TestResolveModel_ExactIDsPerRunner(t *testing.T) {
 		runner orchestration.Runner
 		want   string
 	}{
-		{orchestration.RoleBigThinker, orchestration.RunnerClaude, "claude-opus-4-7"},
+		{orchestration.RoleBigThinker, orchestration.RunnerClaude, "opus"},
 		{orchestration.RoleBigThinker, orchestration.RunnerOpenCode, "anthropic/claude-opus-4-7"},
-		{orchestration.RoleQASeniorEngineer, orchestration.RunnerClaude, "claude-sonnet-4-6"},
+		{orchestration.RoleQASeniorEngineer, orchestration.RunnerClaude, "sonnet"},
 		{orchestration.RoleQASeniorEngineer, orchestration.RunnerOpenCode, "anthropic/claude-sonnet-4-6"},
-		{orchestration.RoleDocsSpecialist, orchestration.RunnerClaude, "claude-haiku-4-5-20251001"},
+		{orchestration.RoleDocsSpecialist, orchestration.RunnerClaude, "haiku"},
 		{orchestration.RoleDocsSpecialist, orchestration.RunnerOpenCode, "anthropic/claude-haiku-4-5"},
 	}
 	for _, tc := range cases {
@@ -60,7 +60,7 @@ func TestResolveModel_MissingMappingNoPanic(t *testing.T) {
 func TestResolveModel_NilModelsMapNoPanic(t *testing.T) {
 	// Passing nil for models must not panic — falls back to default tier.
 	got, ok := orchestration.ResolveModel(orchestration.RoleBigThinker, nil, nil, orchestration.RunnerClaude)
-	if !ok || got != "claude-opus-4-7" {
-		t.Errorf("nil models map: expected (claude-opus-4-7, true), got (%q, %v)", got, ok)
+	if !ok || got != "opus" {
+		t.Errorf("nil models map: expected (opus, true), got (%q, %v)", got, ok)
 	}
 }
