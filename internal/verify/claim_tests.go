@@ -11,6 +11,10 @@ import (
 
 const claimTestsPass = "tests-pass"
 
+// priorRunLabel names the reused single-run outcome. It is a LABEL, not a
+// command string — nothing may classify it as if it were one.
+const priorRunLabel = "validate.commands"
+
 // checkTestsPass re-runs the configured validate commands and confirms they
 // exit 0 AND — for acceptance-classified commands — that their report shows
 // scenarios actually ran. Missing/misconfigured commands surface as
@@ -31,8 +35,11 @@ func checkTestsPass(cfg *config.Config, deps Deps, role string, timeout time.Dur
 		// string, so per-command classification cannot apply to it. Classify over
 		// the configured set as a whole — getting this wrong silently disarms the
 		// rule on the exact path `complete` uses.
-		anyAcceptance := acceptance.AnyExecutionCommand(cfg.Validate.Commands)
-		return classifyTestRun(c, "validate.commands", *deps.PriorTestRun, anyAcceptance, policy).check
+		scope := acceptance.ScopeNone
+		if acceptance.AnyExecutionCommand(cfg.Validate.Commands) {
+			scope = reusedScope(cfg.Validate.Commands)
+		}
+		return classifyTestRun(c, priorRunLabel, *deps.PriorTestRun, scope, policy).check
 	}
 	return runEachCommand(c, cfg, deps, policy, timeout)
 }
@@ -44,7 +51,7 @@ func runEachCommand(c Check, cfg *config.Config, deps Deps, policy string, timeo
 	var notes []string
 	for _, cmd := range cfg.Validate.Commands {
 		out := deps.Runner.Run(deps.Root, cmd, timeout)
-		v := classifyTestRun(c, cmd, out, acceptance.IsExecutionCommand(cmd), policy)
+		v := classifyTestRun(c, cmd, out, acceptance.ScopeOf(cmd), policy)
 		if v.check.Status != StatusPass {
 			return v.check
 		}
@@ -65,7 +72,7 @@ func runEachCommand(c Check, cfg *config.Config, deps Deps, policy string, timeo
 // judged on its REPORT, so `centinela verify` cannot certify a tests-pass claim
 // the validate path would now reject. policy is passed in explicitly: the
 // classifier never reads config itself.
-func classifyTestRun(c Check, cmd string, out RunOutcome, isAcceptance bool, policy string) runVerdict {
+func classifyTestRun(c Check, cmd string, out RunOutcome, scope acceptance.Scope, policy string) runVerdict {
 	switch {
 	case out.TimedOut:
 		c.Status = StatusTimeout
@@ -77,7 +84,7 @@ func classifyTestRun(c Check, cmd string, out RunOutcome, isAcceptance bool, pol
 		c.Status = StatusFail
 		c.Detail = fmt.Sprintf("command %q exited %d", cmd, out.ExitCode)
 	default:
-		return classifyAcceptanceRun(c, cmd, out.Output, isAcceptance, policy)
+		return classifyAcceptanceRun(c, cmd, out, scope, policy)
 	}
 	return runVerdict{check: c}
 }

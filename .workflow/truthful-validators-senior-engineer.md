@@ -67,6 +67,108 @@ out-of-range integer; every structural fault is caught before it.
   (new, 39).
 - `centinela.toml` + `internal/scaffold/assets/centinela.toml` + `PROJECT.md` G2.
 
+### Post-verifier remediation — three findings fixed in-branch
+
+The adversarial verifier returned WARNING with three findings that were
+violations of this feature's OWN acceptance criteria. All three are fixed here,
+not deferred; the verifier's three deferral records were removed from the
+Backlog and `ROADMAP.md` regenerated.
+
+**F1 (HIGH, over-block, AC5).** `go test -v ./...` is acceptance-*classified*,
+so `parseGoVerbose` counted **every** `--- SKIP:` in the repo — a unit tier's
+`t.Skip("requires docker")`, a `-short` skip or a build-constraint skip failed
+validate. Worse, the feature's own R4 note ("add `-json` or `-v` to make skips
+detectable") steered operators straight into it. Fix: a new
+`internal/acceptance/scope.go` separates two questions that had been conflated —
+"does this command RUN acceptance tests" (unchanged; what the tests-step gate
+asks) from "is every result it reports acceptance work". `ScopeMixed` (a
+whole-repo command) counts Go results **only when attributable to a package
+under `tests/acceptance`**; `go test -json` attributes via the `Package` field
+the event carries, and `go test -v` via the contiguous, terminator-delimited
+per-package blocks Go emits. `IsExecutionCommand` is now *defined as*
+`ScopeOf(cmd) != ScopeNone`, so classification and attribution cannot drift and
+the predicate accepts exactly the same commands as before. A Gherkin summary is
+counted in every scope: scenarios are acceptance work by definition, unlike a
+bare Go `--- SKIP:`. The "executed no scenarios" rule now fires only for a
+genuinely acceptance-scoped command — under `ScopeMixed`, zero attributed
+scenarios means the tier was not identifiable, not that nothing ran.
+
+**F2 (HIGH, false-green).** `Detect` returned the FIRST matching parser, so a
+run printing a clean `3 scenarios (3 passed)` beside `--- SKIP: TestGoLevelHidden`
+rendered a silent ✓. Fix: every skip-data parser runs and the results are
+**unioned** (`summary.go: merge`); the skip-data-free non-verbose shape is now a
+strict fallback, reached only when no skip-data shape matched (so R4 is
+preserved). The verifier's exact mixed-output case is pinned at the unit, cmd
+and acceptance tiers.
+
+**F3 (MEDIUM, plan R8 inert).** `completedValidationOutcome()` synthesized a
+fixed prose `Output` that matched no parser, so the reuse path resolved to
+*undetermined* on 100% of production runs and printed "acceptance report could
+not be parsed" seconds after the gate said the opposite. Fix takes the
+coordinator's preferred option **and** its structural half: `validateRunRecord`
+captures the REAL per-command output, and `verify.RunOutcome` gains a typed
+`AcceptanceJudged *AcceptanceJudgement` carrying the analysis the validate gate
+already performed **with each command's own scope**. `inheritJudgement` reuses
+it rather than re-parsing a joined transcript that can no longer say which
+command a line came from. `Analysed` distinguishes "ran and found nothing" from
+"never ran", so the message can never claim an analysis that did not happen. The
+fallback path (a caller that sets `PriorTestRun` without a judgement) judges
+with `ScopeMixed`, the only reading of a joined transcript that cannot
+over-block another tier.
+
+### Verifier round 2 — five more fixed in-branch
+
+Round 1's F1/F2/F3 were confirmed closed and mutation-proven; the round-1 union
+fix opened one new hole, and four smaller honesty defects were found around it.
+
+**R2-F1 (HIGH, zero-scenario union false-green).** `Detect` combined shapes and
+`failable` read `Scenarios == 0` off the MERGED total, so a `0 scenarios` Gherkin
+summary stopped being failable the moment any passing Go test shared the output —
+which is the ordinary shape of godog driven from a Go wrapper. Fix:
+`Summary.GherkinZero` records the fact per shape and survives combination;
+`failable` fails on it directly. A wrapper's `--- PASS:` proves the wrapper ran,
+never that a scenario did.
+
+**R2-F2 (HIGH, Gherkin ignored tier scope + a false provenance claim).**
+`parseCucumber` scanned the whole output and ignored `Scope`, so a whole-repo
+command failed on a UNIT package's scenario summary while the acceptance tier was
+clean — and `Describe` appended ", attributed to tests/acceptance" to counts that
+never passed attribution. Fix: Gherkin summaries are now bound to the enclosing
+`go test` package block exactly like Go results (`parse_text.go` replaces the two
+independent whole-output scans with one block-attributing pass), so the tier-level
+"never" the four documents assert is finally true. The attribution clause is gated
+on `Summary.Attributed`, set only by a parser that actually filtered, so no
+message can assert an attribution that did not happen.
+
+**R2-F4 (LOW, inflated totals).** `merge` summed counts across shapes, reporting a
+3-scenario godog run as "of 4 scenarios" and one real skip three times when
+`-json` and `-v` markers co-occurred. Fix: `atLeast` combines by per-field maximum
+across SHAPES (which re-describe one run), while `add` still sums across package
+BLOCKS (which are genuinely different work).
+
+**R2-F5 (LOW, `off` claimed an analysis ran).** Under `acceptance_skip_policy =
+off` nothing is parsed, yet the record set `Analysed: true` — the one field whose
+job is distinguishing "ran and found nothing" from "never ran". Fix: the record
+carries `disabled`, and the reuse message reads "was not performed — skip
+detection disabled by [validate] acceptance_skip_policy = off".
+
+**R2-F6 (LOW, false test rationale).** The `-json` fixture's inline `printf`
+payload named `tests/acceptance`, which also put that literal in the COMMAND
+string and flipped the command's own scope, so the comment's claim about
+whole-repo attribution was false. Fix: the fixture uses `tvValidateWithScript`, so
+the payload cannot leak into the command string, and the comment now explains
+exactly why that matters.
+
+**R2-F3 is deferred, not fixed**, per instruction: an unindented go-test
+terminator inside a package's own stdout can steal a block's attribution —
+recorded as `acceptance-verbose-terminator-attribution-steal`. All four round-2
+deferral records were left in place.
+
+The reuse fallback also gained `reusedScope`: a joined transcript is `ScopeMixed`
+only when some configured acceptance command is whole-repo, so a bare Gherkin
+report from an all-acceptance-scoped set is still counted rather than silently
+discarded for lacking go package blocks.
+
 ## Architecture Compliance
 
 - **G1:** every source **and** test file ≤ 100 lines. Three files were split
@@ -146,6 +248,14 @@ binary built with the pre-change `nil`.
 states that it does not fail validate and that `pr_gate.fail_on_warning` (off by
 default) would surface it, so a single-locale project reading the warning knows
 exactly what it costs them.
+
+**Deferrals removed.** The verifier recorded
+`acceptance-skip-whole-repo-command-overblocks`,
+`acceptance-parser-precedence-hides-go-skips` and
+`prior-run-skip-analysis-structurally-undetermined`. All three are fixed in this
+branch, so the records were removed with `centinela roadmap remove` and
+`ROADMAP.md` regenerated — the roadmap must not carry false open items, and the
+`roadmap_drift` ⚠ this branch introduced is now gone.
 
 **Deferred (new, `--source truthful-validators/senior-engineer`):**
 `validate-command-verdicts-in-machine-output` — the new per-command verdict is

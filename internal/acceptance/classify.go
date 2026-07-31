@@ -7,38 +7,23 @@
 // edge, so they live in a leaf that cannot participate in a cycle.
 package acceptance
 
-import "strings"
-
-// IsExecutionCommand reports whether ONE command string is an acceptance
-// execution. The body is byte-identical to the loop body of internal/workflow's
-// hasAcceptanceExecutionCommand: this feature moves the predicate, it does not
-// broaden it. Broadening the classification is explicitly out of scope, because
-// the classifier gates the parse and the parse gates the verdict.
+// IsExecutionCommand reports whether ONE command string executes the acceptance
+// tier. It is defined in terms of ScopeOf so the two can never drift, and the
+// set of commands it accepts is byte-identical to the pre-move predicate in
+// internal/workflow — whose own tests still pass unchanged. Broadening the
+// classification remains out of scope.
+//
+// This answers "does the command RUN acceptance tests", which is the question
+// internal/workflow's tests-step gate asks. Whether every skip the command
+// reports is an ACCEPTANCE skip is a separate question — see Scope.
 func IsExecutionCommand(cmd string) bool {
-	c := strings.ToLower(strings.TrimSpace(cmd))
-	if c == "" {
-		return false
-	}
-	if strings.Contains(c, "tests/acceptance") {
-		return true
-	}
-	if strings.Contains(c, "go test") && strings.Contains(c, "./...") {
-		return true
-	}
-	if strings.Contains(c, "cucumber") || strings.Contains(c, "godog") || strings.Contains(c, "behave") {
-		return true
-	}
-	if strings.Contains(c, "acceptance") && strings.Contains(c, "test") {
-		return true
-	}
-	return false
+	return ScopeOf(cmd) != ScopeNone
 }
 
 // AnyExecutionCommand reports whether any command in the list is an acceptance
 // execution. This is the any-of question internal/workflow's artifact gate asks,
-// and the question the reused single-run outcome must be classified by: that
-// outcome is labelled "validate.commands", not a real command string, so
-// per-command classification cannot apply to it.
+// and the fallback classification for a reused outcome that carries no
+// per-command judgement of its own.
 func AnyExecutionCommand(commands []string) bool {
 	for _, cmd := range commands {
 		if IsExecutionCommand(cmd) {

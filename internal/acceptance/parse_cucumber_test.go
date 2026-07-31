@@ -21,7 +21,7 @@ func TestDetect_CucumberSummaries(t *testing.T) {
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			s, ok := Detect("Feature: x\n\n" + c.output + "8 steps (8 passed)\n")
+			s, ok := Detect("Feature: x\n\n"+c.output+"8 steps (8 passed)\n", ScopeAcceptance)
 			if !ok || s.Shape != ShapeCucumber || !s.SkipData {
 				t.Fatalf("expected a cucumber summary with skip data, got %+v ok=%v", s, ok)
 			}
@@ -39,7 +39,7 @@ func TestDetect_CucumberSummaries(t *testing.T) {
 // The aggregate summary is the LAST one: a per-feature run prints several.
 func TestDetect_CucumberUsesTheFinalSummary(t *testing.T) {
 	out := "2 scenarios (2 passed)\n\n5 scenarios (1 skipped, 4 passed)\n"
-	s, ok := Detect(out)
+	s, ok := Detect(out, ScopeAcceptance)
 	if !ok || s.Scenarios != 5 || s.Skipped != 1 {
 		t.Fatalf("expected the aggregate summary, got %+v ok=%v", s, ok)
 	}
@@ -56,7 +56,7 @@ func TestDetect_SummaryShapedTextInOutputIsNotASummary(t *testing.T) {
 	}
 	for name, out := range cases {
 		t.Run(name, func(t *testing.T) {
-			if s, ok := Detect(out); ok && s.Shape == ShapeCucumber {
+			if s, ok := Detect(out, ScopeAcceptance); ok && s.Shape == ShapeCucumber {
 				t.Fatalf("must not match a non-summary line, got %+v", s)
 			}
 		})
@@ -66,7 +66,7 @@ func TestDetect_SummaryShapedTextInOutputIsNotASummary(t *testing.T) {
 // E7: a truncated report is undetermined, never a skip verdict.
 func TestDetect_TruncatedReportIsUndetermined(t *testing.T) {
 	for _, out := range []string{"", "   \n", "Feature: checkout\n  Scenario: pay\n2 scenar"} {
-		if s, ok := Detect(out); ok {
+		if s, ok := Detect(out, ScopeAcceptance); ok {
 			t.Fatalf("truncated output must be undetermined, got %+v", s)
 		}
 	}

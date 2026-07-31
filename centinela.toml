@@ -26,10 +26,12 @@ commands = [
 #   fail (default) — a suite that asserted nothing is not a pass
 #   warn           — surface the counts without failing
 #   off            — exit-code-only, the pre-truthful-validators behavior
-# Only acceptance-classified commands are parsed at all, so a unit or
-# integration command that legitimately skips is never affected. Output that
-# matches no supported runner shape is reported as an undetermined WARNING,
-# never as a pass and never as a failure.
+# Only acceptance-classified commands are parsed at all, and within a combined
+# whole-repo command (e.g. `go test -v ./...`) only results attributable to
+# tests/acceptance are counted — a unit or integration tier that legitimately
+# skips (build tags, --short, platform gates) is never affected.
+# Output that matches no supported runner shape is reported as an undetermined
+# WARNING — never a silent pass, never an unproven failure.
 # acceptance_skip_policy = "fail"
 
 [gates]

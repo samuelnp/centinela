@@ -70,10 +70,12 @@ commands = [
 #   fail (default) — a suite that asserted nothing is not a pass
 #   warn           — surface the counts without failing the run
 #   off            — exit-code-only judging
-# Only acceptance-classified commands are parsed, so a unit or integration
-# command that legitimately skips (build tags, --short, platform gates) is
-# never affected. Output matching no supported runner shape is reported as an
-# undetermined WARNING — never a silent pass, never an unproven failure.
+# Only acceptance-classified commands are parsed at all, and within a combined
+# whole-repo command (e.g. `go test -v ./...`) only results attributable to
+# tests/acceptance are counted — a unit or integration tier that legitimately
+# skips (build tags, --short, platform gates) is never affected.
+# Output that matches no supported runner shape is reported as an undetermined
+# WARNING — never a silent pass, never an unproven failure.
 # Supported report shapes: `go test -json`, `go test -v`, and the
 # "N scenarios (…)" summary cucumber-js and godog both emit.
 # acceptance_skip_policy = "fail"

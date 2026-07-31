@@ -260,6 +260,19 @@
     "createdAt": "2026-06-12T12:32:40Z"
   },
   {
+    "id": "2c37a310bf3d6b5e",
+    "feature": "truthful-validators",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: truthful-validators",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/truthful-validators-gatekeeper.md",
+    "createdAt": "2026-07-31T08:18:58Z"
+  },
+  {
     "id": "2c5c631e117fa2e8",
     "feature": "codex-support",
     "step": "validate",

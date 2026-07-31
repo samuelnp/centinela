@@ -7,27 +7,31 @@ import (
 )
 
 // cucumberSummary matches the run-summary line cucumber-js and godog both
-// emit. It is ANCHORED at the start of a line and consumes the whole line, so
-// a summary-shaped string inside a test's own stdout or inside a failure
-// message ("... got 2 scenarios (1 skipped) from ...") can never match.
-var cucumberSummary = regexp.MustCompile(`(?m)^(\d+) scenarios?(?: \(([^()]*)\))?[ \t]*\r?$`)
+// emit. It is anchored to the WHOLE line, so a summary-shaped string inside a
+// test's own stdout or inside a failure message ("... got 2 scenarios (1
+// skipped) from ...") can never match.
+var cucumberSummary = regexp.MustCompile(`^(\d+) scenarios?(?: \(([^()]*)\))?[ \t]*\r?$`)
 
 // cucumberCount matches one "N label" entry inside the parenthesised breakdown.
 var cucumberCount = regexp.MustCompile(`^(\d+) ([a-z]+)$`)
 
-// parseCucumber reads the LAST summary line in the output: a run that prints
-// per-feature summaries ends with the aggregate one.
-func parseCucumber(output string) (Summary, bool) {
-	matches := cucumberSummary.FindAllStringSubmatch(output, -1)
-	if len(matches) == 0 {
+// cucumberSummaryOf parses ONE line as a Gherkin run summary.
+//
+// It is line-scoped rather than whole-output because a Gherkin summary needs
+// the same tier attribution a Go result does: under a whole-repo command the
+// summary belongs to the package block that printed it, and counting a unit
+// package's scenarios against the acceptance gate is exactly the over-block the
+// Scope split exists to prevent.
+func cucumberSummaryOf(line string) (Summary, bool) {
+	m := cucumberSummary.FindStringSubmatch(line)
+	if m == nil {
 		return Summary{}, false
 	}
-	m := matches[len(matches)-1]
 	total, err := strconv.Atoi(m[1])
 	if err != nil {
 		return Summary{}, false
 	}
-	s := Summary{Shape: ShapeCucumber, Scenarios: total, SkipData: true}
+	s := Summary{Shape: ShapeCucumber, Scenarios: total, SkipData: true, GherkinZero: total == 0}
 	applyCucumberCounts(&s, m[2])
 	return s, true
 }

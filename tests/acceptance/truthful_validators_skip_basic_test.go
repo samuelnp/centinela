@@ -66,11 +66,18 @@ func TestTV_Skip_ZeroScenariosFailsValidate(t *testing.T) {
 }
 
 // Scenario: A Go acceptance test that calls t.Skip fails validate
+//
+// The report body lives in a SCRIPT, not inline: an inline payload naming
+// `tests/acceptance` would also put that literal into the command string, which
+// is what the classifier reads — the command would scope to the acceptance tier
+// and no attribution would run at all. Via a script, the command really is
+// whole-repo (`# go test ./...`) and the skip really does have to be
+// attributable to the acceptance package for the rule to fire.
+// TestTV_Skip_WholeRepoUnitTierSkipStaysGreen pins the other direction.
 func TestTV_Skip_GoJSONTestLevelSkipFailsValidate(t *testing.T) {
-	jsonLines := `{"Action":"run","Package":"p","Test":"TestX"}\n` +
-		`{"Action":"skip","Package":"p","Test":"TestX"}\n`
-	out, code := tvValidateWithCmd(t,
-		`printf '`+jsonLines+`' # go test ./...`, "")
+	jsonLines := `{"Action":"run","Package":"gv/tests/acceptance","Test":"TestX"}\n` +
+		`{"Action":"skip","Package":"gv/tests/acceptance","Test":"TestX"}\n`
+	out, code := tvValidateWithScript(t, "sh ./run.sh # go test ./...", jsonLines)
 	if code == 0 {
 		t.Fatalf("a test-level skip in go test -json must fail validate\n%s", out)
 	}

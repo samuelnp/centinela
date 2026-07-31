@@ -10,7 +10,7 @@ const jsonSkip = `{"Action":"run","Package":"p","Test":"TestA"}
 
 // A test-level skip action is a skipped scenario.
 func TestDetect_GoJSONTestLevelSkip(t *testing.T) {
-	s, ok := Detect(jsonSkip)
+	s, ok := Detect(jsonSkip, ScopeAcceptance)
 	if !ok || s.Shape != ShapeGoJSON || !s.SkipData {
 		t.Fatalf("expected go test -json with skip data, got %+v ok=%v", s, ok)
 	}
@@ -26,7 +26,7 @@ func TestDetect_GoJSONPackageLevelSkipIsNotAScenarioSkip(t *testing.T) {
 {"Action":"pass","Package":"q","Test":"TestOK"}
 {"Action":"pass","Package":"q"}
 `
-	s, ok := Detect(out)
+	s, ok := Detect(out, ScopeAcceptance)
 	if !ok || s.Skipped != 0 {
 		t.Fatalf("package-level skip must not count as a scenario skip, got %+v ok=%v", s, ok)
 	}
@@ -44,7 +44,7 @@ func TestDetect_GoJSONInterleavedPackages(t *testing.T) {
 {"Action":"pass","Package":"a","Test":"T1"}
 not json at all
 `
-	s, ok := Detect(out)
+	s, ok := Detect(out, ScopeAcceptance)
 	if !ok || s.Skipped != 1 || s.Passed != 1 || s.Scenarios != 2 {
 		t.Fatalf("interleaved counts wrong: %+v ok=%v", s, ok)
 	}
@@ -54,7 +54,7 @@ not json at all
 func TestDetect_GoVerboseSkip(t *testing.T) {
 	out := "=== RUN   TestA\n--- SKIP: TestA (0.00s)\n=== RUN   TestB\n" +
 		"    --- SKIP: TestB/sub (0.00s)\n--- PASS: TestB (0.00s)\nPASS\nok  \tp\t0.1s\n"
-	s, ok := Detect(out)
+	s, ok := Detect(out, ScopeAcceptance)
 	if !ok || s.Shape != ShapeGoVerbose || !s.SkipData {
 		t.Fatalf("expected go test -v with skip data, got %+v ok=%v", s, ok)
 	}
@@ -70,7 +70,7 @@ func TestDetect_GoNonVerboseIsRecognizedWithoutSkipData(t *testing.T) {
 	out := "ok  \tgithub.com/x/a\t0.30s\tcoverage: 97.1% of statements\n" +
 		"?   \tgithub.com/x/b\t[no test files]\n" +
 		"ok  \tgithub.com/x/c\t(cached)\n"
-	s, ok := Detect(out)
+	s, ok := Detect(out, ScopeAcceptance)
 	if !ok {
 		t.Fatal("plain go test output must be recognized, not reported unparseable")
 	}
@@ -81,7 +81,7 @@ func TestDetect_GoNonVerboseIsRecognizedWithoutSkipData(t *testing.T) {
 
 // Output from an unsupported runner stays undetermined.
 func TestDetect_UnknownRunnerIsUndetermined(t *testing.T) {
-	if s, ok := Detect("Ran 12 examples, 0 failures\nFinished in 1.2 seconds\n"); ok {
+	if s, ok := Detect("Ran 12 examples, 0 failures\nFinished in 1.2 seconds\n", ScopeAcceptance); ok {
 		t.Fatalf("an unsupported runner must be undetermined, got %+v", s)
 	}
 }
