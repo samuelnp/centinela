@@ -19,6 +19,36 @@ func HonoredRouteTier(role Role, tier string, floors map[string]string) (Tier, b
 	return normalized, true
 }
 
+// CanonicalRouteTiers folds raw route keys onto normalized role slugs. The state
+// file is agent-writable, so two raw keys ("Senior-Engineer" and
+// "senior-engineer") can name the same role; resolving them in map order would
+// let Go's randomized iteration pick the winner, and the same state would emit a
+// different model run to run. Unknown roles and ambiguous collisions are
+// DROPPED — deterministic by construction, and the same fail-safe posture a
+// corrupt tier already gets.
+func CanonicalRouteTiers(routes map[string]string) map[string]string {
+	if len(routes) == 0 {
+		return nil
+	}
+	out := make(map[string]string, len(routes))
+	collided := map[string]bool{}
+	for raw, tier := range routes {
+		role, known := NormalizeRole(raw)
+		if !known {
+			continue
+		}
+		if _, seen := out[string(role)]; seen {
+			collided[string(role)] = true
+			continue
+		}
+		out[string(role)] = tier
+	}
+	for slug := range collided {
+		delete(out, slug)
+	}
+	return out
+}
+
 // ApplyRoutes returns models with each HONORED routed tier replacing that role's
 // entry — routes-first, so a per-feature decision beats a project-wide role
 // override table. The input map is never mutated: the hook shares one models map
@@ -29,23 +59,21 @@ func HonoredRouteTier(role Role, tier string, floors map[string]string) (Tier, b
 // operator confirming the tier the directive already printed must never silently
 // discard a pin. A route to a DIFFERENT tier legitimately replaces the entry.
 func ApplyRoutes(models RoleModels, routes, floors map[string]string) RoleModels {
-	if len(routes) == 0 {
+	canonical := CanonicalRouteTiers(routes)
+	if len(canonical) == 0 {
 		return models
 	}
-	out := make(RoleModels, len(models)+len(routes))
+	out := make(RoleModels, len(models)+len(canonical))
 	for slug, rm := range models {
 		out[slug] = rm
 	}
-	for slug, tier := range routes {
-		role, known := NormalizeRole(slug)
-		if !known {
-			continue
-		}
+	for slug, tier := range canonical {
+		role := Role(slug)
 		routed, honored := HonoredRouteTier(role, tier, floors)
 		if !honored || routed == RoleTier(role, models) {
 			continue
 		}
-		out[string(role)] = RoleModel{Tier: string(routed)}
+		out[slug] = RoleModel{Tier: string(routed)}
 	}
 	return out
 }

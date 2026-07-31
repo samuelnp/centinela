@@ -1,14 +1,14 @@
 {
   "feature": "dynamic-model-routing",
   "startedAt": "2026-07-30T17:01:22.799061Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-07-30T18:00:21Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-07-30T18:43:57Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-31T08:13:54Z"
     }
   },
   "stepOrder": [

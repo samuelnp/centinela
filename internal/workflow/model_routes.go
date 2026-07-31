@@ -11,32 +11,53 @@ type ModelRoute struct {
 	DecidedAt string `json:"decidedAt"` // RFC3339 UTC, like StepState.CompletedAt
 }
 
-// SetModelRoute records (or replaces) the route for a role, initializing the
-// map lazily so a workflow loaded from legacy JSON needs no migration.
-func (wf *Workflow) SetModelRoute(role string, route ModelRoute) {
-	if wf.ModelRoutes == nil {
-		wf.ModelRoutes = map[string]ModelRoute{}
+// SetModelRoute and RawModelRouteRecorded live in model_routes_write.go.
+
+// canonicalRoutes folds the raw state map onto normalized role keys, applying
+// orchestration.CanonicalRouteTiers as the single authority on which keys
+// survive. Reading every route through it is what keeps the `route show` table
+// and the model the hook actually emits from ever disagreeing.
+func canonicalRoutes(wf *Workflow) map[string]ModelRoute {
+	if wf == nil || len(wf.ModelRoutes) == 0 {
+		return nil
 	}
-	wf.ModelRoutes[role] = route
+	tiers := make(map[string]string, len(wf.ModelRoutes))
+	for raw, route := range wf.ModelRoutes {
+		tiers[raw] = route.Tier
+	}
+	kept := orchestration.CanonicalRouteTiers(tiers)
+	out := make(map[string]ModelRoute, len(kept))
+	for raw, route := range wf.ModelRoutes {
+		role, known := orchestration.NormalizeRole(raw)
+		if !known {
+			continue
+		}
+		if _, survives := kept[string(role)]; survives {
+			out[string(role)] = route
+		}
+	}
+	return out
 }
 
-// ModelRouteFor returns the role's recorded route, if any. Nil-safe.
+// ModelRouteFor returns the role's recorded route, if any. Nil-safe. A role
+// whose key collides ambiguously in the raw state has no effective route.
 func (wf *Workflow) ModelRouteFor(role string) (ModelRoute, bool) {
 	if wf == nil {
 		return ModelRoute{}, false
 	}
-	route, ok := wf.ModelRoutes[role]
+	route, ok := canonicalRoutes(wf)[role]
 	return route, ok
 }
 
 // RouteTiers projects the recorded routes onto the role→tier shape
 // orchestration.ApplyRoutes consumes. Nil for a workflow with no routes.
 func RouteTiers(wf *Workflow) map[string]string {
-	if wf == nil || len(wf.ModelRoutes) == 0 {
+	canonical := canonicalRoutes(wf)
+	if len(canonical) == 0 {
 		return nil
 	}
-	out := make(map[string]string, len(wf.ModelRoutes))
-	for role, route := range wf.ModelRoutes {
+	out := make(map[string]string, len(canonical))
+	for role, route := range canonical {
 		out[role] = route.Tier
 	}
 	return out

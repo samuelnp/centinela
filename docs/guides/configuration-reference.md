@@ -165,7 +165,7 @@ AI model routing across subagent roles and runners.
 | `capability_profiles` | table | `{}` | Capability class → enforcement profile remap |
 | `driver_model` | string | `""` | Model id keying the workflow's default profile |
 | `routing_mode` | string | `"static"` | `static` or `dynamic` — see [Dynamic model routing](#dynamic-model-routing) |
-| `floors` | table | `{}` | Role → minimum tier enforced by `centinela route set` |
+| `floors` | table | `{}` | Role → minimum tier a route may take effect at, enforced both by `centinela route set` and again when the model is resolved |
 
 ### `[orchestration.models.<role>]`
 
@@ -268,9 +268,10 @@ with no route fall back to the static chain unchanged, so partial decisions are
 always safe, and a workflow JSON written before `modelRoutes` existed loads with
 no routes at all.
 
-`route show` renders the effective table — role, tier, source (`routed` or
-`static`), floor, reason, decided-at — plus the routing hint while decisions are
-still open.
+`route show` renders the effective table — role, tier, source (`routed`,
+`static`, or `ignored` for a recorded route that resolution refuses to honor),
+floor, reason, decided-at — plus the routing hint while decisions are still
+open. The table always reports what the hook will actually emit.
 
 ## `[memory]`
 

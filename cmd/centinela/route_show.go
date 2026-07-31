@@ -78,6 +78,11 @@ func routeRows(wf *workflow.Workflow, roles []orchestration.Role, models orchest
 			} else {
 				row.Source = "ignored"
 			}
+		} else if wf.RawModelRouteRecorded(string(role)) {
+			// Recorded under a key resolution drops (an ambiguous casing
+			// collision). Reporting "static" here would hide the decision
+			// entirely instead of showing that it does not take effect.
+			row.Source = "ignored"
 		}
 		if floor, ok := orchestration.EffectiveFloor(role, floors); ok {
 			row.Floor = string(floor)

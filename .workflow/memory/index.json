@@ -13,6 +13,19 @@
     "createdAt": "2026-06-29T18:18:47Z"
   },
   {
+    "id": "0230fb1df4b7471d",
+    "feature": "dynamic-model-routing",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: dynamic-model-routing",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/dynamic-model-routing-gatekeeper.md",
+    "createdAt": "2026-07-31T08:13:54Z"
+  },
+  {
     "id": "029e30bb6159e8b0",
     "feature": "adoption-baseline",
     "step": "validate",

@@ -141,6 +141,15 @@ come from `[orchestration.floors]` (shipped defaults: `gatekeeper = "reasoning"`
 always fall back to the static chain, and every accepted decision is recorded as
 a `route-decision` telemetry event.
 
+Floors bind twice, and the second time is the one that matters: the workflow
+state file is agent-writable, so a route hand-written below its role's floor
+would bypass `route set` entirely. Model resolution therefore re-checks the
+floor and IGNORES any route that fails it — falling back to static, exactly as
+it treats a corrupt tier. Two raw keys naming the same role are dropped for the
+same reason. Floors govern ROUTES only: a project that lowers a role in
+`[orchestration.models]` has made that choice explicitly, and `route show`
+labels such a row `ignored` rather than reporting a tier the hook will not emit.
+
 ## Skip Rules
 
 All five steps are mandatory. No step can be skipped — this is enforced by the binary.

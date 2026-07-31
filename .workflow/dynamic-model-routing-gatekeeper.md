@@ -1,0 +1,331 @@
+### Adversarial Verifier Report: dynamic-model-routing
+**Date:** 2026-07-31
+**Status:** WARNING
+
+## Inputs Read
+
+- `git diff main...HEAD` (63 files) **plus the uncommitted working tree** (9 modified + 5 untracked files) — the uncommitted delta is the post-fix state and was verified as part of this tree.
+- `docs/features/dynamic-model-routing.md` (contract), `specs/dynamic-model-routing.feature` (13 scenarios), `docs/plans/dynamic-model-routing.md` (locked decisions R1–R6, refusal matrix).
+- Source read directly: `internal/config/orchestration_routing_mode.go`, `internal/config/orchestration.go`, `internal/config/file_size_exceptions.go`, `internal/orchestration/{route_overlay,route_floors,route_decision,route_directive,model_routing,resolve,models}.go`, `internal/workflow/{model_routes,model_routes_write,model_routes_underway,state,order}.go`, `internal/ui/render_route.go`, `cmd/centinela/{route,route_set,route_request,route_show,hook_orchestration,start_routing,start,orchestration_annotate}.go`, and the new colocated + `tests/` tier tests.
+- Output of the gate, test and probe commands I executed myself (below).
+
+**Contamination check:** the delegating prompt contained NO narrative summary of the
+implementation — only the feature slug, the input-contract paths, and the attack
+surface to probe. It did disclose that a prior verifier's findings were addressed;
+I did not read the prior report (it was overwritten by `artifact new --force`
+before this body was written) and reached every verdict below from the diff plus
+commands I ran. No role `.workflow/*.md` narrative was used as evidence.
+
+## Analyzed Specs
+
+`specs/dynamic-model-routing.feature` — all 13 scenarios: 4 happy paths (recorded
+downgrade + telemetry, hook reflects routed tier, upgrade anytime, `route show`
+table), 1 directive lifecycle, 6 refusals (below floor, downgrade without
+`--reason`, step underway, completed step, unknown role/tier, role not
+scheduled), 1 static-mode byte-identity, 1 back-compat (legacy JSON without
+`modelRoutes`). The spec-traceability gate reports 13/13 covered by acceptance
+tests carrying `// Acceptance:` + `// Scenario:` markers; I re-derived the
+behavior of every one of them against the real binary rather than trusting the
+markers.
+
+## Refutation Attempts
+
+**Claim attacked:** "The gatekeeper cannot be routed below its reasoning floor."
+**How:** Hand-wrote `modelRoutes.gatekeeper = {"tier":"fast"}` straight into
+`.workflow/f.json` (agent-writable in every step, so `route set` is not the only
+write path) on a `validate`-step strict workflow under `routing_mode = "dynamic"`,
+then ran the real `hook orchestration` and `route show`.
+**Result:** REFUTED — the attack fails. The hook emitted
+`gatekeeper (model: opus (claude) …)`; `route show` rendered the row as
+`reasoning / ignored / Route floor reasoning`; the directive re-listed gatekeeper
+as `unrouted`. Floors bind on the RESOLUTION path (`HonoredRouteTier` inside
+`ApplyRoutes`), not only on the write path. The sanctioned path refuses the same
+value naming the floor (exit 1).
+
+**Claim attacked:** "Retired/legacy role slugs are a standing floor bypass."
+**How:** Built a legacy workflow (no `planContract`/`validateContract`) whose plan
+step schedules `big-thinker`/`feature-specialist` and whose validate step
+schedules `validation-specialist`; attempted `route set … fast` on each, then
+hand-wrote a sub-floor route for `big-thinker`.
+**Result:** REFUTED — `floorSuccessor` maps the retired slugs onto planner /
+gatekeeper. Both `route set` calls exit 1 naming the inherited floor; the
+hand-written `big-thinker: fast` is ignored and the hook emits opus.
+
+**Claim attacked:** "Model resolution is deterministic across repeated runs of
+identical state" (Go map iteration order is randomized).
+**How:** Wrote state naming ONE role under two raw keys — `"Senior-Engineer"` +
+`"senior-engineer"`, then `" senior-engineer "` + `"senior-engineer"`, then a
+literal duplicate JSON key — and ran `hook orchestration` 40 / 5 / 5 times each,
+piping through `sort | uniq -c`.
+**Result:** REFUTED — 40/40, 5/5 and 5/5 byte-identical. `CanonicalRouteTiers`
+drops ambiguous collisions outright (falls back to static); a literal duplicate
+key is last-wins at the JSON decoder, also deterministic. A two-active-workflow
+fixture (one routed, one not) run 20× showed no cross-workflow bleed of the
+shared models map — both delegate lines stable.
+
+**Claim attacked:** "A recorded decision can succeed while taking no effect"
+(`route set` against state already naming the same role under different casing).
+**How:** Seeded the collided state above (which resolves to NO route), ran
+`route set f senior-engineer balanced --reason converge`, then inspected the
+command's report, the resulting state keys, `route show`, and the hook.
+**Result:** REFUTED — `SetModelRoute` normalizes the key AND deletes the
+non-canonical sibling. State ends with exactly one `senior-engineer` key; the
+report (`→ balanced (was reasoning)`), `route show` (`balanced / routed`) and the
+hook (`model: sonnet (claude)`) all agree; re-running converges.
+
+**Claim attacked:** "`route show` always displays what the hook actually emits."
+**How:** Compared `route show` against `hook orchestration` for every route state
+I could construct: honored, corrupt tier (`"turbo"`, `"ultra"`), below-floor,
+casing-collided, padded key and padded value, unknown role key, unknown nested
+JSON field, absent, workflow `done`, `currentStep` outside `stepOrder`, and a
+static-config tier LOWER than the route floor.
+**Result:** REFUTED — no disagreement in any state. `routeRows` resolves through
+the same `HonoredRouteTier` the overlay uses; a recorded-but-dropped route renders
+`ignored` (never `static`, never the raw tier) via `RawModelRouteRecorded`.
+
+**Claim attacked:** "Static mode is byte-identical to pre-feature behavior,
+including with routes already sitting in state."
+**How:** With `modelRoutes` present for `senior-engineer` AND `gatekeeper` (both
+`fast`), captured `hook orchestration` under (a) no `centinela.toml`,
+(b) `routing_mode = "static"`, (c) bare `[orchestration]`, (d)
+`routing_mode = "  STATIC  "`, and `cmp`-ed all four. Also compared
+`centinela start` output static vs dynamic, and cross-checked against the
+pre-feature binary built from `main` (`/tmp/centinela-main`) on the same fixture.
+**Result:** REFUTED — a==b==c==d byte-identical, zero occurrences of "routing",
+routes fully inert, and the emitted models match the `main` binary's output
+exactly. `start` adds the directive line only in dynamic mode.
+
+**Claim attacked:** "A route silently discards a per-runner concrete-model pin."
+**How:** Configured `[orchestration.models] senior-engineer = { claude =
+"my-pinned-opus", opencode = "vendor/pinned" }`, then routed to the SAME tier
+(`reasoning` — the very tier the directive prints as `static:`), then to a
+DIFFERENT tier (`balanced`), then back.
+**Result:** REFUTED for the dangerous case — a same-tier route is a no-op and the
+pin survives; a genuine tier change replaces the entry (documented, intended) and
+routing back restores the pin.
+
+**Claim attacked:** "Corrupt / newer-schema state breaks the hook or fails open."
+**How:** `modelRoutes` as a string; `tier` as a number; unknown tier string;
+unknown role key; an unknown nested `futureField` object.
+**Result:** Partially refuted. Type-level corruption makes `workflow.Load` fail,
+so the hook prints `workflow warning: …` and SKIPS that workflow entirely (no
+directive at all) while `route show` exits 1. That is the pre-existing behavior
+for any malformed workflow JSON, not new to this feature, and it is loud rather
+than silent. Value-level corruption (unknown tier/role, extra fields) is ignored
+and falls back to static — never fatal, never a downgrade.
+
+**Claim attacked:** "Config floors can be smuggled below the shipped default."
+**How:** `[orchestration.floors]` with an unknown role key, an unknown tier, an
+upper-cased key (`Gatekeeper`), a padded value (`"  FAST  "`), plus
+`routing_mode = "dinamic"`.
+**Result:** REFUTED — unknown role key, unknown tier and a typo'd mode all fail
+config load; `route show` exits 1 and the hook warns and falls back to the STATIC
+path (dynamic stays off — fail-closed). Keys are validated raw against the same
+vocabulary `[orchestration.models]` uses; values are trim+lower normalized. A
+project CAN lower the gatekeeper floor explicitly — that is the brief's sanctioned
+escape hatch, and both `route show` (`Route floor`) and the directive
+(`floors (routes only)`) label the column so the claim is never overstated.
+
+**Claim attacked:** "The workflow-state schema change breaks older state files."
+**How:** Loaded a legacy workflow JSON with no `modelRoutes` (and no pinned
+contracts) through `route show`, `route set` and the hook; then round-tripped a
+routed state through the pre-feature `main` binary (`hook`, `status`, `revise`,
+`complete`).
+**Result:** REFUTED for backward compatibility — absent field → nil map → all rows
+`static`, hooks unchanged, no migration needed. Forward compatibility is NOT
+preserved: an older binary that reaches a successful `workflow.Save` would drop
+`modelRoutes` silently (there is no schema version on the file). I could not make
+any `main`-binary path actually perform that write in a sandbox (each errored
+before saving), so this remains an unexercised risk — and it is already on the
+roadmap as `workflow-state-schema-version`.
+
+**Claim attacked:** "Over-cap files are hiding behind the diff-aware G1 gate."
+**How:** FULL SCAN — `find cmd internal -name '*.go' -exec wc -l {} \;` filtered
+with `awk '$1>100'`, independent of the gate's diff set.
+**Result:** REFUTED — zero files over 100 lines under `cmd/` or `internal/`,
+including every new `_test.go`. No new `[[gates.file_size_exceptions]]` entries
+were added; `internal/config/file_size_exceptions.go` grew only to wire the two
+new validators into `validateConfig`.
+
+**Claim attacked:** "The scaffold mirror drifted."
+**How:** `diff docs/architecture/workflow-enforcement.md
+internal/scaffold/assets/docs/architecture/workflow-enforcement.md`.
+**Result:** REFUTED — byte-identical; both carry the new routing paragraph.
+
+**Claim attacked:** "Coverage on the touched packages is below the stated bar."
+**How:** `go tool cover -func=coverage.out` (the profile written by the single
+validate suite run), aggregated per package.
+**Result:** REFUTED — config 99.5%, orchestration 99.6%, workflow 98.2%,
+telemetry 96.8%, ui 99.8%, cmd/centinela 97.7% (per-function mean over the
+profile); `check-coverage.sh` passed on that same profile.
+
+## Commands Run
+
+All executed by me, from
+`/Users/samuelnp/projects/personal/centinela/.worktrees/dynamic-model-routing`
+(probe sandboxes under the session scratchpad). Exit codes were captured with
+`echo $?` / `echo EXIT=$?` immediately after each command — never inferred from
+banner text. `centinela validate` was run EXACTLY ONCE; its `[validate] commands`
+already run the full suite (`go test ./... -coverprofile=coverage.out`, with the
+acceptance tier included under `./...`), so the suite was NOT run a second time.
+Durations were wall-clocked only for `validate` (`date +%s` before/after;
+`date +%s%3N` is unsupported on macOS); sub-second probe invocations are recorded
+with `durationMs` 0 rather than a fabricated figure.
+
+| # | argv | exit | duration |
+|---|------|------|----------|
+| 1 | `go build -o /tmp/centinela-v3 ./cmd/centinela` | 0 | not timed |
+| 2 | `/tmp/centinela-v3 validate` | 0 | 366000 ms |
+| 3 | `go build -o /tmp/centinela-main ./cmd/centinela` (from the `main` checkout — pre-feature baseline) | 0 | not timed |
+| 4 | `/tmp/centinela-v3 hook orchestration` (≈90 invocations across 12 sandbox fixtures) | 0 | not timed |
+| 5 | `/tmp/centinela-v3 route show f` (honored / ignored / collided / corrupt / absent / done / legacy fixtures) | 0, and 1 on the corrupt-state and invalid-config fixtures | not timed |
+| 6 | `/tmp/centinela-v3 route set f senior-engineer balanced --reason converge` | 0 | not timed |
+| 7 | `/tmp/centinela-v3 route set f gatekeeper fast --reason cost` | 1 | not timed |
+| 8 | `/tmp/centinela-v3 route set f validation-specialist fast --reason x` | 1 | not timed |
+| 9 | `/tmp/centinela-v3 route set f big-thinker fast --reason x` | 1 | not timed |
+| 10 | `/tmp/centinela-v3 route set f senior-engineer fast --reason x` (currentStep outside stepOrder) | 1 | not timed |
+| 11 | `/tmp/centinela-v3 route set f senior-engineer reasoning` (workflow done) | 1 | not timed |
+| 12 | `/tmp/centinela-v3 route set f gatekeeper reasoning` (upgrade over a lower static tier) | 0 | not timed |
+| 13 | `/tmp/centinela-v3 start myfeat` (dynamic and static sandboxes) | 0 | not timed |
+| 14 | `/tmp/centinela-main hook orchestration`, `status f`, `revise f --reason test`, `complete f` (round-trip probe) | 0 / 0 / 0 / 0 | not timed |
+| 15 | `find cmd internal -name '*.go' -exec wc -l {} \;` piped to `awk '$1>100'` (full-scan G1) | 0 | not timed |
+| 16 | `diff docs/architecture/workflow-enforcement.md internal/scaffold/assets/docs/architecture/workflow-enforcement.md` | 0 | not timed |
+| 17 | `go tool cover -func=coverage.out` | 0 | not timed |
+| 18 | `/tmp/centinela-v3 artifact new dynamic-model-routing gatekeeper --force` | 0 | not timed |
+| 19 | `/tmp/centinela-v3 evidence init dynamic-model-routing gatekeeper` | 0 | not timed |
+
+`centinela validate` output, verbatim: `✓ G1: File Size  All files under 100
+lines.` · `✓ G-Build: Cross-Compile  All 6 release targets compile.` ·
+`⚠ import_graph  Packages match no configured layer:` (pre-existing, non-failing)
+· `✓ spec-traceability-gate  All 13 scenarios have acceptance coverage.` ·
+`⚠ roadmap_drift  ROADMAP.md drifted at line 280 — run 'centinela roadmap
+generate'.` (see F1) · Validate Commands `✓ go test ./... -coverprofile=
+coverage.out`, `✓ COVERAGE_PROFILE=coverage.out ./scripts/check-coverage.sh`,
+`✓ ./scripts/check-fmt.sh` · `All gates passed.` · `EXIT=0`.
+
+## Findings
+
+**F1 — roadmap_drift: `ROADMAP.md` is missing the newest deferral**
+**Affected spec:** `specs/dynamic-model-routing.feature` (none directly — durable
+artifact accuracy / repo hygiene)
+**Affected scenario:** n/a
+**Risk:** `centinela validate` reports `⚠ roadmap_drift ROADMAP.md drifted at
+line 280`. `.workflow/roadmap.json` gained `route-set-canonical-key-collision`
+(deferred 2026-07-31T07:40:48Z) but the uncommitted `ROADMAP.md` still stops at
+`route-lifecycle-hygiene`. The gate is configured `severity = "warn"`, so it does
+not block — but the branch would ship a generated file that does not match its
+generator, and the next feature inherits the drift.
+**Suggestion:** run `centinela roadmap generate` and commit the regenerated
+`ROADMAP.md` with the rest of the working tree.
+
+**F2 — two deferred backlog entries describe defects this branch already fixed**
+**Affected spec:** `specs/dynamic-model-routing.feature` → "A tier below the
+role's floor is refused naming the floor"
+**Affected scenario:** the floor and collision guarantees
+**Risk:** `route-state-integrity-guard` still reads "Floors are enforced only in
+route set; modelRoutes written directly into the agent-writable
+`.workflow/<f>.json` bypass them and downgrade the gatekeeper" — I proved that is
+no longer true (`HonoredRouteTier` inside `ApplyRoutes` ignores the hand-written
+sub-floor route and the hook emits opus). Likewise
+`route-set-canonical-key-collision` reads "route set writes the canonical role key
+without removing a pre-existing non-canonical key" — also no longer true
+(`SetModelRoute` deletes the sibling; I verified convergence end to end). A
+durable backlog asserting a live gatekeeper-downgrade hole that does not exist is
+worse than no entry: it will either be "re-fixed" or cited as evidence the trust
+anchor is unguarded.
+**Suggestion:** `centinela roadmap remove` both entries, or rewrite their
+summaries to describe only the residue that genuinely remains — namely that a
+hand-written route for a FLOORLESS role (`senior-engineer`, `qa-senior`,
+`documentation-specialist`) still takes effect with no `--reason`, no
+step-underway check and no telemetry record, because only floored roles have a
+resolution-path backstop.
+
+**F3 — the telemetry audit trail covers `route set`, not "every route decision"**
+**Affected spec:** `specs/dynamic-model-routing.feature` → "Downgrade with a
+reason is recorded before the step starts"
+**Affected scenario:** brief expected-outcome #6, "Every route decision is
+audited"
+**Risk:** `RecordRouteDecision` fires only on the `route set` path. A route
+hand-written into `.workflow/<f>.json` for a floorless role is honored by the
+overlay and emitted by the hook with NO `route-decision` event, so insights cannot
+attribute that spend to a decision. `route show` does surface it (`routed`), so it
+is discoverable rather than invisible, and the brief's own premise is that a wrong
+downgrade costs a bounced step rather than a shipped defect — hence WARNING, not
+CRITICAL.
+**Suggestion:** either narrow the brief's wording to "every decision recorded
+through `route set`", or fold this residue into the reworded
+`route-state-integrity-guard` entry that F2 asks for.
+
+**F4 — `centinela start` skips the routing directive on the resume path**
+**Affected spec:** `specs/dynamic-model-routing.feature` → "The routing directive
+is emitted while roles are unset and silent once routed"
+**Affected scenario:** the start-time half of that scenario
+**Risk:** `runStart` returns early on the worktree "Resuming existing workflow"
+branch, before `printRoutingDirective`. Under `use_worktrees = true` — this
+project's own setting — a resuming `start` therefore prints no routing line even
+though every role is still un-routed. Low impact: the orchestration hook re-emits
+the same line on the next file write, so the decision window is not actually lost.
+**Suggestion:** move `printRoutingDirective(wf, cfg)` above the resume
+early-return (it needs the workflow loaded on that branch), or accept and document
+that the hook is the directive's only guaranteed emitter.
+
+**Note on the verified tree (not a finding):** this verdict covers HEAD
+`05b8f5f5edb5eead7796f3991a0b3c3ad7eaf063` PLUS the 9 modified + 5 untracked
+working-tree files. Those uncommitted changes are the post-fix state and are what
+I probed; they must be committed unchanged for this verdict to describe what
+merges.
+
+## Deferred Findings
+
+none — F1, F2 and F4 are one-line repairs on this branch, and F3's residue belongs
+in the reworded `route-state-integrity-guard` entry that F2 asks for rather than
+as a new slug. No `centinela roadmap defer` was run by this verifier.
+
+## Recommendation
+
+**WARNING — safe to advance once F1 is repaired.** I attacked the trust anchor
+from every write path I could construct — hand-written sub-floor state, retired
+role slugs, casing / whitespace / duplicate-key collisions, corrupt and
+future-schema entries, floors disagreeing with the models table, and a pre-feature
+binary round-trip — and could not make `gatekeeper` (or any floored role) resolve
+below its floor, could not make identical state emit different models across runs
+(40/40 and 20/20 stable), and could not make `route show` disagree with what the
+hook emits in any state. Static mode is byte-identical to the pre-feature binary
+even with routes sitting in state. `centinela validate` passes (exit 0, 366 s),
+all 13 spec scenarios carry acceptance coverage, the full-scan file-size check is
+clean, and the scaffold mirror is in lockstep.
+
+The WARNING is for durable-artifact accuracy, not runtime behavior: the generated
+`ROADMAP.md` no longer matches its generator (F1 — the one item I would fix before
+merging), and two backlog entries now assert defects this branch already closed
+(F2), including one claiming the gatekeeper is downgradable, which my probes
+disprove. F3 and F4 are honest scope limits worth recording, not blockers.
+
+```json centinela:verification
+{
+  "revision": "05b8f5f5edb5eead7796f3991a0b3c3ad7eaf063",
+  "treeDigest": "sha256:00025e6e4ae0e29985fb82c164225e93df1e7ba18539da03b8c64d23f3b721ee",
+  "commands": [
+    {"argv": ["go", "build", "-o", "/tmp/centinela-v3", "./cmd/centinela"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "validate"], "exitCode": 0, "durationMs": 366000},
+    {"argv": ["go", "build", "-o", "/tmp/centinela-main", "./cmd/centinela"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "hook", "orchestration"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "route", "show", "f"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "route", "set", "f", "senior-engineer", "balanced", "--reason", "converge"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "route", "set", "f", "gatekeeper", "fast", "--reason", "cost"], "exitCode": 1, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "route", "set", "f", "validation-specialist", "fast", "--reason", "x"], "exitCode": 1, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "route", "set", "f", "big-thinker", "fast", "--reason", "x"], "exitCode": 1, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "route", "set", "f", "senior-engineer", "fast", "--reason", "x"], "exitCode": 1, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "route", "set", "f", "senior-engineer", "reasoning"], "exitCode": 1, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "route", "set", "f", "gatekeeper", "reasoning"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "start", "myfeat"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-main", "hook", "orchestration"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-main", "status", "f"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-main", "complete", "f"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["diff", "docs/architecture/workflow-enforcement.md", "internal/scaffold/assets/docs/architecture/workflow-enforcement.md"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["go", "tool", "cover", "-func=coverage.out"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "artifact", "new", "dynamic-model-routing", "gatekeeper", "--force"], "exitCode": 0, "durationMs": 0},
+    {"argv": ["/tmp/centinela-v3", "evidence", "init", "dynamic-model-routing", "gatekeeper"], "exitCode": 0, "durationMs": 0}
+  ]
+}
+```
