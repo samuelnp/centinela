@@ -13,6 +13,12 @@ const emptyCommands = "[]"
 // Stamped returns report with revision and treeDigest set inside the
 // verification block, creating the block when absent. The existing `commands`
 // array is spliced back verbatim — stamping records tree state, never claims.
+//
+// Splicing verbatim is precisely why the shape is checked HERE: the stamp is
+// the last moment a malformed record can be refused at write time, and a
+// record only rejected by a later reader is a defect discovered by the wrong
+// party. The rule itself lives in ValidateCommandsSchema, shared with the
+// reader — one shape, one place.
 func Stamped(report, revision, digest string) (string, error) {
 	commands := emptyCommands
 	start, end, ok := blockSpan(report)
@@ -24,6 +30,13 @@ func Stamped(report, revision, digest string) (string, error) {
 		if raw, has := fields["commands"]; has {
 			commands = string(raw)
 		}
+	}
+	// Checked on BOTH branches so the block-creating path can never become
+	// the one that skips the rule.
+	if err := ValidateCommandsSchema(json.RawMessage(commands)); err != nil {
+		return "", fmt.Errorf("malformed centinela:verification block: %w", err)
+	}
+	if ok {
 		return report[:start] + blockBodyText(revision, digest, commands) + report[end:], nil
 	}
 	return appendBlock(report, blockBodyText(revision, digest, commands)), nil

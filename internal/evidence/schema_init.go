@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/samuelnp/centinela/internal/orchestration"
+	"github.com/samuelnp/centinela/internal/workflow"
 )
 
 // stepForRole maps each role to the workflow step it belongs to so the
@@ -28,8 +29,30 @@ func stepForRole(role Role) string {
 	}
 }
 
-// handoffForRole returns the canonical next role per the contract.
-func handoffForRole(role Role) string {
+// handoffForRole returns the successor the FEATURE'S OWN workflow contract
+// derives, so a freshly scaffolded stub is never seeded with a value the chain
+// gate would then refuse — the CLI's own prefill failing the CLI's own gate is
+// the foot-gun this delegation removes.
+//
+// merge-steward is out-of-band (its step never appears in the ordered steps),
+// so its literal verdict pair is answered here rather than derived.
+//
+// The static defaults below remain the fallback for a feature with no workflow
+// state on disk: there is no contract to derive from, and a stub authored
+// outside a workflow is not gated by one either.
+func handoffForRole(feature string, role Role) string {
+	if role == orchestration.RoleMergeSteward {
+		return "complete"
+	}
+	if want, ok := workflow.ExpectedHandoff(feature, stepForRole(role), role); ok && want != "" {
+		return want
+	}
+	return legacyHandoffForRole(role)
+}
+
+// legacyHandoffForRole is the pre-derivation static chain, kept verbatim as
+// the no-workflow-state fallback.
+func legacyHandoffForRole(role Role) string {
 	switch role {
 	case orchestration.RolePlanner:
 		return string(orchestration.RoleSeniorEngineer)
@@ -64,7 +87,7 @@ func Skeleton(feature string, role Role, cliVersion string) *RoleEvidence {
 		Inputs:      []string{},
 		Outputs:     []string{},
 		EdgeCases:   []string{},
-		HandoffTo:   handoffForRole(role),
+		HandoffTo:   handoffForRole(feature, role),
 		Extra:       map[string]json.RawMessage{},
 	}
 	if role == orchestration.RoleUXUISpecialist {

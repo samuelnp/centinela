@@ -33,7 +33,14 @@ rejected and rewritten.
    fails validation with `mismatched evidence fields`.
 2. `status` MUST be the literal string `"done"`.
 3. `generatedAt` MUST parse as RFC 3339 (e.g. `2026-05-12T14:30:00Z`).
-4. `inputs`, `outputs`, and `handoffTo` MUST be non-empty.
+4. `inputs`, `outputs`, and `handoffTo` MUST be non-empty. `handoffTo` is also
+   checked against the chain **this workflow's own contract derives** — the
+   next required role within the same step, else the first required role of the
+   next step that requires any evidence, else the literal `"complete"`. The
+   per-role values below are what that derivation yields for a default
+   canonical workflow; an archetype that omits a step, a pinned legacy
+   contract, or an internal feature (whose docs step requires no role) shifts
+   them accordingly, and the gate follows the workflow, not this table.
 5. `outputs` entries MUST be real file paths that exist on disk **when
    `centinela complete` runs** — every role, no exemptions.
    Descriptive strings like `"Updated workflow"` will be rejected as
@@ -108,7 +115,8 @@ cannot satisfy its gate with legacy-named files.
   `.workflow/<feature>-edge-cases.md`. Missing either fails with
   `qa-senior outputs must include at least one real test file and …`.
 - `edgeCases` MUST be non-empty.
-- `handoffTo` → `validation-specialist`.
+- `handoffTo` → the validate step's role: `gatekeeper` on any workflow pinned
+  to `adversarial-v1`, or `validation-specialist` on one that predates it.
 
 ### gatekeeper (step: validate)
 
@@ -123,7 +131,10 @@ The validate step's adversarial verifier. It is the only role
   [gatekeeper-prompt.md](gatekeeper-prompt.md). The block lives in the
   Markdown report, NOT in this JSON companion — the evidence schema is
   unchanged.
-- `handoffTo` → `documentation-specialist`.
+- `handoffTo` → `documentation-specialist` for a **user-facing** feature, and
+  `complete` for an internal one — an internal feature ships only a changelog,
+  so its docs step requires no role evidence and validate is the last step with
+  any successor to name.
 
 ### validation-specialist (step: validate) — LEGACY
 
@@ -134,7 +145,9 @@ gatekeeper evidence instead.
 - Only the global rules apply (no role-specific output type).
 - `outputs` typically include `.workflow/<feature>-gatekeeper.md` and any
   other gate reports synthesised.
-- `handoffTo` → `documentation-specialist`.
+- `handoffTo` → same derivation as `gatekeeper` above:
+  `documentation-specialist` for a user-facing feature, `complete` for an
+  internal one.
 
 ### merge-steward (out-of-band on `centinela merge`)
 

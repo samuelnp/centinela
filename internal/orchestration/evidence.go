@@ -52,7 +52,24 @@ func ValidateEvidence(path, feature, step string, role Role, uiPaths []string) e
 	if err := validatePlanSnapshotInputs(path, feature, step, role, e.Inputs); err != nil {
 		return err
 	}
-	return nil
+	return validateStewardHandoff(path, role, e.HandoffTo)
+}
+
+// validateStewardHandoff binds the out-of-band merge-steward role's handoff to
+// its two legal verdicts. The steward runs on `centinela merge`, never appears
+// in a workflow's OrderedSteps(), and so has no derivable successor — its rule
+// is a closed literal pair (APPLY -> "complete", ESCALATE -> "user"), which is
+// exactly what worktree finalization already branches on. Any other value
+// silently reads as ESCALATE there, stalling a merge with no stated reason.
+//
+// Every OTHER role's handoffTo is checked against the chain its own workflow
+// derives, which needs workflow state this package cannot see; that check
+// lives in internal/workflow.
+func validateStewardHandoff(path string, role Role, handoffTo string) error {
+	if role != RoleMergeSteward || handoffTo == "complete" || handoffTo == "user" {
+		return nil
+	}
+	return fmt.Errorf("merge-steward handoffTo must be \"complete\" (APPLY) or \"user\" (ESCALATE), got %q: %s", handoffTo, path)
 }
 
 // needsEdgeCases includes RolePlanner because the planner now carries the spec
