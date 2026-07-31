@@ -1,6 +1,8 @@
 package gates
 
 import (
+	"strings"
+
 	"github.com/samuelnp/centinela/internal/config"
 	"github.com/samuelnp/centinela/internal/docstring"
 	"github.com/samuelnp/centinela/internal/gitdiff"
@@ -42,7 +44,20 @@ func docstringFiles(cfg *config.Config, filter *gitdiff.Set) ([]string, string) 
 		}
 	}
 	if len(files) == 0 {
-		return nil, "No Go files in scope — nothing inspected."
+		return nil, docstringNoGoFilesReason(cfg)
 	}
 	return files, ""
+}
+
+// docstringNoGoFilesReason names the roots the scan was confined to. Saying a
+// bare "No Go files in scope" when the changed set held Go files that simply
+// sat outside the configured roots reports the wrong cause — the operator sees
+// a green-ish skip and no hint that the roots are the reason.
+func docstringNoGoFilesReason(cfg *config.Config) string {
+	roots := cfg.Gates.Docstring.Roots
+	if len(roots) == 0 {
+		roots = docstring.DefaultRoots
+	}
+	return "No Go files in scope under roots [" + strings.Join(roots, " ") +
+		"] — nothing inspected."
 }

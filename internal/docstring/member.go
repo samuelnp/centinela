@@ -37,10 +37,18 @@ func (c *collector) fields(list *ast.FieldList, kind string) {
 // record classifies one exported identifier: documented, exempt, or a
 // violation. Documented wins over exempt so the exemption list only ever shows
 // genuine opt-outs.
+//
+// A TRAILING line comment counts as documentation, matching go/doc: godoc
+// renders `const X = 1 // X is the answer.` as documented, so rejecting it
+// would fail the build for text the pipeline this gate feeds would publish.
+// documented() reads through ast.CommentGroup.Text, which strips directive
+// comments — so a trailing group holding only //centinela:nodoc is correctly
+// still undocumented and falls through to the exemption branch below.
 func (c *collector) record(kind, name string, pos token.Pos, doc, line *ast.CommentGroup) {
 	c.rep.Inspected++
 	at := c.fset.Position(pos).Line
-	if documented(doc, name, c.opts.RequireNamePrefix) {
+	if documented(doc, name, c.opts.RequireNamePrefix) ||
+		documented(line, name, c.opts.RequireNamePrefix) {
 		return
 	}
 	if hasNodoc(doc, line) {

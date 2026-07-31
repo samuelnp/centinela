@@ -40,10 +40,12 @@ func hasNodoc(groups ...*ast.CommentGroup) bool {
 	return false
 }
 
-// documented reports whether a doc comment counts as documentation. v1 asks
-// only for non-empty text; requirePrefix additionally demands the golint-style
-// "Name ..." opening. Note ast.CommentGroup.Text strips directive comments, so
-// a group holding only the nodoc Directive is correctly not documentation.
+// documented reports whether a comment group counts as documentation. It is
+// called for both the doc group and the trailing line comment (go/doc accepts
+// either). v1 asks only for non-empty text; requirePrefix additionally demands
+// the golint-style "Name ..." opening. Note ast.CommentGroup.Text strips
+// directive comments, so a group holding only the nodoc Directive is correctly
+// not documentation.
 func documented(g *ast.CommentGroup, name string, requirePrefix bool) bool {
 	if g == nil {
 		return false

@@ -16,7 +16,7 @@ func TestDG_UndocumentedExportFails(t *testing.T) {
 	writeDocFile(t, dir, "a.go", "package a\n\nfunc Exported() {}\n")
 	commit(t, dir, "add undocumented export")
 	out := runValidateExpectFail(t, bin, dir, []string{"--changed"})
-	mustContain(t, out, "docstring-gate  Undocumented exported identifiers")
+	mustContain(t, out, "docstring-gate  1 undocumented exported identifier")
 	mustContain(t, out, "src/a.go:3: func Exported has no doc comment")
 }
 
@@ -33,17 +33,20 @@ func TestDG_DocumentedPasses(t *testing.T) {
 
 // Scenario: Warn severity reports the violations without failing
 //
-// RenderGateResult only expands Details on Fail (Warn stays a one-line
-// summary here), so the per-violation identifier is pinned separately via
-// `docs lint` in TestDG_DocsLintExitCodes; this test pins the CLI-visible
-// half: the run stays Warn and gates.AllPassed keeps validate exiting 0.
+// RenderGateResult only expands Details on Fail, so a Warn must carry its own
+// count and point at the surface that can list them — it must never end in a
+// colon introducing a list nobody will see. The per-violation identifier is
+// pinned on the gate surface by TestReportDocstring_* and via `docs lint` in
+// TestDG_DocsLintExitCodes.
 func TestDG_WarnSeverityDoesNotFail(t *testing.T) {
 	bin := buildCentinelaBinary(t)
 	dir := setupDocstringRepo(t, "warn")
 	writeDocFile(t, dir, "a.go", "package a\n\nfunc Exported() {}\n")
 	commit(t, dir, "add undocumented export")
 	out := runValidate(t, bin, dir, []string{"--changed"})
-	mustContain(t, out, "⚠ docstring-gate  Undocumented exported identifiers in changed files:")
+	mustContain(t, out, "⚠ docstring-gate  1 undocumented exported identifier in changed files")
+	mustContain(t, out, "centinela docs lint")
+	mustNotContain(t, out, "in changed files —\n")
 	mustContain(t, out, "All gates passed")
 }
 

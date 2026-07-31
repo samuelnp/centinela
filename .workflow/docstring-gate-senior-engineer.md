@@ -83,6 +83,110 @@ Deferral re-scoped: `docstring-gate-ratchet-to-fail` removed (moot),
 - No other new gaps found. `package-doc-comments` and
   `docstring-struct-field-docs` already exist in the Backlog and were left as is.
 
+#### Verifier findings addressed (WARNING, 8 findings, 0 CRITICAL)
+
+The ratchet core held under every attack. Four live false-positive/dishonesty
+classes were fixed in-branch; four were deferred.
+
+- **F1 — gate scope != report scope.** `skippedDirs` lived in `walk.go` and was
+  consulted only by the `--full` report walk, so the gate opened `vendor/`,
+  `testdata/`, `node_modules/`, `dist/`, `.worktrees/`. Reproduced: gate failed
+  on `src/vendor/v.go` and on an unparseable `src/testdata/bad.go` while
+  `--full` reported `0 undocumented ... across 1 files`. Fixed by moving the
+  set into `filter.go` as `excludedDirs` + exported `ExcludedDir`, applied by
+  `InScope` (the gate path) with `Files` keeping it only as a pruning
+  optimization — one set, two surfaces, cannot drift. This closes the only
+  route by which an enforcing ratchet could open a backlog nobody asked it to
+  inspect, and the `testdata/` case had no possible opt-out (an invalid file
+  cannot carry `//centinela:nodoc` and stay invalid).
+- **F2 — trailing line comments rejected.** `spec.Comment` reached `hasNodoc`
+  but never `documented()`, so `const Trailing = 1 // Trailing is the answer.`
+  failed at `severity = "fail"` for text `godoc` publishes. Fixed in
+  `collector.record`: the line group is now passed to `documented()` too.
+  `ast.CommentGroup.Text` strips directives, so a trailing group holding only
+  the nodoc directive is still correctly undocumented and falls through to the
+  exemption branch.
+- **F3 — gate never enforced in CI's `validate` job.** `actions/checkout` had
+  no `fetch-depth`, so `git merge-base HEAD main` failed and the ratchet Skipped
+  honestly on every push — enforcement survived only in `pr-gate`. Fixed with
+  `fetch-depth: 0` plus a comment stating why it is load-bearing. No job depends
+  on a shallow checkout (`release.yml` and `version-bump.yml` already use 0).
+- **F4 — exemption list discarded on the enforcing surface.** `printDocsLintPassDetails`
+  fixed only `docs lint`. `centinela validate` printed
+  `All 2 exported identifiers ... are documented` when one was merely exempt —
+  factually false — and Warn printed a dangling colon with nothing after it.
+  Fixed in `reportDocstring`: Pass now reads `1 of 2 ... documented; 1 exempt
+  via //centinela:nodoc: src/exempt.go:7 func Exempted` (capped at 3 named,
+  then `+N more`), and Warn carries its count and points at `docs lint`. Fail
+  keeps the colon because its Details *are* rendered. `ui.RenderGateResult` was
+  deliberately NOT changed: that would also alter `checkFileSize`,
+  `import_graph` and `spec-traceability` output — deferred as
+  `gate-pass-details-invisible`.
+
+Deferred, not fixed: `docstring-generated-banner-visibility` (F5),
+`docstring-full-scan-empty-roots-honesty` (F6),
+`docstring-ratchet-content-change-only` (F7),
+`docstring-gate-scenario-clause-coverage` (F8), `gate-pass-details-invisible`.
+
+Spec and brief updated for both behavior changes (trailing comments as
+documentation, the shared exclusion set, the CI merge-base requirement, and the
+message-truthfulness constraint). One acceptance test —
+`TestDG_WarnSeverityDoesNotFail`, the substitute F8 named — was repaired to the
+new Warn wording and now also asserts the message does not dangle a colon.
+
+#### Round-2 verifier: CRITICAL — my F3 fix was wrong, and I certified it
+
+The verifier proved `fetch-depth: 0` changed nothing. **The failure was never
+depth — it is ref-name resolution.** `actions/checkout` leaves a detached HEAD
+with no local branch ref for the default branch, so `git merge-base HEAD main`
+exits 128 with `Not a valid object name main` on a *full-history* clone. Bare
+`main` does not DWIM to `refs/remotes/origin/main`. The gate had never enforced
+in CI, in either job. Worse, I shipped four artifacts asserting it did, and a
+test (`TestDG_CIChecksOutFullHistory`) that grepped the workflow YAML for
+`fetch-depth: 0` while its scenario clause claimed a behavioural consequence the
+test never evaluated — the stubbed-seam pattern, authored by me.
+
+Reproduced before fixing (clone with full history, `git checkout --detach`, no
+local `main`): `git merge-base HEAD main` → exit 128;
+`git merge-base HEAD origin/main` → exit 0; branch binary →
+`— docstring-gate  Changed-file scope unresolved (diff base "main" not found)`,
+exit 0. `pr-gate` in that state degraded its *whole* run to a full repo scan.
+
+**Fixed in `internal/gitdiff`, not in the gate** — the resolver is shared, so
+this repairs every diff-aware gate at once. `Resolver.mergeBase` tries the
+configured base, then `origin/<base>` when the bare name does not resolve, and
+returns the ref that actually resolved so `Summary.Base` (and the validate
+header) names the truth rather than an unused ref. An already-qualified base is
+never rewritten; a total failure names every form tried.
+
+After, in the identical clone: `(diff-aware: 65 files changed since
+origin/main)`, and with an undocumented export added — `✗ docstring-gate`,
+**exit 1**. `pr-gate` went from `➖ skip` to a real verdict. `precommit` under
+`CI=true` (the nil-filter ratchet path) went from `No changed files` to Fail
+naming the identifier. I then disabled the fallback and re-ran the new
+acceptance test to confirm it *fails* without the fix — it is not another stub.
+
+Also fixed: parse errors are now counted and labelled separately from
+undocumented identifiers (one unparseable file no longer reports "1
+undocumented", which on Warn was the operator's entire output); roots are
+`path.Clean`-ed so `./internal` cannot silently disarm the gate, an absolute
+root is a config error, and the no-files Skip names the roots it was confined
+to instead of implying no Go files existed at all.
+
+**Artifacts corrected**, all four: the brief's "CI must resolve a merge base"
+section, the `validate.yml` comment, the `centinela.toml` prose, and the spec
+scenario — whose clauses now describe the reproduced ref state and the
+behavioural outcome, backed by `TestDG_CIRefShapeResolvesBaseAndEnforces` and
+`TestDG_CIRefShapeStillRatchets`.
+
+*Honest caveat, carried from the verifier:* the git half is proven by execution
+in a reproduced ref state. The claim that `actions/checkout` produces exactly
+that state is reasoned from its documented behaviour — GitHub Actions cannot be
+run here.
+
+Deferred this round: `docstring-nodoc-spaced-spelling`,
+`docstring-full-scan-symlink-divergence`.
+
 #### Handoff
 - Next role: qa-senior
 - Outstanding TODOs: acceptance tests for all spec scenarios (the tests step —

@@ -21,7 +21,7 @@ func TestCheckDocstring_EmptyScopeSkipsRatherThanPasses(t *testing.T) {
 func TestCheckDocstring_ScopeWithNoGoFilesSkips(t *testing.T) {
 	inDir(t)
 	r := checkDocstring(docstringCfg("fail"), gitdiff.NewSet([]string{"README.md"}))
-	if r.Status != Skip || !strings.Contains(r.Message, "No Go files in scope") {
+	if r.Status != Skip || !strings.Contains(r.Message, "No Go files in scope under roots [.]") {
 		t.Fatalf("status=%v message=%q", r.Status, r.Message)
 	}
 }

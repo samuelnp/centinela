@@ -54,3 +54,32 @@ func TestSelected_DeduplicatesAndDropsOutOfScopePaths(t *testing.T) {
 		t.Fatalf("selected = %v", got)
 	}
 }
+
+// F1 regression at the unit tier: one exclusion set, applied by InScope so the
+// gate path and the Files report path cannot drift.
+func TestInScope_ExcludesVendoredBuildAndFixtureDirectories(t *testing.T) {
+	opts := Options{Roots: []string{"."}, IncludeInternal: true}
+	for _, p := range []string{
+		"src/vendor/v.go", "vendor/v.go", "internal/setup/testdata/x.go",
+		"node_modules/n.go", ".worktrees/feat/src/a.go", "dist/d.go",
+		"build/b.go", "target/t.go", ".git/hooks/h.go",
+	} {
+		if InScope(p, opts) {
+			t.Errorf("InScope(%q) = true, want false", p)
+		}
+	}
+	for _, p := range []string{"src/a.go", "internal/setup/x.go", "cmd/m.go"} {
+		if !InScope(p, opts) {
+			t.Errorf("InScope(%q) = false, want true", p)
+		}
+	}
+}
+
+func TestExcludedDir_MatchesWholeSegmentsOnly(t *testing.T) {
+	if ExcludedDir("src/vendored/a.go") || ExcludedDir("src/mytestdata/a.go") {
+		t.Fatal("a partial segment must not be excluded")
+	}
+	if !ExcludedDir("a/vendor/b.go") || !ExcludedDir("testdata/b.go") {
+		t.Fatal("a whole segment must be excluded")
+	}
+}

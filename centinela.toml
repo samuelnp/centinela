@@ -61,10 +61,13 @@ severity = "warn"
 # rather than opening the legacy backlog. A file nobody touched is never
 # inspected, so main cannot go red for a pre-existing gap, and there is no
 # weakening anywhere: any new or modified exported identifier must be documented
-# or the build fails.
+# or the build fails — locally, in precommit, and in CI. The CI half depends on
+# internal/gitdiff retrying `origin/<base>`: actions/checkout leaves no local
+# `main` ref, so a bare merge-base lookup fails and the gate would Skip. Both CI
+# jobs also check out with fetch-depth: 0 so that retry has history to work with.
 #
 # Measured backlog at adoption (`centinela docs lint --full`): 171 undocumented
-# of 867 exported identifiers across 616 non-test files. (The plan estimated 215
+# of 868 exported identifiers across 616 non-test files. (The plan estimated 215
 # from a throwaway walk over a wider tree; 171 is what the shipped scanner
 # actually reports over the configured roots.) That number is context
 # for the deferred `docstring-full-scan-debt-paydown`, NOT a gate failure count

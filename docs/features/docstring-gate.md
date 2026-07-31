@@ -49,6 +49,35 @@ comment. Scope is the changed-file set — the exact merge-base `*gitdiff.Set`
 the other file-walking gates already receive, with no second notion of
 "changed".
 
+**Documentation means what `go/doc` means.** A doc comment above the
+declaration counts; so does a **trailing line comment**
+(`const X = 1 // X is the answer.`), because `godoc` renders it and this gate
+exists to feed that pipeline. A doc on a grouped `const (` / `var (` / `type (`
+block covers every spec inside it.
+
+**One exclusion set, both surfaces.** `.git`, `node_modules`, `vendor`, `dist`,
+`testdata`, `.worktrees`, `build` and `target` are never source. The gate and
+`centinela docs lint --full` share the single set, so the report always
+predicts the gate. This matters at `severity = "fail"`: a vendored tree under a
+configured root would be a legacy backlog the ratchet was never asked to open,
+and a deliberately-invalid `testdata/` parser fixture would be a hard failure
+with no possible opt-out — an invalid file cannot carry `//centinela:nodoc` and
+stay invalid.
+
+**CI must resolve a merge base — and the failure is ref resolution, not
+depth.** A ratcheted gate that cannot find a merge base Skips honestly and
+enforces nothing, so "enforcing" would be a false claim. `actions/checkout`
+leaves a **detached HEAD with no local branch ref for the default branch**, so
+`git merge-base HEAD main` exits 128 with `Not a valid object name` even on a
+full-history clone — `fetch-depth: 0` alone does not fix it. The real fix lives
+in `internal/gitdiff`: when the configured diff base does not resolve as a
+local ref, the resolver retries `origin/<base>` and reports the ref that
+actually resolved. That repairs **every** diff-aware gate in CI, not just this
+one. Full history (`fetch-depth: 0`) is still required so the retry has a
+common ancestor to find. This is pinned by an acceptance test that reproduces
+the ref state — clone, detach, delete the local branch — and asserts the gate
+*enforces*, never by grepping the workflow YAML.
+
 ## The central constraint: enforcing at 215 legacy violations
 
 A gate that permanently reports a warning is a permanently-red validator —
@@ -111,6 +140,11 @@ not report a confident pass.
 - Empty, Go-free or unresolvable scope must report `Skip` — the
   `truthful-validators` rule that a gate which inspected nothing may not
   report a confident pass.
+- `ui.RenderGateResult` expands `Result.Details` for `Fail` only, so on the
+  enforcing surface the gate **message** must carry the exemption list and the
+  violation count itself. A Pass may never call an exempted identifier
+  documented, and a Warn may never end in a colon introducing a list the
+  renderer will not print.
 - `senior-engineer-prompt.md` is 109 lines against a 130-line budget
   (`promotedPromptLineBudget`) and is **not** on `mirrorParityAllowlist`:
   the duty must fit in the headroom and land byte-identically in

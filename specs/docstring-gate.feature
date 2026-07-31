@@ -33,6 +33,8 @@ Feature: docstring-gate
     When the docstring gate runs
     Then the gate result status is Warn
     And the details still name the undocumented identifier
+    And the gate message carries the violation count and points at "centinela docs lint"
+    And the gate message does not end in a colon introducing an unrendered list
     And gates.AllPassed reports true for the result set
 
   Scenario: An empty changed-file scope reports Skip, not Pass
@@ -80,6 +82,23 @@ Feature: docstring-gate
     When the docstring gate runs
     Then the gate result status is Pass
 
+  Scenario: A trailing line comment counts as documentation
+    Given [gates.docstring] is enabled with severity "fail"
+    And a changed Go file declaring "const Trailing = 1 // Trailing is the answer."
+    When the docstring gate runs
+    Then the gate result status is Pass
+    And the constant is not reported as undocumented
+    And the same holds for a var and for a struct field with a trailing comment
+
+  Scenario: Vendored, build and fixture directories are never inspected
+    Given [gates.docstring] is enabled with severity "fail"
+    And the changed-file scope contains files under "vendor/", "testdata/",
+      "node_modules/", "dist/", "build/", "target/" and ".worktrees/"
+    When the docstring gate runs
+    Then none of those files are inspected
+    And a deliberately-unparseable file under "testdata/" is not reported
+    And "centinela docs lint --full" excludes exactly the same directories
+
   Scenario: Test files and generated files are never reported
     Given [gates.docstring] is enabled with severity "fail"
     And a "_test.go" file with undocumented exported identifiers
@@ -96,6 +115,8 @@ Feature: docstring-gate
     When the docstring gate runs
     Then the gate result status is Pass
     And the details list the exemption naming the identifier
+    And the gate message names the exemption rather than relying on the details
+    And the gate message does not count the exempted identifier as documented
 
   Scenario: Struct fields are not reported when check_fields is false
     Given [gates.docstring] is enabled with severity "fail" and check_fields false
@@ -138,6 +159,14 @@ Feature: docstring-gate
     Then enabled is true
     And severity is "fail"
     And no scope knob weakens the changed-file ratchet
+
+  Scenario: This repository's CI resolves a merge base so the gate enforces
+    Given a repository in the state actions/checkout leaves behind
+    And it has full history, a detached HEAD, and no local branch ref for the base
+    When the docstring gate runs with an undocumented export in the changed set
+    Then the diff base resolves as "origin/main" rather than degrading
+    And the gate reports Fail and the process exit code is 1
+    And a legacy file on the base commit is still never scanned
 
   Scenario: The senior-engineer prompt carries the doc-comment duty in both copies
     Given docs/architecture/senior-engineer-prompt.md

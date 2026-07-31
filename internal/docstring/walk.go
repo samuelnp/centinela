@@ -7,13 +7,9 @@ import (
 	"sort"
 )
 
-// skippedDirs are never descended into by Files.
-var skippedDirs = map[string]bool{
-	".git": true, "node_modules": true, "vendor": true, "dist": true,
-	"testdata": true, ".worktrees": true, "build": true, "target": true,
-}
-
 // Files walks the configured roots and returns every in-scope file, sorted.
+// Pruning here is an optimization only — InScope applies the same exclusion
+// set, so the report and the gate see an identical file universe.
 // It is the whole-repo *report* scope behind `centinela docs lint --full`; the
 // gate never calls it, because a gate that opens legacy files it did not ask
 // anyone to change is a permanently-red validator.
@@ -28,7 +24,7 @@ func Files(opts Options) ([]string, error) {
 				return nil
 			}
 			if d.IsDir() {
-				if skippedDirs[d.Name()] {
+				if excludedDirs[d.Name()] {
 					return filepath.SkipDir
 				}
 				return nil

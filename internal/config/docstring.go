@@ -2,6 +2,8 @@ package config
 
 import (
 	"fmt"
+	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -33,8 +35,13 @@ func (d DocstringConfig) IncludesInternal() bool {
 	return d.IncludeInternal == nil || *d.IncludeInternal
 }
 
-// NormalizeDocstring trims whitespace, drops blank roots, and fills the unset
-// severity and include_internal defaults (fail, true).
+// NormalizeDocstring trims whitespace, cleans and drops blank roots, and fills
+// the unset severity and include_internal defaults (fail, true).
+//
+// Cleaning the roots is a correctness fix, not tidiness: scanned paths arrive
+// repo-relative from git, so an unnormalized "./internal" matched nothing and
+// an enforcing gate silently reported "no Go files in scope" on a tree it
+// should have failed. A config spelling must never disarm a gate.
 func NormalizeDocstring(d DocstringConfig) DocstringConfig {
 	d.Severity = strings.TrimSpace(d.Severity)
 	if d.Severity == "" {
@@ -42,9 +49,14 @@ func NormalizeDocstring(d DocstringConfig) DocstringConfig {
 	}
 	roots := make([]string, 0, len(d.Roots))
 	for _, r := range d.Roots {
-		if r = strings.TrimSpace(r); r != "" {
-			roots = append(roots, r)
+		r = strings.TrimSpace(r)
+		if r == "" {
+			continue
 		}
+		if !filepath.IsAbs(r) {
+			r = path.Clean(filepath.ToSlash(r))
+		}
+		roots = append(roots, r)
 	}
 	d.Roots = roots
 	if d.IncludeInternal == nil {
@@ -62,6 +74,14 @@ func validateDocstring(d DocstringConfig) error {
 	}
 	if d.Severity != "fail" && d.Severity != "warn" {
 		return fmt.Errorf("gates.docstring.severity must be fail or warn, got %q", d.Severity)
+	}
+	for i, r := range d.Roots {
+		// Scanned paths are repo-relative, so an absolute root can never match.
+		// Failing closed beats scanning nothing and calling it a pass.
+		if filepath.IsAbs(r) {
+			return fmt.Errorf(
+				"gates.docstring.roots[%d] must be repo-relative, got absolute path %q", i, r)
+		}
 	}
 	return nil
 }

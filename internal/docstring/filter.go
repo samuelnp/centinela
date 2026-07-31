@@ -5,14 +5,42 @@ import (
 	"strings"
 )
 
+// excludedDirs are directories whose contents are never source this project
+// authors: third-party code, build output, and deliberately-invalid parser
+// fixtures. This is the SINGLE exclusion set — InScope applies it on the gate
+// path and Files prunes with it on the report path, so the gate and
+// `centinela docs lint --full` cannot disagree about what counts as source.
+// Getting this wrong is not cosmetic: a vendored tree under a configured root
+// is a legacy backlog the ratchet was never asked to open, and a
+// deliberately-unparseable testdata fixture is a hard failure with no opt-out
+// (an invalid file cannot carry a //centinela:nodoc directive and stay invalid).
+var excludedDirs = map[string]bool{
+	".git": true, "node_modules": true, "vendor": true, "dist": true,
+	"testdata": true, ".worktrees": true, "build": true, "target": true,
+}
+
+// ExcludedDir reports whether any path segment names an excluded directory.
+func ExcludedDir(path string) bool {
+	for _, seg := range strings.Split(filepath.ToSlash(path), "/") {
+		if excludedDirs[seg] {
+			return true
+		}
+	}
+	return false
+}
+
 // InScope reports whether path is a file this package inspects: a non-test
-// `.go` file under one of the configured roots, honoring IncludeInternal.
+// `.go` file under one of the configured roots, outside every excludedDirs
+// directory, honoring IncludeInternal.
 // Test files are excluded because test functions are not API surface — note
 // that the G1 file-size rule *does* apply to them, so the difference here is
 // deliberate rather than an oversight.
 func InScope(path string, opts Options) bool {
 	p := filepath.ToSlash(strings.TrimSpace(path))
 	if !strings.HasSuffix(p, ".go") || strings.HasSuffix(p, "_test.go") {
+		return false
+	}
+	if ExcludedDir(p) {
 		return false
 	}
 	if !opts.IncludeInternal && hasSegment(p, "internal") {
