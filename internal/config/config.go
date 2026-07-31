@@ -30,6 +30,8 @@ type ValidateConfig struct {
 	Commands []string `toml:"commands"`
 	DiffMode string   `toml:"diff_mode"`
 	DiffBase string   `toml:"diff_base"`
+	// AcceptanceSkipPolicy: fail (default) | warn | off.
+	AcceptanceSkipPolicy string `toml:"acceptance_skip_policy"`
 }
 
 // I18nConfig describes how to check translations for G11.
@@ -67,6 +69,11 @@ func Load() (*Config, error) {
 	// Reject an explicitly-set unknown profile against the raw decoded value,
 	// before applyDefaults normalizes it to strict (which would hide the error).
 	if err := validateEnforcementProfile(cfg.Workflow.EnforcementProfile); err != nil {
+		return nil, err
+	}
+	// Same raw-value rejection for the acceptance skip policy: applyDefaults
+	// normalizes an unknown value to fail, which would hide the operator's typo.
+	if err := validateAcceptanceSkipPolicy(cfg.Validate.AcceptanceSkipPolicy); err != nil {
 		return nil, err
 	}
 	applyDefaults(&cfg)

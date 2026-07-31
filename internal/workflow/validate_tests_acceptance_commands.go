@@ -1,25 +1,12 @@
 package workflow
 
-import "strings"
+import "github.com/samuelnp/centinela/internal/acceptance"
 
+// hasAcceptanceExecutionCommand answers "is any of these an acceptance
+// execution". The per-command predicate moved to the internal/acceptance leaf
+// so cmd/ and internal/verify can share it without importing this package; the
+// classification itself is unchanged, and this file's existing tests are the
+// proof of that.
 func hasAcceptanceExecutionCommand(commands []string) bool {
-	for _, cmd := range commands {
-		c := strings.ToLower(strings.TrimSpace(cmd))
-		if c == "" {
-			continue
-		}
-		if strings.Contains(c, "tests/acceptance") {
-			return true
-		}
-		if strings.Contains(c, "go test") && strings.Contains(c, "./...") {
-			return true
-		}
-		if strings.Contains(c, "cucumber") || strings.Contains(c, "godog") || strings.Contains(c, "behave") {
-			return true
-		}
-		if strings.Contains(c, "acceptance") && strings.Contains(c, "test") {
-			return true
-		}
-	}
-	return false
+	return acceptance.AnyExecutionCommand(commands)
 }

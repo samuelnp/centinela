@@ -1,0 +1,39 @@
+{
+  "feature": "truthful-validators",
+  "startedAt": "2026-07-30T11:34:26.737615Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-30T13:22:04Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-31T08:19:23Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-30T12:15:32Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-30T17:28:44Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-31T08:18:58Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/truthful-validators",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}

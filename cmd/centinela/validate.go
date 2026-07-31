@@ -80,20 +80,3 @@ func executeValidationWithFlag(flag config.FlagOverride) error {
 	}
 	return fmt.Errorf("validation failed — fix the issues above before completing the validate step")
 }
-
-func runValidateCommands(cfg *config.Config) bool {
-	if len(cfg.Validate.Commands) == 0 {
-		return true
-	}
-	fmt.Println()
-	fmt.Println(ui.StyleBold.Render("Validate Commands"))
-	allPassed := true
-	for _, cmd := range cfg.Validate.Commands {
-		passed, out := runCommand(cmd)
-		fmt.Println(ui.RenderCmdResult(cmd, passed, out))
-		if !passed {
-			allPassed = false
-		}
-	}
-	return allPassed
-}

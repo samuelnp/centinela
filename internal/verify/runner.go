@@ -15,6 +15,22 @@ type RunOutcome struct {
 	Output   string
 	TimedOut bool
 	StartErr error // command could not start (e.g. binary not on PATH)
+	// AcceptanceJudged, when non-nil, is the acceptance-skip judgement the
+	// PRODUCER already performed. It exists for the reused single-run outcome,
+	// which stands for several commands at once: re-deriving a verdict from
+	// their concatenated transcript could neither tell which command a line
+	// came from nor apply each command's own scope, so the honest answer is to
+	// inherit the analysis that did have that information.
+	AcceptanceJudged *AcceptanceJudgement
+}
+
+// AcceptanceJudgement is a typed record of an acceptance-skip analysis that
+// already ran. Analysed distinguishes "ran and found nothing" from "never ran",
+// so a consumer can never silently claim an analysis it did not perform.
+type AcceptanceJudgement struct {
+	Analysed bool
+	Failed   bool
+	Detail   string
 }
 
 // CommandRunner runs a shell command in dir, bounded by timeout. Injected so
