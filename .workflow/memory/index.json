@@ -1365,6 +1365,19 @@
     "createdAt": "2026-07-30T12:52:08Z"
   },
   {
+    "id": "fabd37be9d8eb127",
+    "feature": "docstring-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Undocumented exported function in a changed file fails, naming file:line,",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/docstring-gate-edge-cases.md",
+    "createdAt": "2026-07-31T11:36:54Z"
+  },
+  {
     "id": "fd962adabbaacf20",
     "feature": "custom-gate-sdk",
     "step": "tests",
