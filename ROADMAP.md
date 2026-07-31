@@ -208,7 +208,7 @@
 - **docs-step-markdown-first** — Redesign the docs step around markdown for humans: delete the HTML pipeline (internal/docgen, docs generate, KB html, portal index), gate on real updated doc files (docs/guides/, README) instead, and add a curated 'docs context' command so the specialist reads feature-scale inputs instead of crawling the repo
 - **docstring-gate** — Deterministic docstring gate: 'centinela docs lint' walks the AST and fails on exported identifiers without doc comments, changed-files ratchet scope; senior-engineer prompt gains the write-doc-comments-in-code-step duty so a Docusaurus/godoc pipeline can consume the codebase later (depends on docs-step-markdown-first)
 - **dynamic-model-routing** — Opt-in dynamic model routing: [orchestration] routing_mode = static (default, unchanged) | dynamic; in dynamic mode the orchestrator decides each role's model tier per feature via 'centinela route set <feature> <role> <tier>' persisted in workflow state, with configurable per-role floors (default gatekeeper=reasoning, planner=balanced), downgrade-only-before-step-start / upgrade-anytime, --reason required on downgrades below the static default, and every route decision recorded in telemetry; un-routed roles fall back to static config
-- **dynamic-routing-clock-skew** — Hotfix: RoleStepUnderway compares evidence mtime against StartedAt, but Linux stamps mtimes from a coarse tick-granularity clock that can read earlier than the precise clock StartedAt uses, so a stub written moments after start is misjudged as left over from an earlier run — CI-only failure, green on macOS
+- **dynamic-routing-clock-skew** — Hotfix: dynamic model routing clock-skew handling *(draft)*
 
 ## Backlog
 
@@ -273,3 +273,8 @@
 - **plan-empty-inputs-message-masked** — E4 empty-inputs message unreachable behind snapshot check *(deferred 2026-07-30T09:14:14Z · token-diet/gatekeeper)*
 - **summary-digest-hashes-nonschedulable-phases** — roadmap summary digest over-renders on Backlog-only changes *(deferred 2026-07-30T09:14:14Z · token-diet/gatekeeper)*
 - **hook-context-panel-diet** — ACTIVE WORKFLOWS + nudge panels are 96% of hook context bytes; diet them next *(deferred 2026-07-30T09:14:15Z · token-diet/gatekeeper)*
+- **acceptance-verbose-terminator-attribution-steal** — Verbose go test terminator attribution steal — unindented nested terminators can misattribute an acceptance skip *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*
+- **acceptance-skip-parser-breadth** — Skip parser breadth beyond cucumber/godog/go-test (pytest-bdd, behave, JVM cucumber, cucumber-rs) *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*
+- **self-validate-acceptance-report-shape** — Centinela's own non-verbose coverage command carries no skip data — consider a repo-level acceptance command that does *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*
+- **validate-command-verdicts-in-machine-output** — Per-command acceptance verdicts are terminal-only; centinela verdict/pr-gate carry no validate-command line *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*
+- **acceptance-tier-attribution-path-hardcoded** — internal/acceptance hardcodes tests/acceptance (case-sensitive); projects with another acceptance tier path get detection silently disarmed under whole-repo commands — needs a config knob *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*

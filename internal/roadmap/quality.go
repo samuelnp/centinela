@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 )
 
 const RoadmapQualityFile = ".workflow/roadmap-quality.json"
@@ -33,6 +32,15 @@ type QualityReport struct {
 	Features  []QualityFeature `json:"features"`
 }
 
+// qualityEnvelope is the structural first stage: role and threshold are decoded
+// eagerly (they gate everything else), while features stays raw so a shape
+// fault inside it can be named as a shape fault rather than decoding to zeros.
+type qualityEnvelope struct {
+	Role      string           `json:"role"`
+	Threshold int              `json:"threshold"`
+	Features  *json.RawMessage `json:"features"`
+}
+
 func ValidateQuality(r *Roadmap) error {
 	if _, err := os.Stat(RoadmapQualityMarkdown); err != nil {
 		return fmt.Errorf("roadmap quality markdown missing: %s", RoadmapQualityMarkdown)
@@ -41,7 +49,7 @@ func ValidateQuality(r *Roadmap) error {
 	if err != nil {
 		return fmt.Errorf("roadmap quality json missing: %s", RoadmapQualityFile)
 	}
-	var q QualityReport
+	var q qualityEnvelope
 	if err := json.Unmarshal(data, &q); err != nil {
 		return fmt.Errorf("invalid roadmap quality json: %w", err)
 	}
@@ -51,37 +59,9 @@ func ValidateQuality(r *Roadmap) error {
 	if q.Threshold != qualityThreshold {
 		return fmt.Errorf("roadmap quality threshold must be %d", qualityThreshold)
 	}
-	names := roadmapFeatureSet(r)
-	seen := map[string]bool{}
-	for _, f := range q.Features {
-		if !names[f.Name] {
-			return fmt.Errorf("quality references unknown feature: %s", f.Name)
-		}
-		if err := validateScoreRange(f.Scores); err != nil {
-			return fmt.Errorf("feature %s has invalid scores: %w", f.Name, err)
-		}
-		if f.Scores.Overall < qualityThreshold {
-			return fmt.Errorf("feature %s overall score %d is below %d", f.Name, f.Scores.Overall, qualityThreshold)
-		}
-		if strings.TrimSpace(f.Summary) == "" {
-			return fmt.Errorf("feature %s summary is required", f.Name)
-		}
-		seen[f.Name] = true
+	features, err := decodeQualityFeatures(q.Features)
+	if err != nil {
+		return err
 	}
-	for name := range names {
-		if !seen[name] {
-			return fmt.Errorf("quality missing feature: %s", name)
-		}
-	}
-	return nil
-}
-
-func validateScoreRange(s QualityScores) error {
-	vals := []int{s.AcceptanceCriteria, s.UserValue, s.DefinitionClarity, s.Dependencies, s.EffortEstimation, s.Overall}
-	for _, v := range vals {
-		if v < 1 || v > 10 {
-			return fmt.Errorf("scores must be between 1 and 10")
-		}
-	}
-	return nil
+	return validateQualityFeatures(r, features)
 }

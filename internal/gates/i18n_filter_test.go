@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/samuelnp/centinela/internal/config"
@@ -16,8 +17,11 @@ func TestCheckI18nFiltered_SkipsWhenNoLocaleChanged(t *testing.T) {
 		I18n:  config.I18nConfig{Format: "json", Dir: "src/i18n", Locales: []string{"en"}},
 	}
 	r := checkI18nFiltered(cfg, gitdiff.NewSet([]string{"cmd/main.go"}))
-	if r.Status != Pass || r.Message != "No locale changes — gate skipped." {
-		t.Fatalf("expected skip pass, got %+v", r)
+	if r.Status != Skip || r.Message != "No locale files in the diff scope — nothing inspected." {
+		t.Fatalf("a gate that inspected nothing must report Skip, got %+v", r)
+	}
+	if strings.Contains(r.Message, "identical") {
+		t.Fatalf("the skip message must not claim a parity result: %q", r.Message)
 	}
 }
 

@@ -60,5 +60,18 @@ func checkI18nJSON(i config.I18nConfig) Result {
 		keys[locale] = flatKeys(m, "")
 	}
 
+	// One locale: every file above was still read and parsed (a missing or
+	// malformed file already failed), but compareKeysets' locales[1:] loop
+	// would compare nothing and return a confident "identical keys" pass.
+	// Say what was actually verified instead.
+	if len(i.Locales) == 1 {
+		return Result{
+			Name:   "G11: i18n",
+			Status: Warn,
+			Message: "1 locale configured — the key-parity check is trivially satisfied and " +
+				"verifies nothing. Advisory: it does not fail validate, but pr_gate.fail_on_warning " +
+				"(off by default) would surface it.",
+		}
+	}
 	return compareKeysets(keys, i.Locales)
 }

@@ -19,11 +19,33 @@ func TestCheckFileSize_FilterEmptySetSkipsAllFiles(t *testing.T) {
 	os.WriteFile("src/big.go", []byte(big), 0644) //nolint:errcheck
 
 	r := checkFileSize(&config.Config{}, gitdiff.NewSet(nil))
-	if r.Status != Pass {
-		t.Fatalf("empty filter must pass, got %v: %v", r.Status, r.Details)
+	if r.Status != Skip {
+		t.Fatalf("a gate that inspected nothing must report Skip, got %v: %v", r.Status, r.Details)
 	}
-	if r.Message != "No relevant changes — gate skipped." {
-		t.Fatalf("expected skip message, got %q", r.Message)
+	if r.Message != "No files in the diff scope — nothing inspected." {
+		t.Fatalf("expected the nothing-inspected message, got %q", r.Message)
+	}
+	if contains(r.Message, "within") || contains(r.Message, "under") {
+		t.Fatalf("the skip message must not claim files were within the cap: %q", r.Message)
+	}
+}
+
+// The mirror direction: a NON-empty filter with a clean file still passes, and
+// the pass message names the cap and the exception mechanism.
+func TestCheckFileSize_NonEmptyFilterCleanFileStillPasses(t *testing.T) {
+	d := t.TempDir()
+	o, _ := os.Getwd()
+	defer os.Chdir(o) //nolint:errcheck
+	os.Chdir(d)       //nolint:errcheck
+
+	os.MkdirAll("src", 0755)                                  //nolint:errcheck
+	os.WriteFile("src/small.go", []byte("package a\n"), 0644) //nolint:errcheck
+	r := checkFileSize(&config.Config{}, gitdiff.NewSet([]string{"src/small.go"}))
+	if r.Status != Pass {
+		t.Fatalf("clean in-scope file must pass, got %v: %v", r.Status, r.Details)
+	}
+	if !contains(r.Message, "100-line cap") || !contains(r.Message, "gates.file_size_exceptions") {
+		t.Fatalf("pass message must name the cap and the exception mechanism, got %q", r.Message)
 	}
 }
 
