@@ -65,12 +65,17 @@ Each gate rejects what it already claims to reject, with an actionable error:
   Legacy and archetype-subset workflows (hotfix has no plan step; internal
   features skip docs roles) must keep completing, and validation must derive the
   expected successor from the workflow's own contract rather than a hardcoded
-  five-role list. One class is deliberately NOT accommodated: evidence seeded by
-  the old hardcoded prefill that names a role from a LATER step, skipping a
-  required same-step role (`senior-engineer → qa-senior` on a user-facing
-  feature, where the derived successor is the same-step `ux-ui-specialist`).
-  Accepting it would give back the property that makes the gate meaningful, so
-  it is refused — and the error prints the one command that repairs it.
+  five-role list. TWO classes are deliberately NOT accommodated, both seeded by
+  the old hardcoded prefill this feature also fixes:
+  - naming a role from a LATER step, skipping a required same-step role
+    (`senior-engineer → qa-senior` on a user-facing feature, where the derived
+    successor is the same-step `ux-ui-specialist`);
+  - naming a role where the chain has ENDED (`gatekeeper →
+    documentation-specialist` on an internal feature, where the docs step
+    requires no role evidence so the derived successor is `complete`).
+  Accepting either would give back the property that makes the gate meaningful,
+  so both are refused — and the error prints the one command that repairs it.
+  Any repo with an in-flight workflow at those points will hit this once.
 - No gate may be weakened to make another pass.
 - 100-line file cap incl. `_test.go` in `cmd/` and `internal/`; per-package
   coverage ≥97% on touched packages; scaffold-mirror lockstep for any

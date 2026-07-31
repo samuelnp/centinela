@@ -1,15 +1,15 @@
 {
   "feature": "binding-evidence-gates",
   "startedAt": "2026-07-31T09:46:46.674887Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-07-31T11:08:02Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-31T13:14:39Z"
     },
     "plan": {
       "status": "done",

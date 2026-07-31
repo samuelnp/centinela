@@ -1,0 +1,1 @@
+- fix: make three evidence gates bind what they already claimed — handoffTo is validated against a successor derived from the workflow's own contract instead of accepting any non-empty string, the centinela:verification commands schema is validated at stamp time on both the write and read sides, and an unreplaced scaffold placeholder no longer counts as a changelog entry
