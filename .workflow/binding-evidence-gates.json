@@ -1,0 +1,51 @@
+{
+  "feature": "binding-evidence-gates",
+  "startedAt": "2026-07-31T09:46:46.674887Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-31T10:41:04Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/binding-evidence-gates",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1",
+  "modelRoutes": {
+    "planner": {
+      "tier": "balanced",
+      "reason": "three already-diagnosed defects in one layer; the plan is enumeration and sequencing, not open-ended design",
+      "decidedAt": "2026-07-31T09:48:01Z"
+    },
+    "qa-senior": {
+      "tier": "balanced",
+      "reason": "test work here is mechanical: each defect has an obvious red-then-green assertion (banana handoff, malformed commands array, FILL changelog)",
+      "decidedAt": "2026-07-31T09:48:09Z"
+    }
+  }
+}
