@@ -1,0 +1,39 @@
+{
+  "feature": "dynamic-model-routing",
+  "startedAt": "2026-07-30T17:01:22.799061Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-30T18:00:21Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-31T08:15:36Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-30T17:22:00Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-30T18:43:57Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-31T08:13:54Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/dynamic-model-routing",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}

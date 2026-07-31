@@ -1,0 +1,295 @@
+### Adversarial Verifier Report: dynamic-routing-clock-skew
+**Date:** 2026-07-31
+**Status:** WARNING
+
+#### Inputs Read
+
+- `git diff 8def759..HEAD` (the hotfix isolated from the inherited
+  `dynamic-model-routing` feature) plus the uncommitted working tree
+  (`git status --porcelain` — clean apart from the artifact I was told to write).
+- `internal/workflow/model_routes_underway.go` (the changed predicate),
+  `internal/workflow/model_routes_underway_test.go`,
+  `internal/workflow/model_routes_clock_skew_test.go`,
+  `tests/unit/dynamic_routing_clock_skew_unit_test.go`,
+  `tests/unit/dynamic_model_routing_underway_unit_test.go`,
+  `cmd/centinela/route_set_test.go`, `cmd/centinela/route_helper_test.go`,
+  `cmd/centinela/route_request.go`, `internal/orchestration/route_decision.go`.
+- `.workflow/dynamic-routing-clock-skew-edge-cases.md`.
+- `.workflow/dynamic-routing-clock-skew.json` (archetype `hotfix`; steps
+  code → tests → validate; cursor at `validate`).
+- `centinela.toml` — `[validate] commands` runs `go test ./...` in full, so the
+  single mandated `validate` run IS the suite run; no second suite run was made.
+- **External evidence I obtained myself:** the real failing CI logs for PR #90
+  (`gh run view 30617040953 --log-failed` and the sibling run `30617037649`).
+  This is the only Linux-side evidence that exists, and it is exactly what a
+  local macOS suite cannot supply.
+- The role narratives (`-senior-engineer.md`, `-qa-senior.md`) were read **as
+  claims to attack, not as proof**; every behavioral statement below was
+  re-derived by executing code. The orchestrator's prompt did NOT contain a
+  narrative summary of the implementation — it posed the attack surface as
+  questions and told me not to trust role narratives. Nothing to flag there.
+
+#### Refutation Attempts
+
+**Claim attacked:** "The new tolerance lets a downgrade through that should be refused."
+**How:** Traced every consumer of the changed predicate. `roleEvidenceFromThisRun`
+is called only by `RoleStepUnderway`, and only to return `true`;
+`RoleStepUnderway` reaches `cmd/centinela/route_request.go:27` →
+`orchestration.RouteRequest.StepUnderway` → the single rule at
+`internal/orchestration/route_decision.go:58`
+(`TierBelow(NewTier, CurrentTier) && StepUnderway` → refuse). Moving the cutoff
+from `StartedAt` to `StartedAt-2s` can only make MORE artifacts count as
+from-this-run → `StepUnderway` true more often → downgrades refused more often.
+**Result:** REFUTATION FAILED — the tolerance is monotonic in the fail-CLOSED
+direction. It cannot let a downgrade through. The only adverse behavior it can
+produce is refusing a *legitimate* start-window downgrade when a leftover stub
+happens to sit in the `[StartedAt-2s, StartedAt)` band. That is the safe error.
+
+**Claim attacked:** "The tolerance is one-directional; a FUTURE-stamped artifact still closes the window."
+**How:** Wrote my own probe (`TestHVProbe_FutureMtimeClosesWindow`) in a scratch
+copy that drives the real `runRouteSet` end-to-end with the artifact's mtime
+forced to `StartedAt + 72h`, asserting the downgrade is still refused.
+**Result:** REFUTATION FAILED — the claim holds. `!info.ModTime().Before(cutoff)`
+is true for any future mtime, so a future stamp closes the window
+(conservative), exactly as the edge-case report states. The probe passes both
+with and without the fix, confirming the change is genuinely one-directional.
+
+**Claim attacked:** "A stale stub can be aged to reopen the routing window after delegation began."
+**How:** Reasoned about the exploit direction. To *open* the window an actor must
+make the artifact look OLD (mtime < `StartedAt-2s`) or delete it. Widening the
+window backwards makes that strictly HARDER. Touching a file — the easy
+operation — makes it newer, which closes the window.
+**Result:** REFUTATION FAILED for the hotfix. For the record: the pre-existing
+"delete the stub to reopen the window" weakness is inherited from
+`dynamic-model-routing` and is neither introduced nor worsened here.
+
+**Claim attacked:** "The new tests are real regressions, not tautologies."
+**How:** rsync'd the worktree to a scratch copy, reverted the one-line change to
+`cutoff := wf.StartedAt`, ran the affected packages, then restored and re-ran.
+Exit codes captured directly, not inferred.
+**Result:** REFUTATION FAILED — the tests are real. Fix present: exit 0. Fix
+reverted: exit 1, with `TestRoleEvidenceFromThisRun_ToleratesCoarseMtimeSkew`,
+`TestRoleEvidenceFromThisRun_GraceWindowBoundary` and
+`TestRoleStepUnderway_CoarseClockSkewStillCounts` all failing **on macOS** —
+which the original tests could not do. The `os.Chtimes` forcing is what makes
+them platform-independent, and it works. (The two "don't over-widen" guards pass
+under revert, as they must.) The worktree source was never modified:
+`git diff HEAD -- internal/ tests/ cmd/` is empty.
+
+**Claim attacked:** "PR #90 failed CI on two tests." (senior-engineer root-cause record)
+**How:** Pulled the actual failing CI logs for both runs on PR #90.
+**Result:** **REFUTED.** CI failed on THREE tests, identically across both runs:
+`TestRoleStepUnderway_CurrentStepNeedsEvidenceOnDisk` (internal/workflow),
+`TestRoleStepUnderway_JSONStubFromThisRunCounts` (tests/unit), **and
+`TestRunRouteSet_UpgradeNeedsNoReasonEvenMidStep` (cmd/centinela)** — the third
+appears in neither the diagnosis nor the test inventory. I then had to establish
+myself whether the fix covers it: I wrote
+`TestHVProbe_SkewedArtifactStillRefusesDowngrade`, a copy of that CI test with
+the skew forced via `os.Chtimes`, and ran it in the scratch copy. Reverted, it
+FAILS (reproducing the CI failure deterministically on macOS); restored, it
+PASSES. So the fix does repair all three — but that was established here, not by
+the authoring roles, and no guard for that layer was shipped. See Finding 1.
+
+**Claim attacked:** "The tolerance cannot be silently widened without a test failing."
+**How:** Read the boundary test.
+`TestRoleEvidenceFromThisRun_GraceWindowBoundary` expresses both sides as
+`StartedAt ± clockSkewGrace ∓ 1s` — in terms of the constant itself, so it passes
+for ANY value. The only absolute anchors in the suite are `-30 * time.Minute`
+(workflow tier) and `-10 * time.Minute` (unit tier).
+**Result:** PARTIALLY REFUTED. The qa-senior claim that widening "without bound"
+fails `StillRejectsAnEarlierRunsStub` holds only beyond 10 minutes; anything up
+to a 10-minute grace keeps the whole suite green. See Finding 3.
+
+**Claim attacked:** "Nothing else in the repo compares artifact mtimes against a precise clock."
+**How:** Swept every `ModTime` / `Stat` / `.Before(` / `.After(` site.
+`internal/workflow/active.go` compares mtime-to-mtime (same clock source — safe).
+`internal/roadmapcheckpoint` does NOT: `WriteMarker` serializes `time.Now()` with
+`time.RFC3339`, which is **second** precision and truncates DOWN, while
+`LatestMtime` returns raw sub-second artifact mtimes; `Decide` then evaluates
+`latest.After(markerAt)`. I proved the consequence with a probe
+(`TestHVProbe_MarkerTruncationVsArtifactMtime`): an artifact stamped at
+`T+0.500s` and a marker written 10 ms LATER still decides `DecisionStale`.
+**Result:** **REFUTED — a second live instance of the same defect class exists**,
+and in a worse form (1 s of truncation vs. milliseconds of tick skew). It is
+pre-existing and outside this hotfix's scope, so it is a deferral rather than a
+blocker. See Finding 4.
+
+**Claim attacked:** "This repairs a CI-only failure." (the diagnosis itself)
+**How:** Two checks. (a) Mechanism: `New()` stamps `StartedAt` from `time.Now()`
+(vDSO, fine-grained), while a kernel stamps mtimes from the coarse
+`ktime_get_coarse_real_ts64` clock updated once per tick (4–10 ms depending on
+`CONFIG_HZ`) — so a file written microseconds AFTER a `time.Now()` can carry an
+mtime milliseconds BEFORE it. All three CI assertions are precisely "an artifact
+I just wrote reads as older than StartedAt", and both CI runs failed identically
+and instantly (0.00s) — a systematic offset, not a race. Also confirmed the
+production `StartedAt` round-trip is NOT truncated: the on-disk workflow JSON
+carries `2026-07-31T08:49:46.315289Z`, so RFC3339Nano marshalling preserves
+sub-second precision and adds no second skew source. (b) I reproduced all three
+failures deterministically by forcing the mtime.
+**Result:** REFUTATION FAILED — the diagnosis is correct, and 2 s is ~200× the
+worst plausible tick granularity. BUT the repair has never been *observed* on
+Linux: the branch is unpushed (`git rev-parse @{u}` → "no upstream configured"),
+and `git ls-remote origin` shows `refs/heads/dynamic-model-routing` still at
+`8def759`, the red commit. Docker is installed but its daemon is down, so I could
+not run a Linux container either. See Finding 2.
+
+**Claim attacked:** "The legacy zero-StartedAt path still behaves conservatively."
+**How:** Read the arithmetic. `time.Time{}.Add(-2s)` lands in year 1; every real
+mtime is after it, so any artifact counts — identical to pre-fix behavior.
+**Result:** REFUTATION FAILED — no regression on the legacy path.
+
+**Claim attacked:** "The suite is green and the gates pass."
+**How:** Ran `centinela validate` once, from a binary built out of the current
+tree.
+**Result:** REFUTATION FAILED — exit 0 in 372 s. G1 (file size), cross-compile
+(6 targets), spec-traceability (13/13) and roadmap-drift all pass; `import_graph`
+emits only its known non-failing unmapped-package warning.
+`model_routes_underway.go` is 69 lines and the two new test files are 65 and 49 —
+all within G1, including the test files under `internal/`.
+
+#### Commands Run
+
+All commands ran from
+`/Users/samuelnp/projects/personal/centinela/.worktrees/dynamic-routing-clock-skew`,
+except the revert experiments, which ran in `<scratchpad>/revert` — an rsync'd
+copy, so the worktree source was never mutated.
+
+| # | argv | exit | duration |
+|---|------|------|----------|
+| 1 | `go build -o /tmp/centinela-hv ./cmd/centinela` | 0 | ~4s |
+| 2 | `/tmp/centinela-hv validate` | **0** | **372s** |
+| 3 | `/tmp/centinela-hv artifact new dynamic-routing-clock-skew gatekeeper` | 0 | <1s |
+| 4 | `/tmp/centinela-hv evidence init dynamic-routing-clock-skew gatekeeper` | 0 | <1s |
+| 5 | `gh pr checks 90` | 0 | ~2s |
+| 6 | `gh run view 30617040953 --log-failed` | 0 | ~20s |
+| 7 | `gh run view 30617037649 --log-failed` | 0 | ~18s |
+| 8 | `go test ./internal/workflow/... ./tests/unit/... ./cmd/centinela/ -run 'Underway\|Skew\|GraceWindow\|FromThisRun\|HVProbe_Skewed\|HVProbe_Future\|UpgradeNeedsNoReason' -count=1` (scratch, **fix present**) | 0 | 3s |
+| 9 | same argv as #8 (scratch, **fix reverted** to `cutoff := wf.StartedAt`) | **1** — 4 failures | 4s |
+| 10 | `go test ./internal/roadmapcheckpoint/ -run HVProbe -count=1` (scratch) | **1** — truncation defect reproduced | 1s |
+| 11 | `git rev-parse @{u}` / `git ls-remote origin` | 128 (no upstream) / 0 | ~2s |
+
+`centinela validate` was run exactly once. `centinela.toml`'s `[validate]
+commands` already executes `go test ./...` in full (the acceptance tier is under
+`./...`), so that single run IS the suite run and no separate suite invocation
+was made. Exit codes were captured directly with `; echo EXIT=$?`, never inferred
+from banner text. `date +%s%3N` is unsupported on macOS, so durations are whole
+seconds from `date +%s` deltas — command 2's is exact (372 s); sub-second ones
+are marked `<1s` and the `gh` ones are approximate.
+
+#### Findings
+
+**Finding 1 — the root-cause record enumerates 2 of the 3 CI failures, and the
+third has no regression guard.**
+**Affected spec:** none (hotfix archetype — no `.feature` spec for this slug).
+**Affected scenario:** `cmd/centinela` — `TestRunRouteSet_UpgradeNeedsNoReasonEvenMidStep`.
+**Risk:** `.workflow/dynamic-routing-clock-skew-senior-engineer.md` states PR #90
+"failed CI on two tests" and names only the `internal/workflow` and `tests/unit`
+ones. CI actually failed three, across three packages, in both runs. The
+qa-senior test inventory inherits the omission and adds no `cmd/centinela` case.
+The omitted test is the only one exercising the predicate through the *real*
+`runRouteSet` command path rather than calling `RoleStepUnderway` directly — so
+today the end-to-end refusal has no test capable of failing on macOS. I verified
+by construction that the fix does repair it, so this is an evidence and coverage
+gap rather than a live bug; but a future regression on that path would again be
+invisible outside CI, which is exactly the failure mode this hotfix exists to
+eliminate.
+**Suggestion:** add a forced-skew variant of
+`TestRunRouteSet_UpgradeNeedsNoReasonEvenMidStep` to `cmd/centinela` (write the
+artifact, `os.Chtimes` it to `wf.StartedAt.Add(-8*time.Millisecond)`, assert the
+downgrade is still refused), and correct "two tests" to three in the
+senior-engineer record.
+
+**Finding 2 — the repair has never been observed on the platform it repairs.**
+**Affected spec:** none (hotfix archetype).
+**Affected scenario:** the CI `validate` job on `ubuntu-latest`.
+**Risk:** the entire premise is a Linux-only failure. The branch
+`dynamic-routing-clock-skew` has no upstream, and `origin/dynamic-model-routing`
+is still at `8def759` — the pre-fix commit — so PR #90's checks still show the
+RED run. A green local macOS suite is by construction not evidence here; that is
+exactly how the defect shipped in the first place. My deterministic reproduction
+is strong circumstantial evidence (the mechanism is reproduced exactly and all
+three CI assertions flip red→green with the one-line change), but it is not an
+observation on Linux.
+**Suggestion:** push the branch and require the CI `validate` job to go green on
+PR #90 before merging. Do not treat the local validate exit 0 as closing this.
+
+**Finding 3 — the boundary test is self-referential, so the grace can be widened
+~300× with the suite still green.**
+**Affected spec:** none (hotfix archetype).
+**Affected scenario:** `internal/workflow` — `TestRoleEvidenceFromThisRun_GraceWindowBoundary`.
+**Risk:** the test asserts that `clockSkewGrace - 1s` counts and
+`clockSkewGrace + 1s` does not, both written in terms of the constant, so it
+passes for any value of it. The only absolute anchors are 30 minutes and 10
+minutes, so `clockSkewGrace` could be raised to 9 minutes with everything green —
+at which point a stub from an earlier run minutes ago would be adopted as "from
+this run" and would silently close the sanctioned start-time routing window. The
+qa-senior claim that widening "without bound" is caught overstates the guard by
+roughly three orders of magnitude. The direction of harm is fail-closed
+(spurious refusals), so this is a durability-of-guard issue, not a live defect.
+**Suggestion:** anchor the ratchet absolutely — e.g. one line asserting
+`clockSkewGrace <= 5*time.Second` — rather than to the constant itself.
+
+**Finding 4 — the same defect class is live in `internal/roadmapcheckpoint`, in a
+worse form (pre-existing; outside this hotfix's scope).**
+**Affected spec:** none in this feature's scope.
+**Affected scenario:** `centinela roadmap iterate` → the SessionStart checkpoint
+directive (`cmd/centinela/hook_setup.go:72`).
+**Risk:** `WriteMarker` serializes the marker timestamp with `time.RFC3339`
+(second precision, truncating DOWN), while `LatestMtime` compares raw sub-second
+artifact mtimes against it. Any roadmap artifact touched in the same wall-clock
+second as — or up to ~1 s before — the marker compares as newer, so `Decide`
+returns `DecisionStale` and the checkpoint prompt the user just suppressed
+re-fires immediately. Reproduced: artifact at `T+0.500s`, marker written 10 ms
+later, decision `Stale`. Impact is a nuisance re-prompt, not a gate or safety
+failure, and it predates this branch entirely.
+**Suggestion:** defer. Fix by serializing with `time.RFC3339Nano`, and/or
+comparing `latest.Truncate(time.Second).After(markerAt)`.
+
+No CRITICAL finding. The one-line change is correct, minimal, monotonic in the
+fail-closed direction, confined to `internal/workflow`, adds no package edge, and
+is genuinely guarded by tests that fail without it.
+
+#### Deferred Findings
+
+- `roadmap-checkpoint-marker-truncation` —
+  `centinela roadmap defer roadmap-checkpoint-marker-truncation --summary "roadmapcheckpoint compares sub-second artifact mtimes against an RFC3339 second-truncated marker, so roadmap iterate's suppression re-fires immediately" --source dynamic-routing-clock-skew/gatekeeper`
+
+#### Recommendation
+
+**WARNING — merge only after the CI `validate` job goes green on Linux.**
+
+The hotfix itself is correct and I could not break it. I attacked the tolerance
+from both directions — can it let a downgrade through, can it be exploited to
+reopen the window after delegation began, is it really one-directional — and it
+held every time: the change is monotonic toward refusal, the future-mtime case is
+conservative as documented, and the legacy zero-`StartedAt` path is unchanged.
+The new tests are not tautological; reverting the single line turns three of them
+red on macOS, which is precisely the property the original tests lacked.
+
+What keeps this off SAFE is evidence, not code. The authoring roles' record of
+the failure being fixed is wrong (two of three CI failures named), and the
+missing third is the only one exercising the real command path — I had to
+establish its repair myself, and no guard was shipped for it. And the whole claim
+rests on a Linux behavior that still has not been observed: the branch is
+unpushed and PR #90's head is the red commit. Push it and read the CI result; do
+not substitute the green macOS run for it. Separately, anchor Finding 3's
+self-referential boundary and defer Finding 4.
+
+```json centinela:verification
+{
+  "revision": "a361ec5a661c078d19ed6ca28bf8bbae72bd8eea",
+  "treeDigest": "sha256:96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+  "commands": [
+    {"argv": ["go", "build", "-o", "/tmp/centinela-hv", "./cmd/centinela"], "exitCode": 0, "durationMs": 4000},
+    {"argv": ["/tmp/centinela-hv", "validate"], "exitCode": 0, "durationMs": 372000},
+    {"argv": ["/tmp/centinela-hv", "artifact", "new", "dynamic-routing-clock-skew", "gatekeeper"], "exitCode": 0, "durationMs": 300},
+    {"argv": ["/tmp/centinela-hv", "evidence", "init", "dynamic-routing-clock-skew", "gatekeeper"], "exitCode": 0, "durationMs": 300},
+    {"argv": ["gh", "pr", "checks", "90"], "exitCode": 0, "durationMs": 2000},
+    {"argv": ["gh", "run", "view", "30617040953", "--log-failed"], "exitCode": 0, "durationMs": 20000},
+    {"argv": ["gh", "run", "view", "30617037649", "--log-failed"], "exitCode": 0, "durationMs": 18000},
+    {"argv": ["go", "test", "./internal/workflow/...", "./tests/unit/...", "./cmd/centinela/", "-run", "Underway|Skew|GraceWindow|FromThisRun|HVProbe_Skewed|HVProbe_Future|UpgradeNeedsNoReason", "-count=1"], "exitCode": 0, "durationMs": 3000},
+    {"argv": ["go", "test", "./internal/workflow/...", "./tests/unit/...", "./cmd/centinela/", "-run", "Underway|Skew|GraceWindow|FromThisRun|HVProbe_Skewed|HVProbe_Future|UpgradeNeedsNoReason", "-count=1"], "exitCode": 1, "durationMs": 4000},
+    {"argv": ["go", "test", "./internal/roadmapcheckpoint/", "-run", "HVProbe", "-count=1"], "exitCode": 1, "durationMs": 1000}
+  ]
+}
+```

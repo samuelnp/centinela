@@ -8,8 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-
-	"github.com/samuelnp/centinela/internal/config"
 )
 
 // StepState holds the status and completion time of a single workflow step.
@@ -55,6 +53,11 @@ type Workflow struct {
 	// (back-compat, like Archetype) — RevisionsSummary handles the empty case.
 	// The Revision type lives in rewind.go alongside the logic that appends it.
 	Revisions []Revision `json:"revisions,omitempty"`
+	// ModelRoutes is the per-feature role→routing decision recorded by
+	// `centinela route set` under dynamic routing. Absent/omitted on every
+	// workflow written before this field existed and on every static-mode
+	// workflow — a nil map simply means "no routes" (see model_routes.go).
+	ModelRoutes map[string]ModelRoute `json:"modelRoutes,omitempty"`
 }
 
 // WorkflowDir is the directory where workflow JSON files are stored.
@@ -91,10 +94,4 @@ func Save(wf *Workflow) error {
 		return err
 	}
 	return os.WriteFile(FilePath(wf.Feature), data, 0644)
-}
-
-// New creates a fresh workflow starting at the "plan" step under the strict
-// (back-compat default) profile.
-func New(feature string) *Workflow {
-	return NewWithOrder(feature, DefaultStepOrder, config.ProfileStrict)
 }

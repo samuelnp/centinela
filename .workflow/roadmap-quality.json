@@ -63,6 +63,7 @@
     {"name":"docs-step-markdown-first","scores":{"acceptanceCriteria":9,"userValue":9,"definitionClarity":9,"dependencies":9,"effortEstimation":8,"overall":9},"summary":"User-requested docs-step redesign: markdown-first, delete unused HTML pipeline, gate on real doc updates; large recurring token saving on every user-facing feature"},
     {"name":"docstring-gate","scores":{"acceptanceCriteria":9,"userValue":9,"definitionClarity":9,"dependencies":9,"effortEstimation":9,"overall":9},"summary":"Deterministic docstring enforcement (changed-files ratchet) so dev docs become machine-derivable; zero-token gate"},
     {"name":"dynamic-model-routing","scores":{"acceptanceCriteria":9,"userValue":9,"definitionClarity":9,"dependencies":9,"effortEstimation":8,"overall":9},"summary":"User-requested opt-in dynamic routing: orchestrator picks model tiers per role/feature under configurable floors with audited reasons; static mode untouched; direct token-cost lever on every subagent spawn"},
+    {"name":"dynamic-routing-clock-skew","scores":{"acceptanceCriteria":9,"userValue":9,"definitionClarity":9,"dependencies":10,"effortEstimation":9,"overall":9},"summary":"Hotfix for a CI-only clock-granularity defect in dynamic-model-routing's underway check; blocks PR #90"},
     {"name":"dynamic-routing-clock-skew","scores":{"acceptanceCriteria":9,"userValue":9,"definitionClarity":9,"dependencies":10,"effortEstimation":9,"overall":9},"summary":"Hotfix for a CI-only clock-granularity defect in dynamic-model-routing's underway check; blocks PR #90"}
   ]
 }

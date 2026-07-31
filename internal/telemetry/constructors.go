@@ -45,6 +45,22 @@ func RecordRevised(cfg *config.Config, feature, from, to, model string) {
 	Record(cfg, Event{Type: TypeStepRevised, Feature: feature, From: from, Step: to, Model: model})
 }
 
+// RecordRouteDecision records one accepted `centinela route set`: the role, the
+// tier decided, the effective tier it replaced, and the operator's reason. It is
+// the append-only audit trail for routing — the workflow state keeps only the
+// ONE effective route per role, so this log is where the history lives.
+func RecordRouteDecision(cfg *config.Config, feature, role, tier, prevTier, reason, model string) {
+	Record(cfg, Event{
+		Type:     TypeRouteDecision,
+		Feature:  feature,
+		Model:    model,
+		Reason:   reason,
+		Role:     role,
+		Tier:     tier,
+		PrevTier: prevTier,
+	})
+}
+
 // RecordCostSample records host-harness token spend attributed to the active
 // feature/step/model. No-op for a non-positive total so an empty transcript
 // delta never writes a noise line.
