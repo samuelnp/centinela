@@ -208,6 +208,19 @@
     "createdAt": "2026-06-14T15:11:10Z"
   },
   {
+    "id": "20ba9a39bb6b31ae",
+    "feature": "dynamic-routing-clock-skew",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: dynamic-routing-clock-skew",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/dynamic-routing-clock-skew-gatekeeper.md",
+    "createdAt": "2026-07-31T09:14:30Z"
+  },
+  {
     "id": "20f5e09524c45465",
     "feature": "deferred-findings-roadmap-capture",
     "step": "validate",

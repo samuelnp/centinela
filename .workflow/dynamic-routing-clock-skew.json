@@ -1,7 +1,7 @@
 {
   "feature": "dynamic-routing-clock-skew",
   "startedAt": "2026-07-31T08:49:46.315289Z",
-  "currentStep": "validate",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
@@ -12,8 +12,8 @@
       "completedAt": "2026-07-31T08:54:14Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-31T09:14:30Z"
     }
   },
   "stepOrder": [
