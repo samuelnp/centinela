@@ -47,12 +47,39 @@ func hintsForFile(feature string, role Role, path string, uiPaths []string) []Fi
 		}}
 	}
 	errs := r.Validate(path, uiPaths)
-	if len(errs) == 0 {
-		return nil
-	}
-	out := make([]FixHint, 0, len(errs))
+	out := make([]FixHint, 0, len(errs)+1)
 	for _, fe := range errs {
 		out = append(out, fixHintFor(feature, role, fe))
 	}
+	if hint, ok := handoffChainHint(feature, role, r); ok {
+		out = append(out, hint)
+	}
+	if len(out) == 0 {
+		return nil
+	}
 	return out
+}
+
+// handoffChainHint asks the completion gate's OWN chain question, so the
+// pre-flight command the role prompts tell agents to run cannot report
+// "evidence ok" for evidence `centinela complete` will refuse. An agent's
+// self-check contradicting the gate is a false success one layer up.
+//
+// Scope is deliberately identical to the gate's — only the roles that step
+// actually requires — so this can never be STRICTER than what it previews.
+// That excludes the out-of-band merge-steward (whose literal verdict pair is
+// checked in ValidateEvidence) and the optional production-readiness role.
+func handoffChainHint(feature string, role Role, r *RoleEvidence) (FixHint, bool) {
+	required := false
+	for _, want := range workflow.RequiredEvidenceRoles(feature, r.Step) {
+		required = required || want == role
+	}
+	if !required {
+		return FixHint{}, false
+	}
+	err := workflow.CheckHandoffTo(feature, r.Step, role, r.HandoffTo)
+	if err == nil {
+		return FixHint{}, false
+	}
+	return FixHint{Feature: feature, Role: role, Field: "handoffTo", Message: err.Error()}, true
 }

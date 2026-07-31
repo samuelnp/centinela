@@ -1,7 +1,7 @@
 {
   "feature": "binding-evidence-gates",
   "startedAt": "2026-07-31T09:46:46.674887Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -16,11 +16,11 @@
       "completedAt": "2026-07-31T10:41:04Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-31T12:10:01Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },
@@ -43,9 +43,9 @@
       "decidedAt": "2026-07-31T09:48:01Z"
     },
     "qa-senior": {
-      "tier": "balanced",
-      "reason": "test work here is mechanical: each defect has an obvious red-then-green assertion (banana handoff, malformed commands array, FILL changelog)",
-      "decidedAt": "2026-07-31T09:48:09Z"
+      "tier": "reasoning",
+      "reason": "scope changed: edge-case tester found two verified bypasses (null exitCode, stub behind preamble) so this step now fixes fail-open gate logic, not just writes tests",
+      "decidedAt": "2026-07-31T11:23:12Z"
     }
   }
 }

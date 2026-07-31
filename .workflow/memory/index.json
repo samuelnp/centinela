@@ -416,6 +416,19 @@
     "createdAt": "2026-07-28T22:50:43Z"
   },
   {
+    "id": "44dec49d35bb9c89",
+    "feature": "binding-evidence-gates",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **P0 `TestValidateCommandsSchemaRejectsNullExitCode`** — table over",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/binding-evidence-gates-edge-cases.md",
+    "createdAt": "2026-07-31T12:10:01Z"
+  },
+  {
     "id": "47f88ed9b2258fb7",
     "feature": "right-size-docs-step",
     "step": "validate",

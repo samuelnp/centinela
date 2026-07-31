@@ -54,15 +54,28 @@ func validateCommandEntry(entry map[string]json.RawMessage) error {
 	if !has {
 		return fmt.Errorf("exitCode is required (an absent key would silently read as a pass)")
 	}
-	var exitCode int
-	if err := json.Unmarshal(rawExit, &exitCode); err != nil {
-		return fmt.Errorf("exitCode must be an integer: %w", err)
+	if err := requireInt("exitCode", rawExit); err != nil {
+		return err
 	}
 	if rawMS, ok := entry["durationMs"]; ok {
-		var durationMS int
-		if err := json.Unmarshal(rawMS, &durationMS); err != nil {
-			return fmt.Errorf("durationMs must be an integer: %w", err)
-		}
+		return requireInt("durationMs", rawMS)
+	}
+	return nil
+}
+
+// requireInt demands a real integer, and is the reason the present-key check
+// above is not enough on its own: json.Unmarshal of the literal `null` into an
+// int is a documented NO-OP that returns nil and leaves the zero value. A
+// plain int decode therefore ACCEPTS `"exitCode": null` and lands it as 0 —
+// "the gates passed" — which is the absent-key defect with four more
+// characters. Decoding through *int is what makes the null observable.
+func requireInt(field string, raw json.RawMessage) error {
+	var value *int
+	if err := json.Unmarshal(raw, &value); err != nil {
+		return fmt.Errorf("%s must be an integer: %w", field, err)
+	}
+	if value == nil {
+		return fmt.Errorf("%s must be an integer, not null (null decodes to 0, which reads as a passing run)", field)
 	}
 	return nil
 }

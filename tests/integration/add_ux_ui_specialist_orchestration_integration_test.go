@@ -26,7 +26,10 @@ func TestUserFacingCodeStepRequiresUXEvidence(t *testing.T) {
 	workflow.Save(wf) //nolint:errcheck
 	ts := time.Now().UTC().Format(time.RFC3339)
 	os.WriteFile(orchestration.MarkdownPath("f", orchestration.RoleSeniorEngineer), []byte("# role"), 0644) //nolint:errcheck
-	data := `{"feature":"f","step":"code","role":"senior-engineer","status":"done","generatedAt":"` + ts + `","inputs":["docs/plans/f.md"],"outputs":["src/ui/page.tsx"],"edgeCases":[],"handoffTo":"qa-senior"}`
+	// On a user-facing feature the code step's successor is the SAME-step
+	// ux-ui-specialist, not the next step's qa-senior — the derived value, not
+	// the literal the pre-gate prefill used to seed.
+	data := `{"feature":"f","step":"code","role":"senior-engineer","status":"done","generatedAt":"` + ts + `","inputs":["docs/plans/f.md"],"outputs":["src/ui/page.tsx"],"edgeCases":[],"handoffTo":"ux-ui-specialist"}`
 	os.WriteFile(orchestration.JSONPath("f", orchestration.RoleSeniorEngineer), []byte(data), 0644) //nolint:errcheck
 	err := workflow.ValidateArtifacts("f", "code", &config.Config{})
 	if err == nil || !strings.Contains(err.Error(), "ux-ui-specialist") {

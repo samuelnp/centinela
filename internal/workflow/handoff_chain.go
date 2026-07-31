@@ -14,23 +14,44 @@ import (
 // already reported it, and a second message for one missing file buries the
 // remedy. An empty handoffTo is likewise its rule, not this one.
 func validateHandoffChain(feature, step string, roles []orchestration.Role) error {
+	for _, role := range roles {
+		got, err := orchestration.ReadHandoffTo(orchestration.JSONPath(feature, role))
+		if err != nil {
+			continue
+		}
+		if err := CheckHandoffTo(feature, step, role, got); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// CheckHandoffTo answers for ONE role the question `centinela complete` asks of
+// a whole step: is got the successor this workflow's own contract derives?
+//
+// It is exported so the pre-flight `centinela evidence validate` can ask the
+// SAME question. A self-check that reports "evidence ok" for evidence the
+// completion gate then refuses is a false success one layer up — precisely the
+// signal this feature exists to remove — so the two must not be able to
+// disagree.
+//
+// An empty handoffTo and an absent workflow are both nil here: the first is
+// ValidateEvidence's rule, the second means there is no contract to derive
+// from, and inventing one would be the fabrication this gate exists to stop.
+func CheckHandoffTo(feature, step string, role orchestration.Role, got string) error {
+	if got == "" {
+		return nil
+	}
 	wf, err := Load(feature)
 	if err != nil {
 		return nil
 	}
-	for _, role := range roles {
-		got, err := orchestration.ReadHandoffTo(orchestration.JSONPath(feature, role))
-		if err != nil || got == "" {
-			continue
-		}
-		want, sameStep := handoffTarget(wf, feature, step, role)
-		if acceptsHandoff(feature, wf, step, got, want, sameStep) {
-			continue
-		}
-		return fmt.Errorf("evidence handoffTo for %q is %q, but this workflow's contract makes %q its successor — fix with: centinela evidence set %s %s handoffTo %s",
-			role, got, want, feature, role, want)
+	want, sameStep := handoffTarget(wf, feature, step, role)
+	if acceptsHandoff(feature, wf, step, got, want, sameStep) {
+		return nil
 	}
-	return nil
+	return fmt.Errorf("evidence handoffTo for %q is %q, but this workflow's contract makes %q its successor — fix with: centinela evidence set %s %s handoffTo %s",
+		role, got, want, feature, role, want)
 }
 
 // acceptsHandoff decides whether got is in-chain.
