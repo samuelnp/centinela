@@ -455,6 +455,19 @@
     "createdAt": "2026-07-29T22:20:31Z"
   },
   {
+    "id": "4d6e5b86d795c7fc",
+    "feature": "docs-step-markdown-first",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Spec has no scenario for the surface-detection formats (`\u003e`/`-`/bold) even",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/docs-step-markdown-first-edge-cases.md",
+    "createdAt": "2026-07-30T12:23:05Z"
+  },
+  {
     "id": "516c1dba5657b901",
     "feature": "g2-multi-language-import-graph",
     "step": "validate",
@@ -1337,6 +1350,19 @@
     ],
     "sourceArtifact": ".workflow/deep-codebase-analysis-edge-cases.md",
     "createdAt": "2026-06-18T10:50:33Z"
+  },
+  {
+    "id": "f637a1e862133491",
+    "feature": "docs-step-markdown-first",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# docs-step-markdown-first — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/docs-step-markdown-first-gatekeeper.md",
+    "createdAt": "2026-07-30T12:52:08Z"
   },
   {
     "id": "fd962adabbaacf20",

@@ -67,10 +67,9 @@ func runHookContext(_ *cobra.Command, _ []string) error {
 			continue
 		}
 		if orchestration.IsUserFacingFeature(wf.Feature) {
-			if _, err := os.Stat("docs/project-docs/index.html"); os.IsNotExist(err) {
+			if _, err := os.Stat(".workflow/" + wf.Feature + "-documentation-specialist.md"); os.IsNotExist(err) {
 				fmt.Println(ui.RenderDocumentationNeeded(wf.Feature))
 			}
-			continue
 		}
 		if _, err := os.Stat(".workflow/" + wf.Feature + "-changelog.md"); os.IsNotExist(err) {
 			fmt.Println(ui.RenderChangelogNeeded(wf.Feature))

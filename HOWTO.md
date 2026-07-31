@@ -126,23 +126,26 @@ If G1 file-size checks fail, split files by responsibility. Use `gates.file_size
 Advance after validation passes, then ask:
 
 ```text
-Complete the Centinela docs step for landing-page-mvp. Create documentation-specialist evidence and regenerate project docs.
+Complete the Centinela docs step for landing-page-mvp. Update the real markdown docs and create documentation-specialist evidence.
 ```
 
 Run:
 
 ```bash
-centinela docs validate
-centinela docs generate --out docs/project-docs/index.html --title "Project Documentation"
+centinela docs context landing-page-mvp
 ```
+
+Then update `docs/guides/` and/or `README.md` where the feature changed
+behavior, and write the changelog entry.
 
 Expected outputs include:
 
+- updated files under `docs/guides/` or `README.md`
+- `.workflow/landing-page-mvp-changelog.md`
 - `.workflow/landing-page-mvp-documentation-specialist.md`
 - `.workflow/landing-page-mvp-documentation-specialist.json`
-- `docs/project-docs/index.html`
 
-Finish the workflow only after docs validation and generated docs succeed.
+Finish the workflow only after the docs updates and evidence exist.
 
 ## Recovery Tips
 

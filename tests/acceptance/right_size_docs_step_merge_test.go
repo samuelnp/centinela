@@ -1,4 +1,7 @@
-// Acceptance: specs/right-size-docs-step.feature
+// Acceptance: specs/docs-step-markdown-first.feature
+// Supersedes the portal-regeneration scenarios of
+// specs/right-size-docs-step.feature: merge must no longer regenerate any
+// documentation portal.
 package acceptance_test
 
 import (
@@ -18,37 +21,26 @@ func rdsMergeSource(t *testing.T) string {
 	return string(data)
 }
 
-// Scenario: A clean merge regenerates the documentation portal
-func TestRDSCleanMergeRegeneratesPortal(t *testing.T) {
+// Scenario: The HTML pipeline is gone
+// merge.go must not reference the portal-regen seam, the docgen package, or
+// the generated portal path — no code path regenerates
+// docs/project-docs/index.html at merge time.
+func TestRDSMergeDoesNotReferencePortalRegen(t *testing.T) {
 	src := rdsMergeSource(t)
-	// The clean-merge path must invoke the portal-regen seam.
-	if !strings.Contains(src, "docsPortalRegen(repo)") {
-		t.Fatal("a clean merge must call docsPortalRegen(repo) to refresh the portal")
-	}
-	if !strings.Contains(src, "docgen.Generate(") {
-		t.Fatal("the regen seam must be wired to docgen.Generate")
+	for _, banned := range []string{"docsPortalRegen", "docgen", "project-docs", "portal regen"} {
+		if strings.Contains(src, banned) {
+			t.Fatalf("merge.go must not reference %q — the portal pipeline is deleted", banned)
+		}
 	}
 }
 
-// Scenario: A portal regeneration failure does not fail a clean merge
-func TestRDSPortalRegenFailureDoesNotFailMerge(t *testing.T) {
-	src := rdsMergeSource(t)
-	// On a regen error the merge prints a notice and continues (no return err).
-	idx := strings.Index(src, "docsPortalRegen(repo)")
-	if idx < 0 {
-		t.Fatal("docsPortalRegen call not found")
+// Scenario: The HTML pipeline is gone
+// The docgen package itself is deleted from the tree.
+func TestRDSDocgenPackageDeleted(t *testing.T) {
+	if _, err := os.Stat(filepath.Join("..", "..", "internal", "docgen")); !os.IsNotExist(err) {
+		t.Fatalf("internal/docgen must be deleted (stat err=%v)", err)
 	}
-	tail := src[idx:]
-	if !strings.Contains(tail, "notice: portal regen skipped") {
-		t.Fatal("a regen failure must emit a notice rather than fail the merge")
-	}
-	// Success reporting now lives in reportMergeSuccess (merge_report.go);
-	// nothing between the regen call and that hand-off may return the error.
-	end := strings.Index(tail, "reportMergeSuccess")
-	if end < 0 {
-		t.Fatal("merge.go must hand off to reportMergeSuccess after portal regen")
-	}
-	if strings.Contains(tail[:end], "return err") {
-		t.Fatal("a regen failure must not return an error from the merge")
+	if _, err := os.Stat(filepath.Join("..", "..", "docs", "project-docs")); !os.IsNotExist(err) {
+		t.Fatalf("docs/project-docs must be deleted (stat err=%v)", err)
 	}
 }

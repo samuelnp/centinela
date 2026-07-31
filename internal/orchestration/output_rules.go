@@ -6,9 +6,6 @@ import (
 )
 
 func validateActionableOutputs(path, feature string, role Role, outputs, uiPaths []string) error {
-	if role == RoleDocsSpecialist {
-		return nil
-	}
 	files, missing := existingOutputFiles(outputs), missingOutputFiles(outputs)
 	if len(missing) > 0 {
 		return fmt.Errorf("actionable outputs must be real files; missing: %s in: %s", strings.Join(missing, ", "), path)
@@ -36,6 +33,11 @@ func dispatchRoleOutputs(path, feature string, role Role, files, uiPaths []strin
 		return fmt.Errorf("qa-senior outputs must include at least one real test file and %s in: %s", report, path)
 	case RoleUXUISpecialist:
 		return validateUXOutputs(path, files, uiPaths)
+	case RoleDocsSpecialist:
+		if hasDocsOutput(files) {
+			return nil
+		}
+		return fmt.Errorf("documentation-specialist outputs must include a real updated file under docs/ or README.md in: %s", path)
 	case RoleMergeSteward:
 		report := fmt.Sprintf(".workflow/%s-merge-steward.md", feature)
 		if containsPath(files, report) {

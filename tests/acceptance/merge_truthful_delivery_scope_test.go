@@ -48,19 +48,18 @@ func TestAccMergeValidatesMergedPrimaryTreeNotInvokingCwd(t *testing.T) {
 	}
 }
 
-// Acceptance: specs/merge-truthful-delivery.feature
-// Scenario: the documentation portal is regenerated in the primary tree
-func TestAccMergePortalRegenTargetsPrimaryTree(t *testing.T) {
+// Acceptance: specs/docs-step-markdown-first.feature
+// Scenario: The HTML pipeline is gone
+// (Supersedes the merge-truthful-delivery portal-regeneration scenario: no
+// code path regenerates docs/project-docs/index.html at merge time.)
+func TestAccMergeDoesNotRegeneratePortalInPrimaryTree(t *testing.T) {
 	bin := buildCent(t)
 	repo := mergeRepo(t, "high-score", false)
 	wt := filepath.Join(repo, ".worktrees", "high-score")
-	// Committed docgen inputs land in BOTH trees; roadmap.json is written to
-	// the gitignored .workflow/ of the PRIMARY tree only, so a regen that
-	// still runs in the invoking CWD cannot find it.
 	writeFile(t, repo, "PROJECT.md", "# Project\n")
 	writeFile(t, repo, "ROADMAP.md", "# Roadmap\n")
 	mtdaGit(t, repo, "add", "-A")
-	mtdaGit(t, repo, "commit", "-q", "-m", "docgen inputs")
+	mtdaGit(t, repo, "commit", "-q", "-m", "doc inputs")
 	writeFile(t, repo, ".workflow/roadmap.json",
 		`{"phases":[{"name":"Phase 1","features":[{"slug":"high-score","status":"done"}]}]}`)
 
@@ -68,7 +67,10 @@ func TestAccMergePortalRegenTargetsPrimaryTree(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("merge must exit 0 (code=%d):\n%s", code, out)
 	}
-	if _, e := os.Stat(filepath.Join(repo, "docs", "project-docs", "index.html")); e != nil {
-		t.Fatalf("the portal must be regenerated in the primary tree (err=%v):\n%s", e, out)
+	if _, e := os.Stat(filepath.Join(repo, "docs", "project-docs", "index.html")); !os.IsNotExist(e) {
+		t.Fatalf("no portal may be regenerated at merge time (stat err=%v):\n%s", e, out)
+	}
+	if strings.Contains(out, "portal regen") {
+		t.Fatalf("merge output must not mention portal regeneration:\n%s", out)
 	}
 }

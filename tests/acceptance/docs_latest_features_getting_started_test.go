@@ -8,28 +8,30 @@ import (
 )
 
 // Acceptance: specs/docs-latest-features-getting-started.feature
-// Scenario: Getting-started docs and the generated story stay in sync
-// The getting-started prose moved from the README into docs/guides/getting-started.md
-// when the README was slimmed to a landing page; the generated-docs story
-// (render_story.go) still emits the Latest Features + Getting Started sections. This
-// test keeps the source guide and the generated story in sync.
+// Scenario: Getting started teaches the enforced workflow
+// The generated-docs story (internal/docgen) was deleted by
+// docs-step-markdown-first; the getting-started guide is now the single
+// source for onboarding prose and must teach the current markdown-first
+// docs-step contract, not the deleted generator commands.
 func TestDocsLatestFeaturesAndGettingStartedStayInSync(t *testing.T) {
-	guide, err := os.ReadFile(filepath.Join("..", "..", "docs", "guides", "getting-started.md"))
+	data, err := os.ReadFile(filepath.Join("..", "..", "docs", "guides", "getting-started.md"))
 	if err != nil {
 		t.Fatalf("read getting-started guide: %v", err)
 	}
-	for _, want := range []string{"Getting Started", "centinela roadmap validate", "centinela migrate docs"} {
-		if !strings.Contains(string(guide), want) {
+	guide := string(data)
+	for _, want := range []string{
+		"Getting Started",
+		"centinela roadmap validate",
+		"centinela docs context",
+		"changelog",
+	} {
+		if !strings.Contains(guide, want) {
 			t.Fatalf("getting-started guide missing %q", want)
 		}
 	}
-	story, err := os.ReadFile(filepath.Join("..", "..", "internal", "docgen", "render_story.go"))
-	if err != nil {
-		t.Fatalf("read render story: %v", err)
-	}
-	for _, want := range []string{"Latest Features", "Getting Started", "centinela roadmap validate", "centinela docs generate --out docs/project-docs/index.html"} {
-		if !strings.Contains(string(story), want) {
-			t.Fatalf("render story missing %q", want)
+	for _, banned := range []string{"centinela docs generate", "centinela docs validate", "docs/project-docs"} {
+		if strings.Contains(guide, banned) {
+			t.Fatalf("getting-started guide still teaches deleted %q", banned)
 		}
 	}
 }

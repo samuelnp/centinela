@@ -41,7 +41,6 @@ func TestRunMerge_ContinueFromWorktreeCwd_VerifiesBeforeClaiming(t *testing.T) {
 	d := stewardRepo(t, "iota", true)
 	wt := filepath.Join(d, ".worktrees", "iota")
 	chdir(t, wt)
-	stubPortalRegen(t)
 	if err := runMerge(nil, []string{"iota"}); err == nil {
 		t.Fatal("a text conflict must stall")
 	}

@@ -88,3 +88,6 @@
 - Finalized draft in place: adversarial-validate-verifier
 - Finalized draft in place: unified-plan-specialist
 - Finalized draft in place: spec-conflict-false-positives
+- Finalized draft in place: docs-step-markdown-first
+- Finalized draft in place: docstring-gate
+- Finalized draft in place: dynamic-model-routing

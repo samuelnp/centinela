@@ -23,7 +23,7 @@ func docsSpecialistPair(feature string) ([]string, [][]byte, error) {
 
 - Feature: %s
 - Step: docs
-- Outcome: _One paragraph summary of the KB pages and project-docs entries you wrote._
+- Outcome: _One paragraph summary of the guides/README files you updated and the changelog entry._
 - Handoff: complete
 `, "`"+feature+"`"))
 	paths := []string{

@@ -59,7 +59,11 @@ func TestEvidenceContract_PerRoleRulesPresent(t *testing.T) {
 		"at least one path under `tests/`",
 		"mobileFirst",
 		"motion-and-reduced-motion",
-		"Exempt",
+		// markdown-first docs step: the docs-specialist exemption is gone and
+		// the per-role rule demands a real updated doc file.
+		"no exemptions",
+		"NOT exempt",
+		"real updated file under",
 	}
 	for _, want := range rules {
 		if !strings.Contains(body, want) {

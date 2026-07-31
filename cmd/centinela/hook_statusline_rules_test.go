@@ -79,7 +79,8 @@ func TestStatuslineRulesDocs(t *testing.T) {
 	wf.CurrentStep = "docs"
 	cfg := &config.Config{}
 	mkdir(t, ".workflow")
-	// User-facing feature: docs step gates on the portal then docs evidence.
+	// User-facing feature: docs step gates on the documentation-specialist
+	// evidence file, then on the docs artifacts (changelog + evidence pair).
 	mkdir(t, "docs/features")
 	write(t, "docs/features/alpha.md", "surface: user-facing\n")
 	workflow.Save(wf) //nolint:errcheck
@@ -87,8 +88,7 @@ func TestStatuslineRulesDocs(t *testing.T) {
 	if block != "MISSING_DOCS_OUTPUT" {
 		t.Fatalf("expected missing docs output, got %s", block)
 	}
-	mkdir(t, "docs/project-docs")
-	write(t, "docs/project-docs/index.html", "<html></html>")
+	write(t, ".workflow/alpha-documentation-specialist.md", "# docs")
 	block, _ = statusBlockAndNext(wf, cfg)
 	if block != "MISSING_DOCS_EVIDENCE" {
 		t.Fatalf("expected missing docs evidence, got %s", block)

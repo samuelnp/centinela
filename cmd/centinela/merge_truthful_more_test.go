@@ -13,7 +13,6 @@ import (
 // notice (the CWD is the primary tree), and does not move main.
 func TestRunMerge_AlreadyMergedRerun_HonestNoNotice(t *testing.T) {
 	d := seedCleanMergeRepo(t, "omega") // cwd = d (primary tree)
-	stubPortalRegen(t)
 	if err := runMerge(nil, []string{"omega"}); err != nil {
 		t.Fatalf("first merge must succeed: %v", err)
 	}
@@ -41,7 +40,6 @@ func TestRunMerge_AlreadyMergedRerun_HonestNoNotice(t *testing.T) {
 // an otherwise-clean merge instead of being silently swallowed.
 func TestRunMerge_ClearPendingFailure_Surfaced(t *testing.T) {
 	d := seedCleanMergeRepo(t, "omega")
-	stubPortalRegen(t)
 	// Ignore .workflow/ so the occupied marker does not trip the dirty guard.
 	if err := os.WriteFile(filepath.Join(d, ".gitignore"), []byte(".worktrees/\n.workflow/\n"), 0o644); err != nil {
 		t.Fatal(err)

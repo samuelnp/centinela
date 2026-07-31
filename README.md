@@ -111,7 +111,7 @@ flowchart TB
 
         subgraph DOCSTEP["5 · docs"]
             direction LR
-            DS["documentation-specialist<br/>fast · haiku-4-5"] --> DOCART["docs/project-docs/index.html<br/>+ specialist .md / .json evidence"]
+            DS["documentation-specialist<br/>fast · haiku-4-5"] --> DOCART["docs/guides/ · README.md updates<br/>+ changelog + specialist evidence"]
         end
 
         PLAN -->|complete| CODE -->|complete| TESTS -->|complete| VAL -->|complete| DOCSTEP

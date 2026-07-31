@@ -30,7 +30,7 @@ func TestDAS_CompanionSeedsRoleSlots(t *testing.T) {
 		{orchestration.RoleQASeniorEngineer, "Test Inventory"},
 		{orchestration.RoleValidationSpec, "Gates Run"},
 		{orchestration.RoleUXUISpecialist, "Flow Review"},
-		{orchestration.RoleDocsSpecialist, "KB Pages"},
+		{orchestration.RoleDocsSpecialist, "Docs Updated"},
 	}
 	for _, c := range cases {
 		dasChdir(t, "demo.md")
