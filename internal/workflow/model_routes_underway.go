@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"os"
+	"time"
 
 	"github.com/samuelnp/centinela/internal/orchestration"
 )
@@ -38,6 +39,15 @@ func RoleStepUnderway(wf *Workflow, role orchestration.Role) bool {
 	return roleEvidenceFromThisRun(wf, role)
 }
 
+// clockSkewGrace absorbs the gap between the precise clock StartedAt is stamped
+// from and the coarser, tick-granularity clock a kernel stamps mtimes from. On
+// Linux the latter can read several milliseconds EARLIER than a time.Now() taken
+// just before the write, which made an artifact written moments after `start`
+// look like it predated the run — green on macOS, red on CI. A stub genuinely
+// left by an earlier run predates it by minutes at least, so seconds of slack
+// cost this check nothing it was meant to catch.
+const clockSkewGrace = 2 * time.Second
+
 // roleEvidenceFromThisRun reports whether an evidence artifact written since the
 // workflow started exists for the role. A stub whose mtime PREDATES StartedAt is
 // left over from an earlier run of the same slug (a re-start, or a rewind that
@@ -45,12 +55,13 @@ func RoleStepUnderway(wf *Workflow, role orchestration.Role) bool {
 // A workflow with no StartedAt (legacy JSON) keeps the conservative reading:
 // any artifact counts.
 func roleEvidenceFromThisRun(wf *Workflow, role orchestration.Role) bool {
+	cutoff := wf.StartedAt.Add(-clockSkewGrace)
 	for _, path := range []string{
 		orchestration.MarkdownPath(wf.Feature, role),
 		orchestration.JSONPath(wf.Feature, role),
 	} {
 		info, err := os.Stat(path)
-		if err == nil && !info.ModTime().Before(wf.StartedAt) {
+		if err == nil && !info.ModTime().Before(cutoff) {
 			return true
 		}
 	}

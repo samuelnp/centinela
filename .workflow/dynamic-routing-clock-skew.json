@@ -1,0 +1,29 @@
+{
+  "feature": "dynamic-routing-clock-skew",
+  "startedAt": "2026-07-31T08:49:46.315289Z",
+  "currentStep": "tests",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-31T08:51:35Z"
+    },
+    "tests": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "hotfix",
+  "worktreePath": ".worktrees/dynamic-routing-clock-skew",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}
