@@ -13,10 +13,11 @@ import (
 // the diff-aware contract for G11.
 func checkI18nFiltered(cfg *config.Config, filter *gitdiff.Set) Result {
 	if filter != nil && !localeFileInFilter(cfg.I18n.Dir, filter) {
+		// Skip, not Pass: nothing was read, so there is nothing to certify.
 		return Result{
 			Name:    "G11: i18n",
-			Status:  Pass,
-			Message: "No locale changes — gate skipped.",
+			Status:  Skip,
+			Message: "No locale files in the diff scope — nothing inspected.",
 		}
 	}
 	return checkI18n(cfg)

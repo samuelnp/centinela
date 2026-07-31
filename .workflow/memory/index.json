@@ -260,6 +260,19 @@
     "createdAt": "2026-06-12T12:32:40Z"
   },
   {
+    "id": "2c37a310bf3d6b5e",
+    "feature": "truthful-validators",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: truthful-validators",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/truthful-validators-gatekeeper.md",
+    "createdAt": "2026-07-31T08:18:58Z"
+  },
+  {
     "id": "2c5c631e117fa2e8",
     "feature": "codex-support",
     "step": "validate",
@@ -492,6 +505,19 @@
     ],
     "sourceArtifact": ".workflow/workflow-revise-loop-gatekeeper.md",
     "createdAt": "2026-06-30T17:28:39Z"
+  },
+  {
+    "id": "58535c8b2c8a7ac3",
+    "feature": "truthful-validators",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Malformed `centinela.toml` on `evidence validate` surfaces as a config",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/truthful-validators-edge-cases.md",
+    "createdAt": "2026-07-30T17:28:44Z"
   },
   {
     "id": "5c1ccba03ee6b28f",

@@ -272,3 +272,8 @@
 - **plan-empty-inputs-message-masked** — E4 empty-inputs message unreachable behind snapshot check *(deferred 2026-07-30T09:14:14Z · token-diet/gatekeeper)*
 - **summary-digest-hashes-nonschedulable-phases** — roadmap summary digest over-renders on Backlog-only changes *(deferred 2026-07-30T09:14:14Z · token-diet/gatekeeper)*
 - **hook-context-panel-diet** — ACTIVE WORKFLOWS + nudge panels are 96% of hook context bytes; diet them next *(deferred 2026-07-30T09:14:15Z · token-diet/gatekeeper)*
+- **acceptance-verbose-terminator-attribution-steal** — Verbose go test terminator attribution steal — unindented nested terminators can misattribute an acceptance skip *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*
+- **acceptance-skip-parser-breadth** — Skip parser breadth beyond cucumber/godog/go-test (pytest-bdd, behave, JVM cucumber, cucumber-rs) *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*
+- **self-validate-acceptance-report-shape** — Centinela's own non-verbose coverage command carries no skip data — consider a repo-level acceptance command that does *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*
+- **validate-command-verdicts-in-machine-output** — Per-command acceptance verdicts are terminal-only; centinela verdict/pr-gate carry no validate-command line *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*
+- **acceptance-tier-attribution-path-hardcoded** — internal/acceptance hardcodes tests/acceptance (case-sensitive); projects with another acceptance tier path get detection silently disarmed under whole-repo commands — needs a config knob *(deferred 2026-07-31T08:42:41Z · truthful-validators/gatekeeper)*

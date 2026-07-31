@@ -26,8 +26,11 @@ func ParseScores(csv string) (QualityScores, error) {
 		AcceptanceCriteria: nums[0], UserValue: nums[1], DefinitionClarity: nums[2],
 		Dependencies: nums[3], EffortEstimation: nums[4], Overall: nums[5],
 	}
+	// Pass the richer message through: the CSV parse above makes a structural
+	// fault impossible here, so the range error is the only one that can reach
+	// this point and naming the field + value is a strict improvement.
 	if err := validateScoreRange(s); err != nil {
-		return QualityScores{}, fmt.Errorf("each score must be between 1 and 10")
+		return QualityScores{}, err
 	}
 	if s.Overall < qualityThreshold {
 		return QualityScores{}, fmt.Errorf("overall score must be at least %d", qualityThreshold)
