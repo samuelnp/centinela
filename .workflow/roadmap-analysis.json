@@ -61,6 +61,7 @@
     {"name":"spec-conflict-false-positives"},
     {"name":"docs-step-markdown-first"},
     {"name":"docstring-gate"},
-    {"name":"dynamic-model-routing"}
+    {"name":"dynamic-model-routing"},
+    {"name":"dynamic-routing-clock-skew"}
   ]
 }
