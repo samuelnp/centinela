@@ -1,15 +1,15 @@
 {
   "feature": "truthful-validators",
   "startedAt": "2026-07-30T11:34:26.737615Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-07-30T13:22:04Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-31T08:19:23Z"
     },
     "plan": {
       "status": "done",
