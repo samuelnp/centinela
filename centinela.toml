@@ -53,6 +53,34 @@ severity = "warn"
 enabled  = true
 severity = "warn"
 
+# docstring gate: every exported identifier in a CHANGED file must carry a doc
+# comment. Shipped ENFORCING at severity = "fail", which is safe because the
+# gate is a ratchet: its scope is always the merge-base changed-file set — the
+# same *gitdiff.Set every other file-scoped gate receives — and when a run hands
+# it no filter (CI full-scan mode) it resolves that same changed set itself
+# rather than opening the legacy backlog. A file nobody touched is never
+# inspected, so main cannot go red for a pre-existing gap, and there is no
+# weakening anywhere: any new or modified exported identifier must be documented
+# or the build fails.
+#
+# Measured backlog at adoption (`centinela docs lint --full`): 171 undocumented
+# of 867 exported identifiers across 616 non-test files. (The plan estimated 215
+# from a throwaway walk over a wider tree; 171 is what the shipped scanner
+# actually reports over the configured roots.) That number is context
+# for the deferred `docstring-full-scan-debt-paydown`, NOT a gate failure count
+# — the gate never opens those files. `centinela docs lint --full` re-measures
+# it on demand and always exits 0.
+#
+# There is deliberately no `scope` knob: scope is [validate] diff_mode /
+# diff_base, repo-wide, for every gate.
+#   roots               = ["internal", "cmd", "pkg", "lib", "src", "app"]
+#   include_internal    = true
+#   check_fields        = false   # 597 struct fields — deferred, see the brief
+#   require_name_prefix = false   # deprecated golint style rule
+[gates.docstring]
+enabled  = true
+severity = "fail"
+
 [gates.build]
 enabled = true
 command = "go build ./cmd/centinela"
@@ -101,9 +129,14 @@ enabled = true
 # cmd/, internal/verify AND internal/workflow alike. It imports only the
 # standard library, precisely so that sharing it cannot create an
 # internal/verify → internal/workflow edge. See PROJECT.md G2.
+# internal/docstring is also a leaf: the docstring gate's Go AST scanner and its
+# language-provider seam (mirroring internal/importgraph). It imports ONLY the
+# standard library — no internal package at all — which is what lets
+# internal/gates (domain) consume it without any risk of a cycle, and is why the
+# gate resolves scope through internal/gitdiff rather than inside the scanner.
 [[gates.import_graph.layers]]
 name  = "leaf"
-paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**", "internal/selfupdate/**", "internal/acceptance/**"]
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**", "internal/selfupdate/**", "internal/acceptance/**", "internal/docstring/**"]
 allow = []
 
 # internal/analyze is a domain package (deterministic codebase inventory for

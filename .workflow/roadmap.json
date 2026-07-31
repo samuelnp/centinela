@@ -532,7 +532,7 @@
         {"name":"acceptance-tier-attribution-path-hardcoded","summary":"internal/acceptance hardcodes tests/acceptance (case-sensitive); projects with another acceptance tier path get detection silently disarmed under whole-repo commands — needs a config knob","source":{"feature":"truthful-validators","role":"gatekeeper"},"deferredAt":"2026-07-31T08:42:41Z"},
         {"name":"package-doc-comments","summary":"572 of 599 non-test Go files carry no package-clause doc comment; docstring-gate v1 excludes package docs entirely — a per-package (not per-file) rule is a separate check","source":{"feature":"docstring-gate","role":"planner"},"deferredAt":"2026-07-31T09:18:01Z"},
         {"name":"docstring-struct-field-docs","summary":"597 undocumented exported struct fields (73% of the non-test docstring backlog); docstring-gate v1 excludes them behind check_fields=false","source":{"feature":"docstring-gate","role":"planner"},"deferredAt":"2026-07-31T09:18:01Z"},
-        {"name":"docstring-gate-ratchet-to-fail","summary":"Clear this repo's 215-violation docstring backlog and flip [gates.docstring].severity from warn to fail","source":{"feature":"docstring-gate","role":"planner"},"deferredAt":"2026-07-31T09:18:01Z"}
+        {"name":"docstring-full-scan-debt-paydown","summary":"Document the 171 legacy exported identifiers in files the ratcheted docstring gate never opens, so centinela docs lint --full could report zero; replaces docstring-gate-ratchet-to-fail, which is moot because the gate ships enforcing at severity=fail","source":{"feature":"docstring-gate","role":"senior-engineer"},"deferredAt":"2026-07-31T09:50:43Z"}
       ]
     }
   ],
