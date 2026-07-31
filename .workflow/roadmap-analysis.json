@@ -63,6 +63,7 @@
     {"name":"docstring-gate"},
     {"name":"dynamic-model-routing"},
     {"name":"dynamic-routing-clock-skew"},
-    {"name":"dynamic-routing-clock-skew"}
+    {"name":"dynamic-routing-clock-skew"},
+    {"name":"binding-evidence-gates"}
   ]
 }

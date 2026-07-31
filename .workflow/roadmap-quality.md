@@ -93,3 +93,4 @@
 - Finalized draft in place: dynamic-model-routing
 - Finalized draft in place: dynamic-routing-clock-skew
 - Finalized draft in place: dynamic-routing-clock-skew
+- Finalized draft in place: binding-evidence-gates
