@@ -248,8 +248,12 @@ centinela route show <feature>
 
 `route set` records `role → {tier, reason, decidedAt}` into
 `.workflow/<feature>.json` (`modelRoutes`) and appends a `route-decision`
-telemetry event carrying the previous effective tier. It is refused, in order,
-when:
+telemetry event carrying the previous effective tier. The telemetry trail
+therefore covers decisions made through the CLI; a route hand-written straight
+into the state file leaves no event, and for a role with no configured floor it
+still takes effect. Floors are what make that harmless where it matters — see
+the floors section below — but `route show` is the only place an unaudited route
+surfaces. It is refused, in order, when:
 
 1. `routing_mode` is not `dynamic` (the error names the key).
 2. The workflow is already complete.
