@@ -67,7 +67,7 @@ severity = "warn"
 # jobs also check out with fetch-depth: 0 so that retry has history to work with.
 #
 # Measured backlog at adoption (`centinela docs lint --full`): 171 undocumented
-# of 868 exported identifiers across 616 non-test files. (The plan estimated 215
+# of 868 exported identifiers across 618 non-test files. (The plan estimated 215
 # from a throwaway walk over a wider tree; 171 is what the shipped scanner
 # actually reports over the configured roots.) That number is context
 # for the deferred `docstring-full-scan-debt-paydown`, NOT a gate failure count

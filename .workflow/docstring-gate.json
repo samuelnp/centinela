@@ -1,15 +1,15 @@
 {
   "feature": "docstring-gate",
   "startedAt": "2026-07-31T08:57:06.163106Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-07-31T10:10:31Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-07-31T13:46:15Z"
     },
     "plan": {
       "status": "done",
