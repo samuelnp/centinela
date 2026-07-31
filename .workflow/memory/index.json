@@ -897,6 +897,19 @@
     "createdAt": "2026-06-11T16:10:32Z"
   },
   {
+    "id": "931537646e495476",
+    "feature": "binding-evidence-gates",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: binding-evidence-gates",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/binding-evidence-gates-gatekeeper.md",
+    "createdAt": "2026-07-31T13:13:41Z"
+  },
+  {
     "id": "939bc20a9b1a7ea6",
     "feature": "headless-governance",
     "step": "validate",

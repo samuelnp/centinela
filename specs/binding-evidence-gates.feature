@@ -93,3 +93,38 @@ Feature: Binding evidence gates
       gates so a stub can no longer pass"
     When the docs step artifact gate runs for "demo"
     Then validation succeeds
+
+  Scenario: A null exit code is rejected at stamp time
+    Given a gatekeeper report whose centinela:verification block has a
+      commands entry {"argv": ["centinela", "validate"], "exitCode": null}
+    When "centinela artifact stamp demo" runs
+    Then the stamp is rejected
+    And the error says exitCode must be an integer, not null, because a null
+      decodes to 0 and reads as a passing run
+
+  Scenario: A changelog stub behind a heading fails the docs gate
+    Given ".workflow/demo-changelog.md" contains a "## Changelog" heading
+      followed by the literal scaffolded stub
+    When the docs step artifact gate runs for "demo"
+    Then validation is rejected, because the rule is scoped to the entry's
+      content rather than to the first non-blank line
+    And a changelog that quotes the marker in its generic "<FILL: ...>"
+      citation form still passes
+
+  Scenario: The tolerance refuses a role from another step
+    Given a feature "demo" at the "tests" step with qa-senior evidence
+    And the evidence's handoffTo is "documentation-specialist"
+    When "centinela complete demo" runs
+    Then completion is rejected
+    And the tolerance that lets the successor STEP be named under either
+      contract pin does not admit it, because it is scoped to that one step
+
+  Scenario: Evidence seeded by the old prefill on a user-facing feature
+    Given a user-facing feature "demo-ux" at the "code" step whose
+      senior-engineer evidence carries the pre-gate literal "qa-senior"
+    When "centinela complete demo-ux" runs
+    Then completion is rejected, because the derived successor is the
+      SAME-step "ux-ui-specialist" and same-step hops are exact by design
+    And the error names a runnable "centinela evidence set demo-ux
+      senior-engineer handoffTo ux-ui-specialist"
+    And running that command makes the same completion succeed

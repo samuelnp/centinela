@@ -48,9 +48,7 @@ func TestBEG_StampRejectsEmptyArgv(t *testing.T) {
 // present and the decode "succeeded", so the record landed as exit 0. It is
 // refused at write time now, exactly like the absent key beside it.
 //
-// (Proposed spec scenario "A null exit code is rejected at stamp time" — the
-// prewrite hook blocks specs/ edits during the tests step; text is in the
-// qa-senior evidence report.)
+// Scenario: A null exit code is rejected at stamp time
 func TestBEG_StampRejectsNullExitCode(t *testing.T) {
 	_, out, code := begStamp(t, "demo", `[{"argv":["centinela","validate"],"exitCode":null}]`)
 	if code == 0 {

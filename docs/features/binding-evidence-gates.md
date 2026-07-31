@@ -61,10 +61,16 @@ Each gate rejects what it already claims to reject, with an actionable error:
 
 ## Constraints
 
-- **Fail-closed, but not retroactively brittle.** Legacy and archetype-subset
-  workflows (hotfix has no plan step; internal features skip docs roles) must
-  keep completing. Validation must derive the expected successor from the
-  workflow's own contract, never a hardcoded five-role list.
+- **Fail-closed, and retroactively brittle only where exactness is the point.**
+  Legacy and archetype-subset workflows (hotfix has no plan step; internal
+  features skip docs roles) must keep completing, and validation must derive the
+  expected successor from the workflow's own contract rather than a hardcoded
+  five-role list. One class is deliberately NOT accommodated: evidence seeded by
+  the old hardcoded prefill that names a role from a LATER step, skipping a
+  required same-step role (`senior-engineer → qa-senior` on a user-facing
+  feature, where the derived successor is the same-step `ux-ui-specialist`).
+  Accepting it would give back the property that makes the gate meaningful, so
+  it is refused — and the error prints the one command that repairs it.
 - No gate may be weakened to make another pass.
 - 100-line file cap incl. `_test.go` in `cmd/` and `internal/`; per-package
   coverage ≥97% on touched packages; scaffold-mirror lockstep for any

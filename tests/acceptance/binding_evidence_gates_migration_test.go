@@ -1,9 +1,7 @@
 // Acceptance: specs/binding-evidence-gates.feature
 //
-// The two behaviours the spec does not yet state, because the prewrite hook
-// blocks specs/ edits during the tests step. Proposed scenario text is
-// recorded in .workflow/binding-evidence-gates-qa-senior.md; these tests pin
-// the behaviour meanwhile so the decision is stated rather than emergent.
+// The two migration behaviours: what the alternate-pin tolerance refuses, and
+// what evidence seeded by the old hardcoded prefill costs to repair.
 package acceptance_test
 
 import (
@@ -14,7 +12,7 @@ import (
 	"github.com/samuelnp/centinela/internal/workflow"
 )
 
-// Proposed scenario: The tolerance refuses a role from another step.
+// Scenario: The tolerance refuses a role from another step
 //
 // The tolerance exists so evidence naming the successor STEP under the other
 // contract pin keeps completing. It is scoped to that one step: a role from
@@ -32,8 +30,7 @@ func TestBEG_ToleranceRefusesAnotherStepsRole(t *testing.T) {
 	}
 }
 
-// Proposed scenario: Evidence seeded by the old prefill on a user-facing
-// feature.
+// Scenario: Evidence seeded by the old prefill on a user-facing feature
 //
 // The decision: NOT accepted. The old prefill's "qa-senior" does not misname
 // the successor step's occupant — it names a LATER step's role, asserting that

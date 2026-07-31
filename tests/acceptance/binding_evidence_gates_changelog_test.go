@@ -58,8 +58,7 @@ func TestBEG_ScaffoldedChangelogFailsItsOwnGate(t *testing.T) {
 // generic citation form still passes — including the line this very feature
 // ships, which the positional rule would have rejected as a false positive.
 //
-// (Proposed spec scenario "A changelog stub behind a heading fails the docs
-// gate" — the prewrite hook blocks specs/ edits during the tests step.)
+// Scenario: A changelog stub behind a heading fails the docs gate
 func TestBEG_ChangelogStubBehindHeadingFailsDocsGate(t *testing.T) {
 	stub := "- <FILL: type>: <FILL: one-line summary of the change>\n"
 	if err := begDocsGate(t, "demo", "## Changelog\n\n"+stub); err == nil {

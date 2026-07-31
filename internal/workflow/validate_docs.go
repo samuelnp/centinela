@@ -49,7 +49,7 @@ func validateChangelog(feature string) error {
 			continue
 		}
 		entries++
-		if orchestration.UnreplacedSlot(line) {
+		if orchestration.StubEntry(line) {
 			return fmt.Errorf("changelog entry is still a template placeholder for %q: %s line %d (replace the <FILL: ...> slots with a real one-line summary of the change; the generic \"<FILL: ...>\" citation form is not a slot, so prose may still quote the marker)", feature, path, lineNo)
 		}
 	}
