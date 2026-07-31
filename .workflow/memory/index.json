@@ -130,6 +130,19 @@
     "createdAt": "2026-07-29T12:10:55Z"
   },
   {
+    "id": "18ff49d0487e0ac4",
+    "feature": "dynamic-routing-clock-skew",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- An evidence artifact stamped a few milliseconds BEFORE `StartedAt` — the coarse",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/dynamic-routing-clock-skew-edge-cases.md",
+    "createdAt": "2026-07-31T08:54:14Z"
+  },
+  {
     "id": "191b174e960a77d3",
     "feature": "centinela-insights",
     "step": "validate",
