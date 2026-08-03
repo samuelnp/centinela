@@ -19,16 +19,34 @@ import (
 // It stays silent on a project with no workflows (nothing has inherited
 // anything yet) and on a project whose centinela.toml pins the profile
 // explicitly, whatever value it pins.
+//
+// A config that could not be PARSED is not the same as one with no pin. NewContext
+// leaves ctx.Config nil on a parse error so the other checks keep running, and
+// reading that nil as "unpinned" told operators whose config pins strict that they
+// were inheriting guided — the doctor, of all surfaces, answering with the loosest
+// profile. When the config is unreadable this check says so and defers to the
+// config check, which already reports the parse failure as an ERROR.
 type profileDefaultCheck struct{}
 
 func (profileDefaultCheck) Name() string { return "profile-default" }
 
 func (profileDefaultCheck) Run(ctx Context) Diagnosis {
 	d := Diagnosis{Name: "profile-default"}
-	pinned := ctx.Config != nil && ctx.Config.Workflow.RawEnforcementProfile != ""
-	if pinned || !hasWorkflows(ctx.Root) {
+	if ctx.CfgErr != nil || ctx.Config == nil {
 		d.Status = OK
-		d.Message = "enforcement profile is explicit or no workflows exist"
+		d.Message = "enforcement profile is unknown — " + config.Filename + " could not be read"
+		return d
+	}
+	// Silent unless the project ACTUALLY inherits guided. An explicit pin is not
+	// the only way to land elsewhere: a declared driver model resolves through the
+	// capability tier, and an unmapped one resolves strict. Warning "you are on
+	// guided" there would repeat, at project scope, the exact mistake this check
+	// was hardened against at parse-error scope.
+	inherited := config.ProjectDefaultProfile(ctx.Config)
+	pinned := ctx.Config.Workflow.RawEnforcementProfile != ""
+	if pinned || inherited != config.ProfileGuided || !hasWorkflows(ctx.Root) {
+		d.Status = OK
+		d.Message = "enforcement profile is pinned, resolves elsewhere, or no workflows exist"
 		return d
 	}
 	d.Status = Warn
@@ -40,6 +58,8 @@ func (profileDefaultCheck) Run(ctx Context) Diagnosis {
 			"verification and the verifier's grounded verdict are unchanged",
 		`to keep the previous behavior, add to centinela.toml: [workflow] enforcement_profile = "strict"`,
 		"workflows started before the flip are unaffected — they stay strict for life",
+		"this is the PROJECT default; a workflow that pinned a driver model or a " +
+			"--profile at start resolves on its own terms (see centinela status)",
 	}
 	return d
 }

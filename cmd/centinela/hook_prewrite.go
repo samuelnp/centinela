@@ -62,11 +62,12 @@ func runHookPrewrite(_ *cobra.Command, _ []string) error {
 	if len(paths) == 0 {
 		return nil
 	}
-	cfg, err := config.Load()
+	cfg, err := config.LoadForProfile()
 	if err != nil {
-		// Hooks must never break the host session: warn and use defaults.
+		// Hooks must never break the host session: warn and keep going with the
+		// strict-pinned stand-in LoadForProfile returned. Prewrite only relaxes
+		// for outcome, which that stand-in can never produce.
 		fmt.Fprintln(os.Stderr, "config warning: "+err.Error())
-		cfg = &config.Config{}
 	}
 	wfs := loadActiveWorkflows()
 	cwd, _ := os.Getwd()

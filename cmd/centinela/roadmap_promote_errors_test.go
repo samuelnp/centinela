@@ -25,13 +25,15 @@ func TestReportPromoteResult_NoRoadmap(t *testing.T) {
 	}
 }
 
-// TestReportPromoteResult_ValidateFails errors when analysis missing.
+// TestReportPromoteResult_ValidateFails errors when analysis missing under
+// STRICT, which is the profile that requires the grading artifacts at all.
 func TestReportPromoteResult_ValidateFails(t *testing.T) {
 	d := t.TempDir()
 	orig, _ := os.Getwd()
-	defer os.Chdir(orig)           //nolint:errcheck
-	os.Chdir(d)                    //nolint:errcheck
-	os.MkdirAll(".workflow", 0755) //nolint:errcheck
+	defer os.Chdir(orig)                                                                           //nolint:errcheck
+	os.Chdir(d)                                                                                    //nolint:errcheck
+	os.MkdirAll(".workflow", 0755)                                                                 //nolint:errcheck
+	os.WriteFile("centinela.toml", []byte("[workflow]\nenforcement_profile = \"strict\"\n"), 0644) //nolint:errcheck
 	// Roadmap with the slug in a phase, but no analysis coverage
 	r := &roadmap.Roadmap{Phases: []roadmap.Phase{
 		{Name: "Phase 5", Features: []roadmap.Feature{{Name: "some-slug"}}},

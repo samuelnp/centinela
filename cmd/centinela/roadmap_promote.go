@@ -63,6 +63,9 @@ func promoteScored(slug string) error {
 	}
 	if _, err := roadmap.Promote(roadmap.RoadmapFile, roadmap.PromoteRequest{
 		Slug: slug, Phase: promotePhase, Summary: promoteSummary, Scores: scores,
+		// Seeding is profile-scoped and happens INSIDE Promote, after the slug
+		// and phase are validated, so a rejected promote leaves no artifacts.
+		SeedArtifacts: !promoteRequiresGrading(),
 	}); err != nil {
 		return err
 	}
@@ -74,11 +77,8 @@ func reportPromoteResult(slug string) error {
 	if err != nil {
 		return fmt.Errorf("promote wrote files but roadmap reload failed: %w", err)
 	}
-	if err := roadmap.ValidateAnalysis(r); err != nil {
-		return fmt.Errorf("promote wrote files but validate failed: %w", err)
-	}
-	if err := roadmap.ValidateQuality(r); err != nil {
-		return fmt.Errorf("promote wrote files but validate failed: %w", err)
+	if err := reportGradingAfterPromote(r); err != nil {
+		return err
 	}
 	fmt.Println(ui.RenderSuccess(promoteResultMessage(slug)))
 	return nil

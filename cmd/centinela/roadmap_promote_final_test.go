@@ -19,13 +19,16 @@ func TestPromoteScored_PromoteError(t *testing.T) {
 	}
 }
 
-// TestReportPromoteResult_QualityValidateFails errors when quality validate fails.
+// TestReportPromoteResult_QualityValidateFails errors when quality validate
+// fails under STRICT; guided reports the same condition as advice (see
+// roadmap_promote_cascade_test.go).
 func TestReportPromoteResult_QualityValidateFails(t *testing.T) {
 	d := t.TempDir()
 	orig, _ := os.Getwd()
-	defer os.Chdir(orig)           //nolint:errcheck
-	os.Chdir(d)                    //nolint:errcheck
-	os.MkdirAll(".workflow", 0755) //nolint:errcheck
+	defer os.Chdir(orig)                                                                           //nolint:errcheck
+	os.Chdir(d)                                                                                    //nolint:errcheck
+	os.MkdirAll(".workflow", 0755)                                                                 //nolint:errcheck
+	os.WriteFile("centinela.toml", []byte("[workflow]\nenforcement_profile = \"strict\"\n"), 0644) //nolint:errcheck
 	// Roadmap with "slug" in a phase
 	r := &roadmap.Roadmap{Phases: []roadmap.Phase{
 		{Name: "Phase 5", Features: []roadmap.Feature{{Name: "slug"}}},

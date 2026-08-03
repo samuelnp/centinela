@@ -47,9 +47,10 @@ type QualityReport struct {
 // DECODES so every artifact written before the threshold gate was deleted keeps
 // parsing — its value is deliberately ignored, whatever it says.
 type qualityEnvelope struct {
-	Role      string           `json:"role"`
-	Threshold int              `json:"threshold"`
-	Features  *json.RawMessage `json:"features"`
+	Role        string           `json:"role"`
+	Threshold   int              `json:"threshold"`
+	Provisional bool             `json:"provisional"`
+	Features    *json.RawMessage `json:"features"`
 }
 
 // ValidateQuality checks the roadmap quality artifacts: both files present, the
@@ -82,6 +83,9 @@ func loadQualityFeatures() ([]QualityFeature, error) {
 	}
 	if q.Role != qualityRole {
 		return nil, fmt.Errorf("roadmap quality role must be %s", qualityRole)
+	}
+	if q.Provisional {
+		return nil, provisionalRefusal(RoadmapQualityFile, "quality-evaluator")
 	}
 	return decodeQualityFeatures(q.Features)
 }

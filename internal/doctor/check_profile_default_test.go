@@ -7,6 +7,19 @@ import (
 	"github.com/samuelnp/centinela/internal/config"
 )
 
+// loadedCfg returns a config a REAL successful Load produced in the current
+// (fixture) directory. The guided tail is reachable only from one — a fabricated
+// &config.Config{} resolves strict by design (config.ResolvedByLoad) — so the
+// advisory's own precondition needs a genuine load, exactly as NewContext does.
+func loadedCfg(t *testing.T) *config.Config {
+	t.Helper()
+	cfg, err := config.Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	return cfg
+}
+
 // cfgPinned returns a config whose enforcement_profile was set explicitly.
 func cfgPinned(profile string) *config.Config {
 	c := &config.Config{}
@@ -20,7 +33,7 @@ func cfgPinned(profile string) *config.Config {
 func TestProfileDefaultAdvisesInheritedDefault(t *testing.T) {
 	repoFixture(t)
 	seedWorkflow(t, "feat")
-	d := profileDefaultCheck{}.Run(Context{Root: ".", Config: &config.Config{}})
+	d := profileDefaultCheck{}.Run(Context{Root: ".", Config: loadedCfg(t)})
 	if d.Status != Warn {
 		t.Fatalf("status = %v, want Warn (advisory)", d.Status)
 	}
@@ -42,7 +55,7 @@ func TestProfileDefaultSilentWhenPinnedOrEmpty(t *testing.T) {
 		}
 	}
 	repoFixture(t) // workflow-less project: nothing has inherited anything yet
-	if d := (profileDefaultCheck{}).Run(Context{Root: ".", Config: &config.Config{}}); d.Status != OK {
+	if d := (profileDefaultCheck{}).Run(Context{Root: ".", Config: loadedCfg(t)}); d.Status != OK {
 		t.Fatalf("a project with no workflows must be silent, got %v", d.Status)
 	}
 }
@@ -52,7 +65,7 @@ func TestProfileDefaultSilentWhenPinnedOrEmpty(t *testing.T) {
 func TestProfileDefaultIsNeverFatalAndNeverFixed(t *testing.T) {
 	repoFixture(t)
 	seedWorkflow(t, "feat")
-	d := profileDefaultCheck{}.Run(Context{Root: ".", Config: &config.Config{}})
+	d := profileDefaultCheck{}.Run(Context{Root: ".", Config: loadedCfg(t)})
 	if ExitError([]Diagnosis{d}) {
 		t.Fatal("the profile-default advisory must never fail the doctor run")
 	}

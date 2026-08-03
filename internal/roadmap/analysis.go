@@ -6,7 +6,10 @@ import (
 	"os"
 )
 
+// RoadmapAnalysisFile is the machine-readable senior-PM roadmap analysis.
 const RoadmapAnalysisFile = ".workflow/roadmap-analysis.json"
+
+// RoadmapAnalysisMarkdown is its human-readable companion; both must exist.
 const RoadmapAnalysisMarkdown = ".workflow/roadmap-analysis.md"
 
 // AnalysisFeature is a single feature entry in the senior-PM analysis.
@@ -15,9 +18,13 @@ type AnalysisFeature struct {
 	Name string `json:"name"`
 }
 
+// Analysis is the decoded senior-PM roadmap analysis. Provisional marks an
+// artifact seeded by `roadmap promote` rather than written by an evaluator; see
+// provisional.go for why the role string alone is not enough.
 type Analysis struct {
-	Role     string            `json:"role"`
-	Features []AnalysisFeature `json:"features"`
+	Role        string            `json:"role"`
+	Provisional bool              `json:"provisional,omitempty"`
+	Features    []AnalysisFeature `json:"features"`
 }
 
 // ValidateAnalysis checks role, markdown presence, and feature coverage only.
@@ -36,6 +43,9 @@ func ValidateAnalysis(r *Roadmap) error {
 	}
 	if a.Role != "senior-product-manager" {
 		return fmt.Errorf("roadmap analysis role must be senior-product-manager")
+	}
+	if a.Provisional {
+		return provisionalRefusal(RoadmapAnalysisFile, "senior-PM analysis")
 	}
 	names := roadmapFeatureSet(r)
 	seen := map[string]bool{}

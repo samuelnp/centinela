@@ -12,7 +12,9 @@ import (
 //   - tier 2 (explicit global enforcement_profile): note "global"
 //   - tier 3 hit (driver model maps to a class): note "driver: <id> → <class>"
 //   - tier 3 miss (driver set, no class): note "driver: <id> → no capability, default strict"
-//   - tier 4 hit (pinned profile contract): note "default (guided)"
+//   - tier 4 hit (pinned contract + a real config): note "default (guided)"
+//   - an unreadable centinela.toml (checked ahead of every tier below the
+//     per-feature pin): note "unreadable centinela.toml, default strict"
 //   - tier 4 miss (legacy/in-flight workflow): note "default (strict, legacy workflow)"
 //
 // The two tier-4 notes and the tier-3 driver note stay distinguishable on
@@ -24,21 +26,29 @@ func ProfileProvenance(wf *Workflow, cfg *config.Config) (profile, note string) 
 	if wf != nil && wf.EnforcementProfile != "" {
 		return config.NormalizeEnforcementProfile(wf.EnforcementProfile), "--profile"
 	}
+	if cfg.LoadFailed() {
+		return config.ProfileStrict, "unreadable " + config.Filename + ", default strict"
+	}
 	if cfg != nil && cfg.Workflow.RawEnforcementProfile != "" {
 		return config.NormalizeEnforcementProfile(cfg.Workflow.EnforcementProfile), "global"
 	}
-	if wf != nil && wf.DriverModel != "" && cfg != nil {
-		if class, ok := config.CapabilityClassFor(wf.DriverModel, cfg); ok {
+	if driver := TierDriverModel(wf, cfg); driver != "" && cfg != nil {
+		if class, ok := config.CapabilityClassFor(driver, cfg); ok {
 			profile = config.NormalizeEnforcementProfile(config.ProfileForCapability(class, cfg))
-			return profile, fmt.Sprintf("driver: %s → %s", wf.DriverModel, class)
+			return profile, fmt.Sprintf("driver: %s → %s", driver, class)
 		}
-		if _, ok := config.LocalDefaultClass(wf.DriverModel, cfg); ok {
-			return config.ProfileStrict, fmt.Sprintf("local default: %s → limited → strict", wf.DriverModel)
+		if _, ok := config.LocalDefaultClass(driver, cfg); ok {
+			return config.ProfileStrict, fmt.Sprintf("local default: %s → limited → strict", driver)
 		}
-		return config.ProfileStrict, fmt.Sprintf("driver: %s → no capability, default strict", wf.DriverModel)
+		return config.ProfileStrict, fmt.Sprintf("driver: %s → no capability, default strict", driver)
+	}
+	if wf.UsesGuidedDefault() && cfg.ResolvedByLoad() {
+		return config.ProfileGuided, "default (guided)"
 	}
 	if wf.UsesGuidedDefault() {
-		return config.ProfileGuided, "default (guided)"
+		// Post-flip workflow, but the config was never loaded — not a legacy
+		// workflow, and saying so would misattribute the strictness.
+		return config.ProfileStrict, "default (strict, unresolved config)"
 	}
 	return config.ProfileStrict, "default (strict, legacy workflow)"
 }

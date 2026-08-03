@@ -42,17 +42,15 @@ func TestNewWithOrderPinsProfileContract(t *testing.T) {
 // TestEffectiveProfile_TailIsStateDated is the blast-radius guard: the flip
 // reaches pinned workflows and NOTHING else.
 func TestEffectiveProfile_TailIsStateDated(t *testing.T) {
-	if got := EffectiveProfile(pinned(), &config.Config{}); got != config.ProfileGuided {
-		t.Fatalf("pinned + zero config = %q, want guided", got)
+	loaded := loadedCfg(t)
+	if got := EffectiveProfile(pinned(), loaded); got != config.ProfileGuided {
+		t.Fatalf("pinned + a real zero-config load = %q, want guided", got)
 	}
-	if got := EffectiveProfile(&Workflow{}, &config.Config{}); got != config.ProfileStrict {
-		t.Fatalf("unpinned (legacy/in-flight) + zero config = %q, want strict", got)
+	if got := EffectiveProfile(&Workflow{}, loaded); got != config.ProfileStrict {
+		t.Fatalf("unpinned (legacy/in-flight) = %q, want strict", got)
 	}
-	if got := EffectiveProfile(nil, &config.Config{}); got != config.ProfileStrict {
+	if got := EffectiveProfile(nil, loaded); got != config.ProfileStrict {
 		t.Fatalf("workflow-less caller = %q, want strict", got)
-	}
-	if got := EffectiveProfile(pinned(), nil); got != config.ProfileGuided {
-		t.Fatalf("pinned + nil config = %q, want guided", got)
 	}
 }
 
@@ -61,7 +59,7 @@ func TestEffectiveProfile_TailIsStateDated(t *testing.T) {
 func TestEffectiveProfile_PinLosesToEveryExplicitTier(t *testing.T) {
 	tier1 := pinned()
 	tier1.EnforcementProfile = config.ProfileStrict
-	if got := EffectiveProfile(tier1, &config.Config{}); got != config.ProfileStrict {
+	if got := EffectiveProfile(tier1, loadedCfg(t)); got != config.ProfileStrict {
 		t.Fatalf("tier 1 --profile strict = %q, want strict", got)
 	}
 	if got := EffectiveProfile(pinned(), cfgWithProfile(config.ProfileStrict)); got != config.ProfileStrict {
@@ -69,7 +67,7 @@ func TestEffectiveProfile_PinLosesToEveryExplicitTier(t *testing.T) {
 	}
 	limited := pinned()
 	limited.DriverModel = "haiku"
-	if got := EffectiveProfile(limited, &config.Config{}); got != config.ProfileStrict {
+	if got := EffectiveProfile(limited, loadedCfg(t)); got != config.ProfileStrict {
 		t.Fatalf("tier 3 limited driver = %q, want strict", got)
 	}
 }
@@ -77,16 +75,17 @@ func TestEffectiveProfile_PinLosesToEveryExplicitTier(t *testing.T) {
 // TestProfileProvenance_PinDoesNotMaskCapability: a capable driver model must
 // still be reported as the SOURCE of guided, not the shipped default.
 func TestProfileProvenance_PinDoesNotMaskCapability(t *testing.T) {
+	loaded := loadedCfg(t)
 	capable := pinned()
 	capable.DriverModel = "sonnet"
-	profile, note := ProfileProvenance(capable, &config.Config{})
+	profile, note := ProfileProvenance(capable, loaded)
 	if profile != config.ProfileGuided {
 		t.Fatalf("profile = %q, want guided", profile)
 	}
 	if note != "driver: sonnet → capable" {
 		t.Fatalf("note = %q, want the driver capability note", note)
 	}
-	if _, defaultNote := ProfileProvenance(pinned(), &config.Config{}); defaultNote == note {
+	if _, defaultNote := ProfileProvenance(pinned(), loaded); defaultNote == note {
 		t.Fatal("capability-derived and default-derived guided must stay distinguishable")
 	}
 }

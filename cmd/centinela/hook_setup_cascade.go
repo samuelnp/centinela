@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/samuelnp/centinela/internal/config"
+	"github.com/samuelnp/centinela/internal/roadmap"
 	"github.com/samuelnp/centinela/internal/ui"
 )
 
@@ -19,14 +20,11 @@ type setupRung struct {
 }
 
 // setupRequiresGrading reports whether the cascade's grading rungs HALT the
-// setup flow. Strict halts; guided and outcome advise. A centinela.toml that
-// cannot be parsed halts too — when the profile is unknowable the fail-safe
-// direction is more scaffolding, never less.
+// setup flow. Strict halts; guided and outcome advise. The shared resolver
+// supplies the config, so a centinela.toml that cannot be parsed halts too —
+// when the profile is unknowable the fail-safe direction is more scaffolding.
 func setupRequiresGrading() bool {
-	cfg, err := config.Load()
-	if err != nil {
-		return true
-	}
+	cfg, _ := config.LoadForProfile()
 	return config.ProfileDefaults(config.ProjectDefaultProfile(cfg)).RequireRoadmapGrading
 }
 
@@ -48,13 +46,15 @@ func postRoadmapRungs() []setupRung {
 	return []setupRung{{
 		label: ".workflow/roadmap-analysis.{md,json}",
 		satisfied: func() bool {
-			return exists(".workflow/roadmap-analysis.md") && exists(".workflow/roadmap-analysis.json")
+			return evaluatedArtifact(".workflow/roadmap-analysis.md", roadmap.RoadmapAnalysisFile)
 		},
 		directive: "CENTINELA DIRECTIVE: roadmap analysis required. Delegate to senior product manager.",
 		panel:     ui.RenderRoadmapAnalysisNeeded,
 	}, {
-		label:     ".workflow/roadmap-quality.{md,json}",
-		satisfied: func() bool { return exists(".workflow/roadmap-quality.md") && exists(".workflow/roadmap-quality.json") },
+		label: ".workflow/roadmap-quality.{md,json}",
+		satisfied: func() bool {
+			return evaluatedArtifact(".workflow/roadmap-quality.md", roadmap.RoadmapQualityFile)
+		},
 		directive: "CENTINELA DIRECTIVE: roadmap quality required. Delegate to roadmap quality evaluator.",
 		panel:     ui.RenderRoadmapQualityNeeded,
 	}, {

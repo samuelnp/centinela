@@ -37,6 +37,11 @@
   "validateContract": "adversarial-v1",
   "planContract": "planner-v1",
   "modelRoutes": {
+    "gatekeeper": {
+      "tier": "reasoning",
+      "reason": "Adversarial refutation of a change to enforcement defaults; the routing floor mandates reasoning and this is the hardest judgment in the workflow",
+      "decidedAt": "2026-08-03T13:43:37Z"
+    },
     "planner": {
       "tier": "reasoning",
       "reason": "Profile-default flip touches enforcement semantics, greenfield cascade, and the self-graded quality gate deletion — highest-stakes planning judgment in Phase 13",

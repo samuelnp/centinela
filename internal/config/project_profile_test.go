@@ -18,8 +18,10 @@ func TestProjectDefaultProfile(t *testing.T) {
 		cfg  *Config
 		want string
 	}{
-		{"nil config", nil, ProfileGuided},
-		{"zero config", &Config{}, ProfileGuided},
+		// A nil or zero-valued config was never loaded, so the tail is unreachable
+		// and the answer is strict. That is the value-level fail-closed rule.
+		{"nil config", nil, ProfileStrict},
+		{"fabricated zero config", &Config{}, ProfileStrict},
 		{"explicit global strict wins", cfgProject(ProfileStrict, ""), ProfileStrict},
 		{"explicit global outranks driver", cfgProject(ProfileStrict, "sonnet"), ProfileStrict},
 		{"capable driver → guided", cfgProject("", "sonnet"), ProfileGuided},
@@ -34,6 +36,24 @@ func TestProjectDefaultProfile(t *testing.T) {
 				t.Fatalf("ProjectDefaultProfile = %q, want %q", got, tc.want)
 			}
 		})
+	}
+}
+
+// TestProjectDefaultProfileTailNeedsARealLoad: a genuinely zero-config project
+// still takes guided, because Load SUCCEEDS on an absent centinela.toml. Only a
+// config nobody loaded is refused the tail — that distinction is the whole fix.
+func TestProjectDefaultProfileTailNeedsARealLoad(t *testing.T) {
+	t.Chdir(t.TempDir())
+	t.Setenv("CENTINELA_MODEL", "")
+	loaded, err := Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if got := ProjectDefaultProfile(loaded); got != ProfileGuided {
+		t.Fatalf("a real zero-config load must take guided, got %q", got)
+	}
+	if got := ProjectDefaultProfile(&Config{}); got != ProfileStrict {
+		t.Fatalf("a fabricated config must never take guided, got %q", got)
 	}
 }
 
