@@ -384,23 +384,93 @@
       "name": "Phase 13: Lighter Centinela",
       "note": "Retrospective-driven refactor (retrospective.md): verify the work, not artifacts about the work; process weight proportional to risk",
       "features": [
-        {"name":"merge-truthful-delivery","archetype":"canonical","description":"Fix deliver --via merge false success: resolve the primary worktree, verify the target ref advanced and the worktree was removed before reporting success"},
-        {"name":"truthful-validators","archetype":"canonical","description":"Fix nil-uiPaths evidence validate, detect skipped acceptance scenarios (skips fail validate by default), honest quality-score shape errors, honest gate reporting for file-size cap and single-locale i18n"},
-        {"name":"guided-by-default","dependsOn":["truthful-validators"],"archetype":"canonical","description":"Flip the default enforcement profile strict to guided, slim the greenfield cascade to PROJECT.md + roadmap.json, delete the self-graded quality threshold gate"},
-        {"name":"coupled-steps-relaxation","archetype":"refactor","description":"workflow.coupled_tests knob (auto-on for compiled languages): allow existing-test edits during code step and additive spec edits during tests step so the tree compiles at every step boundary; surface workflow archetypes at start"},
-        {"name":"token-diet","archetype":"refactor","description":"Drop the O(N) plan-input glob, fix the UX evidence tag matcher, digest-dedup the per-prompt roadmap summary, replace dated model pins with family aliases"},
-        {"name":"roadmap-state-hygiene","archetype":"canonical","description":"Every roadmap CLI mutation regenerates ROADMAP.md and auto-commits roadmap state (pathspec, respects disable_auto_commit); roadmap backlog --stale aging and a completion nudge for deferred findings"},
-        {"name":"smoke-verification","archetype":"canonical","description":"First-class validate.smoke_commands that exercise the running product during validate and merge; smoke verify claim, scaffolded config examples, and a repo smoke script"},
-        {"name":"unified-plan-specialist","description":"Merge the plan-step big-thinker and feature-specialist roles into one reasoning-tier planner: a single subagent context whose prompt carries both lenses as ordered sections (strategy/scope/risks, then acceptance criteria/edge cases/spec), producing one evidence pair instead of two; keeps the after-plan human confirmation and accepts legacy two-role evidence for in-flight workflows."},
-        {"name":"adversarial-validate-verifier","description":"Recast the validate-step gatekeeper as a fresh-context adversarial verifier: refutation stance (find why the completion claim is false; default to not-done when uncertain), evidence-only inputs (diff vs base, frozen spec, gate outputs — never role reports or orchestrator narrative), and it re-runs centinela validate and the test suite itself instead of trusting reports; drops the validation-specialist role; CRITICAL verdict blocks complete."},
-        {"name":"spec-conflict-false-positives","archetype":"hotfix","description":"Fix DetectSpecConflicts false positives that block deliver --via merge: byte-identical spec copies across trees conflict with themselves, and any two scenarios sharing a Given with different outcomes are flagged even within one file (normal companion Gherkin); conflict only on same (file, scenario) diverging across different owners, and dedupe the report (was 720KB of repeats)"},
-        {"name":"docs-step-markdown-first","archetype":"canonical","description":"Redesign the docs step around markdown for humans: delete the HTML pipeline (internal/docgen, docs generate, KB html, portal index), gate on real updated doc files (docs/guides/, README) instead, and add a curated 'docs context' command so the specialist reads feature-scale inputs instead of crawling the repo"},
-        {"name":"docstring-gate","dependsOn":["docs-step-markdown-first"],"archetype":"canonical","description":"Deterministic docstring gate: 'centinela docs lint' walks the AST and fails on exported identifiers without doc comments, changed-files ratchet scope; senior-engineer prompt gains the write-doc-comments-in-code-step duty so a Docusaurus/godoc pipeline can consume the codebase later"},
-        {"name":"dynamic-model-routing","archetype":"canonical","description":"Opt-in dynamic model routing: [orchestration] routing_mode = static (default, unchanged) | dynamic; in dynamic mode the orchestrator decides each role's model tier per feature via 'centinela route set <feature> <role> <tier>' persisted in workflow state, with configurable per-role floors (default gatekeeper=reasoning, planner=balanced), downgrade-only-before-step-start / upgrade-anytime, --reason required on downgrades below the static default, and every route decision recorded in telemetry; un-routed roles fall back to static config"},
-        {"name":"dynamic-routing-clock-skew","archetype":"hotfix","description":"Hotfix: dynamic model routing clock-skew handling"},
-        {"name":"binding-evidence-gates","archetype":"canonical","description":"Make three evidence/artifact gates actually bind what they claim: validate handoffTo against the documented role chain (today handoffTo=banana completes a step), validate the centinela:verification commands schema at artifact stamp time instead of accepting any shape, and reject an unfilled <FILL:> template as a changelog (today the stub satisfies the docs gate)"},
-        {"name":"beg-docstring-debt","archetype":"hotfix","description":"Hotfix: document the two exported identifiers in internal/orchestration/evidence.go (Evidence, ValidateEvidence) that the newly-enforcing docstring gate surfaces on binding-evidence-gates' changed-file set"},
-        {"name":"evidence-schema-skeleton-legacy-handoff"}
+        {
+          "name": "merge-truthful-delivery",
+          "archetype": "canonical",
+          "description": "Fix deliver --via merge false success: resolve the primary worktree, verify the target ref advanced and the worktree was removed before reporting success"
+        },
+        {
+          "name": "truthful-validators",
+          "archetype": "canonical",
+          "description": "Fix nil-uiPaths evidence validate, detect skipped acceptance scenarios (skips fail validate by default), honest quality-score shape errors, honest gate reporting for file-size cap and single-locale i18n"
+        },
+        {
+          "name": "guided-by-default",
+          "dependsOn": [
+            "truthful-validators"
+          ],
+          "archetype": "canonical",
+          "description": "Flip the default enforcement profile strict to guided, slim the greenfield cascade to PROJECT.md + roadmap.json, delete the self-graded quality threshold gate"
+        },
+        {
+          "name": "coupled-steps-relaxation",
+          "archetype": "refactor",
+          "description": "workflow.coupled_tests knob (auto-on for compiled languages): allow existing-test edits during code step and additive spec edits during tests step so the tree compiles at every step boundary; surface workflow archetypes at start"
+        },
+        {
+          "name": "token-diet",
+          "archetype": "refactor",
+          "description": "Drop the O(N) plan-input glob, fix the UX evidence tag matcher, digest-dedup the per-prompt roadmap summary, replace dated model pins with family aliases"
+        },
+        {
+          "name": "roadmap-state-hygiene",
+          "archetype": "canonical",
+          "description": "Every roadmap CLI mutation regenerates ROADMAP.md and auto-commits roadmap state (pathspec, respects disable_auto_commit); roadmap backlog --stale aging and a completion nudge for deferred findings"
+        },
+        {
+          "name": "smoke-verification",
+          "archetype": "canonical",
+          "description": "First-class validate.smoke_commands that exercise the running product during validate and merge; smoke verify claim, scaffolded config examples, and a repo smoke script"
+        },
+        {
+          "name": "unified-plan-specialist",
+          "description": "Merge the plan-step big-thinker and feature-specialist roles into one reasoning-tier planner: a single subagent context whose prompt carries both lenses as ordered sections (strategy/scope/risks, then acceptance criteria/edge cases/spec), producing one evidence pair instead of two; keeps the after-plan human confirmation and accepts legacy two-role evidence for in-flight workflows."
+        },
+        {
+          "name": "adversarial-validate-verifier",
+          "description": "Recast the validate-step gatekeeper as a fresh-context adversarial verifier: refutation stance (find why the completion claim is false; default to not-done when uncertain), evidence-only inputs (diff vs base, frozen spec, gate outputs — never role reports or orchestrator narrative), and it re-runs centinela validate and the test suite itself instead of trusting reports; drops the validation-specialist role; CRITICAL verdict blocks complete."
+        },
+        {
+          "name": "spec-conflict-false-positives",
+          "archetype": "hotfix",
+          "description": "Fix DetectSpecConflicts false positives that block deliver --via merge: byte-identical spec copies across trees conflict with themselves, and any two scenarios sharing a Given with different outcomes are flagged even within one file (normal companion Gherkin); conflict only on same (file, scenario) diverging across different owners, and dedupe the report (was 720KB of repeats)"
+        },
+        {
+          "name": "docs-step-markdown-first",
+          "archetype": "canonical",
+          "description": "Redesign the docs step around markdown for humans: delete the HTML pipeline (internal/docgen, docs generate, KB html, portal index), gate on real updated doc files (docs/guides/, README) instead, and add a curated 'docs context' command so the specialist reads feature-scale inputs instead of crawling the repo"
+        },
+        {
+          "name": "docstring-gate",
+          "dependsOn": [
+            "docs-step-markdown-first"
+          ],
+          "archetype": "canonical",
+          "description": "Deterministic docstring gate: 'centinela docs lint' walks the AST and fails on exported identifiers without doc comments, changed-files ratchet scope; senior-engineer prompt gains the write-doc-comments-in-code-step duty so a Docusaurus/godoc pipeline can consume the codebase later"
+        },
+        {
+          "name": "dynamic-model-routing",
+          "archetype": "canonical",
+          "description": "Opt-in dynamic model routing: [orchestration] routing_mode = static (default, unchanged) | dynamic; in dynamic mode the orchestrator decides each role's model tier per feature via 'centinela route set <feature> <role> <tier>' persisted in workflow state, with configurable per-role floors (default gatekeeper=reasoning, planner=balanced), downgrade-only-before-step-start / upgrade-anytime, --reason required on downgrades below the static default, and every route decision recorded in telemetry; un-routed roles fall back to static config"
+        },
+        {
+          "name": "dynamic-routing-clock-skew",
+          "archetype": "hotfix",
+          "description": "Hotfix: dynamic model routing clock-skew handling"
+        },
+        {
+          "name": "binding-evidence-gates",
+          "archetype": "canonical",
+          "description": "Make three evidence/artifact gates actually bind what they claim: validate handoffTo against the documented role chain (today handoffTo=banana completes a step), validate the centinela:verification commands schema at artifact stamp time instead of accepting any shape, and reject an unfilled <FILL:> template as a changelog (today the stub satisfies the docs gate)"
+        },
+        {
+          "name": "beg-docstring-debt",
+          "archetype": "hotfix",
+          "description": "Hotfix: document the two exported identifiers in internal/orchestration/evidence.go (Evidence, ValidateEvidence) that the newly-enforcing docstring gate surfaces on binding-evidence-gates' changed-file set"
+        },
+        {
+          "name": "evidence-schema-skeleton-legacy-handoff"
+        }
       ]
     },
     {
@@ -499,7 +569,14 @@
         {"name":"docstring-ci-scenario-ratchet-clause-unasserted","summary":"CI scenario ratchet clause is not actually asserted by its test fixture","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
         {"name":"docstring-roots-parent-escape-unvalidated","summary":"A ..-escaping root passes absolute-root validation but walks outside the repo","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
         {"name":"docstring-pass-message-plural-disagreement","summary":"Pass message says 'All 1 exported identifiers' — plural disagreement","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"evidence-doc-comment-overclaims-handoff","summary":"The ValidateEvidence doc comment says it enforces the handoff-successor rule; it enforces only the merge-steward literal complete/user pair — the derived-successor check lives in internal/workflow.CheckHandoffTo","source":{"feature":"beg-docstring-debt","role":"gatekeeper"},"deferredAt":"2026-08-03T09:35:29Z"}
+        {"name":"evidence-doc-comment-overclaims-handoff","summary":"The ValidateEvidence doc comment says it enforces the handoff-successor rule; it enforces only the merge-steward literal complete/user pair — the derived-successor check lives in internal/workflow.CheckHandoffTo","source":{"feature":"beg-docstring-debt","role":"gatekeeper"},"deferredAt":"2026-08-03T09:35:29Z"},
+        {"name":"acceptance-tier-exceeds-default-test-timeout","summary":"tests/acceptance takes ~442s alone and hit 'panic: test timed out after 10m0s' under full-suite parallelism; validate.commands passes no -timeout, so every validate run carries a live flake risk that presents as an unexplained panic rather than a test failure","source":{"feature":"evidence-schema-skeleton-legacy-handoff","role":"qa-senior"},"deferredAt":"2026-08-03T12:40:20Z"},
+        {"name":"prewrite-hook-cwd-relative-workflow-lookup","summary":"the prewrite hook resolves the active workflow through the same CWD-relative lookup fixed in evidence schema (hook_workflows.go), so an agent working from a subdirectory of its own worktree has legitimate writes blocked","source":{"feature":"evidence-schema-skeleton-legacy-handoff","role":"qa-senior"},"deferredAt":"2026-08-03T12:40:20Z"},
+        {"name":"evidence-active-workflow-corrupt-json-ambiguity","summary":"ActiveWorkflows warns to stderr and skips an unparseable .workflow/*.json, so a corrupt sibling can hide a second active workflow and let ResolveActiveFeature answer confidently where it should decline","source":{"feature":"evidence-schema-skeleton-legacy-handoff","role":"edge-case-tester"},"deferredAt":"2026-08-03T12:40:30Z"},
+        {"name":"workflow-warnings-break-json-stdout-capture","summary":"workflow load warnings go to stderr, so the standard agent capture 'centinela evidence schema <role> 2>&1' yields unparseable output despite the command's JSON-for-prompt-embedding contract","source":{"feature":"evidence-schema-skeleton-legacy-handoff","role":"edge-case-tester"},"deferredAt":"2026-08-03T12:40:30Z"},
+        {"name":"handoff-gate-skips-nonrequired-role-evidence","summary":"CheckHandoffTo only runs for roles the workflow's contract requires, so evidence for a non-required role passes validate with any handoffTo — including the unfilled <successor-role> placeholder","source":{"feature":"evidence-schema-skeleton-legacy-handoff","role":"edge-case-tester"},"deferredAt":"2026-08-03T12:40:30Z"},
+        {"name":"start-inside-worktree-creates-nested-worktree","summary":"centinela start provisions worktrees with repo=\".\" and has no inside-a-worktree guard, so starting a feature from within a worktree creates .worktrees/A/.worktrees/B; that nested layout makes nested-worktrees-resolve-outermost reachable with real workflow state on both levels, so evidence schema prints the outer feature's slug and a handoffTo the inner feature's gate refuses","source":{"feature":"evidence-schema-skeleton-legacy-handoff","role":"gatekeeper"},"deferredAt":"2026-08-03T13:05:26Z"},
+        {"name":"nested-worktrees-resolve-outermost","summary":"a path with repeated .worktrees segments resolves the OUTERMOST feature; verified NOT harmless — the outer feature has real workflow state, so evidence schema prints that feature's successor confidently for work happening in the inner one (probed: outer-uf/ux-ui-specialist where the truth was inner-feat/qa-senior)","source":{"feature":"evidence-schema-skeleton-legacy-handoff","role":"gatekeeper"},"deferredAt":"2026-08-03T13:14:44Z"}
       ]
     }
   ],

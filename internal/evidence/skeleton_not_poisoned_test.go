@@ -19,7 +19,7 @@ func TestSkeletonInputsStayEmpty(t *testing.T) {
 }
 
 func TestSchemaSkeletonRepairInputsEmpty(t *testing.T) {
-	data, err := SchemaSkeleton(orchestration.RoleBigThinker, "1.0.0")
+	data, err := SchemaSkeleton("", orchestration.RoleBigThinker, "1.0.0")
 	if err != nil {
 		t.Fatal(err)
 	}

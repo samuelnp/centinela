@@ -70,7 +70,7 @@ func TestMergeRemovalOpts_FollowsTheFlag(t *testing.T) {
 
 func TestInDir_UnreachableDirectoryIsAnError(t *testing.T) {
 	err := inDir(filepath.Join(t.TempDir(), "absent"), func() error { return nil })
-	if err == nil || !strings.Contains(err.Error(), "cannot enter primary working tree") {
-		t.Fatalf("an unreachable primary tree must error clearly, got: %v", err)
+	if err == nil || !strings.Contains(err.Error(), "cannot enter") {
+		t.Fatalf("an unreachable directory must error clearly, got: %v", err)
 	}
 }

@@ -1079,6 +1079,19 @@
     "createdAt": "2026-07-09T13:38:24Z"
   },
   {
+    "id": "b5ab123a9c0c7560",
+    "feature": "evidence-schema-skeleton-legacy-handoff",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: evidence-schema-skeleton-legacy-handoff",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/evidence-schema-skeleton-legacy-handoff-gatekeeper.md",
+    "createdAt": "2026-08-03T13:14:00Z"
+  },
+  {
     "id": "b5afec861b2222c7",
     "feature": "roadmap-doc-sync",
     "step": "validate",
@@ -1506,6 +1519,19 @@
     ],
     "sourceArtifact": ".workflow/custom-gate-sdk-edge-cases.md",
     "createdAt": "2026-06-16T19:27:54Z"
+  },
+  {
+    "id": "ff17b6a7f4c2d618",
+    "feature": "evidence-schema-skeleton-legacy-handoff",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- `internal/worktreepath/path_test.go` — **required, package currently has none (E16).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/evidence-schema-skeleton-legacy-handoff-edge-cases.md",
+    "createdAt": "2026-08-03T12:40:38Z"
   },
   {
     "id": "ff330e1ec8610e53",

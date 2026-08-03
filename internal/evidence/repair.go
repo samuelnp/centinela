@@ -5,7 +5,19 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/samuelnp/centinela/internal/orchestration"
 	"github.com/samuelnp/centinela/internal/workflow"
+)
+
+const (
+	// placeholderFeature is the obvious unfilled slot the skeleton prints for
+	// `feature` when no feature is known.
+	placeholderFeature = "<feature-slug>"
+	// unfilledHandoffSlot is its sibling for `handoffTo`. Non-empty, so it
+	// clears the generic completeness check, but not a real role name — so
+	// workflow.CheckHandoffTo refuses it with its actionable message if it is
+	// ever pasted verbatim. "The author must decide" beats "confidently wrong".
+	unfilledHandoffSlot = "<successor-role>"
 )
 
 // Repair removes orphaned `<feature>-<role>.json.tmp` files left behind by a
@@ -29,7 +41,44 @@ func Repair(feature string) ([]string, error) {
 // SchemaSkeleton returns the JSON skeleton for the given role rendered for
 // embedding in prompts. The CLI version is stamped so the file shows what
 // binary produced the skeleton.
-func SchemaSkeleton(role Role, cliVersion string) ([]byte, error) {
-	skel := Skeleton("<feature-slug>", role, cliVersion)
+//
+// feature is the feature the caller resolved (see ResolveActiveFeature), or ""
+// when none could be resolved. With a feature, handoffTo comes from the SAME
+// derivation `evidence init` and the completion gate use — one derivation,
+// three callers. Without one, both unknown fields print their placeholder
+// rather than a legacy static guess the gate would then refuse.
+func SchemaSkeleton(feature string, role Role, cliVersion string) ([]byte, error) {
+	if feature != "" && !hasWorkflowState(feature) {
+		// A slug the caller resolved from a path segment but whose contract is
+		// not readable from HERE is not a derivation. Deriving anyway falls
+		// through handoffForRole to the static legacy chain, printing a
+		// plausible-but-wrong successor beside a correct-looking feature name —
+		// strictly more convincing, and strictly more wrong, than the
+		// placeholder. Demote it to the unresolved case instead: the command
+		// answers confidently only where it actually has evidence, like its
+		// sibling `evidence init`, which refuses an unknown feature outright.
+		feature = ""
+	}
+	f := feature
+	if f == "" {
+		f = placeholderFeature
+	}
+	skel := Skeleton(f, role, cliVersion)
+	// merge-steward is out-of-band: handoffForRole answers the fixed literal
+	// "complete" for it independent of any feature, so overriding that already
+	// correct answer with a placeholder would only break a valid stub.
+	if feature == "" && role != orchestration.RoleMergeSteward {
+		skel.HandoffTo = unfilledHandoffSlot
+	}
 	return skel.MarshalJSON()
+}
+
+// hasWorkflowState reports whether feature's workflow state is readable from
+// the CURRENT directory — the same CWD-relative lookup workflow.ExpectedHandoff
+// performs, asked ahead of it so a failure becomes a placeholder rather than a
+// silent fallback. legacyHandoffForRole is untouched and still serves
+// `evidence init`'s genuine no-workflow-state stubs through Skeleton.
+func hasWorkflowState(feature string) bool {
+	_, err := workflow.Load(feature)
+	return err == nil
 }
