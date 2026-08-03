@@ -20,7 +20,10 @@ func TestRoadmapAnalysisValidationAndGuardExist(t *testing.T) {
 	if !strings.Contains(analysisContent, "senior-product-manager") {
 		t.Fatalf("expected senior PM role check in %s", analysisPath)
 	}
-	guardPath := filepath.Join("..", "..", "cmd", "centinela", "start_guard.go")
+	// The requirement moved into start_guard_cascade.go when the greenfield
+	// grading rungs became profile-scoped; the refusal text is unchanged and
+	// still fires under strict.
+	guardPath := filepath.Join("..", "..", "cmd", "centinela", "start_guard_cascade.go")
 	guardData, err := os.ReadFile(guardPath)
 	if err != nil {
 		t.Fatalf("expected file %s: %v", guardPath, err)

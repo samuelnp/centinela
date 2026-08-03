@@ -23,7 +23,7 @@ var roadmapPromoteCmd = &cobra.Command{
 func init() {
 	roadmapPromoteCmd.Flags().StringVar(&promotePhase, "phase", "", "target non-Backlog phase (required)")
 	roadmapPromoteCmd.Flags().StringVar(&promoteSummary, "summary", "", "override summary for the quality entry")
-	roadmapPromoteCmd.Flags().StringVar(&promoteScores, "scores", "", "CSV ac,uv,dc,dep,ee,overall (each 1-10, overall >= 9)")
+	roadmapPromoteCmd.Flags().StringVar(&promoteScores, "scores", "", "CSV ac,uv,dc,dep,ee,overall (each 1-10; recorded, not gated)")
 	roadmapCmd.AddCommand(roadmapPromoteCmd)
 }
 

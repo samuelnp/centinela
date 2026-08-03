@@ -36,8 +36,11 @@ func TestDfrc_PromoteNoScoresPrintsContext(t *testing.T) {
 	if !strings.Contains(out, "Prewrite hook timeout") {
 		t.Error("output must contain finding summary")
 	}
-	if !strings.Contains(out, "9") {
-		t.Error("output must state threshold 9")
+	if !strings.Contains(out, "1-10") {
+		t.Error("output must state the 1-10 scoring range")
+	}
+	if strings.Contains(out, "at least 9") {
+		t.Error("the deleted threshold must not be advertised as a bar to clear")
 	}
 	// roadmap.json must be unchanged
 	after, _ := os.ReadFile(dir + "/.workflow/roadmap.json")

@@ -110,7 +110,7 @@ api_key_env = "LOCAL_API_KEY"   # runner reads the value of this env var
 
 When a local block is present, `centinela init`/`migrate` add a **managed** provider block to `opencode.json` (`options.baseURL` from `endpoint`; `options.apiKey = "{env:NAME}"` for `openai-compatible` with `api_key_env`; the model under `models`). Centinela owns only its own provider key, never clobbering a user-written or foreign provider, and the wiring is idempotent — re-running rewrites it only on a real change. A config with no `[orchestration.local]` block produces byte-for-byte the same managed output as before.
 
-A declared local `model` with no explicit capability class defaults to the `limited` capability → `strict` profile, as the strictly-lowest precedence tier — so you get maximum scaffolding just by declaring an endpoint. An explicit `--profile` or a global `[workflow] enforcement_profile` still wins. `centinela status` shows the provenance:
+A declared local `model` with no explicit capability class defaults to the `limited` capability → `strict` profile — so you get maximum scaffolding just by declaring an endpoint. (This is the one case that still lands on strict: naming a model Centinela has no capability class for is read as a request for more scaffolding, not as the zero-config default, which is `guided`.) An explicit `--profile` or a global `[workflow] enforcement_profile` still wins. `centinela status` shows the provenance:
 
 ```
 Profile  strict  (local default: qwen2.5-coder → limited → strict)

@@ -28,14 +28,15 @@ func runHookAutostart(_ *cobra.Command, _ []string) error {
 		return nil
 	}
 	feature := uniqueFeatureName(autostart.DeriveFeature(autostart.ExtractPrompt(raw)))
-	order, err := workflowOrderForFeature(feature)
+	cfg, _ := config.Load()
+	// No flags in the hook path: env/config still resolve inside ResolveStart.
+	// Resolved first because the greenfield guard weighs its grading rungs by it.
+	decision := workflow.ResolveStart("", "", cfg)
+	order, err := workflowOrderForFeature(feature, decision.EffectiveProfile)
 	if err != nil {
 		return nil
 	}
 	os.MkdirAll(workflow.WorkflowDir, 0755) //nolint:errcheck
-	cfg, _ := config.Load()
-	// No flags in the hook path: env/config still resolve inside ResolveStart.
-	decision := workflow.ResolveStart("", "", cfg)
 	wf := workflow.NewWithOrder(feature, order, decision.EffectiveProfile)
 	wf.EnforcementProfile = decision.PinnedProfile
 	wf.DriverModel = decision.DriverModel

@@ -12,13 +12,12 @@ import (
 // resolveArchetypeOrder picks the step order and the resolved archetype name by
 // precedence: an explicit --archetype flag wins, else the roadmap Feature
 // archetype, else the bootstrap/canonical order from workflowOrderForFeature.
-// An empty/unknown flag or roadmap value is validated before use. The bootstrap
-// branch is itself a kind of archetype: it only applies when no archetype is
-// explicitly chosen.
-func resolveArchetypeOrder(feature, flag string) ([]string, string, error) {
-	// Refuse a draft before any archetype resolution: a draft carries no quality
-	// scores, so starting it would bypass the ≥9 gate — mirroring the Backlog
-	// refusal. Independent of --archetype so a scored-later draft cannot slip in.
+// An empty/unknown flag or roadmap value is validated before use. profile is the
+// start-time enforcement profile; it scopes the greenfield GRADING rungs only.
+func resolveArchetypeOrder(feature, flag, profile string) ([]string, string, error) {
+	// Refuse a draft before any archetype resolution: its phase and definition
+	// are not agreed yet, mirroring the Backlog refusal. Independent of
+	// --archetype and of the profile — a roadmap fact, not a process weight.
 	if r, err := roadmap.Load(); err == nil && roadmap.IsDraftFeature(r, feature) {
 		return nil, "", draftStartError(feature)
 	}
@@ -31,7 +30,7 @@ func resolveArchetypeOrder(feature, flag string) ([]string, string, error) {
 			return archetypeOrderByName(name)
 		}
 	}
-	order, err := workflowOrderForFeature(feature)
+	order, err := workflowOrderForFeature(feature, profile)
 	if err != nil {
 		return nil, "", err
 	}
@@ -49,7 +48,11 @@ func archetypeOrderByName(name string) ([]string, string, error) {
 	return order, normalized, nil
 }
 
-func workflowOrderForFeature(feature string) ([]string, error) {
+// workflowOrderForFeature runs the greenfield start guard and returns the step
+// order. PROJECT.md and a parseable .workflow/roadmap.json are required in every
+// profile, as are every refusal derived from the roadmap's own content; only the
+// grading artifacts are profile-scoped (roadmapGradingGuard).
+func workflowOrderForFeature(feature, profile string) ([]string, error) {
 	stage, err := projectstage.Load("PROJECT.md")
 	if err != nil {
 		return nil, err
@@ -66,11 +69,8 @@ func workflowOrderForFeature(feature string) ([]string, error) {
 			"cannot start %q — it is a Backlog finding; promote it first with "+
 				"centinela roadmap promote %s --phase <name>", feature, feature)
 	}
-	if err := roadmap.ValidateAnalysis(r); err != nil {
-		return nil, fmt.Errorf("greenfield project requires roadmap senior PM analysis: %w", err)
-	}
-	if err := roadmap.ValidateQuality(r); err != nil {
-		return nil, fmt.Errorf("greenfield project requires roadmap quality evaluation: %w", err)
+	if err := roadmapGradingGuard(r, profile); err != nil {
+		return nil, err
 	}
 	if !roadmap.HasBootstrapPhase(r) {
 		return nil, fmt.Errorf("greenfield project requires roadmap phase \"Phase 0: Bootstrap\"")

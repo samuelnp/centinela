@@ -9,6 +9,13 @@ type ProfileKnobs struct {
 	ConfirmationMode        string // step_confirmation_mode default
 	RequireSubagentEvidence bool   // strict-subagents-v1 orchestration mode
 	PlanAdvisorMode         string // plan_advisor_mode default
+	// RequireRoadmapGrading makes the greenfield setup cascade's grading rungs
+	// (ROADMAP.md, roadmap-analysis.*, roadmap-quality.*, the
+	// production-readiness PROMPT doc) blocking. False demotes them to one
+	// advisory line. PROJECT.md and a parseable .workflow/roadmap.json are
+	// required whatever this says, and the production-readiness GATE — which is
+	// proof, not process — is config-driven and never reads this knob.
+	RequireRoadmapGrading bool
 }
 
 // ProfileDefaults returns the knob defaults for a profile. Unknown profiles map
@@ -21,6 +28,7 @@ func ProfileDefaults(profile string) ProfileKnobs {
 			ConfirmationMode:        ConfirmAfterPlan,
 			RequireSubagentEvidence: false,
 			PlanAdvisorMode:         PlanAdvisorMissingInfo,
+			RequireRoadmapGrading:   false,
 		}
 	case ProfileOutcome:
 		return ProfileKnobs{
@@ -28,6 +36,7 @@ func ProfileDefaults(profile string) ProfileKnobs {
 			ConfirmationMode:        ConfirmAuto,
 			RequireSubagentEvidence: false,
 			PlanAdvisorMode:         PlanAdvisorOff,
+			RequireRoadmapGrading:   false,
 		}
 	default: // strict — reproduces today's behavior exactly
 		return ProfileKnobs{
@@ -35,6 +44,7 @@ func ProfileDefaults(profile string) ProfileKnobs {
 			ConfirmationMode:        ConfirmEveryStep,
 			RequireSubagentEvidence: true,
 			PlanAdvisorMode:         PlanAdvisorAlways,
+			RequireRoadmapGrading:   true,
 		}
 	}
 }

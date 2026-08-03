@@ -2,6 +2,8 @@ package ui
 
 import "github.com/charmbracelet/lipgloss"
 
+// RenderRoadmapAnalysisNeeded returns the setup panel directing the operator to
+// delegate the senior-PM roadmap analysis pass.
 func RenderRoadmapAnalysisNeeded() string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
 		StyleYellow.Render("⚠ Roadmap analysis missing — senior PM review required"),
@@ -14,7 +16,7 @@ func RenderRoadmapAnalysisNeeded() string {
 		StyleMuted.Render("3. Write .workflow/roadmap-analysis.md summary"),
 		StyleMuted.Render("4. Write .workflow/roadmap-analysis.json with role senior-product-manager"),
 		StyleMuted.Render("   Include all roadmap features and dependsOn arrays"),
-		StyleMuted.Render("5. After this, run roadmap quality scoring until all features are overall >= 9"),
+		StyleMuted.Render("5. After this, run roadmap quality scoring — scores are recorded, not gated"),
 		"",
 		StyleRed.Render("Do not start features until roadmap analysis artifacts are present."),
 	)

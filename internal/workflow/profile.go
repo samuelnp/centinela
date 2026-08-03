@@ -6,8 +6,14 @@ import "github.com/samuelnp/centinela/internal/config"
 // Precedence (highest → lowest): the explicit per-feature pin (--profile or an
 // explicit global captured at start), then an explicit global enforcement_profile
 // (RawEnforcementProfile non-empty), then the capability default of the pinned
-// driver model, then the strict back-compat default. The result is always a
-// normalized, known profile. Zero-config still resolves to strict byte-identically.
+// driver model, then the tail default. The result is always a normalized, known
+// profile.
+//
+// The tail is state-dated: a workflow pinned with ProfileContractGuidedDefault
+// takes guided, everything else — a legacy/in-flight workflow, or a nil one
+// (workflow-less callers) — keeps strict. Profiles scale PROCESS only; the
+// validate-step gates, suite, freshness checks, claim verification and the
+// verifier's grounded verdict are identical whatever this returns.
 func EffectiveProfile(wf *Workflow, cfg *config.Config) string {
 	if wf != nil && wf.EnforcementProfile != "" {
 		return config.NormalizeEnforcementProfile(wf.EnforcementProfile)
@@ -19,6 +25,9 @@ func EffectiveProfile(wf *Workflow, cfg *config.Config) string {
 		if profile, ok := config.DefaultProfileForModel(wf.DriverModel, cfg); ok {
 			return config.NormalizeEnforcementProfile(profile)
 		}
+	}
+	if wf.UsesGuidedDefault() {
+		return config.ProfileGuided
 	}
 	return config.ProfileStrict
 }

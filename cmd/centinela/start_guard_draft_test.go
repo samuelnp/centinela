@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/samuelnp/centinela/internal/config"
 	"strings"
 	"testing"
 
@@ -21,7 +22,7 @@ func TestResolveArchetypeOrder_RefusesDraft(t *testing.T) {
 	chdirIntoTemp(t)
 	writeFile(t, roadmap.RoadmapFile,
 		`{"phases":[{"name":"Phase 1","features":[{"name":"the-draft","draft":true}]}]}`)
-	_, _, err := resolveArchetypeOrder("the-draft", "")
+	_, _, err := resolveArchetypeOrder("the-draft", "", config.ProfileStrict)
 	if err == nil || !strings.Contains(err.Error(), "draft") {
 		t.Fatalf("start must refuse a draft, got %v", err)
 	}
@@ -32,7 +33,7 @@ func TestResolveArchetypeOrder_NonDraftFlag(t *testing.T) {
 	chdirIntoTemp(t)
 	writeFile(t, roadmap.RoadmapFile,
 		`{"phases":[{"name":"Phase 1","features":[{"name":"auth-service"}]}]}`)
-	order, name, err := resolveArchetypeOrder("auth-service", "canonical")
+	order, name, err := resolveArchetypeOrder("auth-service", "canonical", config.ProfileStrict)
 	if err != nil || name != "canonical" || len(order) == 0 {
 		t.Fatalf("non-draft flag path: order=%v name=%q err=%v", order, name, err)
 	}

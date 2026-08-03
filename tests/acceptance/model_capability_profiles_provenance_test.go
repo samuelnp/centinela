@@ -48,7 +48,12 @@ func TestMCP_StatusFlagProvenance(t *testing.T) {
 	mcpAssertLine(t, wf, &config.Config{}, "Profile  outcome  (--profile)")
 }
 
-// Scenario: Status shows the strict default provenance for a zero-config feature
+// Scenario: Status shows the default provenance for a zero-config feature.
+// The note distinguishes the two tail outcomes: a workflow pinned with the
+// guided-default contract vs a legacy one that predates the flip.
 func TestMCP_StatusDefaultProvenance(t *testing.T) {
-	mcpAssertLine(t, &workflow.Workflow{}, &config.Config{}, "Profile  strict  (default)")
+	mcpAssertLine(t, &workflow.Workflow{ProfileContract: workflow.ProfileContractGuidedDefault},
+		&config.Config{}, "Profile  guided  (default (guided))")
+	mcpAssertLine(t, &workflow.Workflow{}, &config.Config{},
+		"Profile  strict  (default (strict, legacy workflow))")
 }

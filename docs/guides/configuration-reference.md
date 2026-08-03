@@ -20,11 +20,11 @@ Workflow step validation and confirmation behavior.
 
 | Key | Type | Default | Allowed values | Description |
 |-----|------|---------|----------------|-------------|
-| `step_confirmation_mode` | string | `every_step` | `every_step`, `after_plan`, `auto` | When Centinela pauses for manual review before advancing a step |
+| `step_confirmation_mode` | string | `after_plan` (guided default; `every_step` under strict) | `every_step`, `after_plan`, `auto` | When Centinela pauses for manual review before advancing a step |
 | `plan_advisor_mode` | string | `missing_info` | `off`, `always`, `missing_info` | Adaptive planning prompts during the plan step |
 | `plan_question_limit` | int | `4` | `1..4` | Max advisor questions per round |
 | `plan_advisor_failure_top_n` | int | `3` | `1..5` | Max recurring-failure list size shown to the advisor |
-| `enforcement_profile` | string | `strict` | `strict`, `guided`, `outcome` | Global profile that scales how strictly the 5 steps are enforced |
+| `enforcement_profile` | string | `guided` | `strict`, `guided`, `outcome` | Global profile that scales how much **process** the 5 steps impose. It never changes what is verified — see [Profiles scale process, never proof](#profiles-scale-process-never-proof) |
 | `use_worktrees` | bool | `false` | `true`, `false` | Run each feature in its own git worktree under `.worktrees/<feature>/` |
 | `test_suffixes` | []string | `[]` (any file in `tests/`) | file extensions | Suffixes identifying unit/integration tests |
 | `acceptance_suffix` | string | `""` (any file in `tests/acceptance/`) | file extension | Suffix for acceptance-test step definitions |
@@ -221,6 +221,34 @@ An unmapped local `model` defaults to the `limited` capability class → `strict
 | `limited` | `claude-haiku-4-5` | `strict` |
 
 Override a model's class with `[orchestration.capabilities]`, or a class's profile with `[orchestration.capability_profiles]`.
+
+### Profiles scale process, never proof
+
+The shipped default is `guided`. Choosing a profile changes **process** only:
+
+| Behavior | strict | guided | outcome |
+|---|---|---|---|
+| Step confirmation cadence | every step | after plan | auto |
+| Orchestration evidence bundle | required | not required | not required |
+| Prewrite step ordering | enforced | enforced | off |
+| Greenfield setup cascade (`ROADMAP.md`, roadmap analysis/quality, production-readiness *prompt doc*) | blocking | advisory | advisory |
+| Greenfield `PROJECT.md` + `.workflow/roadmap.json` | required | required | required |
+
+Everything that establishes correctness is **identical under all three**: the
+`centinela validate` gate set, the full test suite, both verification-freshness
+checks, claim verification, the adversarial verifier's grounded `adversarial-v1`
+verdict, and the production-readiness gate (which is config-driven, never
+profile-driven).
+
+Two notes on the default flip:
+
+- **Workflows started before the flip are untouched.** The guided default fires
+  only for workflows carrying the `profileContract` pin written at `start`; an
+  older state file resolves to `strict` for its whole life. `centinela status`
+  distinguishes them (`default (guided)` vs `default (strict, legacy workflow)`).
+- **To keep strict, pin it:** `[workflow] enforcement_profile = "strict"`.
+  `centinela doctor` reports an advisory (never an error) on any project with
+  workflows and no explicit pin. No config is ever rewritten for you.
 
 ### Dynamic model routing
 

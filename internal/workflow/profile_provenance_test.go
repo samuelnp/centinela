@@ -41,16 +41,28 @@ func TestProfileProvenance(t *testing.T) {
 			config.ProfileStrict, "driver: some/unknown-local-model → no capability, default strict",
 		},
 		{
-			"tier 4 default",
-			&Workflow{},
+			"tier 4 pinned contract → guided",
+			&Workflow{ProfileContract: ProfileContractGuidedDefault},
 			&config.Config{},
-			config.ProfileStrict, "default",
+			config.ProfileGuided, "default (guided)",
 		},
 		{
-			"nil cfg falls to default",
+			"tier 4 legacy workflow stays strict",
+			&Workflow{},
+			&config.Config{},
+			config.ProfileStrict, "default (strict, legacy workflow)",
+		},
+		{
+			"nil cfg falls to the legacy default",
 			&Workflow{DriverModel: "claude-opus-4-7"},
 			nil,
-			config.ProfileStrict, "default",
+			config.ProfileStrict, "default (strict, legacy workflow)",
+		},
+		{
+			"capability guided is NOT conflated with default guided",
+			&Workflow{DriverModel: "claude-sonnet-4-6", ProfileContract: ProfileContractGuidedDefault},
+			&config.Config{},
+			config.ProfileGuided, "driver: claude-sonnet-4-6 → capable",
 		},
 	}
 	for _, tc := range cases {

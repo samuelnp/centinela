@@ -72,20 +72,21 @@ func TestRunRoadmapPromote_NoPhase(t *testing.T) {
 	}
 }
 
-// TestRunRoadmapPromote_ScoredPath_LowScore returns error, no writes.
+// TestRunRoadmapPromote_ScoredPath_LowScore promotes: the self-graded minimum
+// was deleted, so a low overall is recorded rather than refused.
 func TestRunRoadmapPromote_ScoredPath_LowScore(t *testing.T) {
 	setupPromoteCmd(t)
 	before, _ := os.ReadFile(roadmap.RoadmapFile)
 	promotePhase = "Phase 5"
-	promoteScores = "9,9,8,7,9,7" // overall=7
+	promoteScores = "9,9,8,7,9,3" // overall=3
 	cmd := &cobra.Command{}
 	cmd.Flags().String("scores", "", "")
 	cmd.Flags().Set("scores", promoteScores) //nolint:errcheck
-	if err := runRoadmapPromote(cmd, []string{"my-finding"}); err == nil {
-		t.Fatal("low overall score must error")
+	if err := runRoadmapPromote(cmd, []string{"my-finding"}); err != nil {
+		t.Fatalf("a low overall score must no longer refuse: %v", err)
 	}
 	after, _ := os.ReadFile(roadmap.RoadmapFile)
-	if !bytes.Equal(before, after) {
-		t.Error("roadmap.json must be unchanged on score rejection")
+	if bytes.Equal(before, after) {
+		t.Error("the promotion must actually have been written")
 	}
 }

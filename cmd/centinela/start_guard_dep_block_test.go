@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/samuelnp/centinela/internal/config"
 	"os"
 	"strings"
 	"testing"
@@ -34,7 +35,7 @@ func TestWorkflowOrderForFeature_DepBlocked(t *testing.T) {
 	writeRoadmapQuality(t, 9, "bootstrap-done", "dep-feat", "blocked-feat")
 
 	// blocked-feat has dep-feat (planned) -> blocked
-	_, err := workflowOrderForFeature("blocked-feat")
+	_, err := workflowOrderForFeature("blocked-feat", config.ProfileStrict)
 	if err == nil {
 		t.Fatal("expected blocked error for dep-blocked feature")
 	}

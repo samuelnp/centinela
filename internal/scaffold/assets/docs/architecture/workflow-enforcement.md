@@ -217,8 +217,8 @@ These hooks are wired by `centinela init` for Claude and OpenCode integrations.
 2. Do work only for the active step.
 3. After producing artifacts, run `centinela complete <feature>`.
 4. Respect `workflow.step_confirmation_mode` for review prompts:
-   - `every_step` (default): require explicit user confirmation for each step.
-   - `after_plan`: require confirmation only for plan -> code transition.
+   - `every_step` (the strict-profile default): require explicit user confirmation for each step.
+   - `after_plan` (the guided-profile default, and so the zero-config default): require confirmation only for plan -> code transition.
    - `auto`: no review prompt; still run `centinela complete <feature>` explicitly.
 5. During `plan`, Centinela runs plan-advisor mode by default:
    - `workflow.plan_advisor_mode = "missing_info"` asks only missing high-value questions.
@@ -227,3 +227,43 @@ These hooks are wired by `centinela init` for Claude and OpenCode integrations.
    - `workflow.plan_question_limit` caps each advisor round and defaults to `4`.
    - advisor context uses current feature artifacts first, then roadmap dependencies, then same-phase siblings.
    - related edge-case lessons and roadmap quality notes can shape questions, but the hook emits summarized context instead of raw file dumps.
+
+
+## Enforcement Profiles: process scales, proof does not
+
+The zero-config default is `guided`. A profile changes how much **process** a
+feature pays for; it never changes what is **verified**.
+
+| Behavior | Side of the line | strict | guided | outcome |
+|---|---|---|---|---|
+| Step confirmation cadence | PROCESS | every step | after plan | auto |
+| Orchestration evidence bundle (`strict-subagents-v1`) | PROCESS — a record of *who* produced the work | required | — | — |
+| Prewrite step-gating | PROCESS | on | on | off |
+| Greenfield cascade: `ROADMAP.md`, roadmap analysis/quality, production-readiness *prompt doc* | PROCESS | blocking | advisory | advisory |
+| Greenfield `PROJECT.md` + `.workflow/roadmap.json` | PROCESS floor | required | required | required |
+| `start` refusals from roadmap content (Backlog, draft, unmet dependency, missing `Phase 0: Bootstrap`, bootstrap incomplete) | PROCESS floor | refuse | refuse | refuse |
+| `centinela validate` gate set (file_size, import_graph, security, spec_traceability, build, docstring, coverage, fmt) | **PROOF** | identical | identical | identical |
+| Full test suite + acceptance execution | **PROOF** | identical | identical | identical |
+| `VerificationFresh` (×2, before and after the suite) | **PROOF** | identical | identical | identical |
+| Claim verification | **PROOF** | identical | identical | identical |
+| Gatekeeper report + grounded `adversarial-v1` verdict | **PROOF** | identical | identical | identical |
+| Production-readiness gate (`**Status:** BLOCKING` blocks `complete`) | **PROOF**, config-driven | identical | identical | identical |
+
+`cmd/centinela/complete_validate_gates.go` carries the invariant in its header
+and a source-level test asserts the file contains no profile identifier at all,
+so a future profile branch there fails a test rather than a review.
+
+**Back-compat is state-dated, not clock-dated.** Every workflow created after
+the default flipped carries `profileContract: "guided-default-v1"`. The
+nothing-configured tier of `EffectiveProfile` returns `guided` only for a
+workflow carrying that pin; a workflow started earlier — or in flight when the
+binary was upgraded — resolves to `strict` for its whole life. No user config is
+ever rewritten; `centinela doctor` emits an advisory (never an error) on a
+project with workflows and no explicit `enforcement_profile`.
+
+**The self-graded quality threshold is gone, in every profile.** The old
+`overall >= 9` refusal on `.workflow/roadmap-quality.json` and on
+`roadmap promote --scores` was removed outright: a number assigned by the party
+it constrains was never evidence, so deleting it relaxes no proof. Scores are
+still recorded, still range-checked 1-10, and `centinela roadmap validate`
+reports low ones as advice with exit 0.

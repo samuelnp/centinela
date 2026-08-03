@@ -42,14 +42,16 @@ func TestPromoteScored_DraftInPlace(t *testing.T) {
 	}
 }
 
-// TestPromoteScored_DraftLowScoreByteIdentical refuses below-9 with draft intact.
-func TestPromoteScored_DraftLowScoreByteIdentical(t *testing.T) {
+// TestPromoteScored_OutOfRangeByteIdentical refuses an out-of-range score with
+// the draft intact. A merely LOW score is no longer refused at all — only a
+// score outside 1-10 is, and it must still write nothing.
+func TestPromoteScored_OutOfRangeByteIdentical(t *testing.T) {
 	setupDraftPromote(t)
-	promoteScores = "9,9,9,9,9,8" // overall < 9
+	promoteScores = "9,9,9,9,9,0"
 	before, _ := os.ReadFile(roadmap.RoadmapFile)
 	if err := promoteScored("new-widget"); err == nil ||
-		!strings.Contains(err.Error(), "at least 9") {
-		t.Fatalf("below-9 must be refused, got %v", err)
+		!strings.Contains(err.Error(), "between 1 and 10") {
+		t.Fatalf("an out-of-range score must be refused as a range fault, got %v", err)
 	}
 	after, _ := os.ReadFile(roadmap.RoadmapFile)
 	if !bytes.Equal(before, after) {

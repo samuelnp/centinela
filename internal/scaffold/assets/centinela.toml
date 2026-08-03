@@ -34,9 +34,25 @@
 #   git worktree at `.worktrees/<feature>/` so multiple feature workflows can
 #   run concurrently. Default false to keep the single-checkout flow. New
 #   projects scaffolded by the wizard default this to true.
+#
+# enforcement_profile: how much PROCESS Centinela enforces. Left UNSET on
+#   purpose, so this project takes the shipped default: "guided".
+#     "guided" (default): confirm once after the plan, no orchestration
+#       evidence bundle, and a greenfield cold start needs only PROJECT.md plus
+#       .workflow/roadmap.json.
+#     "strict": confirm before every step, require the orchestration evidence
+#       bundle, and require the full greenfield setup cascade.
+#     "outcome": no confirmation prompts and no prewrite step ordering.
+#   Profiles scale PROCESS, never PROOF. The validate-step gates, the full test
+#   suite, verification freshness, claim verification, the adversarial
+#   verifier's grounded verdict and the production-readiness gate are IDENTICAL
+#   under all three — choosing guided buys fewer prompts, not less checking.
+#   A [orchestration] driver_model outranks this default via its capability
+#   class; an explicit value here outranks that.
 # ---------------------------------------------------------------------------
 [workflow]
 use_worktrees = true
+# enforcement_profile = "strict"
 # test_suffixes      = ["_test.go"]
 # acceptance_suffix  = "_steps_test.go"
 # code_dirs          = ["/cmd/", "/internal/", "/pkg/"]

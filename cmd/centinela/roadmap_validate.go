@@ -31,5 +31,20 @@ func runRoadmapValidate(_ *cobra.Command, _ []string) error {
 		return err
 	}
 	fmt.Println(ui.RenderSuccess("Roadmap analysis and quality are valid."))
+	printQualityAdvisories()
 	return nil
+}
+
+// printQualityAdvisories lists low self-assigned quality scores as advice on an
+// otherwise valid roadmap. It cannot change the exit code: the overall >= 9
+// refusal was deleted outright, in every profile, and nothing replaced it.
+func printQualityAdvisories() {
+	advisories := roadmap.QualityAdvisories()
+	if len(advisories) == 0 {
+		return
+	}
+	fmt.Println(ui.StyleMuted.Render("Advisory — low self-assigned quality scores:"))
+	for _, line := range advisories {
+		fmt.Println(ui.StyleMuted.Render("  · " + line))
+	}
 }

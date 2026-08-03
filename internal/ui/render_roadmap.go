@@ -36,7 +36,7 @@ func RenderRoadmapNeeded() string {
 		StyleMuted.Render("   JSON role must be senior-product-manager"),
 		StyleMuted.Render("7. Delegate roadmap quality scoring and write quality artifacts:"),
 		StyleMuted.Render("   .workflow/roadmap-quality.md + .workflow/roadmap-quality.json"),
-		StyleMuted.Render("   Role roadmap-quality-evaluator, threshold 9, all features overall >= 9"),
+		StyleMuted.Render("   Role roadmap-quality-evaluator, every feature scored 1-10 (no minimum)"),
 		StyleMuted.Render("8. Suggest: centinela start <first-feature>"),
 		"",
 		StyleRed.Render("Do not start any feature until the roadmap AND feature briefs are written."),

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/samuelnp/centinela/internal/config"
 	"os"
 	"strings"
 	"testing"
@@ -77,7 +78,7 @@ func TestWorkflowOrderForFeatureGreenfieldRequiresAnalysis(t *testing.T) {
 	os.WriteFile("PROJECT.md", []byte("Project Stage: greenfield\n"), 0644) //nolint:errcheck
 	r := &roadmap.Roadmap{Phases: []roadmap.Phase{{Name: "Phase 0: Bootstrap", Features: []roadmap.Feature{{Name: "setup"}}}}}
 	roadmap.Save(r) //nolint:errcheck
-	_, err := workflowOrderForFeature("setup")
+	_, err := workflowOrderForFeature("setup", config.ProfileStrict)
 	if err == nil || !strings.Contains(err.Error(), "senior PM analysis") {
 		t.Fatalf("expected roadmap analysis error, got %v", err)
 	}

@@ -18,10 +18,18 @@ func TestRenderStatusWithConfig_Provenance(t *testing.T) {
 		t.Fatalf("frontier driver provenance missing, got:\n%s", out)
 	}
 
-	zero := &workflow.Workflow{Feature: "f", CurrentStep: "plan"}
+	zero := &workflow.Workflow{Feature: "f", CurrentStep: "plan",
+		ProfileContract: workflow.ProfileContractGuidedDefault}
 	zout := RenderStatusWithConfig(zero, &config.Config{})
-	if !strings.Contains(zout, config.ProfileStrict) || !strings.Contains(zout, "(default)") {
+	if !strings.Contains(zout, config.ProfileGuided) || !strings.Contains(zout, "(default (guided))") {
 		t.Fatalf("zero-config provenance missing, got:\n%s", zout)
+	}
+
+	legacy := &workflow.Workflow{Feature: "f", CurrentStep: "plan"}
+	lout := RenderStatusWithConfig(legacy, &config.Config{})
+	if !strings.Contains(lout, config.ProfileStrict) ||
+		!strings.Contains(lout, "(default (strict, legacy workflow))") {
+		t.Fatalf("legacy provenance missing, got:\n%s", lout)
 	}
 }
 
