@@ -1,0 +1,29 @@
+{
+  "feature": "beg-docstring-debt",
+  "startedAt": "2026-08-03T09:00:24.196394Z",
+  "currentStep": "tests",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-08-03T09:01:42Z"
+    },
+    "tests": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "hotfix",
+  "worktreePath": ".worktrees/beg-docstring-debt",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}

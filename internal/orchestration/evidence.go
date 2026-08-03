@@ -8,6 +8,13 @@ import (
 	"time"
 )
 
+// Evidence is one role's orchestration record for a single workflow step — the
+// JSON companion beside `.workflow/<feature>-<role>.md`. It is what
+// `centinela complete` reads to decide whether the step's delegation actually
+// happened, so the fields answer gates rather than readers: Outputs must name
+// real files (never a description of them), EdgeCases must be non-empty for the
+// roles that enumerate them, and HandoffTo must name the successor the
+// workflow's own contract derives.
 type Evidence struct {
 	Feature     string   `json:"feature"`
 	Step        string   `json:"step"`
@@ -22,6 +29,12 @@ type Evidence struct {
 	Checksum    string   `json:"checksum,omitempty"`
 }
 
+// ValidateEvidence reads the evidence JSON at path and reports the first way it
+// fails to certify the (feature, step, role) delegation it claims: unreadable or
+// malformed, mismatched identity fields, incomplete required fields, or a
+// role-specific rule (edge cases, actionable outputs, handoff successor). It
+// returns nil only when every rule holds — the caller treats that as permission
+// to advance the step, so it must never fail open.
 func ValidateEvidence(path, feature, step string, role Role, uiPaths []string) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
