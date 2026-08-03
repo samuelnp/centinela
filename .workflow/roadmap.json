@@ -468,88 +468,843 @@
     {
       "name": "Backlog",
       "features": [
-        {"name":"rawio-reformat-diff-churn","summary":"First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn","source":{"feature":"deferred-findings-roadmap-capture","role":"senior-engineer"},"deferredAt":"2026-06-12T16:29:13Z"},
-        {"name":"roadmap-import-graph-layer-mapping","summary":"Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2","source":{"feature":"roadmap-doc-sync","role":"gatekeeper"},"deferredAt":"2026-06-14T10:30:31Z"},
-        {"name":"non-go-source-import-graphs","summary":"Parse source-level import graphs for non-Go languages (JS/TS, Ruby, Rust, Python); analyze v1 records declared manifest deps only","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"brownfield-framework-fingerprinting","summary":"Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"incremental-codebase-analysis","summary":"Incremental/cached re-analysis that only re-scans changed directories in centinela analyze","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"codebase-metrics-enrichment","summary":"Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference","source":{"feature":"deep-codebase-analysis","role":"big-thinker"},"deferredAt":"2026-06-17T21:17:33Z"},
-        {"name":"brownfield-route-flow-extraction","summary":"Framework-specific HTTP route and call-flow extraction for reconstructed specs; spec-reconstruction v1 ships package/manifest-derived targets only","source":{"feature":"spec-reconstruction","role":"big-thinker"},"deferredAt":"2026-06-22T07:52:17Z"},
-        {"name":"centinela-changelog-subcommand","summary":"Standalone centinela changelog subcommand for merge-path changelog parity (independent of PR delivery)","source":{"feature":"delivery-artifact-generation","role":"big-thinker"},"deferredAt":"2026-06-25T16:36:23Z"},
-        {"name":"gitignore-durable-state-guard","summary":"Add a test asserting durable .workflow state (roadmap{,-analysis,-quality}.json, audit-baseline.json) stays tracked/not-gitignored, so the evidence-footprint allow-list can't silently drop bootstrap state again (regression fixed in 420ab3c)","source":{"feature":"lean-evidence-footprint","role":"validation-specialist"},"deferredAt":"2026-06-29T15:08:01Z"},
-        {"name":"selfupdate-notice-http-timeout","summary":"centinela update + startup notice use http.DefaultClient (no timeout); a stalled GitHub connection can block session start indefinitely — give the production Updater a bounded client timeout (~5s) so the cold-cache notice fails fast and silent","source":{"feature":"cli-self-update","role":"gatekeeper"},"deferredAt":"2026-06-30T09:45:19Z"},
-        {"name":"brownfield-onboarding-docs","summary":"Document the brownfield onboarding path (analyze, synthesize, enrich, confirm) in new-project-guide.md","source":{"feature":"brownfield-setup-detection","role":"big-thinker"},"deferredAt":"2026-06-29T17:42:52Z"},
-        {"name":"brownfield-manifest-breadth","summary":"Extend HasSource manifest list to pom.xml, composer.json, build.gradle for broader ecosystem coverage","source":{"feature":"brownfield-setup-detection","role":"feature-specialist"},"deferredAt":"2026-06-29T17:46:35Z"},
-        {"name":"unit-test-mcp-server-in-memory-transport","summary":"Cover runMcpServe/mcpConnectSelf via an in-memory MCP transport","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"fault-inject-atomic-write-error-paths","summary":"Cover WriteBytesAtomic and low-level I/O error branches via fault injection","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"unit-test-vuln-tool-external-seam","summary":"Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam","source":{"feature":"coverage-hardening","role":"big-thinker"},"deferredAt":"2026-06-30T08:12:27Z"},
-        {"name":"aider-local-provider-wiring","summary":"Point the Aider/Claude harness at a local endpoint; local block currently wires only OpenCode's provider surface","source":{"feature":"local-harness-support","role":"big-thinker"},"deferredAt":"2026-06-30T14:45:14Z"},
-        {"name":"workflow-save-atomic-write","summary":"workflow.Save uses plain os.WriteFile; a crash mid-write can truncate .workflow/<feature>.json — make it write-temp-then-rename","source":{"feature":"workflow-revise-loop","role":"validation-specialist"},"deferredAt":"2026-06-30T17:52:51Z"},
-        {"name":"verify-crosscheck-verifier-commands","summary":"Have centinela verify cross-check the verifier's recorded argv/exit codes against its own claim-verification runs; v1 enforces the commands-run record's shape, not its truthfulness","source":{"feature":"adversarial-validate-verifier","role":"big-thinker"},"deferredAt":"2026-07-28T16:23:12Z"},
-        {"name":"typed-gate-error-codes","summary":"hook_statusline_rules classifies validate failures by substring-matching error text, misreporting any non-BLOCKING error as MISSING_PROD_READINESS; replace with typed gate error codes","source":{"feature":"adversarial-validate-verifier","role":"big-thinker"},"deferredAt":"2026-07-28T16:23:12Z"},
-        {"name":"reuse-prior-test-run-in-complete-verify","summary":"complete_verify.go never sets verify.Deps.PriorTestRun, so complete re-runs the suite executeValidation just ran; wiring the existing seam is the cheapest cut to validate-step wall clock","source":{"feature":"adversarial-validate-verifier","role":"big-thinker"},"deferredAt":"2026-07-28T16:23:20Z"},
-        {"name":"mirror-workflow-enforcement-doc","summary":"workflow-enforcement.md sits on mirrorParityAllowlist as 'not mirrored', so scaffolded projects get no copy and edits to it silently never reach them","source":{"feature":"adversarial-validate-verifier","role":"big-thinker"},"deferredAt":"2026-07-28T16:23:20Z"},
-        {"name":"verifier-template-status-fail-closed","summary":"gatekeeper-prompt.md Output Format ships '**Status:** SAFE | WARNING | CRITICAL' plus a fully-formed example commands array, so an unedited verbatim copy plus the mandated artifact stamp passes every gate; make the template Status fail-closed (CRITICAL) and the legend unparseable","source":{"feature":"adversarial-validate-verifier","role":"gatekeeper"},"deferredAt":"2026-07-28T22:21:04Z"},
-        {"name":"assess-report-before-full-validate-run","summary":"runValidateGates runs executeValidation + claim verification before wf.Complete reaches gatereport.Assess, so an ungrounded stub costs a full validate run (~9 min here) before being refused; hoist the pure-file-read admissibility check ahead of the suite","source":{"feature":"adversarial-validate-verifier","role":"gatekeeper"},"deferredAt":"2026-07-28T22:21:04Z"},
-        {"name":"stale-verification-statusline-unreachable","summary":"validateStatusBlock only calls ValidateArtifacts, which never runs the git-backed freshness check, so STALE_VERIFICATION is unreachable and a stale verification shows as 'none / run-validate' while complete hard-blocks","source":{"feature":"adversarial-validate-verifier","role":"gatekeeper"},"deferredAt":"2026-07-28T22:21:04Z"},
-        {"name":"merge-assert-branch-ancestor","summary":"RefAdvanced should also assert the feature branch is an ancestor of the advanced target","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:17:21Z"},
-        {"name":"render-warn-gate-details","summary":"Surface WARN gate details in deliver output","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:17:28Z"},
-        {"name":"merge-dirty-error-names-cause","summary":"Dirty-primary refusal should name the offending paths (e.g. unignored .worktrees/) not just say commit-or-stash","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:17:28Z"},
-        {"name":"merge-distinguish-missing-branch","summary":"Nonexistent branch is reported as git-text-conflict; report branch-not-found","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:17:28Z"},
-        {"name":"merge-prunable-registry-false-removal","summary":"merge claims 'removed its worktree' while git worktree list still lists the branch's worktree as prunable and the directory survives elsewhere","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:55:04Z"},
-        {"name":"merge-pending-marker-dirties-primary-tree","summary":"the pending marker and steward .md are untracked in repos that track .workflow/, so isDirty(primary) refuses merge --continue from both CWDs","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:55:04Z"},
-        {"name":"merge-validate-fail-leaves-main-advanced","summary":"a post-merge validate failure leaves the merge commit on main unannounced and merge --continue closes it without re-validating","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:55:04Z"},
-        {"name":"merge-force-remove-locked-worktree","summary":"the --force-remove retry advice does not work for a locked worktree (git needs -f -f or unlock)","source":{"feature":"merge-truthful-delivery","role":"gatekeeper"},"deferredAt":"2026-07-29T07:55:04Z"},
-        {"name":"codex-claude-role-agent-registry","summary":"Claude/Codex have no per-role agent registry; AC6 codex-equivalent emitter does not exist","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:42Z"},
-        {"name":"managed-agent-retirement-sweep","summary":"Managed-sync sweep to retire replaced agents from existing projects' opencode.json","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:42Z"},
-        {"name":"prompt-doc-budget-ratchet","summary":"Aggregate prompt-doc budget ratchet as fallback when a merged doc exceeds the 130-line cap","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:42Z"},
-        {"name":"statusline-plan-role-display","summary":"Statusline/status has no plan-step role display field","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"revise-to-plan-sheds-no-evidence","summary":"revise --to plan invalidates no plan evidence; next complete re-passes on stale artifacts","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"legacy-plan-key-mixed-form-precedence","summary":"Mixed legacy tier + override table inverts documented precedence and drops the configured tier","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"planner-skeleton-prompt-header-drift","summary":"Planner companion-stub headers drift from planner-prompt.md sections","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"stale-spec-text-after-role-retirement","summary":"Foreign specs still assert pre-retirement prompt-doc set (add-plan-advisor-mode, configurable-subagent-models, add-agent-evidence-contract, evidence-cli)","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"brownmap-roadmap-source-role-retired","summary":"brownmap baseline/gaps still stamp Source.Role=big-thinker on new entries","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"planner-stub-on-legacy-workflow-unguarded","summary":"evidence init planner on an unpinned workflow is unguarded","source":{"feature":"unified-plan-specialist","role":"gatekeeper"},"deferredAt":"2026-07-29T16:50:43Z"},
-        {"name":"cross-process-suite-result-reuse","summary":"Reuse the gatekeeper's suite result in complete via a tamper-evident digest-keyed run record (any plain on-disk record is writable by the agent it would excuse)","source":{"feature":"dedupe-validate-suite-runs","role":"planner"},"deferredAt":"2026-07-29T20:26:54Z"},
-        {"name":"validate-flake-diagnosability","summary":"A validate suite command can fail without naming any failing test in the rendered output (observed once: go test ./... -coverprofile exit!=0 with only ok lines shown); persist full suite output to a log for diagnosis","source":{"feature":"dedupe-validate-suite-runs","role":"gatekeeper"},"deferredAt":"2026-07-29T21:48:21Z"},
-        {"name":"migrate-prune-project-docs","summary":"centinela migrate leaves stale generated docs/project-docs/ output in downstream projects after the HTML pipeline removal; add a migrate cleanup that prunes it","source":{"feature":"docs-step-markdown-first","role":"planner"},"deferredAt":"2026-07-30T08:39:23Z"},
-        {"name":"migrate-doc-version-refresh","summary":"Rewritten managed docs (documentation-generator-prompt.md et al) never reach downstream repos: migrate drift detection is doc-version-only (CurrentDocVersion stays 1), so content rewrites under the same version are invisible to BuildPlan; needs a content-hash or version-bump strategy","source":{"feature":"docs-step-markdown-first","role":"senior-engineer"},"deferredAt":"2026-07-30T11:42:16Z"},
-        {"name":"stale-project-docs-pruning","summary":"Downstream repos keep a stale generated docs/project-docs/ portal after portal regen removal; add migrate-time pruning","source":{"feature":"docs-step-markdown-first","role":"edge-case-tester"},"deferredAt":"2026-07-30T11:50:54Z"},
-        {"name":"changelog-scanner-line-limit","summary":"validateChangelog ignores bufio.Scanner errors, so a >64KB single-line changelog is misreported as empty","source":{"feature":"docs-step-markdown-first","role":"edge-case-tester"},"deferredAt":"2026-07-30T11:50:54Z"},
-        {"name":"legacy-docs-spec-scenarios-cleanup","summary":"Legacy spec scenario rewrites (right-size-docs-step, docs-knowledge-base-pages, generate-html-project-docs, improve-docs-llm-hybrid-ui, docs-latest-features-getting-started, merge-truthful-delivery portal scenario) still describe the deleted HTML/KB pipeline; prewrite hook blocks specs/ writes during the tests step, so the contradicted scenarios must be rewritten in a plan-step-capable follow-up.","source":{"feature":"docs-step-markdown-first","role":"qa-senior"},"deferredAt":"2026-07-30T12:15:01Z"},
-        {"name":"spec-conflict-scenario-deletion-detection","summary":"Spec-conflict detector ignores scenario deletion: a worktree that removes a scenario another worktree edited is invisible to DetectSpecConflicts","source":{"feature":"spec-conflict-false-positives","role":"senior-engineer"},"deferredAt":"2026-07-30T07:54:20Z"},
-        {"name":"spec-conflict-deep-gherkin-diff","summary":"Spec-conflict detector compares only the first Given and first Then per scenario; divergence in When/And/second-Then steps is not detected","source":{"feature":"spec-conflict-false-positives","role":"senior-engineer"},"deferredAt":"2026-07-30T07:54:24Z"},
-        {"name":"spec-conflict-precheck-requires-merging-worktree","summary":"centinela merge's spec-conflict pre-check is silently disarmed whenever .worktrees/<merging-feature>/specs is absent (worktree already removed by a prior partial merge, --force-remove, or raw-PR delivery): DetectSpecConflicts returns nil before reading any other worktree, so a genuine two-worktree divergence merges unblocked","source":{"feature":"spec-conflict-false-positives","role":"gatekeeper"},"deferredAt":"2026-07-30T08:53:19Z"},
-        {"name":"spec-conflict-cross-file-contradiction-unbacked","summary":"Cross-file spec contradictions (two spec files asserting opposite outcomes for the same Given) are no longer detected and no gate backstops them: centinela validate runs file_size/build/import_graph/spec_traceability plus go test+coverage+fmt, none of which compares Gherkin semantics across files; the trade-off is sound but the documented backstop does not exist","source":{"feature":"spec-conflict-false-positives","role":"gatekeeper"},"deferredAt":"2026-07-30T08:53:19Z"},
-        {"name":"model-capability-spec-scenario-uncovered","summary":"model-capability-profiles.feature scenario lacks acceptance coverage","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:14Z"},
-        {"name":"legacy-model-specs-have-no-scenario-markers","summary":"28 pre-existing legacy model spec scenarios have no acceptance markers","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:14Z"},
-        {"name":"plan-empty-inputs-message-masked","summary":"E4 empty-inputs message unreachable behind snapshot check","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:14Z"},
-        {"name":"summary-digest-hashes-nonschedulable-phases","summary":"roadmap summary digest over-renders on Backlog-only changes","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:14Z"},
-        {"name":"hook-context-panel-diet","summary":"ACTIVE WORKFLOWS + nudge panels are 96% of hook context bytes; diet them next","source":{"feature":"token-diet","role":"gatekeeper"},"deferredAt":"2026-07-30T09:14:15Z"},
-        {"name":"scaffold-toml-orchestration-examples","summary":"Scaffolded centinela.toml documents workflow/gates knobs but carries zero [orchestration] examples for already-shipped features (models, model_map, capabilities, local backend) — new projects discover them only via docs/guides; add a commented orchestration example block","source":{"feature":"dynamic-model-routing","role":"planner"},"deferredAt":"2026-07-30T17:09:41Z"},
-        {"name":"workflow-state-atomic-save","summary":"workflow.Save is an unlocked, non-atomic whole-file WriteFile; concurrent route set + complete lose updates and a killed write bricks the feature state","source":{"feature":"dynamic-model-routing","role":"edge-case-tester"},"deferredAt":"2026-07-30T18:12:16Z"},
-        {"name":"workflow-state-schema-version","summary":"No schema version on .workflow/*.json: an older binary silently drops modelRoutes (and any newer field) on every load-save round-trip","source":{"feature":"dynamic-model-routing","role":"edge-case-tester"},"deferredAt":"2026-07-30T18:12:16Z"},
-        {"name":"route-lifecycle-hygiene","summary":"Recorded routes are invisible and unmanageable outside the dynamic window: flipping routing_mode to static hides them from route show/set while leaving them re-armable (E11), route show succeeds on a done workflow while route set refuses (E14), and a past-step upgrade is accepted and emits telemetry nothing consumes (E13). Needs a route clear/list surface and a scheduling-aware rule 4.","source":{"feature":"dynamic-model-routing","role":"qa-senior"},"deferredAt":"2026-07-30T18:39:42Z"},
-        {"name":"unaudited-handwritten-routes-for-floorless-roles","summary":"A route hand-written into .workflow/<feature>.json takes effect for any role with no configured floor, with no route-decision telemetry event — floors and the audit trail both bind only what route set writes, so 'every route decision is audited' holds for the CLI path only","source":{"feature":"dynamic-model-routing","role":"gatekeeper"},"deferredAt":"2026-07-31T08:14:51Z"},
-        {"name":"start-resume-skips-routing-directive","summary":"runStart returns early on the worktree 'Resuming existing workflow' branch before printRoutingDirective, so a resuming start prints no routing line (the orchestration hook re-emits it, so the decision window is not lost)","source":{"feature":"dynamic-model-routing","role":"gatekeeper"},"deferredAt":"2026-07-31T08:14:51Z"},
-        {"name":"acceptance-verbose-terminator-attribution-steal","summary":"Verbose go test terminator attribution steal — unindented nested terminators can misattribute an acceptance skip","source":{"feature":"truthful-validators","role":"gatekeeper"},"deferredAt":"2026-07-31T08:42:41Z"},
-        {"name":"acceptance-skip-parser-breadth","summary":"Skip parser breadth beyond cucumber/godog/go-test (pytest-bdd, behave, JVM cucumber, cucumber-rs)","source":{"feature":"truthful-validators","role":"gatekeeper"},"deferredAt":"2026-07-31T08:42:41Z"},
-        {"name":"self-validate-acceptance-report-shape","summary":"Centinela's own non-verbose coverage command carries no skip data — consider a repo-level acceptance command that does","source":{"feature":"truthful-validators","role":"gatekeeper"},"deferredAt":"2026-07-31T08:42:41Z"},
-        {"name":"validate-command-verdicts-in-machine-output","summary":"Per-command acceptance verdicts are terminal-only; centinela verdict/pr-gate carry no validate-command line","source":{"feature":"truthful-validators","role":"gatekeeper"},"deferredAt":"2026-07-31T08:42:41Z"},
-        {"name":"acceptance-tier-attribution-path-hardcoded","summary":"internal/acceptance hardcodes tests/acceptance (case-sensitive); projects with another acceptance tier path get detection silently disarmed under whole-repo commands — needs a config knob","source":{"feature":"truthful-validators","role":"gatekeeper"},"deferredAt":"2026-07-31T08:42:41Z"},
-        {"name":"roadmap-checkpoint-marker-truncation","summary":"internal/roadmapcheckpoint compares sub-second artifact mtimes against an RFC3339 second-truncated marker, so centinela roadmap iterate's suppression re-fires immediately — same defect class as the dynamic-routing clock-skew hotfix, reproduced by probe","source":{"feature":"dynamic-routing-clock-skew","role":"gatekeeper"},"deferredAt":"2026-07-31T09:37:25Z"},
-        {"name":"docstring-generated-banner-visibility","summary":"Generated-file banner is a silent whole-file bypass; not counted, listed, or marked exempt","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"docstring-full-scan-empty-roots-honesty","summary":"docs lint --full reports a confident 0-of-0 when roots match nothing","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"docstring-ratchet-content-change-only","summary":"chmod/rename pulls a legacy file's whole backlog into scope","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"docstring-gate-scenario-clause-coverage","summary":"Two scenarios asserted via docs lint substitutes rather than the gate surface","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"gate-pass-details-invisible","summary":"RenderGateResult expands Details on Fail only, hiding checkFileSize justified list and checkDocstring exemptions on passing runs","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"docstring-nodoc-spaced-spelling","summary":"Spaced // centinela:nodoc counts as documented and is never listed as exempt","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"docstring-full-scan-symlink-divergence","summary":"WalkDir does not follow symlinks so --full misses a tree InScope accepts","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"gitdiff-remote-fallback-skips-hierarchical-base","summary":"origin/<base> retry is skipped for any base containing a slash (release/2.0)","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"pr-gate-ci-scope-narrowed-by-remote-fallback","summary":"pr-gate CI scope narrows full-repo to diff-aware now that the base resolves","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"docstring-ci-scenario-ratchet-clause-unasserted","summary":"CI scenario ratchet clause is not actually asserted by its test fixture","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"docstring-roots-parent-escape-unvalidated","summary":"A ..-escaping root passes absolute-root validation but walks outside the repo","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"},
-        {"name":"docstring-pass-message-plural-disagreement","summary":"Pass message says 'All 1 exported identifiers' — plural disagreement","source":{"feature":"docstring-gate","role":"gatekeeper"},"deferredAt":"2026-08-03T08:12:12Z"}
+        {
+          "name": "rawio-reformat-diff-churn",
+          "summary": "First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn",
+          "source": {
+            "feature": "deferred-findings-roadmap-capture",
+            "role": "senior-engineer"
+          },
+          "deferredAt": "2026-06-12T16:29:13Z"
+        },
+        {
+          "name": "roadmap-import-graph-layer-mapping",
+          "summary": "Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2",
+          "source": {
+            "feature": "roadmap-doc-sync",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-06-14T10:30:31Z"
+        },
+        {
+          "name": "non-go-source-import-graphs",
+          "summary": "Parse source-level import graphs for non-Go languages (JS/TS, Ruby, Rust, Python); analyze v1 records declared manifest deps only",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "brownfield-framework-fingerprinting",
+          "summary": "Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "incremental-codebase-analysis",
+          "summary": "Incremental/cached re-analysis that only re-scans changed directories in centinela analyze",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "codebase-metrics-enrichment",
+          "summary": "Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference",
+          "source": {
+            "feature": "deep-codebase-analysis",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-17T21:17:33Z"
+        },
+        {
+          "name": "brownfield-route-flow-extraction",
+          "summary": "Framework-specific HTTP route and call-flow extraction for reconstructed specs; spec-reconstruction v1 ships package/manifest-derived targets only",
+          "source": {
+            "feature": "spec-reconstruction",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-22T07:52:17Z"
+        },
+        {
+          "name": "centinela-changelog-subcommand",
+          "summary": "Standalone centinela changelog subcommand for merge-path changelog parity (independent of PR delivery)",
+          "source": {
+            "feature": "delivery-artifact-generation",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-25T16:36:23Z"
+        },
+        {
+          "name": "gitignore-durable-state-guard",
+          "summary": "Add a test asserting durable .workflow state (roadmap{,-analysis,-quality}.json, audit-baseline.json) stays tracked/not-gitignored, so the evidence-footprint allow-list can't silently drop bootstrap state again (regression fixed in 420ab3c)",
+          "source": {
+            "feature": "lean-evidence-footprint",
+            "role": "validation-specialist"
+          },
+          "deferredAt": "2026-06-29T15:08:01Z"
+        },
+        {
+          "name": "selfupdate-notice-http-timeout",
+          "summary": "centinela update + startup notice use http.DefaultClient (no timeout); a stalled GitHub connection can block session start indefinitely — give the production Updater a bounded client timeout (~5s) so the cold-cache notice fails fast and silent",
+          "source": {
+            "feature": "cli-self-update",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-06-30T09:45:19Z"
+        },
+        {
+          "name": "brownfield-onboarding-docs",
+          "summary": "Document the brownfield onboarding path (analyze, synthesize, enrich, confirm) in new-project-guide.md",
+          "source": {
+            "feature": "brownfield-setup-detection",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-29T17:42:52Z"
+        },
+        {
+          "name": "brownfield-manifest-breadth",
+          "summary": "Extend HasSource manifest list to pom.xml, composer.json, build.gradle for broader ecosystem coverage",
+          "source": {
+            "feature": "brownfield-setup-detection",
+            "role": "feature-specialist"
+          },
+          "deferredAt": "2026-06-29T17:46:35Z"
+        },
+        {
+          "name": "unit-test-mcp-server-in-memory-transport",
+          "summary": "Cover runMcpServe/mcpConnectSelf via an in-memory MCP transport",
+          "source": {
+            "feature": "coverage-hardening",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T08:12:27Z"
+        },
+        {
+          "name": "fault-inject-atomic-write-error-paths",
+          "summary": "Cover WriteBytesAtomic and low-level I/O error branches via fault injection",
+          "source": {
+            "feature": "coverage-hardening",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T08:12:27Z"
+        },
+        {
+          "name": "unit-test-vuln-tool-external-seam",
+          "summary": "Cover runVulnTool by stubbing the external vulnerability-scanner binary behind a test seam",
+          "source": {
+            "feature": "coverage-hardening",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T08:12:27Z"
+        },
+        {
+          "name": "aider-local-provider-wiring",
+          "summary": "Point the Aider/Claude harness at a local endpoint; local block currently wires only OpenCode's provider surface",
+          "source": {
+            "feature": "local-harness-support",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-06-30T14:45:14Z"
+        },
+        {
+          "name": "workflow-save-atomic-write",
+          "summary": "workflow.Save uses plain os.WriteFile; a crash mid-write can truncate .workflow/<feature>.json — make it write-temp-then-rename",
+          "source": {
+            "feature": "workflow-revise-loop",
+            "role": "validation-specialist"
+          },
+          "deferredAt": "2026-06-30T17:52:51Z"
+        },
+        {
+          "name": "verify-crosscheck-verifier-commands",
+          "summary": "Have centinela verify cross-check the verifier's recorded argv/exit codes against its own claim-verification runs; v1 enforces the commands-run record's shape, not its truthfulness",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-07-28T16:23:12Z"
+        },
+        {
+          "name": "typed-gate-error-codes",
+          "summary": "hook_statusline_rules classifies validate failures by substring-matching error text, misreporting any non-BLOCKING error as MISSING_PROD_READINESS; replace with typed gate error codes",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-07-28T16:23:12Z"
+        },
+        {
+          "name": "reuse-prior-test-run-in-complete-verify",
+          "summary": "complete_verify.go never sets verify.Deps.PriorTestRun, so complete re-runs the suite executeValidation just ran; wiring the existing seam is the cheapest cut to validate-step wall clock",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-07-28T16:23:20Z"
+        },
+        {
+          "name": "mirror-workflow-enforcement-doc",
+          "summary": "workflow-enforcement.md sits on mirrorParityAllowlist as 'not mirrored', so scaffolded projects get no copy and edits to it silently never reach them",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "big-thinker"
+          },
+          "deferredAt": "2026-07-28T16:23:20Z"
+        },
+        {
+          "name": "verifier-template-status-fail-closed",
+          "summary": "gatekeeper-prompt.md Output Format ships '**Status:** SAFE | WARNING | CRITICAL' plus a fully-formed example commands array, so an unedited verbatim copy plus the mandated artifact stamp passes every gate; make the template Status fail-closed (CRITICAL) and the legend unparseable",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-28T22:21:04Z"
+        },
+        {
+          "name": "assess-report-before-full-validate-run",
+          "summary": "runValidateGates runs executeValidation + claim verification before wf.Complete reaches gatereport.Assess, so an ungrounded stub costs a full validate run (~9 min here) before being refused; hoist the pure-file-read admissibility check ahead of the suite",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-28T22:21:04Z"
+        },
+        {
+          "name": "stale-verification-statusline-unreachable",
+          "summary": "validateStatusBlock only calls ValidateArtifacts, which never runs the git-backed freshness check, so STALE_VERIFICATION is unreachable and a stale verification shows as 'none / run-validate' while complete hard-blocks",
+          "source": {
+            "feature": "adversarial-validate-verifier",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-28T22:21:04Z"
+        },
+        {
+          "name": "merge-assert-branch-ancestor",
+          "summary": "RefAdvanced should also assert the feature branch is an ancestor of the advanced target",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:17:21Z"
+        },
+        {
+          "name": "render-warn-gate-details",
+          "summary": "Surface WARN gate details in deliver output",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:17:28Z"
+        },
+        {
+          "name": "merge-dirty-error-names-cause",
+          "summary": "Dirty-primary refusal should name the offending paths (e.g. unignored .worktrees/) not just say commit-or-stash",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:17:28Z"
+        },
+        {
+          "name": "merge-distinguish-missing-branch",
+          "summary": "Nonexistent branch is reported as git-text-conflict; report branch-not-found",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:17:28Z"
+        },
+        {
+          "name": "merge-prunable-registry-false-removal",
+          "summary": "merge claims 'removed its worktree' while git worktree list still lists the branch's worktree as prunable and the directory survives elsewhere",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:55:04Z"
+        },
+        {
+          "name": "merge-pending-marker-dirties-primary-tree",
+          "summary": "the pending marker and steward .md are untracked in repos that track .workflow/, so isDirty(primary) refuses merge --continue from both CWDs",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:55:04Z"
+        },
+        {
+          "name": "merge-validate-fail-leaves-main-advanced",
+          "summary": "a post-merge validate failure leaves the merge commit on main unannounced and merge --continue closes it without re-validating",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:55:04Z"
+        },
+        {
+          "name": "merge-force-remove-locked-worktree",
+          "summary": "the --force-remove retry advice does not work for a locked worktree (git needs -f -f or unlock)",
+          "source": {
+            "feature": "merge-truthful-delivery",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T07:55:04Z"
+        },
+        {
+          "name": "codex-claude-role-agent-registry",
+          "summary": "Claude/Codex have no per-role agent registry; AC6 codex-equivalent emitter does not exist",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:42Z"
+        },
+        {
+          "name": "managed-agent-retirement-sweep",
+          "summary": "Managed-sync sweep to retire replaced agents from existing projects' opencode.json",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:42Z"
+        },
+        {
+          "name": "prompt-doc-budget-ratchet",
+          "summary": "Aggregate prompt-doc budget ratchet as fallback when a merged doc exceeds the 130-line cap",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:42Z"
+        },
+        {
+          "name": "statusline-plan-role-display",
+          "summary": "Statusline/status has no plan-step role display field",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "revise-to-plan-sheds-no-evidence",
+          "summary": "revise --to plan invalidates no plan evidence; next complete re-passes on stale artifacts",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "legacy-plan-key-mixed-form-precedence",
+          "summary": "Mixed legacy tier + override table inverts documented precedence and drops the configured tier",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "planner-skeleton-prompt-header-drift",
+          "summary": "Planner companion-stub headers drift from planner-prompt.md sections",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "stale-spec-text-after-role-retirement",
+          "summary": "Foreign specs still assert pre-retirement prompt-doc set (add-plan-advisor-mode, configurable-subagent-models, add-agent-evidence-contract, evidence-cli)",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "brownmap-roadmap-source-role-retired",
+          "summary": "brownmap baseline/gaps still stamp Source.Role=big-thinker on new entries",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "planner-stub-on-legacy-workflow-unguarded",
+          "summary": "evidence init planner on an unpinned workflow is unguarded",
+          "source": {
+            "feature": "unified-plan-specialist",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T16:50:43Z"
+        },
+        {
+          "name": "cross-process-suite-result-reuse",
+          "summary": "Reuse the gatekeeper's suite result in complete via a tamper-evident digest-keyed run record (any plain on-disk record is writable by the agent it would excuse)",
+          "source": {
+            "feature": "dedupe-validate-suite-runs",
+            "role": "planner"
+          },
+          "deferredAt": "2026-07-29T20:26:54Z"
+        },
+        {
+          "name": "validate-flake-diagnosability",
+          "summary": "A validate suite command can fail without naming any failing test in the rendered output (observed once: go test ./... -coverprofile exit!=0 with only ok lines shown); persist full suite output to a log for diagnosis",
+          "source": {
+            "feature": "dedupe-validate-suite-runs",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-29T21:48:21Z"
+        },
+        {
+          "name": "migrate-prune-project-docs",
+          "summary": "centinela migrate leaves stale generated docs/project-docs/ output in downstream projects after the HTML pipeline removal; add a migrate cleanup that prunes it",
+          "source": {
+            "feature": "docs-step-markdown-first",
+            "role": "planner"
+          },
+          "deferredAt": "2026-07-30T08:39:23Z"
+        },
+        {
+          "name": "migrate-doc-version-refresh",
+          "summary": "Rewritten managed docs (documentation-generator-prompt.md et al) never reach downstream repos: migrate drift detection is doc-version-only (CurrentDocVersion stays 1), so content rewrites under the same version are invisible to BuildPlan; needs a content-hash or version-bump strategy",
+          "source": {
+            "feature": "docs-step-markdown-first",
+            "role": "senior-engineer"
+          },
+          "deferredAt": "2026-07-30T11:42:16Z"
+        },
+        {
+          "name": "stale-project-docs-pruning",
+          "summary": "Downstream repos keep a stale generated docs/project-docs/ portal after portal regen removal; add migrate-time pruning",
+          "source": {
+            "feature": "docs-step-markdown-first",
+            "role": "edge-case-tester"
+          },
+          "deferredAt": "2026-07-30T11:50:54Z"
+        },
+        {
+          "name": "changelog-scanner-line-limit",
+          "summary": "validateChangelog ignores bufio.Scanner errors, so a >64KB single-line changelog is misreported as empty",
+          "source": {
+            "feature": "docs-step-markdown-first",
+            "role": "edge-case-tester"
+          },
+          "deferredAt": "2026-07-30T11:50:54Z"
+        },
+        {
+          "name": "legacy-docs-spec-scenarios-cleanup",
+          "summary": "Legacy spec scenario rewrites (right-size-docs-step, docs-knowledge-base-pages, generate-html-project-docs, improve-docs-llm-hybrid-ui, docs-latest-features-getting-started, merge-truthful-delivery portal scenario) still describe the deleted HTML/KB pipeline; prewrite hook blocks specs/ writes during the tests step, so the contradicted scenarios must be rewritten in a plan-step-capable follow-up.",
+          "source": {
+            "feature": "docs-step-markdown-first",
+            "role": "qa-senior"
+          },
+          "deferredAt": "2026-07-30T12:15:01Z"
+        },
+        {
+          "name": "spec-conflict-scenario-deletion-detection",
+          "summary": "Spec-conflict detector ignores scenario deletion: a worktree that removes a scenario another worktree edited is invisible to DetectSpecConflicts",
+          "source": {
+            "feature": "spec-conflict-false-positives",
+            "role": "senior-engineer"
+          },
+          "deferredAt": "2026-07-30T07:54:20Z"
+        },
+        {
+          "name": "spec-conflict-deep-gherkin-diff",
+          "summary": "Spec-conflict detector compares only the first Given and first Then per scenario; divergence in When/And/second-Then steps is not detected",
+          "source": {
+            "feature": "spec-conflict-false-positives",
+            "role": "senior-engineer"
+          },
+          "deferredAt": "2026-07-30T07:54:24Z"
+        },
+        {
+          "name": "spec-conflict-precheck-requires-merging-worktree",
+          "summary": "centinela merge's spec-conflict pre-check is silently disarmed whenever .worktrees/<merging-feature>/specs is absent (worktree already removed by a prior partial merge, --force-remove, or raw-PR delivery): DetectSpecConflicts returns nil before reading any other worktree, so a genuine two-worktree divergence merges unblocked",
+          "source": {
+            "feature": "spec-conflict-false-positives",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-30T08:53:19Z"
+        },
+        {
+          "name": "spec-conflict-cross-file-contradiction-unbacked",
+          "summary": "Cross-file spec contradictions (two spec files asserting opposite outcomes for the same Given) are no longer detected and no gate backstops them: centinela validate runs file_size/build/import_graph/spec_traceability plus go test+coverage+fmt, none of which compares Gherkin semantics across files; the trade-off is sound but the documented backstop does not exist",
+          "source": {
+            "feature": "spec-conflict-false-positives",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-30T08:53:19Z"
+        },
+        {
+          "name": "model-capability-spec-scenario-uncovered",
+          "summary": "model-capability-profiles.feature scenario lacks acceptance coverage",
+          "source": {
+            "feature": "token-diet",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-30T09:14:14Z"
+        },
+        {
+          "name": "legacy-model-specs-have-no-scenario-markers",
+          "summary": "28 pre-existing legacy model spec scenarios have no acceptance markers",
+          "source": {
+            "feature": "token-diet",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-30T09:14:14Z"
+        },
+        {
+          "name": "plan-empty-inputs-message-masked",
+          "summary": "E4 empty-inputs message unreachable behind snapshot check",
+          "source": {
+            "feature": "token-diet",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-30T09:14:14Z"
+        },
+        {
+          "name": "summary-digest-hashes-nonschedulable-phases",
+          "summary": "roadmap summary digest over-renders on Backlog-only changes",
+          "source": {
+            "feature": "token-diet",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-30T09:14:14Z"
+        },
+        {
+          "name": "hook-context-panel-diet",
+          "summary": "ACTIVE WORKFLOWS + nudge panels are 96% of hook context bytes; diet them next",
+          "source": {
+            "feature": "token-diet",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-30T09:14:15Z"
+        },
+        {
+          "name": "scaffold-toml-orchestration-examples",
+          "summary": "Scaffolded centinela.toml documents workflow/gates knobs but carries zero [orchestration] examples for already-shipped features (models, model_map, capabilities, local backend) — new projects discover them only via docs/guides; add a commented orchestration example block",
+          "source": {
+            "feature": "dynamic-model-routing",
+            "role": "planner"
+          },
+          "deferredAt": "2026-07-30T17:09:41Z"
+        },
+        {
+          "name": "workflow-state-atomic-save",
+          "summary": "workflow.Save is an unlocked, non-atomic whole-file WriteFile; concurrent route set + complete lose updates and a killed write bricks the feature state",
+          "source": {
+            "feature": "dynamic-model-routing",
+            "role": "edge-case-tester"
+          },
+          "deferredAt": "2026-07-30T18:12:16Z"
+        },
+        {
+          "name": "workflow-state-schema-version",
+          "summary": "No schema version on .workflow/*.json: an older binary silently drops modelRoutes (and any newer field) on every load-save round-trip",
+          "source": {
+            "feature": "dynamic-model-routing",
+            "role": "edge-case-tester"
+          },
+          "deferredAt": "2026-07-30T18:12:16Z"
+        },
+        {
+          "name": "route-lifecycle-hygiene",
+          "summary": "Recorded routes are invisible and unmanageable outside the dynamic window: flipping routing_mode to static hides them from route show/set while leaving them re-armable (E11), route show succeeds on a done workflow while route set refuses (E14), and a past-step upgrade is accepted and emits telemetry nothing consumes (E13). Needs a route clear/list surface and a scheduling-aware rule 4.",
+          "source": {
+            "feature": "dynamic-model-routing",
+            "role": "qa-senior"
+          },
+          "deferredAt": "2026-07-30T18:39:42Z"
+        },
+        {
+          "name": "unaudited-handwritten-routes-for-floorless-roles",
+          "summary": "A route hand-written into .workflow/<feature>.json takes effect for any role with no configured floor, with no route-decision telemetry event — floors and the audit trail both bind only what route set writes, so 'every route decision is audited' holds for the CLI path only",
+          "source": {
+            "feature": "dynamic-model-routing",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T08:14:51Z"
+        },
+        {
+          "name": "start-resume-skips-routing-directive",
+          "summary": "runStart returns early on the worktree 'Resuming existing workflow' branch before printRoutingDirective, so a resuming start prints no routing line (the orchestration hook re-emits it, so the decision window is not lost)",
+          "source": {
+            "feature": "dynamic-model-routing",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T08:14:51Z"
+        },
+        {
+          "name": "acceptance-verbose-terminator-attribution-steal",
+          "summary": "Verbose go test terminator attribution steal — unindented nested terminators can misattribute an acceptance skip",
+          "source": {
+            "feature": "truthful-validators",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T08:42:41Z"
+        },
+        {
+          "name": "acceptance-skip-parser-breadth",
+          "summary": "Skip parser breadth beyond cucumber/godog/go-test (pytest-bdd, behave, JVM cucumber, cucumber-rs)",
+          "source": {
+            "feature": "truthful-validators",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T08:42:41Z"
+        },
+        {
+          "name": "self-validate-acceptance-report-shape",
+          "summary": "Centinela's own non-verbose coverage command carries no skip data — consider a repo-level acceptance command that does",
+          "source": {
+            "feature": "truthful-validators",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T08:42:41Z"
+        },
+        {
+          "name": "validate-command-verdicts-in-machine-output",
+          "summary": "Per-command acceptance verdicts are terminal-only; centinela verdict/pr-gate carry no validate-command line",
+          "source": {
+            "feature": "truthful-validators",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T08:42:41Z"
+        },
+        {
+          "name": "acceptance-tier-attribution-path-hardcoded",
+          "summary": "internal/acceptance hardcodes tests/acceptance (case-sensitive); projects with another acceptance tier path get detection silently disarmed under whole-repo commands — needs a config knob",
+          "source": {
+            "feature": "truthful-validators",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T08:42:41Z"
+        },
+        {
+          "name": "roadmap-checkpoint-marker-truncation",
+          "summary": "internal/roadmapcheckpoint compares sub-second artifact mtimes against an RFC3339 second-truncated marker, so centinela roadmap iterate's suppression re-fires immediately — same defect class as the dynamic-routing clock-skew hotfix, reproduced by probe",
+          "source": {
+            "feature": "dynamic-routing-clock-skew",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T09:37:25Z"
+        },
+        {
+          "name": "broaden-fill-marker-stub-detection",
+          "summary": "internal/evidence FillMarker/<FILL:> stub-detection is changelog-only for binding-evidence-gates v1; broaden to all companion .md reports IF an unfilled-companion-report-passes-gate bug is hit in practice like dynamic-model-routing's changelog case (risk: false positives on legitimate prose mentioning the marker)",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "planner"
+          },
+          "deferredAt": "2026-07-31T10:05:13Z"
+        },
+        {
+          "name": "retire-handoff-alternate-pin-tolerance",
+          "summary": "handoffTo chain validation accepts the successor STEP's occupant under either contract pin (validate: gatekeeper|validation-specialist, plan: planner|big-thinker) so evidence written by the pre-fix hardcoded prefill still validates. Once no in-flight or downstream workflow carries a pre-gate handoffTo, tighten acceptsHandoff to exact-match on the derived successor and delete alternateContractRoles.",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "senior-engineer"
+          },
+          "deferredAt": "2026-07-31T11:03:58Z"
+        },
+        {
+          "name": "workflow-state-file-disarms-its-own-gates",
+          "summary": "orchestrationMode:\"\" or a deleted .workflow/<feature>.json silently disables the whole strict-orchestration gate, and validateContract:\"\" disables the grounded-verdict gate — the agent-writable state file is the trust root for both",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "edge-case-tester"
+          },
+          "deferredAt": "2026-07-31T11:19:32Z"
+        },
+        {
+          "name": "evidence-validate-skips-handoff-chain",
+          "summary": "centinela evidence validate and evidence set both accept an out-of-chain handoffTo that centinela complete rejects, so the agents' own pre-flight command disagrees with the gate",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "edge-case-tester"
+          },
+          "deferredAt": "2026-07-31T11:19:32Z"
+        },
+        {
+          "name": "changelog-substance-floor-is-non-empty",
+          "summary": "once the FILL marker is gone validateChangelog accepts a bare '-' or 'x' as an entry; no conventional-commit shape or minimum substance is required",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "edge-case-tester"
+          },
+          "deferredAt": "2026-07-31T11:19:32Z"
+        },
+        {
+          "name": "fill-marker-detection-is-exact-substring",
+          "summary": "HasFillMarker matches only the literal '<FILL:' so '<fill:', '< FILL:' and '<FILL type>' pass, while a legitimate changelog quoting the marker in prose is a false positive",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "edge-case-tester"
+          },
+          "deferredAt": "2026-07-31T11:19:32Z"
+        },
+        {
+          "name": "pin-feature-surface-on-workflow",
+          "summary": "IsUserFacingFeature greps docs/features/<feature>.md at gate time, so deleting the surface line mid-workflow silently drops the ux-ui + docs-specialist requirements and changes the derived handoff successor; ValidateContract/PlanContract are pinned in workflow state at start for exactly this reason, surface is not",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T12:41:23Z"
+        },
+        {
+          "name": "changelog-bare-heading-passes-gate",
+          "summary": "validateChangelog counts every non-blank line as an entry, so a file containing only '## Changelog' passes; needs a substance floor distinguishing a heading from an entry",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T12:41:23Z"
+        },
+        {
+          "name": "fill-marker-codespan-false-positive",
+          "summary": "A concrete <FILL: type> quoted inside a backtick code span is refused as a stub; detector is also case-sensitive — quoting the concrete marker form should be legal in prose",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T12:41:23Z"
+        },
+        {
+          "name": "changelog-erasure-passes-gate",
+          "summary": "StubEntry only fires while a literal <FILL: survives, so deleting the scaffold's slots in place leaves '- : ' (or '-', '.', 'TODO') and validateChangelog accepts it; the placeholder rule needs a substance floor beside it — same gap as changelog-bare-heading-passes-gate",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T13:14:22Z"
+        },
+        {
+          "name": "feature-surface-unpinned-at-gate-time",
+          "summary": "IsUserFacingFeature re-reads docs/features/<feature>.md at gate time: deleting the 'surface: user-facing' line mid-workflow flips a refused senior-engineer handoff to a pass and drops the ux-ui-specialist requirement; validateContract/planContract are pinned in workflow state at start, surface is not",
+          "source": {
+            "feature": "binding-evidence-gates",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-07-31T13:14:22Z"
+        },
+        {
+          "name": "docstring-generated-banner-visibility",
+          "summary": "Generated-file banner is a silent whole-file bypass; not counted, listed, or marked exempt",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "docstring-full-scan-empty-roots-honesty",
+          "summary": "docs lint --full reports a confident 0-of-0 when roots match nothing",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "docstring-ratchet-content-change-only",
+          "summary": "chmod/rename pulls a legacy file's whole backlog into scope",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "docstring-gate-scenario-clause-coverage",
+          "summary": "Two scenarios asserted via docs lint substitutes rather than the gate surface",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "gate-pass-details-invisible",
+          "summary": "RenderGateResult expands Details on Fail only, hiding checkFileSize justified list and checkDocstring exemptions on passing runs",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "docstring-nodoc-spaced-spelling",
+          "summary": "Spaced // centinela:nodoc counts as documented and is never listed as exempt",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "docstring-full-scan-symlink-divergence",
+          "summary": "WalkDir does not follow symlinks so --full misses a tree InScope accepts",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "gitdiff-remote-fallback-skips-hierarchical-base",
+          "summary": "origin/<base> retry is skipped for any base containing a slash (release/2.0)",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "pr-gate-ci-scope-narrowed-by-remote-fallback",
+          "summary": "pr-gate CI scope narrows full-repo to diff-aware now that the base resolves",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "docstring-ci-scenario-ratchet-clause-unasserted",
+          "summary": "CI scenario ratchet clause is not actually asserted by its test fixture",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "docstring-roots-parent-escape-unvalidated",
+          "summary": "A ..-escaping root passes absolute-root validation but walks outside the repo",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        },
+        {
+          "name": "docstring-pass-message-plural-disagreement",
+          "summary": "Pass message says 'All 1 exported identifiers' — plural disagreement",
+          "source": {
+            "feature": "docstring-gate",
+            "role": "gatekeeper"
+          },
+          "deferredAt": "2026-08-03T08:12:12Z"
+        }
       ]
     }
   ],

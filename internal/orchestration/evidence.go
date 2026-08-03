@@ -8,6 +8,13 @@ import (
 	"time"
 )
 
+// Evidence is one role's orchestration record for a single workflow step — the
+// JSON companion beside `.workflow/<feature>-<role>.md`. It is what
+// `centinela complete` reads to decide whether the step's delegation actually
+// happened, so the fields answer gates rather than readers: Outputs must name
+// real files (never a description of them), EdgeCases must be non-empty for the
+// roles that enumerate them, and HandoffTo must name the successor the
+// workflow's own contract derives.
 type Evidence struct {
 	Feature     string   `json:"feature"`
 	Step        string   `json:"step"`
@@ -22,6 +29,12 @@ type Evidence struct {
 	Checksum    string   `json:"checksum,omitempty"`
 }
 
+// ValidateEvidence reads the evidence JSON at path and reports the first way it
+// fails to certify the (feature, step, role) delegation it claims: unreadable or
+// malformed, mismatched identity fields, incomplete required fields, or a
+// role-specific rule (edge cases, actionable outputs, handoff successor). It
+// returns nil only when every rule holds — the caller treats that as permission
+// to advance the step, so it must never fail open.
 func ValidateEvidence(path, feature, step string, role Role, uiPaths []string) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -52,7 +65,24 @@ func ValidateEvidence(path, feature, step string, role Role, uiPaths []string) e
 	if err := validatePlanSnapshotInputs(path, feature, step, role, e.Inputs); err != nil {
 		return err
 	}
-	return nil
+	return validateStewardHandoff(path, role, e.HandoffTo)
+}
+
+// validateStewardHandoff binds the out-of-band merge-steward role's handoff to
+// its two legal verdicts. The steward runs on `centinela merge`, never appears
+// in a workflow's OrderedSteps(), and so has no derivable successor — its rule
+// is a closed literal pair (APPLY -> "complete", ESCALATE -> "user"), which is
+// exactly what worktree finalization already branches on. Any other value
+// silently reads as ESCALATE there, stalling a merge with no stated reason.
+//
+// Every OTHER role's handoffTo is checked against the chain its own workflow
+// derives, which needs workflow state this package cannot see; that check
+// lives in internal/workflow.
+func validateStewardHandoff(path string, role Role, handoffTo string) error {
+	if role != RoleMergeSteward || handoffTo == "complete" || handoffTo == "user" {
+		return nil
+	}
+	return fmt.Errorf("merge-steward handoffTo must be \"complete\" (APPLY) or \"user\" (ESCALATE), got %q: %s", handoffTo, path)
 }
 
 // needsEdgeCases includes RolePlanner because the planner now carries the spec
