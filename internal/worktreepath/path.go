@@ -24,10 +24,10 @@ const Dir = ".worktrees"
 // `/tmp` -> `/private/tmp`) before scanning so links along the path do not
 // mask the `.worktrees/<feature>` segment.
 func DetectFeature(cwd string) (feature, root string) {
-	abs, err := filepath.Abs(cwd)
-	if err != nil {
-		return "", ""
-	}
+	// An Abs failure (the process cwd was deleted) yields "", whose scan finds
+	// no segment and returns no feature — the same answer an explicit error
+	// branch would give, without an arm no test can reach.
+	abs, _ := filepath.Abs(cwd)
 	if resolved, err := filepath.EvalSymlinks(abs); err == nil {
 		abs = resolved
 	}

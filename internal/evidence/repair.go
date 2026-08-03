@@ -48,6 +48,17 @@ func Repair(feature string) ([]string, error) {
 // three callers. Without one, both unknown fields print their placeholder
 // rather than a legacy static guess the gate would then refuse.
 func SchemaSkeleton(feature string, role Role, cliVersion string) ([]byte, error) {
+	if feature != "" && !hasWorkflowState(feature) {
+		// A slug the caller resolved from a path segment but whose contract is
+		// not readable from HERE is not a derivation. Deriving anyway falls
+		// through handoffForRole to the static legacy chain, printing a
+		// plausible-but-wrong successor beside a correct-looking feature name —
+		// strictly more convincing, and strictly more wrong, than the
+		// placeholder. Demote it to the unresolved case instead: the command
+		// answers confidently only where it actually has evidence, like its
+		// sibling `evidence init`, which refuses an unknown feature outright.
+		feature = ""
+	}
 	f := feature
 	if f == "" {
 		f = placeholderFeature
@@ -60,4 +71,14 @@ func SchemaSkeleton(feature string, role Role, cliVersion string) ([]byte, error
 		skel.HandoffTo = unfilledHandoffSlot
 	}
 	return skel.MarshalJSON()
+}
+
+// hasWorkflowState reports whether feature's workflow state is readable from
+// the CURRENT directory — the same CWD-relative lookup workflow.ExpectedHandoff
+// performs, asked ahead of it so a failure becomes a placeholder rather than a
+// silent fallback. legacyHandoffForRole is untouched and still serves
+// `evidence init`'s genuine no-workflow-state stubs through Skeleton.
+func hasWorkflowState(feature string) bool {
+	_, err := workflow.Load(feature)
+	return err == nil
 }

@@ -1508,6 +1508,19 @@
     "createdAt": "2026-06-16T19:27:54Z"
   },
   {
+    "id": "ff17b6a7f4c2d618",
+    "feature": "evidence-schema-skeleton-legacy-handoff",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- `internal/worktreepath/path_test.go` — **required, package currently has none (E16).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/evidence-schema-skeleton-legacy-handoff-edge-cases.md",
+    "createdAt": "2026-08-03T12:40:38Z"
+  },
+  {
     "id": "ff330e1ec8610e53",
     "feature": "team-dashboard",
     "step": "tests",

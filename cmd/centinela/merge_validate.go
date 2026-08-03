@@ -7,17 +7,23 @@ import (
 	"github.com/samuelnp/centinela/internal/config"
 )
 
-// inDir runs fn with the process CWD set to dir, restoring it afterwards.
-// Merge-time work (validate, portal regen, steward evidence lookup) must
-// operate on the PRIMARY tree, not on the invoking CWD: from a feature
-// worktree the latter is about to be deleted, and its diff against the target
-// is empty because the primary tree has already absorbed the branch.
+// inDir runs fn with the process CWD set to dir, restoring it afterwards — the
+// one seam for work that must read the CWD-relative domain APIs from somewhere
+// other than the invoking directory. Two callers:
+//
+//   - merge-time work (validate, portal regen, steward evidence lookup) must
+//     operate on the PRIMARY tree: from a feature worktree the invoking CWD is
+//     about to be deleted, and its diff against the target is empty because the
+//     primary tree has already absorbed the branch;
+//   - `evidence schema` must derive from the WORKTREE ROOT, so it answers the
+//     same from a package subdirectory as from the root.
+//
 // A missing original CWD (the worktree we were standing in got removed) is
 // tolerated — there is simply nothing to restore.
 func inDir(dir string, fn func() error) error {
 	orig, _ := os.Getwd()
 	if err := os.Chdir(dir); err != nil {
-		return fmt.Errorf("cannot enter primary working tree %s: %w", dir, err)
+		return fmt.Errorf("cannot enter %s: %w", dir, err)
 	}
 	if orig != "" {
 		defer os.Chdir(orig) //nolint:errcheck // best-effort restore
