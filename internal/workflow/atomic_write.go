@@ -27,6 +27,13 @@ var beforeRename = func() {}
 // evidence check, whose repair only knows how to remove <feature>-<role> temps
 // and would otherwise report a fix that removes nothing, forever).
 //
+// SYMLINKS ARE REPLACED, NOT FOLLOWED — accepted deliberately. rename(2)
+// replaces the link itself, where os.WriteFile wrote through it. Writing
+// through a link would re-open the O_TRUNC window this helper exists to close,
+// and the link's target may sit on another filesystem where rename cannot be
+// atomic at all (EXDEV). Share state by symlinking the .workflow/ DIRECTORY:
+// that still works, since the temp lands in the resolved directory.
+//
 // Every error names the TARGET, not the temp: the caller asked to write the
 // state file and that is the path worth reporting.
 func WriteFileAtomic(path string, data []byte, perm fs.FileMode) error {

@@ -351,6 +351,19 @@
     "createdAt": "2026-07-09T14:08:08Z"
   },
   {
+    "id": "314b240c37e5cb40",
+    "feature": "durable-workflow-state",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Anti-bricking holds for a well-typed future version.** **[probe]**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/durable-workflow-state-edge-cases.md",
+    "createdAt": "2026-08-03T20:28:00Z"
+  },
+  {
     "id": "32f04a9174b07dba",
     "feature": "spec-traceability-gate",
     "step": "validate",

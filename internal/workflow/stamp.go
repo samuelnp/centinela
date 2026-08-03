@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 
@@ -33,20 +34,16 @@ func StampVerification(feature, root string, run treestate.Runner) (treestate.Sn
 	return snapshot, nil
 }
 
+// reportFileMode is the mode a stamped verifier report is kept at: the same
+// world-readable mode `centinela artifact new` creates it with. The hand-rolled
+// replace this delegation removed used os.CreateTemp without a Chmod, so every
+// `artifact stamp` silently downgraded the report to 0600.
+const reportFileMode fs.FileMode = 0o644
+
 // writeReport replaces path atomically so an interrupted stamp can never leave
-// a half-written verdict on disk.
+// a half-written verdict on disk. It delegates to WriteFileAtomic rather than
+// hand-rolling a second, weaker copy of it one file away: that copy had no
+// chmod (0600 reports), no fsync and no directory fsync.
 func writeReport(path string, data []byte) error {
-	tmp, err := os.CreateTemp(filepath.Dir(path), ".stamp-*")
-	if err != nil {
-		return err
-	}
-	defer os.Remove(tmp.Name()) //nolint:errcheck
-	if _, err := tmp.Write(data); err != nil {
-		tmp.Close() //nolint:errcheck
-		return err
-	}
-	if err := tmp.Close(); err != nil {
-		return err
-	}
-	return os.Rename(tmp.Name(), path)
+	return WriteFileAtomic(path, data, reportFileMode)
 }

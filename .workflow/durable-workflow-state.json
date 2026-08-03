@@ -1,7 +1,7 @@
 {
   "feature": "durable-workflow-state",
   "startedAt": "2026-08-03T14:44:46.118916Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -16,11 +16,11 @@
       "completedAt": "2026-08-03T18:34:35Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-03T20:28:00Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },
@@ -40,6 +40,11 @@
     "planner": {
       "tier": "reasoning",
       "decidedAt": "2026-08-03T14:45:10Z"
+    },
+    "qa-senior": {
+      "tier": "reasoning",
+      "reason": "scope changed: edge-case tester found a critical hole (Load unmarshals before probing version, defeating the anti-bricking rationale) plus a silent-resurrect bug; this step fixes core load/save logic, not just tests",
+      "decidedAt": "2026-08-03T19:37:53Z"
     }
   }
 }

@@ -67,6 +67,12 @@ type Workflow struct {
 	// New/NewWithOrder, which is what exempts `start` and the autostart hook
 	// from a conflict check they cannot meaningfully fail.
 	loadedDigest string
+
+	// unmodellable marks a workflow Load rebuilt from a state file written by a
+	// NEWER Centinela whose body this binary cannot unmarshal. Unexported for
+	// the same reason as loadedDigest, and never true for a file this binary
+	// wrote. See degradedWorkflow for the contract it carries.
+	unmodellable bool
 }
 
 // WorkflowDir is the directory where workflow JSON files are stored.

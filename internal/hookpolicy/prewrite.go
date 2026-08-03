@@ -38,6 +38,13 @@ func EvaluatePrewrite(path, cwd string, cfg *config.Config, wfs []*workflow.Work
 			continue
 		}
 		active++
+		// A workflow whose state file came from a NEWER Centinela and cannot be
+		// modelled here is reported, never enforced: this binary does not
+		// understand that file's step semantics, and guessing them would block
+		// every governed write in the repo (see workflow.Unmodellable).
+		if wf.Unmodellable() {
+			return PrewriteDecision{Allow: true, FileType: fileType}
+		}
 		// outcome drops the ordering rails: any write in an active step is
 		// allowed. The no-active-workflow block above is untouched for all
 		// profiles. strict/guided keep today's step-gating.

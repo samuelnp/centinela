@@ -40,8 +40,8 @@ func TestSaveStampsCurrentVersion(t *testing.T) {
 	if !strings.Contains(string(raw), `"schemaVersion": `+strconv.Itoa(SchemaVersion)) {
 		t.Fatalf("state file is not stamped: %s", raw)
 	}
-	if onDiskVersion(raw) != SchemaVersion {
-		t.Fatalf("onDiskVersion = %d, want %d", onDiskVersion(raw), SchemaVersion)
+	if v, ok := stateVersion(raw); !ok || v != SchemaVersion {
+		t.Fatalf("stateVersion = %d,%v, want %d,true", v, ok, SchemaVersion)
 	}
 }
 
@@ -90,8 +90,11 @@ func TestSaveReadsVersionFromDiskNotMemory(t *testing.T) {
 	}
 }
 
-func TestOnDiskVersionToleratesGarbage(t *testing.T) {
-	if got := onDiskVersion([]byte("{not json")); got != legacyVersion {
-		t.Fatalf("corrupt bytes must not read as a future version, got %d", got)
+// Corruption is not evidence of a file from the future: bytes that are not a
+// JSON object at all still read as the legacy version, so a corrupt file is
+// diagnosed as corrupt rather than as "upgrade Centinela".
+func TestStateVersionToleratesGarbage(t *testing.T) {
+	if v, ok := stateVersion([]byte("{not json")); !ok || v != legacyVersion {
+		t.Fatalf("corrupt bytes must not read as a future version, got %d,%v", v, ok)
 	}
 }
