@@ -1079,6 +1079,19 @@
     "createdAt": "2026-07-09T13:38:24Z"
   },
   {
+    "id": "b5ab123a9c0c7560",
+    "feature": "evidence-schema-skeleton-legacy-handoff",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: evidence-schema-skeleton-legacy-handoff",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/evidence-schema-skeleton-legacy-handoff-gatekeeper.md",
+    "createdAt": "2026-08-03T13:14:00Z"
+  },
+  {
     "id": "b5afec861b2222c7",
     "feature": "roadmap-doc-sync",
     "step": "validate",

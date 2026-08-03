@@ -7,6 +7,7 @@ import (
 )
 
 // Acceptance: specs/evidence-schema-skeleton-legacy-handoff.feature
+// Scenario: Derivation is identical from a subdirectory of the worktree
 // Scenario: Derive with feature — canonical internal feature, worktree CWD
 // Scenario: Derive with feature — hotfix archetype has no docs step
 // Scenario: Derive with feature — user-facing feature, same-step ux-ui hop
@@ -63,8 +64,8 @@ func TestEvidenceSchemaAgreesWithEvidenceInit(t *testing.T) {
 	}
 }
 
-// Acceptance: Scenario: Merge-steward is out-of-band — never guessed, never
-// placeholder'd; and unaffected by derivation when a feature IS resolvable.
+// Scenario: Merge-steward is out-of-band — never guessed, never placeholder'd
+// Scenario: Merge-steward with a resolvable feature is unaffected by derivation
 func TestEvidenceSchemaMergeStewardAlwaysComplete(t *testing.T) {
 	root := schemaRepo(t, "demo-internal", schemaCanonicalOrder, schemaModernPins, "# demo\n", "validate")
 	for _, dir := range []string{root, filepath.Join(root, "internal", "evidence"), t.TempDir()} {

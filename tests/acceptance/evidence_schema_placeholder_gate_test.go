@@ -6,8 +6,8 @@ import (
 )
 
 // Acceptance: specs/evidence-schema-skeleton-legacy-handoff.feature
-// Scenario: No-feature path — "pasting this JSON verbatim ... reports a
-// handoffTo issue naming the true successor and a fix command".
+// Scenario: The placeholder is refused loudly for a contract-required role
+// Scenario: The placeholder is NOT refused for a role the contract omits
 //
 // That scenario is TRUE ONLY for a role the workflow's contract requires: the
 // chain check iterates RequiredEvidenceRoles, so a non-required role's

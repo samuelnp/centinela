@@ -11,9 +11,10 @@ import (
 // Acceptance: specs/evidence-schema-skeleton-legacy-handoff.feature
 // Scenario: No-feature path — CWD resolves nothing
 // Scenario: No-feature path — ambiguous CWD (parallel sessions) never guesses
-// PLUS the case the spec does not state: a `.worktrees/<x>` segment whose
-// workflow state is not readable is ALSO the no-feature path. Answering from
-// the static legacy chain there prints a stale successor beside a real-looking
+// Scenario: A resolved slug with no readable workflow state is not guessed at
+//
+// That last one is the case the original spec did not state: answering from the
+// static legacy chain there prints a stale successor beside a real-looking
 // slug — the failure this feature exists to remove, wearing better clothes.
 func TestEvidenceSchemaPlaceholderWhenNothingResolves(t *testing.T) {
 	cases := []struct {
@@ -52,9 +53,10 @@ func TestEvidenceSchemaPlaceholderWhenNothingResolves(t *testing.T) {
 	}
 }
 
-// Acceptance: Scenario: Unknown role is rejected before any derivation happens
-// ("and nothing is printed to stdout") — extended to the arity errors, because
-// the same capture path swallows all three straight into a prompt.
+// Scenario: Unknown role is rejected before any derivation happens
+//
+// Extended to the arity errors: the same capture path swallows all three
+// straight into a prompt.
 func TestEvidenceSchemaErrorPathsWriteNothingToStdout(t *testing.T) {
 	dir := schemaPlainRepo(t)
 	cases := [][]string{
