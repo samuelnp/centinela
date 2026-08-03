@@ -1,11 +1,11 @@
 {
   "feature": "evidence-schema-skeleton-legacy-handoff",
   "startedAt": "2026-08-03T10:45:36.277724Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-03T11:16:59Z"
     },
     "docs": {
       "status": "pending",
@@ -16,7 +16,7 @@
       "completedAt": "2026-08-03T11:03:39Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {

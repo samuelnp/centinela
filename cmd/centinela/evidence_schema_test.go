@@ -6,6 +6,12 @@ import (
 )
 
 func TestEvidenceSchemaEmitsSkeleton(t *testing.T) {
+	// The skeleton derives its feature from the CWD, so the no-feature branch
+	// must be asserted from a directory that resolves nothing: a temp dir (no
+	// `.worktrees/<feature>` segment) with an empty .workflow. Without this the
+	// test's outcome depends on where the repo happens to be checked out — it
+	// fails outright when the checkout is itself inside a `.worktrees/` path.
+	chdirEvidenceTemp(t)
 	out := captureStdout(t, func() {
 		if err := runEvidenceSchema(nil, []string{"big-thinker"}); err != nil {
 			t.Fatal(err)
