@@ -1,11 +1,6 @@
 package workflow
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"io/fs"
-	"os"
 	"path/filepath"
 	"time"
 )
@@ -18,6 +13,12 @@ type StepState struct {
 
 // Workflow represents the full state of a feature workflow.
 type Workflow struct {
+	// SchemaVersion is the state-file schema this file was written against. It
+	// is first so it is the first key in the marshalled JSON — `head -3` of any
+	// state file shows it — and carries no omitempty so every file this binary
+	// writes is stamped. Absent on disk means version 1. A HIGHER value is
+	// refused by Save and never by Load; see SchemaVersion for why.
+	SchemaVersion     int                  `json:"schemaVersion"`
 	Feature           string               `json:"feature"`
 	StartedAt         time.Time            `json:"startedAt"`
 	CurrentStep       string               `json:"currentStep"`
@@ -58,6 +59,14 @@ type Workflow struct {
 	// workflow written before this field existed and on every static-mode
 	// workflow — a nil map simply means "no routes" (see model_routes.go).
 	ModelRoutes map[string]ModelRoute `json:"modelRoutes,omitempty"`
+
+	// loadedDigest fingerprints the raw bytes Load read, so Save can refuse to
+	// overwrite a file another process has changed since. It is UNEXPORTED on
+	// purpose: encoding/json ignores it, so the on-disk shape is untouched and
+	// not one existing fixture needs to change. Empty on a workflow built by
+	// New/NewWithOrder, which is what exempts `start` and the autostart hook
+	// from a conflict check they cannot meaningfully fail.
+	loadedDigest string
 }
 
 // WorkflowDir is the directory where workflow JSON files are stored.
@@ -68,30 +77,6 @@ func FilePath(feature string) string {
 	return filepath.Join(WorkflowDir, feature+".json")
 }
 
-// Load reads and parses a workflow file from disk. Only a genuinely
-// missing state file reports absence; read and parse failures surface
-// with the state file path so they are never mistaken for "not started".
-func Load(feature string) (*Workflow, error) {
-	path := FilePath(feature)
-	data, err := os.ReadFile(path)
-	if err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			return nil, fmt.Errorf("no workflow found for %q", feature)
-		}
-		return nil, fmt.Errorf("reading workflow file %s: %w", path, err)
-	}
-	var wf Workflow
-	if err := json.Unmarshal(data, &wf); err != nil {
-		return nil, fmt.Errorf("invalid workflow file %s: %w", path, err)
-	}
-	return &wf, nil
-}
-
-// Save writes a workflow to disk.
-func Save(wf *Workflow) error {
-	data, err := json.MarshalIndent(wf, "", "  ")
-	if err != nil {
-		return err
-	}
-	return os.WriteFile(FilePath(wf.Feature), data, 0644)
-}
+// Load and Save live in state_io.go: the durability rules (atomic replace,
+// schema version, stale-write detection) are a concern of their own and this
+// file is at the 100-line cap.

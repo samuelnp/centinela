@@ -55,6 +55,12 @@ ECOSYSTEM.md
 .workflow/.roadmap-digest
 .workflow/.roadmap-digest-*
 
+# Temp file for the atomic state-file replace (workflow.WriteFileAtomic). It
+# only survives a SIGKILL between write and rename; ignoring it keeps
+# `git status` clean after a crash. It is deliberately dot-prefixed and
+# suffixed so it matches neither `.workflow/*.json` nor `.workflow/*.json.tmp`.
+.workflow/.*.json.tmp-*
+
 # Editor / OS junk. Two of these were committed on a feature branch and only
 # caught by an adversarial verifier: a tracked .swp makes every later editor
 # session prompt for swap recovery on the doc it shadows.

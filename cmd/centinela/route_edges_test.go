@@ -57,8 +57,12 @@ func TestRunRouteShow_MissingWorkflowAndUnwritableState(t *testing.T) {
 		t.Fatal("an unknown feature must surface the missing-workflow error")
 	}
 	routeSetReason = "config-only change"
-	os.Chmod(workflow.FilePath("f"), 0o400)                       //nolint:errcheck
-	t.Cleanup(func() { os.Chmod(workflow.FilePath("f"), 0o644) }) //nolint:errcheck
+	// The save is atomic (temp + rename), so an unwritable TARGET no longer
+	// fails it — rename needs write permission on the DIRECTORY. Make the
+	// state directory unwritable, which is the condition that actually blocks
+	// a durable write.
+	os.Chmod(workflow.WorkflowDir, 0o500)                       //nolint:errcheck
+	t.Cleanup(func() { os.Chmod(workflow.WorkflowDir, 0o755) }) //nolint:errcheck
 	if err := runRouteSet(nil, []string{"f", "senior-engineer", "balanced"}); err == nil ||
 		!strings.Contains(err.Error(), "cannot save workflow") {
 		t.Fatalf("a failed save must surface, got %v", err)
