@@ -1,18 +1,18 @@
 {
   "feature": "beg-docstring-debt",
   "startedAt": "2026-08-03T09:00:24.196394Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-08-03T09:01:42Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-03T09:02:35Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },

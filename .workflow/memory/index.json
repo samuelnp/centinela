@@ -676,6 +676,19 @@
     "createdAt": "2026-06-22T09:56:27Z"
   },
   {
+    "id": "6e8932d78bff74ce",
+    "feature": "beg-docstring-debt",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- The docstring gate over this branch's changed-file set, verified by running",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/beg-docstring-debt-edge-cases.md",
+    "createdAt": "2026-08-03T09:02:35Z"
+  },
+  {
     "id": "6f2c47e7d891ec8f",
     "feature": "failure-ledger-plan-advisor",
     "step": "tests",
