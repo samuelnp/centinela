@@ -1,0 +1,45 @@
+{
+  "feature": "durable-workflow-state",
+  "startedAt": "2026-08-03T14:44:46.118916Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-08-03T18:34:35Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/durable-workflow-state",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1",
+  "modelRoutes": {
+    "planner": {
+      "tier": "reasoning",
+      "decidedAt": "2026-08-03T14:45:10Z"
+    }
+  }
+}
