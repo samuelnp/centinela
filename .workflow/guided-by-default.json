@@ -1,7 +1,7 @@
 {
   "feature": "guided-by-default",
   "startedAt": "2026-08-03T08:27:42.689123Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -16,11 +16,11 @@
       "completedAt": "2026-08-03T08:41:46Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-03T13:43:10Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },
@@ -41,6 +41,11 @@
       "tier": "reasoning",
       "reason": "Profile-default flip touches enforcement semantics, greenfield cascade, and the self-graded quality gate deletion — highest-stakes planning judgment in Phase 13",
       "decidedAt": "2026-08-03T08:28:07Z"
+    },
+    "qa-senior": {
+      "tier": "balanced",
+      "reason": "Acceptance-tier authoring against a written spec — pattern-following work, not novel judgment; parity table and self-governance test shapes are specified by the plan",
+      "decidedAt": "2026-08-03T13:06:57Z"
     },
     "senior-engineer": {
       "tier": "reasoning",

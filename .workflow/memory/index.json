@@ -91,6 +91,19 @@
     "createdAt": "2026-06-06T18:53:48Z"
   },
   {
+    "id": "10c2e600703a5670",
+    "feature": "guided-by-default",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Missing gatekeeper report blocks both profiles identically** —",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/guided-by-default-edge-cases.md",
+    "createdAt": "2026-08-03T13:43:10Z"
+  },
+  {
     "id": "121a9c908809ba77",
     "feature": "right-size-docs-step",
     "step": "tests",
