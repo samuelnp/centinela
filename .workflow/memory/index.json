@@ -182,6 +182,19 @@
     "createdAt": "2026-06-22T10:34:01Z"
   },
   {
+    "id": "1a8f5ae24c898655",
+    "feature": "beg-docstring-debt",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: beg-docstring-debt",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/beg-docstring-debt-gatekeeper.md",
+    "createdAt": "2026-08-03T09:21:10Z"
+  },
+  {
     "id": "1ba2b232333b5a26",
     "feature": "governance-telemetry",
     "step": "validate",
