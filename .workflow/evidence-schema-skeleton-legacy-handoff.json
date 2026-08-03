@@ -1,0 +1,46 @@
+{
+  "feature": "evidence-schema-skeleton-legacy-handoff",
+  "startedAt": "2026-08-03T10:45:36.277724Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-08-03T11:03:39Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/evidence-schema-skeleton-legacy-handoff",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1",
+  "modelRoutes": {
+    "planner": {
+      "tier": "balanced",
+      "reason": "single well-diagnosed defect with a narrow CLI-surface decision (how a feature-less skeleton names handoffTo); the plan is choosing between two known options, not exploring a space",
+      "decidedAt": "2026-08-03T10:45:47Z"
+    }
+  }
+}
