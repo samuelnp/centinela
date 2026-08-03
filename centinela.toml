@@ -239,3 +239,12 @@ verify_timeout = 360
 # [orchestration.model_map.reasoning]
 # claude = "opus"
 # opencode = "anthropic/claude-opus-4-7"
+
+# Dogfooding dynamic-model-routing on Centinela itself: the orchestrator picks
+# each role's tier per feature with `centinela route set`, instead of every
+# feature paying one project-wide tier. Un-routed roles fall back to the static
+# chain, so this is additive. Floors are left at their shipped defaults
+# (gatekeeper = reasoning, planner = balanced) — the verifier's tier is the
+# quality of the adversarial judgment, so it is not a cost knob.
+[orchestration]
+routing_mode = "dynamic"

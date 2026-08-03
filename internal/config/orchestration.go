@@ -13,6 +13,8 @@ type OrchestrationConfig struct {
 	CapabilityProfiles map[string]string            `toml:"capability_profiles"` // class → enforcement profile
 	DriverModel        string                       `toml:"driver_model"`        // workflow's default-profile key
 	Local              LocalConfig                  `toml:"local"`               // local-model backend (lowest-precedence tier)
+	RoutingMode        string                       `toml:"routing_mode"`        // static (default/absent) | dynamic
+	Floors             map[string]string            `toml:"floors"`              // role → minimum tier (dynamic routing)
 }
 
 // RoleModelValue is the union value of an [orchestration.models].<role> entry:
