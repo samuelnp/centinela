@@ -46,6 +46,10 @@ Required analysis:
 3. Type-safety notes — how the strictest available type system is used;
    no dynamic-typing shortcuts (no `any`, no untyped ducks).
 4. Trade-offs — alternatives considered and why rejected.
+5. Doc comments — every exported identifier you add or modify carries a
+   doc comment. The docstring gate enforces this on changed files at
+   fail severity; `centinela docs lint` is the standalone surface. Use
+   `//centinela:nodoc` only with a stated reason.
 
 Output format:
 ### Senior-Engineer Report: <FEATURE_NAME>
@@ -60,6 +64,7 @@ Output format:
 - Boundary checks passed: …
 - G1 file size: each modified file ≤ 100 lines (or G1 exception logged).
 - G7 outer-layer rule: no business logic moved into the outer layer.
+- Docstrings: every exported identifier added or modified is documented.
 
 #### Type-Safety Notes
 - bullet list

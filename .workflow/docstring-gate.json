@@ -1,0 +1,39 @@
+{
+  "feature": "docstring-gate",
+  "startedAt": "2026-07-31T08:57:06.163106Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-31T10:10:31Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-31T13:46:15Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-31T09:35:39Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-31T11:36:54Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-31T13:45:39Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/docstring-gate",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1"
+}

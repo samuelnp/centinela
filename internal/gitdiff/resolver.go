@@ -23,21 +23,26 @@ type Resolver struct {
 var Default = &Resolver{Run: runGit}
 
 // ChangedFiles returns the union of tracked changes since merge-base and
-// untracked files (when includeUntracked is true). On any git failure it
-// returns (nil, summary with non-empty Degrade, nil error) so callers can
-// degrade to full scan with a notice.
+// untracked files (when includeUntracked is true). The base is resolved by
+// mergeBase, which retries the origin/<base> form so a CI checkout without a
+// local branch ref still produces a real scope. On any git failure it returns
+// (nil, summary with non-empty Degrade, nil error) so callers can degrade to
+// full scan with a notice.
 func (r *Resolver) ChangedFiles(base string, includeUntracked bool) (*Set, Summary, error) {
 	if base == "" {
 		base = "main"
 	}
 	summary := Summary{Base: base}
 
-	mb, err := r.Run("git", "merge-base", "HEAD", base)
+	resolved, mb, err := r.mergeBase(base)
 	if err != nil {
 		summary.Degrade = degradeReason(err, base)
 		return nil, summary, nil
 	}
-	mb = strings.TrimSpace(mb)
+	// Report the ref that actually resolved, not the one that was configured:
+	// the validate header names the base, and naming an unused ref would be a
+	// small lie about what the run compared against.
+	summary.Base = resolved
 
 	tracked, err := r.Run("git", "diff", "--name-only", "--diff-filter=ACMR", mb)
 	if err != nil {
@@ -59,18 +64,6 @@ func (r *Resolver) ChangedFiles(base string, includeUntracked bool) (*Set, Summa
 	set := NewSet(paths)
 	summary.Files = set.Len()
 	return set, summary, nil
-}
-
-func degradeReason(err error, base string) string {
-	msg := err.Error()
-	if strings.Contains(msg, "not a git repository") {
-		return "not a git repository"
-	}
-	if strings.Contains(msg, "Not a valid object name") ||
-		strings.Contains(msg, "unknown revision") {
-		return fmt.Sprintf("diff base %q not found", base)
-	}
-	return fmt.Sprintf("git merge-base failed: %s", msg)
 }
 
 func splitNonEmpty(s string) []string {

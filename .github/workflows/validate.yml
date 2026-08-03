@@ -9,8 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # fetch-depth: 0 gives the merge base something to reach. It is NOT by
+      # itself what makes the docstring ratchet enforce here: actions/checkout
+      # leaves a detached HEAD with no local `main` ref, so `git merge-base HEAD
+      # main` exits 128 even on a full clone. internal/gitdiff resolves that by
+      # retrying `origin/<base>`; full history is what makes that retry able to
+      # find a common ancestor. Both halves are required.
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup Go
         uses: actions/setup-go@v6
