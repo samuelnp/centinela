@@ -210,6 +210,7 @@
 - **dynamic-model-routing** — Opt-in dynamic model routing: [orchestration] routing_mode = static (default, unchanged) | dynamic; in dynamic mode the orchestrator decides each role's model tier per feature via 'centinela route set <feature> <role> <tier>' persisted in workflow state, with configurable per-role floors (default gatekeeper=reasoning, planner=balanced), downgrade-only-before-step-start / upgrade-anytime, --reason required on downgrades below the static default, and every route decision recorded in telemetry; un-routed roles fall back to static config
 - **dynamic-routing-clock-skew** — Hotfix: dynamic model routing clock-skew handling
 - **binding-evidence-gates** — Make three evidence/artifact gates actually bind what they claim: validate handoffTo against the documented role chain (today handoffTo=banana completes a step), validate the centinela:verification commands schema at artifact stamp time instead of accepting any shape, and reject an unfilled <FILL:> template as a changelog (today the stub satisfies the docs gate)
+- **beg-docstring-debt** — Hotfix: document the two exported identifiers in internal/orchestration/evidence.go (Evidence, ValidateEvidence) that the newly-enforcing docstring gate surfaces on binding-evidence-gates' changed-file set
 
 ## Backlog
 
@@ -306,3 +307,5 @@
 - **docstring-ci-scenario-ratchet-clause-unasserted** — CI scenario ratchet clause is not actually asserted by its test fixture *(deferred 2026-08-03T08:12:12Z · docstring-gate/gatekeeper)*
 - **docstring-roots-parent-escape-unvalidated** — A ..-escaping root passes absolute-root validation but walks outside the repo *(deferred 2026-08-03T08:12:12Z · docstring-gate/gatekeeper)*
 - **docstring-pass-message-plural-disagreement** — Pass message says 'All 1 exported identifiers' — plural disagreement *(deferred 2026-08-03T08:12:12Z · docstring-gate/gatekeeper)*
+- **evidence-schema-skeleton-legacy-handoff** — centinela evidence schema <role> prints the legacy-table handoffTo (e.g. documentation-specialist), which the derived-successor gate refuses on hotfix and spike archetypes; the skeleton should derive the successor the same way the gate does *(deferred 2026-08-03T09:35:29Z · beg-docstring-debt/gatekeeper)*
+- **evidence-doc-comment-overclaims-handoff** — The ValidateEvidence doc comment says it enforces the handoff-successor rule; it enforces only the merge-steward literal complete/user pair — the derived-successor check lives in internal/workflow.CheckHandoffTo *(deferred 2026-08-03T09:35:29Z · beg-docstring-debt/gatekeeper)*
