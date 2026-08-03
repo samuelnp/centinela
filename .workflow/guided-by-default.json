@@ -1,0 +1,46 @@
+{
+  "feature": "guided-by-default",
+  "startedAt": "2026-08-03T08:27:42.689123Z",
+  "currentStep": "code",
+  "steps": {
+    "code": {
+      "status": "in-progress",
+      "completedAt": null
+    },
+    "docs": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-08-03T08:41:46Z"
+    },
+    "tests": {
+      "status": "pending",
+      "completedAt": null
+    },
+    "validate": {
+      "status": "pending",
+      "completedAt": null
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/guided-by-default",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1",
+  "modelRoutes": {
+    "planner": {
+      "tier": "reasoning",
+      "reason": "Profile-default flip touches enforcement semantics, greenfield cascade, and the self-graded quality gate deletion — highest-stakes planning judgment in Phase 13",
+      "decidedAt": "2026-08-03T08:28:07Z"
+    }
+  }
+}
