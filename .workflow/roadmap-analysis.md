@@ -95,3 +95,4 @@
 - Finalized draft in place: binding-evidence-gates
 - Finalized draft in place: beg-docstring-debt
 - Promoted from Backlog: evidence-schema-skeleton-legacy-handoff (source=beg-docstring-debt/gatekeeper, deferredAt=2026-08-03T09:35:29Z)
+- Finalized draft in place: durable-workflow-state

@@ -66,6 +66,7 @@
     {"name":"dynamic-routing-clock-skew"},
     {"name":"binding-evidence-gates"},
     {"name":"beg-docstring-debt"},
-    {"name":"evidence-schema-skeleton-legacy-handoff"}
+    {"name":"evidence-schema-skeleton-legacy-handoff"},
+    {"name":"durable-workflow-state"}
   ]
 }
