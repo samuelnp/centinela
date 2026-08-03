@@ -1079,6 +1079,19 @@
     "createdAt": "2026-06-29T18:47:23Z"
   },
   {
+    "id": "b6532109e81f09e9",
+    "feature": "docstring-gate",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Gatekeeper Report — docstring-gate (round 3)",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/docstring-gate-gatekeeper.md",
+    "createdAt": "2026-07-31T13:45:39Z"
+  },
+  {
     "id": "bacb676c33af8e1a",
     "feature": "remove-panel-borders",
     "step": "tests",
@@ -1441,6 +1454,19 @@
     ],
     "sourceArtifact": ".workflow/docs-step-markdown-first-gatekeeper.md",
     "createdAt": "2026-07-30T12:52:08Z"
+  },
+  {
+    "id": "fabd37be9d8eb127",
+    "feature": "docstring-gate",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- Undocumented exported function in a changed file fails, naming file:line,",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/docstring-gate-edge-cases.md",
+    "createdAt": "2026-07-31T11:36:54Z"
   },
   {
     "id": "fd962adabbaacf20",

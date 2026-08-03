@@ -1,0 +1,177 @@
+Feature: docstring-gate
+  As a Centinela user
+  I want a deterministic gate that fails on exported identifiers without doc comments
+  So that the codebase carries the in-code documentation a godoc/Docusaurus
+  pipeline consumes, ratcheted to changed files so a legacy backlog does not
+  block every unrelated feature.
+
+  Background:
+    Given the built-in gate "docstring-gate" is registered in gates.RunWithFilter
+    And its scope is the changed-file set every other file-scoped gate receives
+    And it inspects exported funcs, types, methods, interface methods, consts and vars
+
+  Scenario: Undocumented exported function in a changed file fails the gate
+    Given [gates.docstring] is enabled with severity "fail"
+    And a Go source file declaring "func Exported()" with no doc comment
+    And that file is in the changed-file scope
+    When the docstring gate runs
+    Then the gate result status is Fail
+    And the details name the file, the line, the kind "func" and the name "Exported"
+
+  Scenario: Documented exported identifiers pass
+    Given [gates.docstring] is enabled with severity "fail"
+    And a Go source file whose every exported identifier carries a doc comment
+    And that file is in the changed-file scope
+    When the docstring gate runs
+    Then the gate result status is Pass
+    And the message names how many exported identifiers were inspected
+
+  Scenario: Warn severity reports the violations without failing
+    Given [gates.docstring] is enabled with severity "warn"
+    And a Go source file declaring "func Exported()" with no doc comment
+    And that file is in the changed-file scope
+    When the docstring gate runs
+    Then the gate result status is Warn
+    And the details still name the undocumented identifier
+    And the gate message carries the violation count and points at "centinela docs lint"
+    And the gate message does not end in a colon introducing an unrendered list
+    And gates.AllPassed reports true for the result set
+
+  Scenario: An empty changed-file scope reports Skip, not Pass
+    Given [gates.docstring] is enabled
+    And the changed-file scope is a non-nil filter containing zero files
+    When the docstring gate runs
+    Then the gate result status is Skip
+    And the message states that nothing was inspected
+
+  Scenario: A changed-file scope with no Go files reports Skip
+    Given [gates.docstring] is enabled
+    And the changed-file scope contains only "README.md"
+    When the docstring gate runs
+    Then the gate result status is Skip
+    And the message states that no Go files were in scope
+
+  Scenario: A legacy unchanged file with undocumented exports is never scanned
+    Given [gates.docstring] is enabled with severity "fail"
+    And a legacy Go file with undocumented exported identifiers exists on disk
+    And the changed-file scope contains a different, fully documented file
+    When the docstring gate runs
+    Then the gate result status is Pass
+    And the legacy file is absent from the details
+
+  Scenario: The gate ratchets to changed files even when the run asks for a full scan
+    Given [gates.docstring] is enabled with severity "fail"
+    And the run resolves a nil filter because the mode is full scan
+    When the docstring gate runs
+    Then it resolves the same merge-base changed-file set the other gates use
+    And only those files are inspected
+    And legacy undocumented identifiers outside that set are never reported
+
+  Scenario: An unresolvable changed-file scope reports Skip, not Pass and not Fail
+    Given [gates.docstring] is enabled with severity "fail"
+    And the run resolves a nil filter and git cannot resolve the merge base
+    When the docstring gate runs
+    Then the gate result status is Skip
+    And the message names the reason the scope could not be resolved
+
+  Scenario: A grouped const block doc covers every constant in the block
+    Given [gates.docstring] is enabled with severity "fail"
+    And a Go source file with a documented "const (" block declaring "A" and "B"
+    And neither constant carries its own doc comment
+    And that file is in the changed-file scope
+    When the docstring gate runs
+    Then the gate result status is Pass
+
+  Scenario: A trailing line comment counts as documentation
+    Given [gates.docstring] is enabled with severity "fail"
+    And a changed Go file declaring "const Trailing = 1 // Trailing is the answer."
+    When the docstring gate runs
+    Then the gate result status is Pass
+    And the constant is not reported as undocumented
+    And the same holds for a var and for a struct field with a trailing comment
+
+  Scenario: Vendored, build and fixture directories are never inspected
+    Given [gates.docstring] is enabled with severity "fail"
+    And the changed-file scope contains files under "vendor/", "testdata/",
+      "node_modules/", "dist/", "build/", "target/" and ".worktrees/"
+    When the docstring gate runs
+    Then none of those files are inspected
+    And a deliberately-unparseable file under "testdata/" is not reported
+    And "centinela docs lint --full" excludes exactly the same directories
+
+  Scenario: Test files and generated files are never reported
+    Given [gates.docstring] is enabled with severity "fail"
+    And a "_test.go" file with undocumented exported identifiers
+    And a file whose first comment is "// Code generated by x. DO NOT EDIT."
+    And both files are in the changed-file scope
+    When the docstring gate runs
+    Then the gate result status is Skip
+    And the details are empty
+
+  Scenario: A nodoc directive exempts an identifier and the exemption is reported
+    Given [gates.docstring] is enabled with severity "fail"
+    And an undocumented exported identifier marked "//centinela:nodoc"
+    And that file is in the changed-file scope
+    When the docstring gate runs
+    Then the gate result status is Pass
+    And the details list the exemption naming the identifier
+    And the gate message names the exemption rather than relying on the details
+    And the gate message does not count the exempted identifier as documented
+
+  Scenario: Struct fields are not reported when check_fields is false
+    Given [gates.docstring] is enabled with severity "fail" and check_fields false
+    And a documented exported struct type with undocumented exported fields
+    And that file is in the changed-file scope
+    When the docstring gate runs
+    Then the gate result status is Pass
+
+  Scenario: An unparseable Go file is reported, not silently skipped
+    Given [gates.docstring] is enabled with severity "fail"
+    And a file named "broken.go" whose contents are not valid Go
+    And that file is in the changed-file scope
+    When the docstring gate runs
+    Then the gate result status is not Pass
+    And the details name "broken.go" as unparseable
+
+  Scenario: An unknown severity is a configuration error
+    Given a centinela.toml with [gates.docstring] enabled and severity "nope"
+    When the configuration is validated
+    Then validation fails
+    And the error names "gates.docstring.severity" and the accepted values
+
+  Scenario: centinela docs lint exits 1 on Fail and 0 on Warn
+    Given a repository with an undocumented exported function in the changed-file scope
+    When "centinela docs lint" runs with severity "fail"
+    Then the process exit code is 1
+    When "centinela docs lint" runs with severity "warn"
+    Then the process exit code is 0
+    And both runs report the same undocumented identifier
+
+  Scenario: centinela docs lint --full reports the legacy backlog without failing
+    Given a repository with undocumented exported identifiers in unchanged files
+    When "centinela docs lint --full" runs
+    Then the process exit code is 0
+    And the output reports the whole-repo undocumented count
+
+  Scenario: This repository ships the gate enforcing at fail severity
+    Given centinela.toml in this repository
+    When [gates.docstring] is read
+    Then enabled is true
+    And severity is "fail"
+    And no scope knob weakens the changed-file ratchet
+
+  Scenario: This repository's CI resolves a merge base so the gate enforces
+    Given a repository in the state actions/checkout leaves behind
+    And it has full history, a detached HEAD, and no local branch ref for the base
+    When the docstring gate runs with an undocumented export in the changed set
+    Then the diff base resolves as "origin/main" rather than degrading
+    And the gate reports Fail and the process exit code is 1
+    And a legacy file on the base commit is still never scanned
+
+  Scenario: The senior-engineer prompt carries the doc-comment duty in both copies
+    Given docs/architecture/senior-engineer-prompt.md
+    And internal/scaffold/assets/docs/architecture/senior-engineer-prompt.md
+    When both files are read
+    Then each states the duty to write doc comments on exported identifiers
+    And the two files are byte-identical
+    And each is at most 130 lines

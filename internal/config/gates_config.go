@@ -12,5 +12,6 @@ type GatesConfig struct {
 	SpecTraceability           SpecTraceabilityConfig `toml:"spec_traceability"`
 	RoadmapDrift               RoadmapDriftConfig     `toml:"roadmap_drift"`
 	AuditBaseline              AuditBaselineConfig    `toml:"audit_baseline"`
+	Docstring                  DocstringConfig        `toml:"docstring"`
 	CustomGates                []CustomGate           `toml:"custom"`
 }

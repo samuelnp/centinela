@@ -8,10 +8,16 @@ import (
 // Status represents the outcome of a gate check.
 type Status int
 
+// The gate outcomes. Fail is the only status that blocks a run; Skip means the
+// gate inspected nothing and therefore refuses to claim a pass.
 const (
+	// Pass means the gate inspected its scope and found no violation.
 	Pass Status = iota
+	// Fail means the gate found a blocking violation.
 	Fail
+	// Warn means the gate found a violation it was configured not to block on.
 	Warn
+	// Skip means the gate had nothing in scope to inspect.
 	Skip
 )
 
@@ -61,6 +67,10 @@ func RunWithFilter(cfg *config.Config, filter *gitdiff.Set) []Result {
 
 	if cfg.Gates.RoadmapDrift.Enabled {
 		results = append(results, checkRoadmapDrift(cfg, filter))
+	}
+
+	if cfg.Gates.Docstring.Enabled {
+		results = append(results, checkDocstring(cfg, filter))
 	}
 
 	if len(cfg.Gates.CustomGates) > 0 {

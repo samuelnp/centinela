@@ -6,13 +6,20 @@ import (
 	"strings"
 )
 
+// FileSizeExceptionCap is the hard ceiling a justified G1 exception may raise
+// the 100-line default to.
 const FileSizeExceptionCap = 130
 
+// FileSizeException is a justified per-file override of the G1 line cap.
 type FileSizeException struct {
-	Path     string `toml:"path"`
-	Kind     string `toml:"kind"`
-	Reason   string `toml:"reason"`
-	MaxLines int    `toml:"max_lines"`
+	// Path is the slash-normalized file the exception applies to.
+	Path string `toml:"path"`
+	// Kind is the justification class: configuration or domain_atomic.
+	Kind string `toml:"kind"`
+	// Reason is the human justification recorded in the passing report.
+	Reason string `toml:"reason"`
+	// MaxLines is the raised cap, 101..FileSizeExceptionCap.
+	MaxLines int `toml:"max_lines"`
 }
 
 func validateConfig(cfg *Config) error {
@@ -60,6 +67,9 @@ func validateConfig(cfg *Config) error {
 		return err
 	}
 	if err := validateAuditBaseline(cfg.Gates.AuditBaseline); err != nil {
+		return err
+	}
+	if err := validateDocstring(cfg.Gates.Docstring); err != nil {
 		return err
 	}
 	if err := validateCustomGates(cfg.Gates.CustomGates); err != nil {
