@@ -18,11 +18,17 @@ const fieldsLockedAtVersion = 1
 // compatible and quietly destroys data written by the newer one — the version
 // scheme only works if the constant moves with the shape. This test is the
 // mechanism that makes a forgotten bump loud.
+// profileContract arrived from guided-by-default while this feature was in
+// flight — the exact drift this list exists to make loud. It stays at version 1
+// deliberately: it is `omitempty` and back-compat-by-absence, so an absent key
+// defaults correctly and defaulting IS the migration. A bump is owed only by a
+// change that alters the MEANING of an existing key or removes one, where an
+// older binary reading the file would be wrong rather than merely incomplete.
 var wantWorkflowFields = []string{
 	"schemaVersion", "feature", "startedAt", "currentStep", "steps",
 	"stepOrder", "orchestrationMode", "enforcementProfile", "archetype",
 	"worktreePath", "driverModel", "validateContract", "planContract",
-	"revisions", "modelRoutes",
+	"profileContract", "revisions", "modelRoutes",
 }
 
 func TestWorkflowStructFieldsAreVersionLocked(t *testing.T) {
