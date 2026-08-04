@@ -264,7 +264,8 @@
         {"name":"roadmap-edit-rename-leaves-analysis-quality-stale","summary":"roadmap edit --name renames a feature and its dependents but leaves roadmap-analysis/quality entries under the old slug, orphaning them","source":{"feature":"roadmap-state-hygiene","role":"gatekeeper"},"deferredAt":"2026-08-04T10:58:23Z"},
         {"name":"roadmap-featurename-empty-not-an-error","summary":"featureName returns empty string for an entry with no name instead of erroring; resolve guards this locally, other callers do not","source":{"feature":"roadmap-state-hygiene","role":"gatekeeper"},"deferredAt":"2026-08-04T10:58:23Z"},
         {"name":"roadmap-sync-readback-false-overwrite-alarm","summary":"InWorkingTree is sampled before the commit, so a peer mid-mutation makes the read-back transiently false and a committed record prints the red overwrite alarm","source":{"feature":"roadmap-state-hygiene","role":"gatekeeper"},"deferredAt":"2026-08-04T12:54:14Z"},
-        {"name":"roadmap-statesync-readback-lacks-record-identity","summary":"StateInSync only proves roadmap.json and ROADMAP.md agree, not that THIS mutation's record is present; pass the slug into the read-back","source":{"feature":"roadmap-state-hygiene","role":"gatekeeper"},"deferredAt":"2026-08-04T12:54:15Z"}
+        {"name":"roadmap-statesync-readback-lacks-record-identity","summary":"StateInSync only proves roadmap.json and ROADMAP.md agree, not that THIS mutation's record is present; pass the slug into the read-back","source":{"feature":"roadmap-state-hygiene","role":"gatekeeper"},"deferredAt":"2026-08-04T12:54:15Z"},
+        {"name":"roadmap-rebase-warning-omits-abort-hazard","summary":"'it is in your working tree' during an interrupted rebase reads as safe, but git rebase --abort discards the record; name the hazard","source":{"feature":"roadmap-state-hygiene","role":"gatekeeper"},"deferredAt":"2026-08-04T12:54:15Z"}
       ]
     }
   ],
