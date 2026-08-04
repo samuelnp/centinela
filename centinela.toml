@@ -143,9 +143,16 @@ enabled = true
 # standard library — no internal package at all — which is what lets
 # internal/gates (domain) consume it without any risk of a cycle, and is why the
 # gate resolves scope through internal/gitdiff rather than inside the scanner.
+# internal/worktreepath is also a leaf: the `.worktrees/<feature>` path
+# vocabulary (the directory name + the cwd -> feature scan), standard library
+# only. internal/worktree (lifecycle) and internal/evidence (skeleton feature
+# resolution) both need the scan; keeping it in internal/worktree would force an
+# internal/evidence -> internal/worktree edge G2 does not sanction, while a
+# stdlib-only leaf is shareable by both and cannot cycle. Same reasoning as
+# internal/acceptance. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "leaf"
-paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**", "internal/selfupdate/**", "internal/acceptance/**", "internal/docstring/**"]
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**", "internal/selfupdate/**", "internal/acceptance/**", "internal/docstring/**", "internal/worktreepath/**"]
 allow = []
 
 # internal/analyze is a domain package (deterministic codebase inventory for

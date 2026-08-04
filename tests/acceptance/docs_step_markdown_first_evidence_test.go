@@ -25,7 +25,9 @@ func dsmfUserFacing(t *testing.T, outputs string) {
 	}
 	mustWrite(t, orchestration.MarkdownPath("uf", orchestration.RoleDocsSpecialist), "# report")
 	data := `{"feature":"uf","step":"docs","role":"documentation-specialist","status":"done","generatedAt":"` +
-		time.Now().UTC().Format(time.RFC3339) + `","inputs":["i"],"outputs":[` + outputs + `],"edgeCases":[],"handoffTo":"orchestrator"}`
+		// docs is the last step with any required evidence, so the derived
+		// successor is the terminal literal, not a role name.
+		time.Now().UTC().Format(time.RFC3339) + `","inputs":["i"],"outputs":[` + outputs + `],"edgeCases":[],"handoffTo":"complete"}`
 	mustWrite(t, orchestration.JSONPath("uf", orchestration.RoleDocsSpecialist), data)
 }
 

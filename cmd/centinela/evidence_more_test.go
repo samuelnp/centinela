@@ -49,6 +49,9 @@ func TestEvidenceRepairUnknownFeatureNoop(t *testing.T) {
 }
 
 func TestEvidenceSchemaReturnsValidJSON(t *testing.T) {
+	// Pinned: the schema command reads the ambient CWD, so an unpinned run here
+	// would silently change answer depending on where the checkout lives.
+	chdirEvidenceTemp(t)
 	out := captureStdout(t, func() {
 		if err := runEvidenceSchema(nil, []string{"feature-specialist"}); err != nil {
 			t.Fatal(err)

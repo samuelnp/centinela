@@ -8,7 +8,7 @@ import (
 )
 
 func TestSchemaSkeletonReturnsPlaceholder(t *testing.T) {
-	out, err := SchemaSkeleton(orchestration.RoleFeatureSpecial, "v1")
+	out, err := SchemaSkeleton("", orchestration.RoleFeatureSpecial, "v1")
 	if err != nil {
 		t.Fatal(err)
 	}

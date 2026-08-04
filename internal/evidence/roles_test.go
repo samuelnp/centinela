@@ -45,7 +45,9 @@ func TestStepForRoleCoverage(t *testing.T) {
 	}
 }
 
-func TestHandoffForRoleCoverage(t *testing.T) {
+// The static table is now the fallback taken only when a feature has no
+// workflow state to derive a successor from; the table itself is unchanged.
+func TestLegacyHandoffForRoleCoverage(t *testing.T) {
 	cases := map[Role]string{
 		orchestration.RoleBigThinker:       "feature-specialist",
 		orchestration.RoleFeatureSpecial:   "senior-engineer",
@@ -58,8 +60,8 @@ func TestHandoffForRoleCoverage(t *testing.T) {
 		Role("ghost"):                      "complete",
 	}
 	for r, want := range cases {
-		if got := handoffForRole(r); got != want {
-			t.Errorf("handoffForRole(%q) = %q, want %q", r, got, want)
+		if got := legacyHandoffForRole(r); got != want {
+			t.Errorf("legacyHandoffForRole(%q) = %q, want %q", r, got, want)
 		}
 	}
 }

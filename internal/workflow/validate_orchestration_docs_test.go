@@ -46,6 +46,6 @@ func TestValidateArtifactsDocsStrictOrchestration(t *testing.T) {
 func writeDocsEvidence(t *testing.T, outputs string) {
 	t.Helper()
 	data := `{"feature":"f","step":"docs","role":"documentation-specialist","status":"done","generatedAt":"` +
-		time.Now().UTC().Format(time.RFC3339) + `","inputs":["i"],"outputs":[` + outputs + `],"edgeCases":[],"handoffTo":"orchestrator"}`
+		time.Now().UTC().Format(time.RFC3339) + `","inputs":["i"],"outputs":[` + outputs + `],"edgeCases":[],"handoffTo":"complete"}`
 	os.WriteFile(orchestration.JSONPath("f", orchestration.RoleDocsSpecialist), []byte(data), 0644) //nolint:errcheck
 }

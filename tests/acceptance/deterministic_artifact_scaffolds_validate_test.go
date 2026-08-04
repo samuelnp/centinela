@@ -87,7 +87,7 @@ func TestDAS_SkeletonStaysEmpty(t *testing.T) {
 	if len(skel.Inputs) != 0 {
 		t.Fatalf("skeleton inputs not empty: %v", skel.Inputs)
 	}
-	data, err := evidence.SchemaSkeleton(orchestration.RoleBigThinker, "1.0.0")
+	data, err := evidence.SchemaSkeleton("", orchestration.RoleBigThinker, "1.0.0")
 	if err != nil {
 		t.Fatal(err)
 	}

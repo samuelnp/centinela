@@ -17,10 +17,23 @@ const FenceOpen = "```json centinela:verification"
 var ErrNoBlock = errors.New("report has no centinela:verification block")
 
 // ParseVerification returns the record carried by the FIRST tagged fence.
+//
+// The raw `commands` array is schema-checked BEFORE it is decoded into the
+// typed slice, because decoding is lossy in the direction that matters: a
+// missing exitCode becomes 0 (= passed) and an entry that is not an object at
+// all vanishes. The same rule runs at stamp time (Stamped), so read and write
+// agree on one shape.
 func ParseVerification(report string) (Verification, error) {
 	body, ok := blockBody(report)
 	if !ok {
 		return Verification{}, ErrNoBlock
+	}
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal([]byte(body), &fields); err != nil {
+		return Verification{}, fmt.Errorf("malformed centinela:verification block: %w", err)
+	}
+	if err := ValidateCommandsSchema(fields["commands"]); err != nil {
+		return Verification{}, fmt.Errorf("malformed centinela:verification block: %w", err)
 	}
 	var v Verification
 	if err := json.Unmarshal([]byte(body), &v); err != nil {

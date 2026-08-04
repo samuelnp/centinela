@@ -195,6 +195,19 @@
     "createdAt": "2026-06-22T10:34:01Z"
   },
   {
+    "id": "1a8f5ae24c898655",
+    "feature": "beg-docstring-debt",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: beg-docstring-debt",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/beg-docstring-debt-gatekeeper.md",
+    "createdAt": "2026-08-03T09:21:10Z"
+  },
+  {
     "id": "1ba2b232333b5a26",
     "feature": "governance-telemetry",
     "step": "validate",
@@ -427,6 +440,19 @@
     ],
     "sourceArtifact": ".workflow/adversarial-validate-verifier-gatekeeper.md",
     "createdAt": "2026-07-28T22:50:43Z"
+  },
+  {
+    "id": "44dec49d35bb9c89",
+    "feature": "binding-evidence-gates",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **P0 `TestValidateCommandsSchemaRejectsNullExitCode`** — table over",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/binding-evidence-gates-edge-cases.md",
+    "createdAt": "2026-07-31T12:10:01Z"
   },
   {
     "id": "47f88ed9b2258fb7",
@@ -676,6 +702,19 @@
     "createdAt": "2026-06-22T09:56:27Z"
   },
   {
+    "id": "6e8932d78bff74ce",
+    "feature": "beg-docstring-debt",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- The docstring gate over this branch's changed-file set, verified by running",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/beg-docstring-debt-edge-cases.md",
+    "createdAt": "2026-08-03T09:02:35Z"
+  },
+  {
     "id": "6f2c47e7d891ec8f",
     "feature": "failure-ledger-plan-advisor",
     "step": "tests",
@@ -897,6 +936,19 @@
     "createdAt": "2026-06-11T16:10:32Z"
   },
   {
+    "id": "931537646e495476",
+    "feature": "binding-evidence-gates",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: binding-evidence-gates",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/binding-evidence-gates-gatekeeper.md",
+    "createdAt": "2026-07-31T13:13:41Z"
+  },
+  {
     "id": "939bc20a9b1a7ea6",
     "feature": "headless-governance",
     "step": "validate",
@@ -1038,6 +1090,19 @@
     ],
     "sourceArtifact": ".workflow/roadmap-phase-ops-edge-cases.md",
     "createdAt": "2026-07-09T13:38:24Z"
+  },
+  {
+    "id": "b5ab123a9c0c7560",
+    "feature": "evidence-schema-skeleton-legacy-handoff",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: evidence-schema-skeleton-legacy-handoff",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/evidence-schema-skeleton-legacy-handoff-gatekeeper.md",
+    "createdAt": "2026-08-03T13:14:00Z"
   },
   {
     "id": "b5afec861b2222c7",
@@ -1480,6 +1545,19 @@
     ],
     "sourceArtifact": ".workflow/custom-gate-sdk-edge-cases.md",
     "createdAt": "2026-06-16T19:27:54Z"
+  },
+  {
+    "id": "ff17b6a7f4c2d618",
+    "feature": "evidence-schema-skeleton-legacy-handoff",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- `internal/worktreepath/path_test.go` — **required, package currently has none (E16).**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/evidence-schema-skeleton-legacy-handoff-edge-cases.md",
+    "createdAt": "2026-08-03T12:40:38Z"
   },
   {
     "id": "ff330e1ec8610e53",

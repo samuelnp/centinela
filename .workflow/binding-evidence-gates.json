@@ -1,0 +1,51 @@
+{
+  "feature": "binding-evidence-gates",
+  "startedAt": "2026-07-31T09:46:46.674887Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-07-31T11:08:02Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-07-31T13:14:39Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-07-31T10:41:04Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-07-31T12:10:01Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-07-31T13:13:41Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/binding-evidence-gates",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1",
+  "modelRoutes": {
+    "planner": {
+      "tier": "balanced",
+      "reason": "three already-diagnosed defects in one layer; the plan is enumeration and sequencing, not open-ended design",
+      "decidedAt": "2026-07-31T09:48:01Z"
+    },
+    "qa-senior": {
+      "tier": "reasoning",
+      "reason": "scope changed: edge-case tester found two verified bypasses (null exitCode, stub behind preamble) so this step now fixes fail-open gate logic, not just writes tests",
+      "decidedAt": "2026-07-31T11:23:12Z"
+    }
+  }
+}

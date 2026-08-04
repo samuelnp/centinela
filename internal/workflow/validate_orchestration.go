@@ -11,7 +11,14 @@ func validateOrchestration(feature, step string, cfg *config.Config) error {
 	if !strictOrchestrationEnabled(feature) {
 		return nil
 	}
-	err := orchestration.ValidateRoles(feature, step, RequiredEvidenceRoles(feature, step), config.UIPaths(cfg))
+	roles := RequiredEvidenceRoles(feature, step)
+	err := orchestration.ValidateRoles(feature, step, roles, config.UIPaths(cfg))
+	if err == nil {
+		// Only once the evidence is structurally sound: a chain complaint about
+		// a file that is missing or schema-invalid is noise on top of a defect
+		// ValidateRoles has already named.
+		err = validateHandoffChain(feature, step, roles)
+	}
 	return annotatePlanContract(feature, step, err)
 }
 
@@ -32,6 +39,31 @@ func RequiredEvidenceRoles(feature, step string) []orchestration.Role {
 	}
 	if step == "plan" && !FeatureUsesUnifiedPlanner(feature) {
 		return []orchestration.Role{orchestration.RoleBigThinker, orchestration.RoleFeatureSpecial}
+	}
+	return orchestration.RequiredRolesForFeature(feature, step)
+}
+
+// alternateContractRoles returns the roles step requires under the contract pin
+// this workflow did NOT take — the other arm of each branch above, kept
+// adjacent to it so the two can never drift.
+//
+// Its only consumer is the handoff-chain check: handing off names a STEP, and
+// a workflow whose evidence predates that check carries the name the old
+// prefill seeded, which is that step's occupant under the other pin. Nothing
+// else may use it — the roles a step actually REQUIRES are always
+// RequiredEvidenceRoles.
+func alternateContractRoles(feature, step string) []orchestration.Role {
+	switch step {
+	case "validate":
+		if featureUsesAdversarialVerifier(feature) {
+			return []orchestration.Role{orchestration.RoleValidationSpec}
+		}
+	case "plan":
+		if FeatureUsesUnifiedPlanner(feature) {
+			return []orchestration.Role{orchestration.RoleBigThinker, orchestration.RoleFeatureSpecial}
+		}
+	default:
+		return nil
 	}
 	return orchestration.RequiredRolesForFeature(feature, step)
 }
