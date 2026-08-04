@@ -258,7 +258,8 @@
         {"name":"roadmap-resolve-schedulable-phase-merge","summary":"Extend roadmap resolve from Backlog-union to a full semantic 3-way merge of schedulable phases (v1 refuses that case)","source":{"feature":"roadmap-state-hygiene","role":"planner"},"deferredAt":"2026-08-04T08:15:10Z"},
         {"name":"roadmap-backlog-stale-threshold-config","summary":"Config knob for the roadmap backlog staleness threshold (v1 hardcodes 14 days with an --older-than override)","source":{"feature":"roadmap-state-hygiene","role":"planner"},"deferredAt":"2026-08-04T08:15:10Z"},
         {"name":"roadmap-state-commit-squash-on-deliver","summary":"Optionally squash the per-mutation chore(roadmap) commits at deliver time so a feature branch carries one roadmap-state commit","source":{"feature":"roadmap-state-hygiene","role":"planner"},"deferredAt":"2026-08-04T08:15:10Z"},
-        {"name":"roadmap-resolve-summary-arithmetic-unreconcilable","summary":"resolve summary counts Kept but FromOurs/FromTheirs exclude base hits, so they never sum — print a from-base term or relabel","source":{"feature":"roadmap-state-hygiene","role":"gatekeeper"},"deferredAt":"2026-08-04T10:58:10Z"}
+        {"name":"roadmap-resolve-summary-arithmetic-unreconcilable","summary":"resolve summary counts Kept but FromOurs/FromTheirs exclude base hits, so they never sum — print a from-base term or relabel","source":{"feature":"roadmap-state-hygiene","role":"gatekeeper"},"deferredAt":"2026-08-04T10:58:10Z"},
+        {"name":"roadmap-state-exemption-covers-all-workflow-dir","summary":"freshness revision-range exemption covers every .workflow/ path, broader than AC9's wording — narrow Covers or correct the AC","source":{"feature":"roadmap-state-hygiene","role":"gatekeeper"},"deferredAt":"2026-08-04T10:58:10Z"}
       ]
     }
   ],
