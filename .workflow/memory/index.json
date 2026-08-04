@@ -1443,6 +1443,19 @@
     "createdAt": "2026-07-30T12:52:08Z"
   },
   {
+    "id": "f67e33f7fd53bd0f",
+    "feature": "guided-by-default",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Adversarial Verifier Report — guided-by-default (round 6, final)",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/guided-by-default-gatekeeper.md",
+    "createdAt": "2026-08-04T07:13:13Z"
+  },
+  {
     "id": "fabd37be9d8eb127",
     "feature": "docstring-gate",
     "step": "tests",
