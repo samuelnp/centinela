@@ -1,14 +1,14 @@
 {
   "feature": "durable-workflow-state",
   "startedAt": "2026-08-03T14:44:46.118916Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-08-03T19:16:16Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +20,8 @@
       "completedAt": "2026-08-03T20:28:00Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-04T08:31:01Z"
     }
   },
   "stepOrder": [

@@ -20,16 +20,26 @@ var stateMarkers = [...]string{"feature", "currentStep", "steps", "stepOrder"}
 // unmarshal (a future version that changed a TYPE or a SHAPE rather than only
 // adding fields).
 //
-// The contract, chosen so that a newer file can never brick an older binary:
+// The contract, chosen so that a newer file this binary cannot PARSE can never
+// brick it. Note the boundary precisely: a future file whose body still parses
+// is modelled and governed normally, so one naming a step this binary does not
+// know will refuse writes against that step. That is deliberate — the file is
+// readable, so guessing at its semantics would be worse — but it means the
+// no-brick guarantee covers unparseable bodies, not every future file.
 //
 //   - Load SUCCEEDS. It never returns an error for a future-versioned file, so
 //     ActiveWorkflows keeps the feature, the active set is never emptied,
 //     EvaluatePrewrite never falls to NeedInit and hook_autostart never forks a
 //     duplicate workflow.
-//   - The returned workflow is marked Unmodellable. EvaluatePrewrite ALLOWS
-//     every governed write against it: this binary cannot enforce step rules
-//     whose schema it does not understand, and refusing to govern is far
-//     cheaper than blocking every write in the repo.
+//   - The returned workflow is marked Unmodellable. EvaluatePrewrite SKIPS it:
+//     this binary cannot enforce step rules whose schema it does not
+//     understand, so the workflow neither governs nor vouches for a write.
+//     Allowing on its behalf would let one unreadable file disarm step gating
+//     for every other feature in the repo. When EVERY active workflow is
+//     unmodellable the write is REFUSED as StaleBinary, naming the upgrade —
+//     never passed, because `.workflow/*.json` is an ungoverned write target
+//     and passing would let an agent unblock itself by corrupting its own
+//     state file.
 //   - Feature and CurrentStep are salvaged when they are still plain strings,
 //     so a mis-named or per-role JSON is still filtered out by ActiveWorkflows;
 //     otherwise the feature is the file's own name and the step is UnknownStep.

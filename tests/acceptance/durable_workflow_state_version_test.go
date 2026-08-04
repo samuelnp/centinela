@@ -40,7 +40,7 @@ func TestAccFutureVersionSaveIsRefused(t *testing.T) {
 	}
 }
 
-// Scenario: A future-version state file does not block file writes
+// Scenario: A future-version state file this binary can still model keeps governing
 func TestAccFutureVersionDoesNotBlockWrites(t *testing.T) {
 	bin := dmrBuildBin(t)
 	dir := dmrRepo(t, dmrDynamicTOML)
@@ -56,20 +56,28 @@ func TestAccFutureVersionDoesNotBlockWrites(t *testing.T) {
 	}
 }
 
-// The same guarantee for a future file this binary cannot even unmarshal — the
-// case that used to fail Load, empty the active set and block every write.
-func TestAccUnmodellableFutureVersionDoesNotBlockWrites(t *testing.T) {
+// Scenario: A future-version state file this binary cannot model refuses the write
+//
+// A future file this binary cannot even unmarshal REFUSES the write and names
+// the upgrade. Passing would be a self-service bypass: `.workflow/*.json` is an
+// ungoverned write target, so any agent could write a future version over its
+// own state file and open the gate. What the degraded path still buys is the
+// rest of the contract — Load succeeds, so the hook never claims no workflow
+// was started and autostart never forks a duplicate.
+func TestAccUnmodellableFutureVersionRefusesAndNamesTheUpgrade(t *testing.T) {
 	bin := dmrBuildBin(t)
 	dir := dmrRepo(t, dmrDynamicTOML)
 	dmrWrite(t, dir, "delta", `{"schemaVersion":"2.0","feature":"delta",`+
 		`"currentStep":"plan","steps":[{"name":"plan","status":["done"]}]}`)
 
 	out, code := dwsPrewrite(t, bin, dir, "internal/foo.go")
-	if code != 0 {
-		t.Fatalf("a write must not be blocked by a file this binary cannot model, "+
-			"got exit %d:\n%s", code, out)
+	if code == 0 {
+		t.Fatalf("an unreadable state file must not open the gate:\n%s", out)
 	}
-	if strings.Contains(out, "no workflow") || strings.Contains(out, "BLOCKED") {
-		t.Fatalf("the hook must not report that no workflow has been started:\n%s", out)
+	if !strings.Contains(out, "centinela update") {
+		t.Fatalf("the refusal must name the upgrade, got:\n%s", out)
+	}
+	if strings.Contains(out, "no workflow") || strings.Contains(out, "centinela start") {
+		t.Fatalf("the hook must not claim no workflow has been started:\n%s", out)
 	}
 }

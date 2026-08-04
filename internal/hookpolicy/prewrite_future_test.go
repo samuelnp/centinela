@@ -10,12 +10,13 @@ import (
 )
 
 // A state file written by a NEWER Centinela, whose body this binary cannot
-// model, must never block a write. This binary does not understand that file's
-// step semantics; enforcing a guess would block every governed write in the
-// repo, which is exactly the bricking this feature exists to prevent. The
-// fixture sits on "plan", where a code file is normally BLOCKED — so the allow
-// can only come from the unmodellable rule.
-func TestUnmodellableWorkflowNeverBlocksAWrite(t *testing.T) {
+// model, REFUSES the write and says why. Passing instead would be a
+// self-service bypass: `.workflow/*.json` is an ungoverned write target, so any
+// agent could write a future version over its own state file and open the gate.
+// The refusal names the feature and the remedy (upgrade the binary) — and
+// crucially NeedInit stays false, so the hook never claims no workflow exists
+// and hook_autostart never forks a duplicate.
+func TestUnmodellableWorkflowRefusesAndNamesTheRemedy(t *testing.T) {
 	dir := t.TempDir()
 	t.Chdir(dir)
 	if err := os.MkdirAll(workflow.WorkflowDir, 0o755); err != nil {
@@ -35,8 +36,14 @@ func TestUnmodellableWorkflowNeverBlocksAWrite(t *testing.T) {
 
 	wfs := []*workflow.Workflow{wf}
 	d := EvaluatePrewrite(filepath.Join(dir, "internal", "a.go"), dir, &config.Config{}, wfs)
-	if !d.Allow {
-		t.Fatalf("a write governed by an unmodellable workflow must be allowed, got %+v", d)
+	if d.Allow {
+		t.Fatalf("an unreadable state file must not open the gate, got %+v", d)
+	}
+	if !d.StaleBinary {
+		t.Fatalf("the refusal must say the binary is too old, got %+v", d)
+	}
+	if d.Feature != "delta" {
+		t.Fatalf("the refusal must name the feature, got %q", d.Feature)
 	}
 	if d.NeedInit {
 		t.Fatal("the hook must not claim no workflow has been started")

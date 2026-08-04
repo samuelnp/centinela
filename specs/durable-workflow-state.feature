@@ -70,12 +70,25 @@ Feature: Durable workflow state
     And the error says upgrading Centinela is the fix
     And ".workflow/delta.json" is left byte-for-byte unchanged
 
-  Scenario: A future-version state file does not block file writes
+  Scenario: A future-version state file this binary can still model keeps governing
     Given a state file for "delta" carrying schema version 99
+    And its body still parses, so this binary can read its step
     And "delta" is the only workflow in the project
-    When the prewrite hook evaluates a write to a file governed by "delta"'s current step
+    When the prewrite hook evaluates a write allowed in "delta"'s current step
     Then the write is allowed
     And the hook does not report that no workflow has been started
+
+  Scenario: A future-version state file this binary cannot model refuses the write
+    Given a state file for "delta" carrying schema version 99
+    And its body does not parse, so this binary cannot read its step
+    And "delta" is the only workflow in the project
+    When the prewrite hook evaluates a write to a governed file
+    Then the write is refused, because ".workflow/*.json" is itself an
+      ungoverned write target and passing would let an agent unblock itself by
+      writing a future version over its own state file
+    And the refusal names upgrading Centinela as the remedy
+    And the hook does not report that no workflow has been started, and no
+      duplicate workflow is auto-started
 
   # --- Concurrent writers -----------------------------------------------------
 

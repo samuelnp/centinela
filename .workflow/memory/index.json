@@ -1222,6 +1222,19 @@
     "createdAt": "2026-06-12T17:00:44Z"
   },
   {
+    "id": "c8183d40a6488c28",
+    "feature": "durable-workflow-state",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: durable-workflow-state",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/durable-workflow-state-gatekeeper.md",
+    "createdAt": "2026-08-04T08:31:01Z"
+  },
+  {
     "id": "c8a174bcf8ce6416",
     "feature": "completion-delivery-prompt",
     "step": "tests",
