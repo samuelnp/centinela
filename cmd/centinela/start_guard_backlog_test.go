@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/samuelnp/centinela/internal/config"
 	"os"
 	"strings"
 	"testing"
@@ -26,7 +27,7 @@ func TestWorkflowOrderForFeature_BacklogRefused(t *testing.T) {
 	writeRoadmapAnalysis(t, "bootstrap-done")
 	writeRoadmapQuality(t, 9, "bootstrap-done")
 
-	_, err := workflowOrderForFeature("backlog-finding")
+	_, err := workflowOrderForFeature("backlog-finding", config.ProfileStrict)
 	if err == nil {
 		t.Fatal("starting a Backlog feature must be refused")
 	}

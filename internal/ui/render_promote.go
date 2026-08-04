@@ -10,7 +10,9 @@ import (
 
 // RenderPromoteEvaluatorContext returns the quality-evaluator context panel for
 // `roadmap promote` without --scores. It lists the finding, the target phase,
-// the threshold, the six scoring dimensions, and the literal re-invocation line.
+// the six scoring dimensions, and the literal re-invocation line. No threshold
+// is quoted: the self-graded minimum was deleted, and promising a bar that no
+// longer exists would invite the score inflation the deletion was meant to end.
 // Pure formatting — promote writes nothing on this path.
 func RenderPromoteEvaluatorContext(f *roadmap.BacklogFinding, phase string) string {
 	src := "(none)"
@@ -28,7 +30,7 @@ func RenderPromoteEvaluatorContext(f *roadmap.BacklogFinding, phase string) stri
 		StyleMuted.Render("Source:  ")+src,
 		StyleMuted.Render("Target phase: ")+phase,
 		"",
-		StyleBold.Render("Quality threshold: overall must be at least 9"),
+		StyleBold.Render("Scores are recorded, not gated — grade honestly, not defensively"),
 		StyleMuted.Render("Score each dimension 1-10:"),
 		StyleMuted.Render("  acceptanceCriteria, userValue, definitionClarity,"),
 		StyleMuted.Render("  dependencies, effortEstimation, overall"),

@@ -10,7 +10,7 @@ Three things people expect to be in `centinela.toml` but aren't:
 
 - **Which harness runs** (Claude Code / OpenCode / Codex) is chosen by `centinela init --agent` and the generated `.claude/settings.json` / `opencode.json`. `centinela.toml` decides *what is enforced*, not *which agent runs*.
 - **Your architecture archetype** (Hexagonal, Rails, N-Tier, ECS, Modular) is inferred from your codebase and confirmed in `PROJECT.md`.
-- **The enforcement profile** (`strict` / `guided` / `outcome`) scales how strictly the five steps are enforced. It does not swap config files — the same `centinela.toml` applies.
+- **The enforcement profile** (`strict` / `guided` / `outcome`) scales how much **process** the five steps impose — confirmation cadence, the orchestration evidence bundle, and the greenfield setup cascade. It does not swap config files, and it never changes what is *verified*: the gate set, the full test suite, verification freshness, claim verification, the verifier's grounded verdict and the production-readiness gate are identical under all three. **The default is `guided`.** Set `enforcement_profile = "strict"` to keep the heavier process; workflows started before this default changed keep strict on their own. See the [profile table](configuration-reference.md#profiles-scale-process-never-proof).
 
 Jump to a recipe:
 

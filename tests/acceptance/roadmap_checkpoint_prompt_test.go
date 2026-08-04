@@ -178,10 +178,12 @@ func TestAccept_Checkpoint_SuppressWorkflowFileExists(t *testing.T) {
 	mustNotContain(t, out, checkpointDirective)
 }
 
-// Scenario 8: Precedence — missing ROADMAP.md emits roadmap-required.
+// Scenario 8: Precedence — under strict, a missing ROADMAP.md emits
+// roadmap-required. The pin matters: the rung is advisory under guided.
 func TestAccept_Checkpoint_PrecedenceMissingRoadmap(t *testing.T) {
 	d := t.TempDir()
 	aWrite(t, filepath.Join(d, "PROJECT.md"), "x")
+	aWrite(t, filepath.Join(d, "centinela.toml"), "[workflow]\nenforcement_profile = \"strict\"\n")
 	out := runHookSetupIn(t, d)
 	mustContain(t, out, "CENTINELA DIRECTIVE: roadmap required")
 	mustNotContain(t, out, checkpointDirective)

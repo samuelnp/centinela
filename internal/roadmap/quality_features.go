@@ -5,6 +5,10 @@ import (
 	"strings"
 )
 
+// validateQualityFeatures checks each report entry against the roadmap: the
+// feature exists, every score is in 1-10, the summary is non-empty, and no
+// roadmap feature is left ungraded. There is deliberately NO minimum-score
+// check — a self-assigned number gates nothing.
 func validateQualityFeatures(r *Roadmap, features []QualityFeature) error {
 	names := roadmapFeatureSet(r)
 	seen := map[string]bool{}
@@ -14,9 +18,6 @@ func validateQualityFeatures(r *Roadmap, features []QualityFeature) error {
 		}
 		if err := validateScoreRange(f.Scores); err != nil {
 			return fmt.Errorf("feature %s has invalid scores: %w", f.Name, err)
-		}
-		if f.Scores.Overall < qualityThreshold {
-			return fmt.Errorf("feature %s overall score %d is below %d", f.Name, f.Scores.Overall, qualityThreshold)
 		}
 		if strings.TrimSpace(f.Summary) == "" {
 			return fmt.Errorf("feature %s summary is required", f.Name)

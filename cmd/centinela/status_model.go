@@ -53,7 +53,10 @@ func runStatusModel(wfs []*workflow.Workflow) error {
 
 func renderStatusBody(wfs []*workflow.Workflow) string {
 	sep := "\n" + ui.StyleMuted.Render(strings.Repeat("─", 32)) + "\n"
-	cfg, _ := config.Load() // nil-safe: provenance falls back to pinned value
+	// Fail CLOSED via the shared resolver: an unreadable centinela.toml makes the
+	// profile unknowable, and status must not be the one surface that answers
+	// with the loosest profile while start, autostart and verdict all refuse.
+	cfg, _ := config.LoadForProfile()
 	views := make([]string, 0, len(wfs))
 	for _, wf := range wfs {
 		views = append(views, ui.RenderStatusWithConfig(wf, cfg))

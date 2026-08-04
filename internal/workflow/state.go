@@ -49,6 +49,9 @@ type Workflow struct {
 	// created before this field existed — those keep demanding the complete
 	// legacy big-thinker + feature-specialist pair (see UsesUnifiedPlanner).
 	PlanContract string `json:"planContract,omitempty"`
+	// ProfileContract pins the profile-default contract at start. Empty on
+	// pre-flip workflows, which keep strict (see UsesGuidedDefault).
+	ProfileContract string `json:"profileContract,omitempty"`
 	// Revisions is the append-only audit log of backward transitions performed by
 	// `centinela revise`. Empty/absent on workflows that were never rewound
 	// (back-compat, like Archetype) — RevisionsSummary handles the empty case.

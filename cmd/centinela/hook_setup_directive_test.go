@@ -9,9 +9,10 @@ import (
 func TestRunHookSetupRoadmapWhenTemplateRenamed(t *testing.T) {
 	d := t.TempDir()
 	o, _ := os.Getwd()
-	defer os.Chdir(o)                             //nolint:errcheck
-	os.Chdir(d)                                   //nolint:errcheck
-	os.WriteFile("PROJECT.md", []byte("x"), 0644) //nolint:errcheck
+	defer os.Chdir(o)                                                                              //nolint:errcheck
+	os.Chdir(d)                                                                                    //nolint:errcheck
+	os.WriteFile("PROJECT.md", []byte("x"), 0644)                                                  //nolint:errcheck
+	os.WriteFile("centinela.toml", []byte("[workflow]\nenforcement_profile = \"strict\"\n"), 0644) //nolint:errcheck
 
 	withStdin(t, "{}", func() {
 		out := captureStdout(t, func() { _ = runHookSetup(nil, nil) })
@@ -48,6 +49,7 @@ func TestRunHookSetupRoadmapAnalysisDirective(t *testing.T) {
 	defer os.Chdir(o)                                                                                                                //nolint:errcheck
 	os.Chdir(d)                                                                                                                      //nolint:errcheck
 	os.WriteFile("PROJECT.md", []byte("x"), 0644)                                                                                    //nolint:errcheck
+	os.WriteFile("centinela.toml", []byte("[workflow]\nenforcement_profile = \"strict\"\n"), 0644)                                   //nolint:errcheck
 	os.WriteFile("ROADMAP.md", []byte("x"), 0644)                                                                                    //nolint:errcheck
 	os.MkdirAll(".workflow", 0755)                                                                                                   //nolint:errcheck
 	os.WriteFile(".workflow/roadmap.json", []byte(`{"phases":[{"name":"Phase 0: Bootstrap","features":[{"name":"setup"}]}]}`), 0644) //nolint:errcheck

@@ -6,7 +6,9 @@ import (
 	"testing"
 )
 
-func TestValidateQualityPassAndThreshold(t *testing.T) {
+// TestValidateQualityPassAndLowScoreAccepted: the self-graded overall >= 9
+// refusal is DELETED in every profile, so a low score validates like any other.
+func TestValidateQualityPassAndLowScoreAccepted(t *testing.T) {
 	d := t.TempDir()
 	o, _ := os.Getwd()
 	defer os.Chdir(o) //nolint:errcheck
@@ -19,10 +21,14 @@ func TestValidateQualityPassAndThreshold(t *testing.T) {
 	if err := ValidateQuality(r); err != nil {
 		t.Fatalf("expected pass, got %v", err)
 	}
-	bad := `{"role":"roadmap-quality-evaluator","threshold":9,"features":[{"name":"user","scores":{"acceptanceCriteria":9,"userValue":9,"definitionClarity":9,"dependencies":9,"effortEstimation":2,"overall":8},"summary":"low"},{"name":"post","scores":{"acceptanceCriteria":9,"userValue":9,"definitionClarity":9,"dependencies":9,"effortEstimation":3,"overall":10},"summary":"ok"}]}`
-	os.WriteFile(RoadmapQualityFile, []byte(bad), 0644) //nolint:errcheck
-	if err := ValidateQuality(r); err == nil || !strings.Contains(err.Error(), "below 9") {
-		t.Fatalf("expected threshold error, got %v", err)
+	low := `{"role":"roadmap-quality-evaluator","threshold":9,"features":[{"name":"user","scores":{"acceptanceCriteria":3,"userValue":3,"definitionClarity":3,"dependencies":3,"effortEstimation":3,"overall":3},"summary":"low"},{"name":"post","scores":{"acceptanceCriteria":9,"userValue":9,"definitionClarity":9,"dependencies":9,"effortEstimation":3,"overall":10},"summary":"ok"}]}`
+	os.WriteFile(RoadmapQualityFile, []byte(low), 0644) //nolint:errcheck
+	if err := ValidateQuality(r); err != nil {
+		t.Fatalf("a low self-assigned score must no longer refuse, got %v", err)
+	}
+	adv := QualityAdvisories()
+	if len(adv) != 1 || !strings.Contains(adv[0], "user") || !strings.Contains(adv[0], "overall 3") {
+		t.Fatalf("low score must surface as advice naming the feature, got %v", adv)
 	}
 }
 

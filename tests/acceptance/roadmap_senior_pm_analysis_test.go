@@ -9,13 +9,14 @@ import (
 
 // Acceptance: specs/roadmap-senior-pm-analysis.feature
 func TestRoadmapSeniorPMAnalysisHookAndCommandWiring(t *testing.T) {
-	setupPath := filepath.Join("..", "..", "cmd", "centinela", "hook_setup.go")
+	// The rung table moved to hook_setup_cascade.go when the cascade became
+	// profile-scoped; the directive text itself is unchanged.
+	setupPath := filepath.Join("..", "..", "cmd", "centinela", "hook_setup_cascade.go")
 	setupData, err := os.ReadFile(setupPath)
 	if err != nil {
-		t.Fatalf("read hook setup file: %v", err)
+		t.Fatalf("read hook setup cascade file: %v", err)
 	}
-	setupContent := string(setupData)
-	if !strings.Contains(setupContent, "roadmap analysis required") {
+	if !strings.Contains(string(setupData), "roadmap analysis required") {
 		t.Fatal("roadmap analysis setup directive missing")
 	}
 	validatePath := filepath.Join("..", "..", "cmd", "centinela", "roadmap_validate.go")

@@ -24,8 +24,11 @@ func TestRenderPromoteEvaluatorContext_WithSource(t *testing.T) {
 	if !strings.Contains(got, "Phase 5") {
 		t.Error("target phase missing")
 	}
-	if !strings.Contains(got, "9") {
-		t.Error("quality threshold missing")
+	if !strings.Contains(got, "1-10") {
+		t.Error("scoring range missing")
+	}
+	if strings.Contains(got, "at least 9") {
+		t.Error("the deleted threshold must not be advertised as a bar to clear")
 	}
 	if !strings.Contains(got, "acceptanceCriteria") {
 		t.Error("scoring dimensions missing")

@@ -42,7 +42,10 @@ func TestDAS_PreFillIdempotentUnderForce(t *testing.T) {
 	first, _ := dasReadJSON(t, "demo", orchestration.RoleBigThinker)
 	dasInit(t, "demo", orchestration.RoleBigThinker) // simulate --force re-run
 	second, e := dasReadJSON(t, "demo", orchestration.RoleBigThinker)
-	if first != second {
+	// The scenario asserts the pre-fill CONTENT is idempotent. generatedAt is a
+	// second-granularity wall clock, so two writes straddling a tick differ by
+	// design; comparing it made this a ~3%/run flake.
+	if dasWithoutTimestamps(first) != dasWithoutTimestamps(second) {
 		t.Fatalf("re-run not idempotent:\n%s\n---\n%s", first, second)
 	}
 	seen := map[string]int{}

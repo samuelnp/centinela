@@ -13,6 +13,12 @@ func TestUPS_FreshStartPinsPlannerAndDirectiveNamesOnlyPlanner(t *testing.T) {
 	bin := upsBuildBin(t)
 	dir := upsExistingRepo(t)
 
+	// The orchestration DIRECTIVE is strict-only process (it exists to demand the
+	// evidence bundle), so this scenario pins strict explicitly rather than
+	// relying on the shipped default, which is now guided.
+	mustWrite(t, filepath.Join(dir, "centinela.toml"),
+		"[workflow]\nenforcement_profile = \"strict\"\n")
+
 	out, code := runCent(t, bin, dir, "start", "new-widget")
 	if code != 0 {
 		t.Fatalf("start failed (%d): %s", code, out)

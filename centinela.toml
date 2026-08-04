@@ -1,4 +1,10 @@
 [workflow]
+# The shipped default is now "guided" (guided-by-default). Centinela pins strict
+# EXPLICITLY so its own dogfooding is unchanged by that flip and so this repo
+# keeps exercising the heaviest process path it ships. Profiles scale process,
+# never proof: every gate, the full suite, verification freshness, claim
+# verification and the verifier's grounded verdict are identical under guided.
+enforcement_profile = "strict"
 # Enable per-feature git worktrees at .worktrees/<feature>/ on `centinela start`.
 use_worktrees = true
 # Confirm only at the plan boundary (the highest-leverage review point);

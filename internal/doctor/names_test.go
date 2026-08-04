@@ -3,7 +3,7 @@ package doctor
 import "testing"
 
 func TestCheckNames(t *testing.T) {
-	want := []string{"hooks", "roadmap", "worktrees", "workflow-state", "evidence", "config", "version"}
+	want := []string{"hooks", "roadmap", "worktrees", "workflow-state", "evidence", "config", "profile-default", "version"}
 	all := checks()
 	if len(all) != len(want) {
 		t.Fatalf("registry size %d want %d", len(all), len(want))

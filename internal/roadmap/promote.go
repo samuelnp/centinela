@@ -13,6 +13,11 @@ type PromoteRequest struct {
 	Phase   string
 	Summary string
 	Scores  QualityScores
+	// SeedArtifacts lets Promote create absent grading artifacts instead of
+	// refusing. The CALLER decides, from the resolved enforcement profile, so
+	// this package stays config-free. Seeding runs only AFTER every slug and
+	// phase check has passed, so a rejected promote still writes nothing.
+	SeedArtifacts bool
 }
 
 // BacklogFinding is the decoded metadata of a Backlog entry, used to build
@@ -78,7 +83,7 @@ func promoteFromBacklog(path string, doc *rawDoc, raw json.RawMessage, backlogId
 	if err := doc.removeBacklogFeature(backlogIdx, req.Slug); err != nil {
 		return nil, err
 	}
-	if err := preflightArtifacts(); err != nil {
+	if err := seedThenPreflight(req); err != nil {
 		return nil, err // missing/corrupt artifact — nothing written yet
 	}
 	summary := strings.TrimSpace(req.Summary)

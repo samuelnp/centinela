@@ -25,8 +25,14 @@ type StartDecision struct {
 // ResolveStart computes the start-time decision. flagProfile is --profile (may be
 // ""); flagModel is --model (may be ""). Precedence mirrors runtime
 // EffectiveProfile: explicit --profile > explicit global > capability default >
-// strict. Only an explicit --profile is pinned; an explicit global is left to
+// guided. Only an explicit --profile is pinned; an explicit global is left to
 // resolve live so it stays distinguishable in status provenance.
+//
+// The nothing-configured tail is guided — every workflow born here carries
+// ProfileContractGuidedDefault, so runtime EffectiveProfile agrees. A DECLARED
+// but unmapped driver model still falls back to strict: naming a model
+// Centinela has no capability class for is a signal to keep maximum
+// scaffolding, not to inherit the zero-config default.
 func ResolveStart(flagProfile, flagModel string, cfg *config.Config) StartDecision {
 	d := StartDecision{}
 	d.DriverModel = config.DriverModelFrom(flagModel, cfg)
@@ -45,7 +51,7 @@ func ResolveStart(flagProfile, flagModel string, cfg *config.Config) StartDecisi
 			d.EffectiveProfile = config.ProfileStrict
 		}
 	default:
-		d.EffectiveProfile = config.ProfileStrict
+		d.EffectiveProfile = config.ProfileGuided
 	}
 	return d
 }

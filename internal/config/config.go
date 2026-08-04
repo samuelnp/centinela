@@ -7,6 +7,7 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+// Filename is the project configuration file Load reads from the working dir.
 const Filename = "centinela.toml"
 
 // Config is the centinela.toml structure.
@@ -23,6 +24,12 @@ type Config struct {
 	Precommit     PrecommitConfig     `toml:"precommit"`
 	PrGate        PrGateConfig        `toml:"pr_gate"`
 	Cost          CostConfig          `toml:"cost"`
+	// resolvedByLoad marks a Config a SUCCESSFUL Load produced; unexported so no
+	// other package can forge one. See ResolvedByLoad in profile_load.go.
+	resolvedByLoad bool
+	// loadFailed marks the stand-in LoadForProfile returns when centinela.toml
+	// could not be read. Also unexported, for the same reason.
+	loadFailed bool
 }
 
 // ValidateConfig holds user-defined commands that centinela runs during validate.
@@ -49,7 +56,9 @@ func Load() (*Config, error) {
 	data, err := os.ReadFile(Filename)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return defaultConfig(), nil
+			// An absent centinela.toml is a SUCCESSFUL load of a zero-config
+			// project, which legitimately takes the shipped default.
+			return markResolved(defaultConfig()), nil
 		}
 		return nil, fmt.Errorf("reading %s: %w", Filename, err)
 	}
@@ -80,16 +89,5 @@ func Load() (*Config, error) {
 	if err := validateConfig(&cfg); err != nil {
 		return nil, err
 	}
-	return &cfg, nil
-}
-
-func defaultConfig() *Config {
-	cfg := &Config{
-		Gates: GatesConfig{
-			FileSizeEnabled: true,
-			I18nEnabled:     false,
-		},
-	}
-	applyMemoryDefaults(cfg)
-	return cfg
+	return markResolved(&cfg), nil
 }

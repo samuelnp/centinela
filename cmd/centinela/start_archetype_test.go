@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/samuelnp/centinela/internal/config"
 	"os"
 	"slices"
 	"testing"
@@ -29,7 +30,7 @@ func TestResolveArchetypeOrder_FlagOverridesRoadmap(t *testing.T) {
 		{Name: "feat", Archetype: "refactor"},
 	}}}}
 	roadmap.Save(r) //nolint:errcheck
-	order, name, err := resolveArchetypeOrder("feat", "hotfix")
+	order, name, err := resolveArchetypeOrder("feat", "hotfix", config.ProfileStrict)
 	if err != nil || name != "hotfix" || !slices.Equal(order, []string{"code", "tests", "validate"}) {
 		t.Fatalf("flag must override roadmap: %v/%q/%v", order, name, err)
 	}
@@ -43,7 +44,7 @@ func TestResolveArchetypeOrder_RoadmapWhenNoFlag(t *testing.T) {
 		{Name: "feat", Archetype: "spike"},
 	}}}}
 	roadmap.Save(r) //nolint:errcheck
-	order, name, err := resolveArchetypeOrder("feat", "")
+	order, name, err := resolveArchetypeOrder("feat", "", config.ProfileStrict)
 	if err != nil || name != "spike" || !slices.Equal(order, []string{"plan", "code"}) {
 		t.Fatalf("roadmap archetype must apply: %v/%q/%v", order, name, err)
 	}
@@ -54,7 +55,7 @@ func TestResolveArchetypeOrder_RoadmapWhenNoFlag(t *testing.T) {
 func TestResolveArchetypeOrder_FallsThroughToCanonical(t *testing.T) {
 	t.Chdir(t.TempDir())
 	os.WriteFile("PROJECT.md", []byte("Project Stage: existing\n"), 0644) //nolint:errcheck
-	order, name, err := resolveArchetypeOrder("feat", "")
+	order, name, err := resolveArchetypeOrder("feat", "", config.ProfileStrict)
 	if err != nil || name != workflow.ArchetypeCanonical {
 		t.Fatalf("expected canonical fallthrough, got %q/%v", name, err)
 	}

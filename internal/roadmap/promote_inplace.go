@@ -32,7 +32,7 @@ func promoteDraftInPlace(path string, doc *rawDoc, req PromoteRequest) (*Backlog
 	if err := doc.replaceFeatureAt(phaseIdx, featIdx, cleared); err != nil {
 		return nil, err
 	}
-	if err := preflightArtifacts(); err != nil {
+	if err := seedThenPreflight(req); err != nil {
 		return nil, err
 	}
 	summary := draftSummary(req, f)

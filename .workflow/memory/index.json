@@ -91,6 +91,19 @@
     "createdAt": "2026-06-06T18:53:48Z"
   },
   {
+    "id": "10c2e600703a5670",
+    "feature": "guided-by-default",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Missing gatekeeper report blocks both profiles identically** —",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/guided-by-default-edge-cases.md",
+    "createdAt": "2026-08-03T13:43:10Z"
+  },
+  {
     "id": "121a9c908809ba77",
     "feature": "right-size-docs-step",
     "step": "tests",
@@ -1519,6 +1532,19 @@
     ],
     "sourceArtifact": ".workflow/docs-step-markdown-first-gatekeeper.md",
     "createdAt": "2026-07-30T12:52:08Z"
+  },
+  {
+    "id": "f67e33f7fd53bd0f",
+    "feature": "guided-by-default",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# Adversarial Verifier Report — guided-by-default (round 6, final)",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/guided-by-default-gatekeeper.md",
+    "createdAt": "2026-08-04T07:13:13Z"
   },
   {
     "id": "fabd37be9d8eb127",

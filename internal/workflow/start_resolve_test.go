@@ -15,7 +15,8 @@ func cfgGlobal(profile string) *config.Config {
 
 // ResolveStart: --profile pins and sets the effective mode; an explicit global is
 // honored for the effective mode but deliberately NOT pinned (the correctness fix);
-// a capability default is unpinned; a driver miss and zero both fall to strict.
+// a capability default is unpinned; a DECLARED-but-unmapped driver still falls to
+// strict, while nothing-configured takes the shipped guided default.
 func TestResolveStart(t *testing.T) {
 	cases := []struct {
 		name          string
@@ -30,7 +31,7 @@ func TestResolveStart(t *testing.T) {
 		{"explicit global not pinned", "", "", cfgGlobal(config.ProfileGuided), "", config.ProfileGuided, ""},
 		{"capability default unpinned", "", "claude-opus-4-7", &config.Config{}, "", config.ProfileOutcome, "claude-opus-4-7"},
 		{"driver miss → strict", "", "some/unknown", &config.Config{}, "", config.ProfileStrict, "some/unknown"},
-		{"zero → strict", "", "", &config.Config{}, "", config.ProfileStrict, ""},
+		{"zero → guided (shipped default)", "", "", &config.Config{}, "", config.ProfileGuided, ""},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
