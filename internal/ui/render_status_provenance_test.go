@@ -11,17 +11,32 @@ import (
 // RenderStatusWithConfig threads cfg so the Profile row shows full provenance:
 // a frontier driver model annotates its derived class; zero-config shows default.
 func TestRenderStatusWithConfig_Provenance(t *testing.T) {
+	// A config a real Load produced: the guided tail is only reachable from one
+	// (see config.ResolvedByLoad), so a fabricated struct would report strict.
+	t.Chdir(t.TempDir())
+	loaded, err := config.Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
 	frontier := &workflow.Workflow{Feature: "f", CurrentStep: "code", DriverModel: "claude-opus-4-7"}
-	out := RenderStatusWithConfig(frontier, &config.Config{})
+	out := RenderStatusWithConfig(frontier, loaded)
 	if !strings.Contains(out, config.ProfileOutcome) ||
 		!strings.Contains(out, "driver: claude-opus-4-7 → frontier") {
 		t.Fatalf("frontier driver provenance missing, got:\n%s", out)
 	}
 
-	zero := &workflow.Workflow{Feature: "f", CurrentStep: "plan"}
-	zout := RenderStatusWithConfig(zero, &config.Config{})
-	if !strings.Contains(zout, config.ProfileStrict) || !strings.Contains(zout, "(default)") {
+	zero := &workflow.Workflow{Feature: "f", CurrentStep: "plan",
+		ProfileContract: workflow.ProfileContractGuidedDefault}
+	zout := RenderStatusWithConfig(zero, loaded)
+	if !strings.Contains(zout, config.ProfileGuided) || !strings.Contains(zout, "(default (guided))") {
 		t.Fatalf("zero-config provenance missing, got:\n%s", zout)
+	}
+
+	legacy := &workflow.Workflow{Feature: "f", CurrentStep: "plan"}
+	lout := RenderStatusWithConfig(legacy, loaded)
+	if !strings.Contains(lout, config.ProfileStrict) ||
+		!strings.Contains(lout, "(default (strict, legacy workflow))") {
+		t.Fatalf("legacy provenance missing, got:\n%s", lout)
 	}
 }
 

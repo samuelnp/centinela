@@ -37,15 +37,15 @@ func healthyCtx(t *testing.T) Context {
 func TestRunAllChecksHealthy(t *testing.T) {
 	ctx := healthyCtx(t)
 	diags := Run(ctx)
-	if len(diags) != 7 {
-		t.Fatalf("expected 7 checks, got %d", len(diags))
+	if len(diags) != 8 {
+		t.Fatalf("expected 8 checks, got %d", len(diags))
 	}
 	ok, warn, errc := Counts(diags)
-	if ok != 7 || warn != 0 || errc != 0 {
+	if ok != 8 || warn != 0 || errc != 0 {
 		t.Fatalf("healthy must be all OK, got %d ok %d warn %d err", ok, warn, errc)
 	}
 	// deterministic order.
-	names := []string{"hooks", "roadmap", "worktrees", "workflow-state", "evidence", "config", "version"}
+	names := []string{"hooks", "roadmap", "worktrees", "workflow-state", "evidence", "config", "profile-default", "version"}
 	for i, n := range names {
 		if diags[i].Name != n {
 			t.Fatalf("order[%d]=%q want %q", i, diags[i].Name, n)

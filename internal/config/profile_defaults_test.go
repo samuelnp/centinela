@@ -10,14 +10,17 @@ func TestProfileDefaults_PerProfileKnobs(t *testing.T) {
 		{ProfileStrict, ProfileKnobs{
 			StepGating: true, ConfirmationMode: ConfirmEveryStep,
 			RequireSubagentEvidence: true, PlanAdvisorMode: PlanAdvisorAlways,
+			RequireRoadmapGrading: true,
 		}},
 		{ProfileGuided, ProfileKnobs{
 			StepGating: true, ConfirmationMode: ConfirmAfterPlan,
 			RequireSubagentEvidence: false, PlanAdvisorMode: PlanAdvisorMissingInfo,
+			RequireRoadmapGrading: false,
 		}},
 		{ProfileOutcome, ProfileKnobs{
 			StepGating: false, ConfirmationMode: ConfirmAuto,
 			RequireSubagentEvidence: false, PlanAdvisorMode: PlanAdvisorOff,
+			RequireRoadmapGrading: false,
 		}},
 	}
 	for _, c := range cases {

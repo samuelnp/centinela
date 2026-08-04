@@ -2,6 +2,8 @@ package ui
 
 import "github.com/charmbracelet/lipgloss"
 
+// RenderRoadmapQualityNeeded returns the setup panel directing the operator to
+// delegate the roadmap quality-evaluator pass.
 func RenderRoadmapQualityNeeded() string {
 	body := lipgloss.JoinVertical(lipgloss.Left,
 		StyleYellow.Render("⚠ Roadmap quality scoring missing — evaluator review required"),
@@ -11,11 +13,11 @@ func RenderRoadmapQualityNeeded() string {
 		"",
 		StyleMuted.Render("1. Score each roadmap feature from 1-10 for:"),
 		StyleMuted.Render("   acceptanceCriteria, userValue, definitionClarity, dependencies, effortEstimation"),
-		StyleMuted.Render("2. Set overall score per feature (overall is the gate)"),
+		StyleMuted.Render("2. Set an honest overall score per feature — it gates nothing"),
 		StyleMuted.Render("3. Write .workflow/roadmap-quality.md summary and improvement loop"),
 		StyleMuted.Render("4. Write .workflow/roadmap-quality.json with role roadmap-quality-evaluator"),
-		StyleMuted.Render("   Set threshold to 9 and include all roadmap features"),
-		StyleRed.Render("Iterate roadmap and feature briefs until every feature overall score is >= 9."),
+		StyleMuted.Render("   Include all roadmap features; every score must be 1-10"),
+		StyleRed.Render("A low score blocks nothing — inflating one only hides work that needs doing."),
 	)
 	return renderSystemPanel("SETUP", "ROADMAP QUALITY REQUIRED", toneWarn, body)
 }

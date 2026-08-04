@@ -39,10 +39,16 @@ func TestValidateQuality_EarlyErrorBranches(t *testing.T) {
 		t.Fatalf("expected wrong-role error, got %v", err)
 	}
 
-	// 5. Wrong threshold.
+	// 5. A declared threshold other than 9 is no longer enforced — the field
+	// still decodes so pre-deletion artifacts keep parsing, and the failure that
+	// follows is about the ABSENT features array, never about the threshold.
 	_ = os.WriteFile(RoadmapQualityFile,
 		[]byte(`{"role":"roadmap-quality-evaluator","threshold":1}`), 0644)
-	if err := ValidateQuality(r); err == nil || !strings.Contains(err.Error(), "threshold must be") {
-		t.Fatalf("expected wrong-threshold error, got %v", err)
+	err := ValidateQuality(r)
+	if err == nil || !strings.Contains(err.Error(), `"features" is missing`) {
+		t.Fatalf("expected the missing-features shape error, got %v", err)
+	}
+	if strings.Contains(err.Error(), "threshold") {
+		t.Fatalf("the threshold gate is deleted; it must not appear in %v", err)
 	}
 }

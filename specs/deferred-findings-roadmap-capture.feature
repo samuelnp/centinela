@@ -174,7 +174,7 @@ Feature: Deferred findings roadmap capture
     And the output contains the finding's summary "Prewrite hook timeout is hardcoded"
     And the output contains the finding's source
     And the output contains the target phase "Phase 5 — Operability & DX"
-    And the output states the threshold is 9
+    And the output states each dimension is scored 1-10 with no minimum
     And the output describes all six scoring dimensions: acceptanceCriteria, userValue, definitionClarity, dependencies, effortEstimation, overall
     And the output contains a re-invocation line of the form:
       centinela roadmap promote hook-timeout-config --phase "Phase 5 — Operability & DX" --scores ac,uv,dc,dep,ee,overall
@@ -219,16 +219,17 @@ Feature: Deferred findings roadmap capture
   # Slice 3 — roadmap promote: validation rejections (zero writes)
   # ---------------------------------------------------------------------------
 
-  Scenario: Promote with overall score below 9 is rejected before any write
+  # Superseded by guided-by-default: the self-graded overall >= 9 minimum was
+  # deleted in every profile, because a number assigned by the party it
+  # constrains is not evidence. A low score is now RECORDED, not refused; the
+  # 1-10 range check below is what still rejects a bad score before any write.
+  Scenario: Promote with a low overall score is recorded rather than rejected
     Given roadmap.json contains a Backlog phase with entry "low-score-test"
     And roadmap.json contains a phase "Phase 5 — Operability & DX"
     When the agent runs:
-      centinela roadmap promote low-score-test --phase "Phase 5 — Operability & DX" --scores 9,9,8,7,9,7
-    Then the command exits with a non-zero code
-    And the output states the overall score must be at least 9
-    And roadmap.json is unchanged
-    And roadmap-analysis.json is unchanged
-    And roadmap-quality.json is unchanged
+      centinela roadmap promote low-score-test --phase "Phase 5 — Operability & DX" --scores 9,9,8,7,9,3
+    Then the command exits with a zero code
+    And the promoted entry records an overall score of 3
 
   Scenario: Promote with any dimension score outside 1-10 is rejected before any write
     Given roadmap.json contains a Backlog phase with entry "bad-score-test"

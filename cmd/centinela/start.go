@@ -63,7 +63,16 @@ func runStart(_ *cobra.Command, args []string) error {
 		return fmt.Errorf("workflow for %q already exists — use 'status' to check progress", feature)
 	}
 
-	order, archetype, err := resolveArchetypeOrder(feature, startArchetype)
+	// Resolve the start-time decision FIRST: the greenfield guard needs the
+	// effective profile to weigh its grading rungs. The profile also governs
+	// orchestration evidence at creation, but only an EXPLICIT profile is pinned
+	// — an empty pin lets runtime EffectiveProfile re-derive through the
+	// global/capability tiers and the ProfileContract tail. ResolveStart
+	// normalizes rather than errors (an unknown profile is already rejected at
+	// config load), so moving it ahead cannot change error precedence.
+	decision := workflow.ResolveStart(startProfile, startModel, cfg)
+
+	order, archetype, err := resolveArchetypeOrder(feature, startArchetype, decision.EffectiveProfile)
 	if err != nil {
 		return err
 	}
@@ -72,10 +81,6 @@ func runStart(_ *cobra.Command, args []string) error {
 		return fmt.Errorf("cannot create %s: %w", workflow.WorkflowDir, err)
 	}
 
-	// Resolve the start-time decision: the effective profile governs orchestration
-	// evidence at creation, but only an EXPLICIT profile is pinned — an empty pin
-	// lets runtime EffectiveProfile re-derive through the capability/global tiers.
-	decision := workflow.ResolveStart(startProfile, startModel, cfg)
 	wf := workflow.NewWithOrder(feature, order, decision.EffectiveProfile)
 	wf.EnforcementProfile = decision.PinnedProfile
 	wf.DriverModel = decision.DriverModel

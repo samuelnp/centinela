@@ -7,8 +7,10 @@ import (
 )
 
 // ParseScores parses a CSV of exactly six integers in the order
-// ac,uv,dc,dep,ee,overall, validating each is 1-10 and overall >= the quality
-// threshold. All validation happens before any write at the call site.
+// ac,uv,dc,dep,ee,overall, validating each is 1-10. There is no minimum for
+// overall: the self-graded threshold gate was deleted in every profile, so the
+// scores are RECORDED here, not enforced. All validation happens before any
+// write at the call site.
 func ParseScores(csv string) (QualityScores, error) {
 	parts := strings.Split(strings.TrimSpace(csv), ",")
 	if len(parts) != 6 {
@@ -31,9 +33,6 @@ func ParseScores(csv string) (QualityScores, error) {
 	// this point and naming the field + value is a strict improvement.
 	if err := validateScoreRange(s); err != nil {
 		return QualityScores{}, err
-	}
-	if s.Overall < qualityThreshold {
-		return QualityScores{}, fmt.Errorf("overall score must be at least %d", qualityThreshold)
 	}
 	return s, nil
 }

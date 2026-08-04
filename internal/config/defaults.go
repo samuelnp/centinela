@@ -34,3 +34,15 @@ func applyDefaults(cfg *Config) {
 	cfg.PrGate = NormalizePrGate(cfg.PrGate)
 	cfg.Cost = NormalizeCost(cfg.Cost)
 }
+
+// defaultConfig is the config a project with no centinela.toml gets.
+func defaultConfig() *Config {
+	cfg := &Config{
+		Gates: GatesConfig{
+			FileSizeEnabled: true,
+			I18nEnabled:     false,
+		},
+	}
+	applyMemoryDefaults(cfg)
+	return cfg
+}

@@ -17,10 +17,9 @@ func buildStatusLineView(wfs []*workflow.Workflow) ui.StatusLineView {
 	// Deliberate silent fallback: the statusline is a single-line protocol
 	// surface that cannot carry a warning line; the context hook already
 	// surfaces the same config failure on every prompt.
-	cfg, err := config.Load()
-	if err != nil {
-		cfg = &config.Config{}
-	}
+	// LoadForProfile hands back a strict-pinned stand-in on a read failure, so
+	// the status block never advertises a looser profile than the one in force.
+	cfg, _ := config.LoadForProfile()
 	block, next := statusBlockAndNext(wf, cfg)
 	mode := wf.OrchestrationMode
 	if mode == "" {

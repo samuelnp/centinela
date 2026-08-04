@@ -3,6 +3,7 @@ package acceptance_test
 import (
 	"encoding/json"
 	"os"
+	"regexp"
 	"testing"
 
 	"github.com/samuelnp/centinela/internal/evidence"
@@ -71,4 +72,11 @@ func dasReadJSON(t *testing.T, feature string, role evidence.Role) (string, dasE
 		t.Fatal(err)
 	}
 	return string(data), e
+}
+
+// dasWithoutTimestamps blanks wall-clock fields so an idempotency comparison
+// reflects content, not the second in which each write happened.
+func dasWithoutTimestamps(jsonText string) string {
+	return regexp.MustCompile(`"(generatedAt|written_at)":\s*"[^"]*"`).
+		ReplaceAllString(jsonText, `"$1":""`)
 }

@@ -3,22 +3,28 @@ package acceptance_test
 // Acceptance: specs/deferred-findings-roadmap-capture.feature
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
 
-// Scenario: Promote with overall score below 9 is rejected before any write
-func TestDfrc_PromoteLowOverallRejected(t *testing.T) {
+// Scenario: Promote with a low overall score is recorded rather than rejected
+func TestDfrc_PromoteLowOverallRecorded(t *testing.T) {
 	bin := buildCent(t)
 	dir := dfrcAcceptDir(t, promoteRoadmap)
 	seedPromoteArtifacts(t, dir)
 	out, code := runCent(t, bin, dir, "roadmap", "promote", "hook-timeout-config",
-		"--phase", "Phase 5 — Operability & DX", "--scores", "9,9,8,7,9,7")
-	if code == 0 {
-		t.Fatalf("low overall score must be rejected, got exit 0\n%s", out)
+		"--phase", "Phase 5 — Operability & DX", "--scores", "9,9,8,7,9,3")
+	if code != 0 {
+		t.Fatalf("a low overall score must no longer be rejected, got exit %d\n%s", code, out)
 	}
-	if !strings.Contains(strings.ToLower(out), "overall") && !strings.Contains(strings.ToLower(out), "9") {
-		t.Errorf("output must mention overall threshold: %s", out)
+	quality, err := os.ReadFile(filepath.Join(dir, ".workflow", "roadmap-quality.json"))
+	if err != nil {
+		t.Fatalf("read quality: %v", err)
+	}
+	if !strings.Contains(string(quality), `"overall":3`) {
+		t.Errorf("the low score must be RECORDED verbatim: %s", quality)
 	}
 }
 

@@ -10,6 +10,7 @@ func checks() []Check {
 		workflowStateCheck{},
 		evidenceCheck{},
 		configCheck{},
+		profileDefaultCheck{},
 		versionCheck{},
 	}
 }

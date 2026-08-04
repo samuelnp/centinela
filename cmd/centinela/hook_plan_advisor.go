@@ -23,11 +23,11 @@ func init() {
 
 func runHookPlanAdvisor(_ *cobra.Command, _ []string) error {
 	io.ReadAll(os.Stdin) //nolint:errcheck
-	cfg, err := config.Load()
+	cfg, err := config.LoadForProfile()
 	if err != nil {
-		// Hooks must never break the host session: warn and use defaults.
+		// Hooks must never break the host session: warn and keep going with the
+		// strict-pinned stand-in LoadForProfile returned.
 		fmt.Println("config warning: " + err.Error())
-		cfg = &config.Config{}
 	}
 	if config.IsHeadless(cfg) {
 		return nil

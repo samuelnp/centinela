@@ -6,10 +6,13 @@ import (
 	"time"
 )
 
-// Scenario 8: Precedence — missing ROADMAP.md emits roadmap-required, not checkpoint.
+// Scenario 8: Precedence — under STRICT, a missing ROADMAP.md emits
+// roadmap-required, not the checkpoint. The pin is the point: under guided the
+// rung is advisory, so this asserts strict is byte-identical to pre-flip.
 func TestCheckpoint_Precedence_MissingRoadmap(t *testing.T) {
 	chdirIntoTemp(t)
 	writeFile(t, "PROJECT.md", "x")
+	writeFile(t, "centinela.toml", "[workflow]\nenforcement_profile = \"strict\"\n")
 	out := runSetup(t)
 	assertContains(t, out, "CENTINELA DIRECTIVE: roadmap required")
 	assertNotContains(t, out, ckptDirective)

@@ -24,12 +24,13 @@ func init() {
 
 func runHookContext(_ *cobra.Command, _ []string) error {
 	sessionID := readHookSessionID(os.Stdin)
-	cfg, err := config.Load()
+	cfg, err := config.LoadForProfile()
 	if err != nil {
-		// Hooks must never break the host session: degrade to defaults and
-		// surface the failure in the injected context instead.
+		// Hooks must never break the host session: surface the failure in the
+		// injected context and keep going. LoadForProfile already returned a
+		// strict-pinned stand-in — do NOT rebind it to an empty struct, which is
+		// exactly how this hook used to drop the step-confirmation directive.
 		fmt.Println("config warning: " + err.Error())
-		cfg = &config.Config{}
 	}
 	wfs := loadActiveWorkflows()
 	emitRoadmapSummary(sessionID)

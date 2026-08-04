@@ -1,0 +1,61 @@
+{
+  "feature": "guided-by-default",
+  "startedAt": "2026-08-03T08:27:42.689123Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-08-03T13:06:44Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-08-04T07:13:48Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-08-03T08:41:46Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-08-03T13:43:10Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-08-04T07:13:13Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/guided-by-default",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1",
+  "modelRoutes": {
+    "gatekeeper": {
+      "tier": "reasoning",
+      "reason": "Adversarial refutation of a change to enforcement defaults; the routing floor mandates reasoning and this is the hardest judgment in the workflow",
+      "decidedAt": "2026-08-03T13:43:37Z"
+    },
+    "planner": {
+      "tier": "reasoning",
+      "reason": "Profile-default flip touches enforcement semantics, greenfield cascade, and the self-graded quality gate deletion — highest-stakes planning judgment in Phase 13",
+      "decidedAt": "2026-08-03T08:28:07Z"
+    },
+    "qa-senior": {
+      "tier": "balanced",
+      "reason": "Acceptance-tier authoring against a written spec — pattern-following work, not novel judgment; parity table and self-governance test shapes are specified by the plan",
+      "decidedAt": "2026-08-03T13:06:57Z"
+    },
+    "senior-engineer": {
+      "tier": "reasoning",
+      "reason": "Profile-default flip with a pinned ProfileContract, deletion of a gate at three call sites, and a mechanical proof-parity guard — high blast radius across enforcement semantics",
+      "decidedAt": "2026-08-03T11:10:10Z"
+    }
+  }
+}

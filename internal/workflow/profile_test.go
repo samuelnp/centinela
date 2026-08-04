@@ -6,6 +6,21 @@ import (
 	"github.com/samuelnp/centinela/internal/config"
 )
 
+// loadedCfg returns a config produced by a REAL successful Load in an empty temp
+// dir: the zero-config shape, stamped as genuinely loaded. Tail-reaching tests
+// must use this rather than &config.Config{} — a fabricated config is
+// deliberately not tail-eligible (config.ResolvedByLoad), which is what stops a
+// surface that swallows a load error from inheriting guided.
+func loadedCfg(t *testing.T) *config.Config {
+	t.Helper()
+	t.Chdir(t.TempDir())
+	cfg, err := config.Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	return cfg
+}
+
 func cfgWithProfile(p string) *config.Config {
 	c := &config.Config{}
 	c.Workflow.EnforcementProfile = p

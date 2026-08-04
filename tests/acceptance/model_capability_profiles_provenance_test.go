@@ -16,6 +16,19 @@ func mcpProvLine(wf *workflow.Workflow, cfg *config.Config) string {
 	return "Profile  " + profile + "  (" + note + ")"
 }
 
+// mcpLoadedCfg returns a config a real successful Load produced. The guided tail
+// is reachable only from one (config.ResolvedByLoad), so a tail assertion built
+// on &config.Config{} would report strict — by design.
+func mcpLoadedCfg(t *testing.T) *config.Config {
+	t.Helper()
+	t.Chdir(t.TempDir())
+	cfg, err := config.Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	return cfg
+}
+
 func mcpAssertLine(t *testing.T, wf *workflow.Workflow, cfg *config.Config, want string) {
 	t.Helper()
 	if got := mcpProvLine(wf, cfg); got != want {
@@ -48,7 +61,12 @@ func TestMCP_StatusFlagProvenance(t *testing.T) {
 	mcpAssertLine(t, wf, &config.Config{}, "Profile  outcome  (--profile)")
 }
 
-// Scenario: Status shows the strict default provenance for a zero-config feature
+// Scenario: Status shows the default provenance for a zero-config feature.
+// The note distinguishes the two tail outcomes: a workflow pinned with the
+// guided-default contract vs a legacy one that predates the flip.
 func TestMCP_StatusDefaultProvenance(t *testing.T) {
-	mcpAssertLine(t, &workflow.Workflow{}, &config.Config{}, "Profile  strict  (default)")
+	mcpAssertLine(t, &workflow.Workflow{ProfileContract: workflow.ProfileContractGuidedDefault},
+		mcpLoadedCfg(t), "Profile  guided  (default (guided))")
+	mcpAssertLine(t, &workflow.Workflow{}, &config.Config{},
+		"Profile  strict  (default (strict, legacy workflow))")
 }

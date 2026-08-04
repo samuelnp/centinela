@@ -35,9 +35,12 @@ func runHookSetup(_ *cobra.Command, _ []string) error {
 		emitSetupDirective()
 		return nil
 	}
-	if !exists("ROADMAP.md") {
-		fmt.Println("CENTINELA DIRECTIVE: roadmap required. Define roadmap before feature work.")
-		fmt.Println(ui.RenderRoadmapNeeded())
+	// PROJECT.md (above) and a parseable .workflow/roadmap.json (below) are
+	// required in every profile. The grading rungs around them halt under strict
+	// and merely advise under guided/outcome — see hook_setup_cascade.go.
+	graded := setupRequiresGrading()
+	halt, missing := runSetupRungs(preRoadmapRungs(), graded)
+	if halt {
 		return nil
 	}
 	r, err := roadmap.Load()
@@ -46,21 +49,11 @@ func runHookSetup(_ *cobra.Command, _ []string) error {
 		fmt.Println(ui.RenderRoadmapJSONNeeded(err))
 		return nil
 	}
-	if !exists(".workflow/roadmap-analysis.md") || !exists(".workflow/roadmap-analysis.json") {
-		fmt.Println("CENTINELA DIRECTIVE: roadmap analysis required. Delegate to senior product manager.")
-		fmt.Println(ui.RenderRoadmapAnalysisNeeded())
+	halt, post := runSetupRungs(postRoadmapRungs(), graded)
+	if halt {
 		return nil
 	}
-	if !exists(".workflow/roadmap-quality.md") || !exists(".workflow/roadmap-quality.json") {
-		fmt.Println("CENTINELA DIRECTIVE: roadmap quality required. Delegate to roadmap quality evaluator.")
-		fmt.Println(ui.RenderRoadmapQualityNeeded())
-		return nil
-	}
-	if !exists("docs/architecture/production-readiness-prompt.md") {
-		fmt.Println("CENTINELA DIRECTIVE: configure production-readiness prompt before continuing.")
-		fmt.Println(ui.RenderProductionReadinessSetupNeeded())
-		return nil
-	}
+	emitSetupAdvisory(append(missing, post...))
 	emitRoadmapCheckpoint(r)
 	return nil
 }
