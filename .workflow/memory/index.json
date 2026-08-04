@@ -1079,6 +1079,19 @@
     "createdAt": "2026-07-29T16:36:02Z"
   },
   {
+    "id": "9f6560f67b67a642",
+    "feature": "hook-context-panel-diet",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Idempotency and byte-level behaviour of `trimTrailingWS`** (probed via",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/hook-context-panel-diet-edge-cases.md",
+    "createdAt": "2026-08-04T13:13:50Z"
+  },
+  {
     "id": "a861ca032b250c87",
     "feature": "configurable-model-routing",
     "step": "validate",
