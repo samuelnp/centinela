@@ -16,6 +16,11 @@ type AddRequest struct {
 // dependency integrity) runs before the single atomic write, so a rejected add
 // leaves roadmap.json byte-identical.
 func Add(path string, req AddRequest) error {
+	release, lerr := lockRoadmapState(path)
+	if lerr != nil {
+		return lerr
+	}
+	defer release()
 	if err := validateSlug(req.Slug); err != nil {
 		return err
 	}

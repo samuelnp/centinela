@@ -6,6 +6,11 @@ package roadmap
 // still depends on it. All guards run before the single atomic write, so a
 // rejected remove leaves roadmap.json byte-identical.
 func Remove(path, slug string) error {
+	release, lerr := lockRoadmapState(path)
+	if lerr != nil {
+		return lerr
+	}
+	defer release()
 	doc, err := readRawRoadmap(path)
 	if err != nil {
 		return err

@@ -44,7 +44,7 @@ func runRoadmapMove(_ *cobra.Command, args []string) error {
 	}); err != nil {
 		return err
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf(
-		"Moved %q to %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", args[0], moveToPhase)))
+	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Moved %q to %q.", args[0], moveToPhase)))
+	syncRoadmapState("move", args[0])
 	return nil
 }

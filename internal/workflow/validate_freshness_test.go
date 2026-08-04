@@ -7,14 +7,24 @@ import (
 )
 
 // gitStub answers rev-parse with head and reports a working tree that is
-// clean apart from the given porcelain status.
+// clean apart from the given porcelain status. A revision range reports a
+// SOURCE file, so a moved HEAD means real product churn — the roadmap-state
+// exemption (D5) is opted into explicitly by gitStubRange.
 func gitStub(head, status string) treestate.Runner {
+	return gitStubRange(head, status, "internal/x.go\n")
+}
+
+// gitStubRange additionally controls what `diff --name-only <rev>..HEAD`
+// answers, which is what decides whether a moved HEAD is exempt.
+func gitStubRange(head, status, rangePaths string) treestate.Runner {
 	return func(_ string, args ...string) (string, error) {
-		switch args[0] {
-		case "rev-parse":
+		switch {
+		case args[0] == "rev-parse":
 			return head + "\n", nil
-		case "status":
+		case args[0] == "status":
 			return status, nil
+		case args[0] == "diff" && len(args) > 1 && args[1] == "--name-only":
+			return rangePaths, nil
 		default:
 			return "", nil
 		}

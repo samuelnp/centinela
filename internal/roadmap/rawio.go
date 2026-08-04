@@ -23,6 +23,13 @@ func readRawRoadmap(path string) (*rawDoc, error) {
 	if err != nil {
 		return nil, err
 	}
+	return parseRawRoadmap(data)
+}
+
+// parseRawRoadmap is readRawRoadmap over bytes. `roadmap resolve` reads its
+// three sides from git's index stages rather than from disk, and must parse
+// them exactly the way every other reader does.
+func parseRawRoadmap(data []byte) (*rawDoc, error) {
 	var top map[string]json.RawMessage
 	if err := json.Unmarshal(data, &top); err != nil {
 		return nil, fmt.Errorf("invalid roadmap json: %w", err)

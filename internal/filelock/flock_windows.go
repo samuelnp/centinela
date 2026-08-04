@@ -1,6 +1,6 @@
 //go:build windows
 
-package evidence
+package filelock
 
 import (
 	"errors"

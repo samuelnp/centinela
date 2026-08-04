@@ -13,6 +13,11 @@ import (
 // names, and an unknown --after anchor are refused, each leaving the file
 // byte-identical. A single atomic write follows a post-insert dependency check.
 func PhaseAdd(path, name, note, afterPhase string) error {
+	release, lerr := lockRoadmapState(path)
+	if lerr != nil {
+		return lerr
+	}
+	defer release()
 	if strings.TrimSpace(name) == "" {
 		return fmt.Errorf("phase name is required")
 	}

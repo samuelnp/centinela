@@ -38,6 +38,7 @@ func runRoadmapDefer(_ *cobra.Command, args []string) error {
 		return err
 	}
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Deferred %q to the Backlog phase.", args[0])))
+	syncRoadmapState("defer", args[0])
 	return nil
 }
 

@@ -46,8 +46,8 @@ func TestReindex_InsertEarlierWhileLaterDirty(t *testing.T) {
 	}
 	want := "{\n  \"phases\": [\n" +
 		"    {\n      \"name\": \"Phase 0: Bootstrap\",\n      \"features\": []\n    },\n" +
-		"    {\n      \"name\": \"Phase 1: Foundations\",\n      \"features\": [\n        {\n          \"name\": \"a\"\n        }\n      ]\n    },\n" +
-		"    {\n      \"name\": \"Phase 2: Growth\",\n      \"features\": [\n        {\n          \"name\": \"mid\"\n        }\n      ]\n    },\n" +
+		"    {\n      \"name\": \"Phase 1: Foundations\",\n      \"features\": [\n        {\"name\":\"a\"}\n      ]\n    },\n" +
+		"    {\n      \"name\": \"Phase 2: Growth\",\n      \"features\": [\n        {\"name\":\"mid\"}\n      ]\n    },\n" +
 		"    {\n      \"name\": \"Phase 3: Scale\",\n      \"features\": [\n        {\"name\":\"reporting\",\"note\":\"edited\"}\n      ]\n    }\n" +
 		"  ]\n}\n"
 	if string(got) != want {
@@ -76,7 +76,7 @@ func TestReindex_RemoveMiddleWhileLaterDirty(t *testing.T) {
 		t.Fatalf("render: %v", err)
 	}
 	want := "{\n  \"phases\": [\n" +
-		"    {\n      \"name\": \"Phase 1: Foundations\",\n      \"features\": [\n        {\n          \"name\": \"a\"\n        }\n      ]\n    },\n" +
+		"    {\n      \"name\": \"Phase 1: Foundations\",\n      \"features\": [\n        {\"name\":\"a\"}\n      ]\n    },\n" +
 		"    {\n      \"name\": \"Phase 3: Scale\",\n      \"features\": [\n        {\"name\":\"reporting\",\"note\":\"edited\"}\n      ]\n    }\n" +
 		"  ]\n}\n"
 	if string(got) != want {

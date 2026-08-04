@@ -31,7 +31,7 @@ func runRoadmapPhaseAdd(_ *cobra.Command, args []string) error {
 	if err := roadmap.PhaseAdd(roadmap.RoadmapFile, args[0], phaseAddNote, phaseAddAfter); err != nil {
 		return err
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf(
-		"Added phase %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", args[0])))
+	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Added phase %q.", args[0])))
+	syncRoadmapState("phase add", args[0])
 	return nil
 }

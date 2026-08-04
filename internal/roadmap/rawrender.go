@@ -6,21 +6,17 @@ import (
 	"fmt"
 )
 
-// render serializes the doc back to bytes at 2-space indent. Each phase is
-// re-indented with json.Indent, which preserves key order and every field
-// (including ones the Go structs drop) while normalizing whitespace
-// deterministically. Dirty phases (Backlog / promote target) use rebuilt bytes.
+// render serializes the doc back to bytes at 2-space indent. EVERY phase —
+// not only the mutated one — renders through renderDirtyPhase's canonical
+// one-feature-object-per-line form, so a one-field edit produces a one-line
+// diff instead of reformatting a whole phase (AC14). Rendering is idempotent:
+// a second write of unchanged content is byte-identical, and unknown
+// per-phase and per-feature fields survive the round trip verbatim.
 func (d *rawDoc) render() ([]byte, error) {
 	var buf bytes.Buffer
 	buf.WriteString("{\n  \"phases\": [\n")
 	for i := range d.phases {
-		var out string
-		var err error
-		if dirty, ok := d.dirty[i]; ok {
-			out, err = renderDirtyPhase(json.RawMessage(dirty)) // one feature per line
-		} else {
-			out, err = indentValue(d.phases[i], "    ") // untouched: re-indent only
-		}
+		out, err := renderDirtyPhase(d.phaseBytes(i))
 		if err != nil {
 			return nil, err
 		}

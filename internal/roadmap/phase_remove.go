@@ -10,6 +10,11 @@ import "fmt"
 // that refuses the whole op (byte-identical) if a surviving feature would be left
 // depending on a removed one. A rejected remove writes nothing.
 func PhaseRemove(path, name string, force bool) error {
+	release, lerr := lockRoadmapState(path)
+	if lerr != nil {
+		return lerr
+	}
+	defer release()
 	if isNonSchedulablePhase(name) {
 		return fmt.Errorf("%q is a reserved phase name; managed via defer/promote", name)
 	}

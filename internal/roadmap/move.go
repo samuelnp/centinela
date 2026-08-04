@@ -17,6 +17,11 @@ type MoveRequest struct {
 // quality entries survive unchanged. Untouched phases round-trip byte-identically
 // and a rejected move (unknown phase/anchor, cycle) writes nothing.
 func Move(path string, req MoveRequest) error {
+	release, lerr := lockRoadmapState(path)
+	if lerr != nil {
+		return lerr
+	}
+	defer release()
 	doc, err := readRawRoadmap(path)
 	if err != nil {
 		return err

@@ -80,6 +80,9 @@ func runComplete(_ *cobra.Command, args []string) error {
 		opts := gitutil.DeliveryOptions(hasOrigin, worktreeMode)
 		fmt.Println(ui.RenderDeliveryChoice(feature, opts))
 		fmt.Println(gitutil.DeliveryDirective(feature, opts))
+		// Deferral without a closure path is socially acceptable debt: when the
+		// last schedulable feature lands, say how much Backlog is still open.
+		printBacklogNudge()
 	} else {
 		fmt.Println(ui.RenderStep("Next step", wf.CurrentStep))
 	}

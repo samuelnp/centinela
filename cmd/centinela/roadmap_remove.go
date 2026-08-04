@@ -25,7 +25,7 @@ func runRoadmapRemove(_ *cobra.Command, args []string) error {
 	if err := roadmap.Remove(roadmap.RoadmapFile, args[0]); err != nil {
 		return err
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf(
-		"Removed %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", args[0])))
+	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Removed %q.", args[0])))
+	syncRoadmapState("remove", args[0])
 	return nil
 }

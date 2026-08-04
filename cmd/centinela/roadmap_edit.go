@@ -43,7 +43,7 @@ func runRoadmapEdit(cmd *cobra.Command, args []string) error {
 	}); err != nil {
 		return err
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf(
-		"Edited %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", args[0])))
+	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Edited %q.", args[0])))
+	syncRoadmapState("edit", args[0])
 	return nil
 }
