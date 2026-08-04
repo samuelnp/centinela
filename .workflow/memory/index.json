@@ -208,6 +208,19 @@
     "createdAt": "2026-08-03T09:21:10Z"
   },
   {
+    "id": "1b909b643564451f",
+    "feature": "version-lock-profile-contract",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# version-lock-profile-contract — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/version-lock-profile-contract-gatekeeper.md",
+    "createdAt": "2026-08-04T10:07:15Z"
+  },
+  {
     "id": "1ba2b232333b5a26",
     "feature": "governance-telemetry",
     "step": "validate",

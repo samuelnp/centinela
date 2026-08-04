@@ -21,6 +21,7 @@ const legacyState = `{
   "driverModel": "claude-opus-5",
   "validateContract": "adversarial-verifier",
   "planContract": "unified-planner",
+  "profileContract": "guided-v1",
   "modelRoutes": {"senior-engineer": {"tier": "reasoning", "decidedAt": "2026-01-02T05:00:00Z"}}
 }`
 
@@ -58,6 +59,7 @@ func TestLegacyStateRoundTripsWithEveryFieldIntact(t *testing.T) {
 		{"driverModel", after.DriverModel, before.DriverModel},
 		{"validateContract", after.ValidateContract, before.ValidateContract},
 		{"planContract", after.PlanContract, before.PlanContract},
+		{"profileContract", after.ProfileContract, before.ProfileContract},
 	}
 	for _, c := range checks {
 		if c.got != c.want {

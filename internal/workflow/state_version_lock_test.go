@@ -19,11 +19,15 @@ const fieldsLockedAtVersion = 1
 // scheme only works if the constant moves with the shape. This test is the
 // mechanism that makes a forgotten bump loud.
 // profileContract arrived from guided-by-default while this feature was in
-// flight — the exact drift this list exists to make loud. It stays at version 1
-// deliberately: it is `omitempty` and back-compat-by-absence, so an absent key
-// defaults correctly and defaulting IS the migration. A bump is owed only by a
-// change that alters the MEANING of an existing key or removes one, where an
-// older binary reading the file would be wrong rather than merely incomplete.
+// flight — the exact drift this list exists to make loud.
+//
+// It stays at version 1 for one reason only: version 1 HAS NOT SHIPPED YET, so
+// it can still absorb the field. No released binary carries the version check
+// at all, which is also why a bump would buy nothing here — v0.55.6 drops both
+// profileContract AND schemaVersion on a load-save round-trip whatever number
+// this constant holds. Do not read this as "additive fields are free": once
+// version 1 is released, the strict rule stated in schema_version.go and in the
+// failure message below applies, and a shape change owes a bump.
 var wantWorkflowFields = []string{
 	"schemaVersion", "feature", "startedAt", "currentStep", "steps",
 	"stepOrder", "orchestrationMode", "enforcementProfile", "archetype",
@@ -49,16 +53,28 @@ func TestWorkflowStructFieldsAreVersionLocked(t *testing.T) {
 }
 
 // workflowJSONFields lists Workflow's marshalled keys in declaration order.
-// Unexported fields (loadedDigest, unmodellable) carry no tag and never reach
-// the file, so they are skipped.
+//
+// Skipping is by EXPORTEDNESS, not by tag: an unexported field (loadedDigest,
+// unmodellable) never marshals, but an exported one always does — and if its
+// tag names nothing, encoding/json falls back to the Go field name. Deciding
+// this on the tag alone left a hole: an exported field with no json tag, or
+// one whose tag supplies only options and no name, reached the state file
+// while passing the lock — so the list could drift from the real marshalled
+// shape exactly as the lock promises it cannot.
 func workflowJSONFields() []string {
 	rt := reflect.TypeOf(Workflow{})
 	out := make([]string, 0, rt.NumField())
 	for i := 0; i < rt.NumField(); i++ {
-		tag := rt.Field(i).Tag.Get("json")
-		name, _, _ := strings.Cut(tag, ",")
-		if name == "" || name == "-" {
+		f := rt.Field(i)
+		if !f.IsExported() {
 			continue
+		}
+		name, _, _ := strings.Cut(f.Tag.Get("json"), ",")
+		switch name {
+		case "-":
+			continue
+		case "":
+			name = f.Name // encoding/json's own fallback
 		}
 		out = append(out, name)
 	}
