@@ -1,0 +1,30 @@
+{
+  "feature": "version-lock-profile-contract",
+  "startedAt": "2026-08-04T09:00:42.17805Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-08-04T09:01:51Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-08-04T09:02:49Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-08-04T10:07:15Z"
+    }
+  },
+  "stepOrder": [
+    "code",
+    "tests",
+    "validate"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "hotfix",
+  "worktreePath": ".worktrees/version-lock-profile-contract",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1",
+  "profileContract": "guided-default-v1"
+}
