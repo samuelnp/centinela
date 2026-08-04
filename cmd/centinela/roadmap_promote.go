@@ -77,20 +77,20 @@ func reportPromoteResult(slug string) error {
 	if err != nil {
 		return fmt.Errorf("promote wrote files but roadmap reload failed: %w", err)
 	}
-	if err := reportGradingAfterPromote(r); err != nil {
-		return err
-	}
 	fmt.Println(ui.RenderSuccess(promoteResultMessage(slug)))
-	return nil
+	// Sync BEFORE the grading report: promote has already written roadmap.json,
+	// so a grading failure must not leave ROADMAP.md drifted. Promote also
+	// rewrites the analysis/quality artifacts, so it supplies them as extra
+	// pathspec entries — the mutation declares what it wrote (R7).
+	syncRoadmapState("promote", slug, roadmap.PromoteArtifactPaths()...)
+	return reportGradingAfterPromote(r)
 }
 
 // promoteResultMessage phrases success for either branch: a Backlog promote
 // moved the slug into --phase, while an in-place draft finalize did not move it.
 func promoteResultMessage(slug string) string {
 	if promotePhase == "" {
-		return fmt.Sprintf(
-			"Finalized draft %q in place. Remember to sync ROADMAP.md (roadmap-doc-sync).", slug)
+		return fmt.Sprintf("Finalized draft %q in place.", slug)
 	}
-	return fmt.Sprintf(
-		"Promoted %q to %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", slug, promotePhase)
+	return fmt.Sprintf("Promoted %q to %q.", slug, promotePhase)
 }

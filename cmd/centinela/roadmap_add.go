@@ -44,5 +44,6 @@ func runRoadmapAdd(_ *cobra.Command, args []string) error {
 	}
 	fmt.Println(ui.RenderSuccess(fmt.Sprintf(
 		"Added draft %q to %q. Score it with roadmap promote to finalize.", args[0], addPhase)))
+	syncRoadmapState("add", args[0])
 	return nil
 }

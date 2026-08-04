@@ -7,10 +7,12 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"github.com/samuelnp/centinela/internal/roadmapstate"
 )
 
-// UntrackedPaths returns the `??` entries of a porcelain=v1 status that lie
-// outside .workflow/. Their status LINES never change when their contents do,
+// UntrackedPaths returns the `??` entries of a porcelain=v1 status that are
+// not roadmap state. Their status LINES never change when their contents do,
 // so the caller must hash them separately.
 func UntrackedPaths(status string) []string {
 	paths := []string{}
@@ -19,7 +21,7 @@ func UntrackedPaths(status string) []string {
 			continue
 		}
 		path := strings.Trim(strings.TrimSpace(ln[3:]), `"`)
-		if path != "" && !strings.HasPrefix(path, excluded) {
+		if path != "" && !roadmapstate.IsStatePath(path) {
 			paths = append(paths, path)
 		}
 	}

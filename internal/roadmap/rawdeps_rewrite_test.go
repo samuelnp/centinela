@@ -27,9 +27,10 @@ func TestRewriteDependents_MultiPhase(t *testing.T) {
 			t.Fatalf("expected %s in:\n%s", want, out)
 		}
 	}
-	// Phase 3 has no dependent on "a": it must be untouched (still json.Indent form).
-	if !strings.Contains(out, `"f"`) || strings.Contains(out, `{"name":"f"`) {
-		t.Fatalf("untouched Phase 3 must not be re-rendered one-per-line:\n%s", out)
+	// Phase 3 has no dependent on "a", but AC14 renders EVERY phase canonically:
+	// its content is unchanged and it is emitted one feature object per line.
+	if !strings.Contains(out, `{"name":"f","dependsOn":["x"]}`) {
+		t.Fatalf("every phase must render one feature object per line:\n%s", out)
 	}
 	if strings.Contains(out, `"a"`) == false {
 		t.Fatal("the renamed target's own entry is left to applyRename, not rewriteDependents")

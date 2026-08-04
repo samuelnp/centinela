@@ -143,6 +143,14 @@ enabled = true
 # standard library — no internal package at all — which is what lets
 # internal/gates (domain) consume it without any risk of a cycle, and is why the
 # gate resolves scope through internal/gitdiff rather than inside the scanner.
+# internal/roadmapstate is also a leaf: THE definition of "roadmap state" (the
+# .workflow/roadmap.json + ROADMAP.md pathspec, the Covers subset test and the
+# chore(roadmap) commit message). internal/roadmap (the mutation commit),
+# internal/treestate (the working-tree digest exclusion) and internal/workflow
+# (the freshness revision-range exemption) all need the SAME list; owning it in
+# any one of them would close the cycle treestate -> roadmap -> workflow ->
+# treestate. Standard library only. Same reasoning as internal/acceptance and
+# internal/worktreepath. See PROJECT.md G2.
 # internal/worktreepath is also a leaf: the `.worktrees/<feature>` path
 # vocabulary (the directory name + the cwd -> feature scan), standard library
 # only. internal/worktree (lifecycle) and internal/evidence (skeleton feature
@@ -152,7 +160,7 @@ enabled = true
 # internal/acceptance. See PROJECT.md G2.
 [[gates.import_graph.layers]]
 name  = "leaf"
-paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**", "internal/selfupdate/**", "internal/acceptance/**", "internal/docstring/**", "internal/worktreepath/**"]
+paths = ["internal/config/**", "internal/gitdiff/**", "internal/orchestration/**", "internal/githooks/**", "internal/golist/**", "internal/importgraph/**", "internal/gitutil/**", "internal/selfupdate/**", "internal/acceptance/**", "internal/docstring/**", "internal/worktreepath/**", "internal/roadmapstate/**"]
 allow = []
 
 # internal/analyze is a domain package (deterministic codebase inventory for

@@ -24,7 +24,7 @@ func runRoadmapPhaseRename(_ *cobra.Command, args []string) error {
 	if err := roadmap.PhaseRename(roadmap.RoadmapFile, args[0], args[1]); err != nil {
 		return err
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf(
-		"Renamed phase %q to %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", args[0], args[1])))
+	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Renamed phase %q to %q.", args[0], args[1])))
+	syncRoadmapState("phase rename", args[1])
 	return nil
 }

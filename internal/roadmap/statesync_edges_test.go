@@ -1,0 +1,49 @@
+package roadmap
+
+import (
+	"os"
+	"strings"
+	"testing"
+)
+
+// A missing committer is a wiring bug, not a policy choice: it must warn.
+func TestSyncWithoutACommitterWarns(t *testing.T) {
+	syncRepo(t, syncBody)
+	rep := Sync(SyncOptions{Verb: "defer", Subject: "x", Commit: true})
+	if !rep.Warn || !strings.Contains(rep.Reason, "no committer") {
+		t.Fatalf("report = %+v", rep)
+	}
+	if !rep.Regenerated {
+		t.Fatal("regeneration must still have happened")
+	}
+}
+
+// A ROADMAP.md that cannot be written surfaces as a warning, never a crash.
+func TestSyncSurfacesAMarkdownWriteFailure(t *testing.T) {
+	syncRepo(t, syncBody)
+	if err := os.Mkdir("ROADMAP.md", 0o755); err != nil {
+		t.Fatal(err)
+	}
+	rep := Sync(SyncOptions{Verb: "defer", Subject: "x", Commit: true, C: &fakeCommitter{}})
+	if !rep.Warn || !strings.Contains(rep.Reason, "regeneration failed") {
+		t.Fatalf("report = %+v", rep)
+	}
+}
+
+func TestWriteRoadmapJSONReplacesTheFileAtomically(t *testing.T) {
+	syncRepo(t, syncBody)
+	merged := []byte(`{"phases":[{"name":"P","features":[]}]}`)
+	if err := WriteRoadmapJSON(merged); err != nil {
+		t.Fatal(err)
+	}
+	got, err := os.ReadFile(RoadmapFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != string(merged) {
+		t.Fatalf("roadmap.json = %q", got)
+	}
+	if _, err := Load(); err != nil {
+		t.Fatalf("the written document must still load: %v", err)
+	}
+}

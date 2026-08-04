@@ -27,3 +27,25 @@ func FirstNotDone(name string) (string, bool) {
 	}
 	return "", false
 }
+
+// FirstIncompleteSchedulable is FirstIncomplete restricted to SCHEDULABLE
+// phases: Backlog findings and Baseline capability are not work anyone can
+// start, so they must not read as "the roadmap is unfinished". This is the
+// predicate behind the Backlog completion nudge — without it every deferred
+// finding would keep the roadmap permanently incomplete.
+func FirstIncompleteSchedulable(r *Roadmap) (string, bool) {
+	if r == nil {
+		return "", false
+	}
+	for _, phase := range r.Phases {
+		if isNonSchedulablePhase(phase.Name) {
+			continue
+		}
+		for _, f := range phase.Features {
+			if name, ok := FirstNotDone(f.Name); ok {
+				return name, true
+			}
+		}
+	}
+	return "", false
+}

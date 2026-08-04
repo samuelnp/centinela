@@ -28,7 +28,7 @@ func runRoadmapPhaseRemove(_ *cobra.Command, args []string) error {
 	if err := roadmap.PhaseRemove(roadmap.RoadmapFile, args[0], phaseRemoveForce); err != nil {
 		return err
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf(
-		"Removed phase %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", args[0])))
+	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Removed phase %q.", args[0])))
+	syncRoadmapState("phase remove", args[0], roadmap.RoadmapAnalysisFile, roadmap.RoadmapQualityFile)
 	return nil
 }

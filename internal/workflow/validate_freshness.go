@@ -37,15 +37,21 @@ func VerificationFresh(feature, root string, run treestate.Runner) error {
 	if err != nil {
 		return fmt.Errorf("cannot determine current tree state to check %s: %w", report, err)
 	}
-	return compareStamp(recorded, current)
+	return compareStamp(recorded, current, root, run)
 }
 
 // compareStamp names which half of the binding drifted: HEAD moving means
 // fixes were committed on top of the verified commit, an equal HEAD with a
 // different digest means fixes were made in place (D3 — the case a HEAD-only
 // comparison would wrongly admit).
-func compareStamp(recorded gatereport.Verification, current treestate.Snapshot) error {
-	if recorded.Revision != current.Revision {
+//
+// A moved HEAD is forgiven ONLY when every path in the range is roadmap state
+// (D5): a roadmap mutation commits itself now, so recording a deferral must not
+// void the verdict the same verifier is about to stamp. Any other path in the
+// range still stales it, with today's message.
+func compareStamp(recorded gatereport.Verification, current treestate.Snapshot, root string, run treestate.Runner) error {
+	if recorded.Revision != current.Revision &&
+		!revisionRangeIsRoadmapStateOnly(root, recorded.Revision, run) {
 		return fmt.Errorf("gatekeeper verification is stale (verified %s, HEAD is now %s). %s",
 			short(recorded.Revision), short(current.Revision), reverify)
 	}

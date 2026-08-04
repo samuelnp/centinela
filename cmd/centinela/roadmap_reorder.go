@@ -41,7 +41,7 @@ func runRoadmapReorder(_ *cobra.Command, args []string) error {
 	}); err != nil {
 		return err
 	}
-	fmt.Println(ui.RenderSuccess(fmt.Sprintf(
-		"Reordered %q. Remember to sync ROADMAP.md (roadmap-doc-sync).", args[0])))
+	fmt.Println(ui.RenderSuccess(fmt.Sprintf("Reordered %q.", args[0])))
+	syncRoadmapState("reorder", args[0])
 	return nil
 }
