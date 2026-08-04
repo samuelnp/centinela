@@ -1,7 +1,7 @@
 {
   "feature": "roadmap-state-hygiene",
   "startedAt": "2026-08-04T08:01:31.48785Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
@@ -16,11 +16,11 @@
       "completedAt": "2026-08-04T08:18:43Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-04T10:17:23Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },
@@ -42,6 +42,11 @@
       "tier": "reasoning",
       "reason": "Auto-commit semantics on shared state touch every delivery path and the parallel-merge conflict class; getting the commit boundary wrong risks clobbering concurrent sessions",
       "decidedAt": "2026-08-04T08:01:40Z"
+    },
+    "qa-senior": {
+      "tier": "balanced",
+      "reason": "Acceptance authoring against 14 written ACs; shapes specified by the plan",
+      "decidedAt": "2026-08-04T09:19:12Z"
     },
     "senior-engineer": {
       "tier": "reasoning",
