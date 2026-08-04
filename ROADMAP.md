@@ -326,3 +326,4 @@
 - **roadmap-resolve-schedulable-phase-merge** — Extend roadmap resolve from Backlog-union to a full semantic 3-way merge of schedulable phases (v1 refuses that case) *(deferred 2026-08-04T08:15:10Z · roadmap-state-hygiene/planner)*
 - **roadmap-backlog-stale-threshold-config** — Config knob for the roadmap backlog staleness threshold (v1 hardcodes 14 days with an --older-than override) *(deferred 2026-08-04T08:15:10Z · roadmap-state-hygiene/planner)*
 - **roadmap-state-commit-squash-on-deliver** — Optionally squash the per-mutation chore(roadmap) commits at deliver time so a feature branch carries one roadmap-state commit *(deferred 2026-08-04T08:15:10Z · roadmap-state-hygiene/planner)*
+- **roadmap-resolve-summary-arithmetic-unreconcilable** — resolve summary counts Kept but FromOurs/FromTheirs exclude base hits, so they never sum — print a from-base term or relabel *(deferred 2026-08-04T10:58:10Z · roadmap-state-hygiene/gatekeeper)*
