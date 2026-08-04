@@ -213,6 +213,7 @@
 - **beg-docstring-debt** — Hotfix: document the two exported identifiers in internal/orchestration/evidence.go (Evidence, ValidateEvidence) that the newly-enforcing docstring gate surfaces on binding-evidence-gates' changed-file set
 - **evidence-schema-skeleton-legacy-handoff**
 - **durable-workflow-state** — Make .workflow/<feature>.json survive what actually happens to it: write-temp-then-rename so a killed or crashed process cannot truncate the file, and a schema version so an older binary cannot silently drop fields it does not know (modelRoutes today, anything added tomorrow) on a load-save round-trip
+- **version-lock-profile-contract** — Hotfix: guided-by-default added profileContract to the Workflow struct while durable-workflow-state was in flight; the version-lock golden field list must record it (additive, omitempty, back-compat-by-absence, so no SchemaVersion bump). Neither PR's own CI could see this — it only fails on the merged tree
 
 ## Backlog
 
