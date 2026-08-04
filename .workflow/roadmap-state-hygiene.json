@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "feature": "roadmap-state-hygiene",
   "startedAt": "2026-08-04T08:01:31.48785Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-08-04T09:19:12Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-04T14:45:08Z"
     },
     "plan": {
       "status": "done",
