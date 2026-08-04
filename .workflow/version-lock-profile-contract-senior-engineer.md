@@ -4,7 +4,8 @@
 
 | Path | Reason |
 |------|--------|
-| `internal/workflow/state_version_lock_test.go` | Record `profileContract` in the golden field list, with the reasoning for holding SchemaVersion at 1 |
+| `internal/workflow/state_version_lock_test.go` | Record `profileContract` in the golden field list; skip by exportedness rather than by json tag; state why SchemaVersion holds at 1 |
+| `internal/workflow/state_version_compat_test.go` | Carry `profileContract` through the legacy round-trip fixture |
 
 ## Problem
 
@@ -25,29 +26,34 @@ contain.
 
 ## The decision: no SchemaVersion bump
 
-`profileContract` is `omitempty` and back-compat-by-absence: a file without the
-key loads with the zero value, which is the same thing the field means when
-unset. The documented migration contract in `schema_version.go` is that
-defaulting IS the migration for additive fields, so version 1 still describes
-this shape honestly.
+Version 1 has not shipped yet, so it can still absorb the field — that is the
+whole reason, and it is the one recorded beside the list.
 
-A bump is owed by a change that alters the MEANING of an existing key or removes
-one — where an older binary reading the file would be *wrong* rather than merely
-incomplete. That is the line recorded in the comment beside the list, so the
-next person facing this question has the rule rather than a precedent to copy.
+An earlier draft of this report argued "additive and back-compat-by-absence",
+which a verifier disproved empirically: a real v0.55.6 binary drops
+`profileContract` AND `schemaVersion` on a Load→Save round-trip, turning a
+guided-pinned workflow strict mid-run. That is a behaviour change, not merely an
+incomplete read. No bump could prevent it either, because no released binary
+carries the version check at all. The comment now says so explicitly and warns
+against reading it as "additive fields are free" once v1 ships.
 
 ## Architecture Compliance
 
-- Boundary checks passed: one colocated test file; no production code, no
+- Boundary checks passed: two colocated test files; no production code, no
   imports, no package edges changed.
-- G1 file size: `state_version_lock_test.go` is 66 lines (≤100).
+- G1 file size: `state_version_lock_test.go` 83 lines, `state_version_compat_test.go`
+  86 lines (both ≤100).
 - G7 outer-layer rule: unaffected.
 
 ## Type-Safety Notes
 
-- No type surface changed. The golden list stays `[]string` compared against
-  reflected struct tags, so it cannot drift from the real marshalled shape
-  without failing.
+- No type surface changed. The golden list stays `[]string`, now compared
+  against fields selected by EXPORTEDNESS with encoding/json's own name
+  fallback — deciding on the tag alone let an exported untagged field reach the
+  state file while passing the lock. Two exotic shapes still evade it (an
+  embedded unexported struct type, and `json:"-,"`); deferred as
+  `workflow-shape-lock-marshal-derived`, whose real fix is deriving the list
+  from `json.Marshal` output rather than from reflection over tags.
 
 ## Trade-Offs
 
