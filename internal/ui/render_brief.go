@@ -26,5 +26,5 @@ func RenderFeatureBriefNeeded(feature string) string {
 		"",
 		StyleRed.Render(fmt.Sprintf("Write the brief first. The plan must reference it: docs/features/%s.md", feature)),
 	)
-	return renderSystemPanel("HOOK", "FEATURE BRIEF REQUIRED", toneWarn, body)
+	return trimTrailingWS(renderSystemPanel("HOOK", "FEATURE BRIEF REQUIRED", toneWarn, body))
 }

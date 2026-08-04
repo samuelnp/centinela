@@ -54,7 +54,7 @@ func RenderContextCapped(wfs []*workflow.Workflow, more int) string {
 	if more > 0 {
 		body += "\n\n" + StyleMuted.Render(fmt.Sprintf("+%d more active", more))
 	}
-	return renderSystemPanel("HOOK", "ACTIVE WORKFLOWS", toneInfo, body)
+	return trimTrailingWS(renderSystemPanel("HOOK", "ACTIVE WORKFLOWS", toneInfo, body))
 }
 
 func stepBar(wf *workflow.Workflow) string {

@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "feature": "hook-context-panel-diet",
   "startedAt": "2026-08-04T11:23:27.241142Z",
-  "currentStep": "code",
+  "currentStep": "tests",
   "steps": {
     "code": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-04T12:26:11Z"
     },
     "docs": {
       "status": "pending",
@@ -17,7 +17,7 @@
       "completedAt": "2026-08-04T12:18:23Z"
     },
     "tests": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "validate": {
