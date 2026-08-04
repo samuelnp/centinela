@@ -1079,6 +1079,32 @@
     "createdAt": "2026-07-29T16:36:02Z"
   },
   {
+    "id": "9ea4bdffa9812f3f",
+    "feature": "hook-context-panel-diet",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: hook-context-panel-diet",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/hook-context-panel-diet-gatekeeper.md",
+    "createdAt": "2026-08-04T13:39:40Z"
+  },
+  {
+    "id": "9f6560f67b67a642",
+    "feature": "hook-context-panel-diet",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Idempotency and byte-level behaviour of `trimTrailingWS`** (probed via",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/hook-context-panel-diet-edge-cases.md",
+    "createdAt": "2026-08-04T13:13:50Z"
+  },
+  {
     "id": "a861ca032b250c87",
     "feature": "configurable-model-routing",
     "step": "validate",

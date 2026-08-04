@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "feature": "hook-context-panel-diet",
+  "startedAt": "2026-08-04T11:23:27.241142Z",
+  "currentStep": "done",
+  "steps": {
+    "code": {
+      "status": "done",
+      "completedAt": "2026-08-04T12:26:11Z"
+    },
+    "docs": {
+      "status": "done",
+      "completedAt": "2026-08-04T13:40:44Z"
+    },
+    "plan": {
+      "status": "done",
+      "completedAt": "2026-08-04T12:18:23Z"
+    },
+    "tests": {
+      "status": "done",
+      "completedAt": "2026-08-04T13:13:50Z"
+    },
+    "validate": {
+      "status": "done",
+      "completedAt": "2026-08-04T13:39:40Z"
+    }
+  },
+  "stepOrder": [
+    "plan",
+    "code",
+    "tests",
+    "validate",
+    "docs"
+  ],
+  "orchestrationMode": "strict-subagents-v1",
+  "archetype": "canonical",
+  "worktreePath": ".worktrees/hook-context-panel-diet",
+  "validateContract": "adversarial-v1",
+  "planContract": "planner-v1",
+  "profileContract": "guided-default-v1",
+  "modelRoutes": {
+    "planner": {
+      "tier": "balanced",
+      "reason": "the problem is already measured (1770 bytes, 736 of them trailing whitespace, on every turn) and the solution space is narrow — this is trimming a known emitter, not exploring a design space",
+      "decidedAt": "2026-08-04T11:24:18Z"
+    }
+  }
+}

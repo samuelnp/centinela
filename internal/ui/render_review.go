@@ -13,7 +13,7 @@ func RenderReviewReady(feature, step, next string) string {
 		"",
 		StyleMuted.Render("Only run `centinela complete "+feature+"` after user confirms."),
 	)
-	return renderSystemPanel("HOOK", "REVIEW REQUIRED", toneWarn, body)
+	return trimTrailingWS(renderSystemPanel("HOOK", "REVIEW REQUIRED", toneWarn, body))
 }
 
 // RenderEdgeCaseReportNeeded reminds the agent to write edge-case analysis.
@@ -25,7 +25,7 @@ func RenderEdgeCaseReportNeeded(feature string) string {
 		StyleMuted.Render("Run edge-case subagent using docs/architecture/edge-case-tester-prompt.md"),
 		StyleMuted.Render("Then write: .workflow/"+feature+"-edge-cases.md"),
 	)
-	return renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body)
+	return trimTrailingWS(renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body))
 }
 
 // RenderDocumentationNeeded reminds the agent to run docs-specialist workflow.
@@ -37,7 +37,7 @@ func RenderDocumentationNeeded(feature string) string {
 		StyleMuted.Render("Run: centinela docs context "+feature),
 		StyleMuted.Render("Update docs/guides/ or README.md, then write evidence listing the real files."),
 	)
-	return renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body)
+	return trimTrailingWS(renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body))
 }
 
 // RenderChangelogNeeded reminds the agent that an internal feature's docs step
@@ -50,5 +50,5 @@ func RenderChangelogNeeded(feature string) string {
 		StyleMuted.Render("Run: centinela artifact new "+feature+" changelog"),
 		StyleMuted.Render("Then write: .workflow/"+feature+"-changelog.md"),
 	)
-	return renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body)
+	return trimTrailingWS(renderSystemPanel("HOOK", "ACTION REQUIRED", toneWarn, body))
 }
