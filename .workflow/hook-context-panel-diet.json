@@ -2,15 +2,15 @@
   "schemaVersion": 1,
   "feature": "hook-context-panel-diet",
   "startedAt": "2026-08-04T11:23:27.241142Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-08-04T12:26:11Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-04T13:40:44Z"
     },
     "plan": {
       "status": "done",
