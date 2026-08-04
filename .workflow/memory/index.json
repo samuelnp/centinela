@@ -208,6 +208,19 @@
     "createdAt": "2026-08-03T09:21:10Z"
   },
   {
+    "id": "1b909b643564451f",
+    "feature": "version-lock-profile-contract",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# version-lock-profile-contract — gatekeeper",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/version-lock-profile-contract-gatekeeper.md",
+    "createdAt": "2026-08-04T10:07:15Z"
+  },
+  {
     "id": "1ba2b232333b5a26",
     "feature": "governance-telemetry",
     "step": "validate",
@@ -364,6 +377,19 @@
     "createdAt": "2026-07-09T14:08:08Z"
   },
   {
+    "id": "314b240c37e5cb40",
+    "feature": "durable-workflow-state",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- **Anti-bricking holds for a well-typed future version.** **[probe]**",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/durable-workflow-state-edge-cases.md",
+    "createdAt": "2026-08-03T20:28:00Z"
+  },
+  {
     "id": "32f04a9174b07dba",
     "feature": "spec-traceability-gate",
     "step": "validate",
@@ -427,6 +453,19 @@
     ],
     "sourceArtifact": ".workflow/workflow-archetypes-edge-cases.md",
     "createdAt": "2026-06-12T12:17:49Z"
+  },
+  {
+    "id": "4044fd62e725f303",
+    "feature": "version-lock-profile-contract",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- The version lock itself is the executable check, and it is already red→green",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/version-lock-profile-contract-edge-cases.md",
+    "createdAt": "2026-08-04T09:02:49Z"
   },
   {
     "id": "442f02b8af975c0a",
@@ -1233,6 +1272,19 @@
     ],
     "sourceArtifact": ".workflow/model-capability-profiles-gatekeeper.md",
     "createdAt": "2026-06-12T17:00:44Z"
+  },
+  {
+    "id": "c8183d40a6488c28",
+    "feature": "durable-workflow-state",
+    "step": "validate",
+    "type": "verdict",
+    "title": "### Adversarial Verifier Report: durable-workflow-state",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/durable-workflow-state-gatekeeper.md",
+    "createdAt": "2026-08-04T08:31:01Z"
   },
   {
     "id": "c8a174bcf8ce6416",

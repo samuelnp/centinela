@@ -61,10 +61,12 @@ func TestCov2RunCompleteSaveError(t *testing.T) {
 	if err := workflow.Save(wf); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.Chmod(workflow.FilePath("feat"), 0o444); err != nil {
+	// The save is atomic (temp + rename), so an unwritable TARGET no longer
+	// fails it — rename needs write permission on the DIRECTORY.
+	if err := os.Chmod(workflow.WorkflowDir, 0o500); err != nil {
 		t.Fatal(err)
 	}
-	t.Cleanup(func() { _ = os.Chmod(workflow.FilePath("feat"), 0o644) })
+	t.Cleanup(func() { _ = os.Chmod(workflow.WorkflowDir, 0o755) })
 	err := runComplete(nil, []string{"feat"})
 	if err == nil || !strings.Contains(err.Error(), "cannot save") {
 		t.Fatalf("expected a save error, got %v", err)
