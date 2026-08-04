@@ -1,15 +1,15 @@
 {
   "feature": "durable-workflow-state",
   "startedAt": "2026-08-03T14:44:46.118916Z",
-  "currentStep": "docs",
+  "currentStep": "done",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-08-03T19:16:16Z"
     },
     "docs": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-04T08:31:54Z"
     },
     "plan": {
       "status": "done",
