@@ -68,6 +68,7 @@
     {"name":"beg-docstring-debt"},
     {"name":"evidence-schema-skeleton-legacy-handoff"},
     {"name":"durable-workflow-state"},
-    {"name":"version-lock-profile-contract"}
+    {"name":"version-lock-profile-contract"},
+    {"name":"hook-context-panel-diet"}
   ]
 }

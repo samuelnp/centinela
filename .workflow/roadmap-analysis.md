@@ -97,3 +97,4 @@
 - Promoted from Backlog: evidence-schema-skeleton-legacy-handoff (source=beg-docstring-debt/gatekeeper, deferredAt=2026-08-03T09:35:29Z)
 - Finalized draft in place: durable-workflow-state
 - Finalized draft in place: version-lock-profile-contract
+- Promoted from Backlog: hook-context-panel-diet (source=token-diet/gatekeeper, deferredAt=2026-07-30T09:14:15Z)

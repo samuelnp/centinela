@@ -214,6 +214,7 @@
 - **evidence-schema-skeleton-legacy-handoff**
 - **durable-workflow-state** — Make .workflow/<feature>.json survive what actually happens to it: write-temp-then-rename so a killed or crashed process cannot truncate the file, and a schema version so an older binary cannot silently drop fields it does not know (modelRoutes today, anything added tomorrow) on a load-save round-trip
 - **version-lock-profile-contract** — Hotfix: guided-by-default added profileContract to the Workflow struct while durable-workflow-state was in flight; the version-lock golden field list must record it (additive, omitempty, back-compat-by-absence, so no SchemaVersion bump). Neither PR's own CI could see this — it only fails on the merged tree
+- **hook-context-panel-diet**
 
 ## Backlog
 
@@ -274,7 +275,6 @@
 - **legacy-model-specs-have-no-scenario-markers** — 28 pre-existing legacy model spec scenarios have no acceptance markers *(deferred 2026-07-30T09:14:14Z · token-diet/gatekeeper)*
 - **plan-empty-inputs-message-masked** — E4 empty-inputs message unreachable behind snapshot check *(deferred 2026-07-30T09:14:14Z · token-diet/gatekeeper)*
 - **summary-digest-hashes-nonschedulable-phases** — roadmap summary digest over-renders on Backlog-only changes *(deferred 2026-07-30T09:14:14Z · token-diet/gatekeeper)*
-- **hook-context-panel-diet** — ACTIVE WORKFLOWS + nudge panels are 96% of hook context bytes; diet them next *(deferred 2026-07-30T09:14:15Z · token-diet/gatekeeper)*
 - **scaffold-toml-orchestration-examples** — Scaffolded centinela.toml documents workflow/gates knobs but carries zero [orchestration] examples for already-shipped features (models, model_map, capabilities, local backend) — new projects discover them only via docs/guides; add a commented orchestration example block *(deferred 2026-07-30T17:09:41Z · dynamic-model-routing/planner)*
 - **route-lifecycle-hygiene** — Recorded routes are invisible and unmanageable outside the dynamic window: flipping routing_mode to static hides them from route show/set while leaving them re-armable (E11), route show succeeds on a done workflow while route set refuses (E14), and a past-step upgrade is accepted and emits telemetry nothing consumes (E13). Needs a route clear/list surface and a scheduling-aware rule 4. *(deferred 2026-07-30T18:39:42Z · dynamic-model-routing/qa-senior)*
 - **unaudited-handwritten-routes-for-floorless-roles** — A route hand-written into .workflow/<feature>.json takes effect for any role with no configured floor, with no route-decision telemetry event — floors and the audit trail both bind only what route set writes, so 'every route decision is audited' holds for the CLI path only *(deferred 2026-07-31T08:14:51Z · dynamic-model-routing/gatekeeper)*
