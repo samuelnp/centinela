@@ -442,6 +442,19 @@
     "createdAt": "2026-06-12T12:17:49Z"
   },
   {
+    "id": "4044fd62e725f303",
+    "feature": "version-lock-profile-contract",
+    "step": "tests",
+    "type": "lesson",
+    "title": "- The version lock itself is the executable check, and it is already red→green",
+    "tags": [
+      "edge-cases",
+      "lesson"
+    ],
+    "sourceArtifact": ".workflow/version-lock-profile-contract-edge-cases.md",
+    "createdAt": "2026-08-04T09:02:49Z"
+  },
+  {
     "id": "442f02b8af975c0a",
     "feature": "adversarial-validate-verifier",
     "step": "validate",

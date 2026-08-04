@@ -1,18 +1,18 @@
 {
   "feature": "version-lock-profile-contract",
   "startedAt": "2026-08-04T09:00:42.17805Z",
-  "currentStep": "tests",
+  "currentStep": "validate",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-08-04T09:01:51Z"
     },
     "tests": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-04T09:02:49Z"
     },
     "validate": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     }
   },
