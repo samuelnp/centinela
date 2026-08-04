@@ -51,7 +51,10 @@ func TestRsh_HostileGitEnvironmentWarnsNeverFails(t *testing.T) {
 			if _, err := os.Stat(dir + "/ROADMAP.md"); err != nil {
 				t.Fatalf("ROADMAP.md must be regenerated: %v", err)
 			}
-			containsAll(t, out, "left uncommitted", tc.reason)
+			// AC5: the warning must name the reason and say the state was not
+			// committed. It may only add "in your working tree" because the
+			// read-back verified the record really is there (F1).
+			containsAll(t, out, "not committed", "in your working tree", tc.reason)
 		})
 	}
 }

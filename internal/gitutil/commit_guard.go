@@ -31,6 +31,18 @@ func HasHead(repo string) bool {
 	return err == nil
 }
 
+// DetachedHead reports whether repo's HEAD points straight at a commit rather
+// than at a branch. `symbolic-ref` fails exactly in that case; it SUCCEEDS on an
+// unborn branch, which is why HasHead is the separate check.
+//
+// A commit made on a detached HEAD is reachable from nothing: the next
+// `git checkout` orphans it and the record it carried is gone. That is worse
+// than not committing, so it is a blocking condition, not a success.
+func DetachedHead(repo string) bool {
+	_, err := gitRun(repo, "symbolic-ref", "-q", "HEAD")
+	return err != nil
+}
+
 // InProgressOperation names the in-flight git operation blocking a partial
 // commit in repo ("merge in progress", "rebase in progress", …), or "" when
 // none is running.
@@ -54,7 +66,15 @@ func CommitBlockedReason(repo string) string {
 	if !HasHead(repo) {
 		return "no HEAD"
 	}
-	return InProgressOperation(repo)
+	// An in-flight rebase or bisect ALSO detaches HEAD, so the more specific
+	// operation name is reported first.
+	if op := InProgressOperation(repo); op != "" {
+		return op
+	}
+	if DetachedHead(repo) {
+		return "detached HEAD"
+	}
+	return ""
 }
 
 // gitPathExists resolves name inside repo's git directory (via `rev-parse

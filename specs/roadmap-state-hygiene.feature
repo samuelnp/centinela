@@ -88,7 +88,8 @@ Feature: roadmap state hygiene — self-committing mutations, stamp-safe regener
     Then the command exits with code 0
     And ROADMAP.md is regenerated and in sync with roadmap.json
     And no new commit is created
-    And the output states that roadmap state was left uncommitted
+    And the output states that roadmap state was not committed
+    And the output says the record is in the working tree, having verified it is
 
   # ---------------------------------------------------------------------------
   # AC5 — the commit is best-effort and never fails the mutation
@@ -100,7 +101,7 @@ Feature: roadmap state hygiene — self-committing mutations, stamp-safe regener
     Then the command exits with code 0
     And roadmap.json contains the finding "resilient-thing"
     And ROADMAP.md is in sync with roadmap.json
-    And the output warns that roadmap state was left uncommitted because of "<reason>"
+    And the output warns that roadmap state was not committed because of "<reason>"
 
     Examples:
       | git state                | reason              |
@@ -113,6 +114,42 @@ Feature: roadmap state hygiene — self-committing mutations, stamp-safe regener
   # ---------------------------------------------------------------------------
   # AC6 — worktree locality
   # ---------------------------------------------------------------------------
+
+  Scenario: a lost record is never reported as merely uncommitted
+    Given roadmap.json is replaced by another process after the mutation wrote it
+    When the roadmap-state sync reports its outcome
+    Then the output does not claim the record is in the working tree
+    And the output says roadmap.json no longer matches what the command wrote
+
+  Scenario: two concurrent mutations in one checkout both survive
+    Given two "centinela roadmap defer" processes start at the same time
+    When both complete
+    Then roadmap.json contains both findings
+    And each mutation saw the other's content rather than overwriting it
+
+  Scenario: concurrent mutations entering by different path spellings all survive
+    Given the same repository is reachable by its real path and by a symlink
+    When two mutations run through each spelling at the same time
+    Then roadmap.json contains all four findings
+    And exactly one lock file exists
+    And the working tree is clean
+
+  Scenario: a mutation on a detached HEAD is not committed
+    Given the repository has a detached HEAD
+    When the operator runs: centinela roadmap defer "detached-thing" --summary "x"
+    Then the command exits with code 0
+    And no commit is created
+    And the output warns that roadmap state was not committed because of "detached HEAD"
+    And the finding survives a checkout back to a branch
+
+  Scenario: resolve refuses a finding one side edited and the other deleted
+    Given the base contains the finding "finding-A"
+    And our side edited its summary and their side deleted it
+    When the operator runs: centinela roadmap resolve
+    Then the command exits with a non-zero code
+    And the message names the finding "finding-A"
+    And .workflow/roadmap.json still contains its conflict markers
+    And nothing is staged
 
   Scenario: a mutation inside a feature worktree commits to that worktree's branch
     Given the current directory is ".worktrees/some-feature" on branch "some-feature"
@@ -250,7 +287,8 @@ Feature: roadmap state hygiene — self-committing mutations, stamp-safe regener
     And roadmap.json contains all 10 findings ordered by deferredAt then name
     And ROADMAP.md is regenerated from the resolved roadmap.json
     And both ".workflow/roadmap.json" and "ROADMAP.md" are staged
-    And the summary names how many findings came from each side
+    And the summary reconciles: unchanged plus each side's contributions equal the kept total
+    And each surviving finding is credited to the side whose version was kept
 
   Scenario: resolve keeps one entry when both sides added the same slug
     Given both sides added a Backlog finding with the slug "same-thing"
@@ -263,6 +301,42 @@ Feature: roadmap state hygiene — self-committing mutations, stamp-safe regener
     And our side removed it and their side left it untouched
     When the operator runs: centinela roadmap resolve
     Then roadmap.json does not contain "promoted-away"
+
+  Scenario: resolve keeps a one-sided edit made on the incoming side
+    Given the base contains the finding "finding-A"
+    And their side edited its summary and our side left it untouched
+    When the operator runs: centinela roadmap resolve
+    Then the command exits with code 0
+    And roadmap.json contains their edited summary, not the base one
+    And both sides' newly added findings survive
+
+  Scenario: resolve keeps a one-sided edit to the Backlog phase note
+    Given the base Backlog phase carries a note
+    And their side edited the note and our side left it untouched
+    When the operator runs: centinela roadmap resolve
+    Then the command exits with code 0
+    And roadmap.json carries their edited note, not the base one
+    And every finding from both sides survives
+
+  Scenario: resolve keeps a one-sided local edit to the Backlog phase note
+    Given the base Backlog phase carries a note
+    And our side edited the note and their side left it untouched
+    When the operator runs: centinela roadmap resolve
+    Then roadmap.json carries our edited note
+
+  Scenario: resolve refuses when both sides edited the Backlog phase note
+    Given both sides edited the Backlog phase note differently
+    When the operator runs: centinela roadmap resolve
+    Then the command exits with a non-zero code
+    And the message names the phase "Backlog"
+    And .workflow/roadmap.json still contains its conflict markers
+
+  Scenario: resolve refuses when both sides edited the same finding differently
+    Given both sides edited the summary of the finding "finding-A" differently
+    When the operator runs: centinela roadmap resolve
+    Then the command exits with a non-zero code
+    And the message names the finding "finding-A"
+    And nothing is staged
 
   Scenario: resolve refuses when a schedulable phase diverged on both sides
     Given both sides changed the features of phase "Phase 13: Lighter Centinela"

@@ -22,6 +22,11 @@ type EditRequest struct {
 // re-checked before the single atomic write, so a rejected edit (bad slug,
 // collision, cycle, unknown dep) leaves roadmap.json byte-identical.
 func Edit(path string, req EditRequest) error {
+	release, lerr := lockRoadmapState(path)
+	if lerr != nil {
+		return lerr
+	}
+	defer release()
 	doc, err := readRawRoadmap(path)
 	if err != nil {
 		return err

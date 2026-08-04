@@ -161,3 +161,41 @@ unit/`cmd` test the engineer wrote alongside the S1-S6 implementation.
   (`--name` equal to the current slug) takes the same `editIsNoop` branch but
   is not separately re-driven through the acceptance tier — covered at the
   `internal/roadmap/edit.go` unit level instead.
+
+## Added after adversarial verification (F1, F2, F4)
+
+The verifier refuted three cases this list did not cover. All three are now
+implemented and covered; the entries below record them so the list matches the
+code rather than the intent.
+
+- **E17 — two mutations in the same second in the same checkout.** Previously
+  CLAIMED here and in the brief ("the second sees the first's content") but
+  never true and never tested: the read → modify → write of `roadmap.json` had
+  no lock, so the second `os.Rename` won and the first record was destroyed —
+  invisibly, because the winner's auto-commit leaves a clean tree. Now
+  serialized by an advisory lock (`internal/roadmap/mutate_lock.go`, on the
+  shared `internal/filelock` leaf). Covered at BOTH tiers the failure needs:
+  `internal/roadmap/mutate_lock_test.go` (8 concurrent goroutines) and
+  `cmd/centinela/roadmap_concurrent_test.go` (three real OS processes, which is
+  the only tier that exercises git's own `index.lock`). Negative control: with
+  the lock neutralized both tests fail, 3/3 runs.
+- **E1a — the lock file must never dirty the working tree.** Centinela does not
+  manage a consumer project's `.gitignore`, so the lock lives in the git
+  directory (never reported by `git status`), falling back to the OS temp dir
+  outside a repository. Covered by
+  `internal/roadmap/mutate_lock_path_test.go`.
+- **E1b — detached HEAD.** The brief's E1 named "detached" as a warn-and-skip
+  cause, but `CommitBlockedReason` did not check it: the commit succeeded onto a
+  dangling commit, reported `✓ Committed`, and the record died at the next
+  checkout. Now blocked with the reason `detached HEAD`; an in-flight rebase
+  (which also detaches) still reports the more specific operation. Covered by
+  `internal/gitutil/commit_detached_test.go`.
+- **E12a — `resolve` modify/delete.** E12 covered "one side deleted, the other
+  left it untouched". It did not cover "one side deleted, the other EDITED it":
+  `survivor` decided on presence alone and dropped the edit with exit 0 and a
+  `kept 0` summary. `resolve` now refuses that pair by slug, exactly as it
+  refuses a both-sides phase edit, leaving the markers and the index untouched.
+  Covered by `internal/roadmap/resolve_modifydelete_test.go` and
+  `cmd/centinela/roadmap_resolve_refuse_test.go`. A reformatted-but-unchanged
+  side is still a delete, not an edit (the comparison is over compacted JSON).
+

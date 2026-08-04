@@ -26,8 +26,11 @@ func TestResolveUnionsBothSidesOfTheBacklog(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got.Kept != 5 || got.FromOurs != 1 || got.FromTheirs != 2 {
+	if got.Kept != 5 || got.FromBase != 2 || got.FromOurs != 1 || got.FromTheirs != 2 {
 		t.Fatalf("arithmetic = %+v", got)
+	}
+	if got.FromBase+got.FromOurs+got.FromTheirs != got.Kept {
+		t.Fatalf("the counts must reconcile to Kept: %+v", got)
 	}
 	doc := string(got.Doc)
 	for _, slug := range []string{"b1", "b2", "o1", "t1", "t2"} {
@@ -55,8 +58,12 @@ func TestResolveDedupesTheSameSlug(t *testing.T) {
 	if !strings.Contains(string(got.Doc), "2026-05-01T00:00:00Z") {
 		t.Fatalf("the earlier deferredAt must win:\n%s", got.Doc)
 	}
-	if got.FromOurs+got.FromTheirs != 1 {
+	if got.FromOurs+got.FromTheirs != 1 || got.FromBase != 0 {
 		t.Fatalf("a slug added on both sides must be counted once: %+v", got)
+	}
+	// The earlier capture kept is THEIRS, so theirs must be credited.
+	if got.FromTheirs != 1 {
+		t.Fatalf("the surviving entry is theirs; it must not be credited to ours: %+v", got)
 	}
 }
 

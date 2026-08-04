@@ -12,6 +12,11 @@ import (
 // and every other phase round-trip byte-identically; a rejected rename writes
 // nothing.
 func PhaseRename(path, oldName, newName string) error {
+	release, lerr := lockRoadmapState(path)
+	if lerr != nil {
+		return lerr
+	}
+	defer release()
 	if strings.TrimSpace(newName) == "" {
 		return fmt.Errorf("phase name is required")
 	}

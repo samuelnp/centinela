@@ -8,8 +8,8 @@ import (
 )
 
 func TestRenderResolveSummaryNamesEachSidesContribution(t *testing.T) {
-	got := RenderResolveSummary(roadmap.Merged{Kept: 10, FromOurs: 2, FromTheirs: 3})
-	for _, want := range []string{"kept 10 findings", "2 from our side", "3 from theirs"} {
+	got := RenderResolveSummary(roadmap.Merged{Kept: 10, FromBase: 5, FromOurs: 2, FromTheirs: 3})
+	for _, want := range []string{"kept 10 findings", "5 unchanged", "2 from our side", "3 from theirs"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("%q missing from %q", want, got)
 		}

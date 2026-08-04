@@ -1326,6 +1326,19 @@
     "createdAt": "2026-06-10T16:25:22Z"
   },
   {
+    "id": "ce6fdb3c37435cce",
+    "feature": "roadmap-state-hygiene",
+    "step": "validate",
+    "type": "verdict",
+    "title": "# roadmap-state-hygiene — gatekeeper (round 4)",
+    "tags": [
+      "gatekeeper",
+      "verdict"
+    ],
+    "sourceArtifact": ".workflow/roadmap-state-hygiene-gatekeeper.md",
+    "createdAt": "2026-08-04T14:44:36Z"
+  },
+  {
     "id": "d1632d2cefba0f51",
     "feature": "archetype-inference-project-synthesis",
     "step": "validate",

@@ -1,26 +1,16 @@
 package roadmap
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
-// PhaseConflictError reports a schedulable phase both sides changed. v1 refuses
-// rather than guesses: silently unioning two real edits is how a finding gets
-// lost, which is the failure this command exists to prevent.
-type PhaseConflictError struct{ Phase string }
-
-// Error names the phase the operator must resolve by hand.
-func (e *PhaseConflictError) Error() string {
-	return fmt.Sprintf("phase %q changed on both sides; resolve it by hand — "+
-		"roadmap resolve only merges divergent Backlog findings", e.Phase)
-}
+import "encoding/json"
 
 // Merged is a resolved roadmap.json plus the arithmetic a human needs to trust
 // it: how many findings survived, and how many each side contributed.
 type Merged struct {
-	Doc        []byte
-	Kept       int
+	Doc  []byte
+	Kept int
+	// FromBase, FromOurs and FromTheirs partition Kept exactly: every surviving
+	// finding is credited to the side whose bytes it is, so a human can check
+	// the arithmetic instead of being told a number that cannot be reconciled.
+	FromBase   int
 	FromOurs   int
 	FromTheirs int
 }

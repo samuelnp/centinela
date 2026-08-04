@@ -41,3 +41,23 @@ func PromoteArtifactPaths() []string {
 func WriteRoadmapJSON(data []byte) error {
 	return writeAtomic(RoadmapFile, data)
 }
+
+// StateInSync reports whether ROADMAP.md on disk is EXACTLY what the renderer
+// produces from roadmap.json on disk, right now.
+//
+// It is a read-back, not a memory of what we wrote: it is the only way to tell
+// "your record is sitting in the working tree" from "something else rewrote
+// roadmap.json after this mutation". Reporting the first when the second is
+// true is how a lost deferral looks like a successful one, so the presentation
+// layer is never allowed to claim it without this answer.
+func StateInSync() bool {
+	r, err := Load()
+	if err != nil {
+		return false
+	}
+	md, err := os.ReadFile(roadmapstate.MarkdownFile)
+	if err != nil {
+		return false
+	}
+	return bytes.Equal(md, RenderMarkdown(r))
+}

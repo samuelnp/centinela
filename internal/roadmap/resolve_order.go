@@ -33,6 +33,11 @@ func byDeferredAtThenName(a, b json.RawMessage) bool {
 
 // earlier returns whichever of two entries for the SAME slug was deferred
 // first, so a dedupe keeps the original capture rather than the replay.
+//
+// It decides ONLY the case the base never had — both sides independently
+// deferring one slug. It must never arbitrate an edit: deferredAt does not move
+// when a finding is edited, so the comparison would tie and silently return
+// ours. Anything the base had is three-wayed against the base in survivor.
 func earlier(a, b json.RawMessage) json.RawMessage {
 	ka, kb := keyOf(a), keyOf(b)
 	if ka.deferredAt == "" || (kb.deferredAt != "" && kb.deferredAt < ka.deferredAt) {
@@ -41,19 +46,14 @@ func earlier(a, b json.RawMessage) json.RawMessage {
 	return a
 }
 
-// backlogPhase rebuilds the Backlog phase object around the merged findings,
-// preserving whatever other phase keys (note, and anything unknown) the
-// surviving side carried. Ours wins the shell; theirs is the fallback when the
-// phase exists only on their side. At least one side always has it — the
-// caller reached here by finding the phase name on one of them.
-func backlogPhase(name string, o, t *side, kept []json.RawMessage) (json.RawMessage, error) {
-	shell := map[string]json.RawMessage{}
-	for _, s := range []*side{t, o} {
-		if raw, ok := s.phase[name]; ok {
-			if err := json.Unmarshal(raw, &shell); err != nil {
-				return nil, err
-			}
-		}
+// backlogPhase rebuilds the Backlog phase object around the merged findings.
+// The phase's own keys (note, and anything unknown) are three-wayed against the
+// base like every other phase — see mergeShellKeys — and `features` is then
+// written from the merged finding list.
+func backlogPhase(name string, b, o, t *side, kept []json.RawMessage) (json.RawMessage, error) {
+	shell, err := mergeShellKeys(name, b, o, t)
+	if err != nil {
+		return nil, err
 	}
 	if len(kept) == 0 {
 		kept = []json.RawMessage{}
@@ -62,6 +62,6 @@ func backlogPhase(name string, o, t *side, kept []json.RawMessage) (json.RawMess
 	if err != nil {
 		return nil, err
 	}
-	shell["features"] = feats
+	shell[shellKey] = feats
 	return json.Marshal(shell)
 }

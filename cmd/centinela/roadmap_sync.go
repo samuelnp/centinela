@@ -37,7 +37,8 @@ func syncRoadmapState(verb, subject string, extra ...string) {
 		Commit: roadmapAutoCommitEnabled(), C: roadmapCommitter{repo: "."},
 	})
 	line := ui.RenderRoadmapSync(rep)
-	if rep.Warn {
+	// A failed read-back is louder than a warning: the record may be gone.
+	if rep.Warn || !rep.InWorkingTree {
 		fmt.Fprintln(os.Stderr, line)
 		return
 	}

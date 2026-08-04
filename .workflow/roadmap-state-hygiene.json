@@ -1,14 +1,15 @@
 {
+  "schemaVersion": 1,
   "feature": "roadmap-state-hygiene",
   "startedAt": "2026-08-04T08:01:31.48785Z",
-  "currentStep": "validate",
+  "currentStep": "docs",
   "steps": {
     "code": {
       "status": "done",
       "completedAt": "2026-08-04T09:19:12Z"
     },
     "docs": {
-      "status": "pending",
+      "status": "in-progress",
       "completedAt": null
     },
     "plan": {
@@ -20,8 +21,8 @@
       "completedAt": "2026-08-04T10:17:23Z"
     },
     "validate": {
-      "status": "in-progress",
-      "completedAt": null
+      "status": "done",
+      "completedAt": "2026-08-04T14:44:35Z"
     }
   },
   "stepOrder": [
@@ -38,6 +39,11 @@
   "planContract": "planner-v1",
   "profileContract": "guided-default-v1",
   "modelRoutes": {
+    "gatekeeper": {
+      "tier": "reasoning",
+      "reason": "Adversarial refutation of auto-commit on shared state with concurrent sessions; routing floor mandates reasoning",
+      "decidedAt": "2026-08-04T10:17:43Z"
+    },
     "planner": {
       "tier": "reasoning",
       "reason": "Auto-commit semantics on shared state touch every delivery path and the parallel-merge conflict class; getting the commit boundary wrong risks clobbering concurrent sessions",

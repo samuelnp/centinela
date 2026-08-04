@@ -53,5 +53,7 @@ func TestRsh_ResolveUnionsBothSidesOfARealConflict(t *testing.T) {
 	if got := rshGitOut(t, dir, "diff", "--cached", "--name-only"); got != ".workflow/roadmap.json\nROADMAP.md" {
 		t.Fatalf("both roadmap-state paths must be staged, got %q", got)
 	}
-	containsAll(t, out, "10", "2 from our side", "3 from theirs")
+	// The arithmetic must reconcile: 5 base findings unchanged + 2 ours + 3
+	// theirs = the 10 kept. A count a human cannot check is not evidence (R5).
+	containsAll(t, out, "kept 10 findings", "5 unchanged", "2 from our side", "3 from theirs")
 }

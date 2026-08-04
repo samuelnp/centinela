@@ -18,6 +18,11 @@ type ReorderRequest struct {
 // reorder that resolves to the feature's current position leaves roadmap.json
 // byte-identical (no write); a rejected reorder writes nothing.
 func Reorder(path string, req ReorderRequest) error {
+	release, lerr := lockRoadmapState(path)
+	if lerr != nil {
+		return lerr
+	}
+	defer release()
 	doc, err := readRawRoadmap(path)
 	if err != nil {
 		return err

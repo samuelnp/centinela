@@ -47,3 +47,41 @@ func TestWriteRoadmapJSONReplacesTheFileAtomically(t *testing.T) {
 		t.Fatalf("the written document must still load: %v", err)
 	}
 }
+
+// F1: the report must carry a VERIFIED read-back, not an assumption.
+func TestSyncVerifiesTheStateIsOnDisk(t *testing.T) {
+	syncRepo(t, syncBody)
+	rep := Sync(SyncOptions{Verb: "defer", Subject: "x", Commit: false})
+	if !rep.InWorkingTree {
+		t.Fatal("a completed regeneration must verify as in the working tree")
+	}
+	if !StateInSync() {
+		t.Fatal("StateInSync must agree")
+	}
+	// Simulate a concurrent process replacing roadmap.json after this mutation:
+	// the read-back must now refuse to vouch for the tree.
+	if err := os.WriteFile(RoadmapFile,
+		[]byte(`{"phases":[{"name":"Other","features":[]}]}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if StateInSync() {
+		t.Fatal("a roadmap.json rewritten underneath must not report as in sync")
+	}
+}
+
+// An unreadable or absent ROADMAP.md can never be vouched for either.
+func TestStateInSyncFailsClosed(t *testing.T) {
+	syncRepo(t, syncBody)
+	if StateInSync() {
+		t.Fatal("no ROADMAP.md at all must not report as in sync")
+	}
+	if _, err := RegenerateMarkdown(); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(RoadmapFile, []byte("{broken"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if StateInSync() {
+		t.Fatal("an unparseable roadmap.json must not report as in sync")
+	}
+}

@@ -98,10 +98,16 @@ every delivery that has to merge.
    every other path are byte-identical afterwards.
 4. **`disable_auto_commit` is respected.** With `workflow.disable_auto_commit =
    true`, ROADMAP.md is still regenerated (correctness, not VCS policy), no
-   commit is made, and one line says the state was left uncommitted.
+   commit is made, and one line says the state was not committed. That line may
+   only add where the record is ("in your working tree") after a verified
+   read-back; when the read-back fails it says so instead, because a lost record
+   reported as merely uncommitted is invisible — the auto-commit leaves a clean
+   tree, so `git status` will not show it either.
 5. **The commit is best-effort and never fails the mutation.** No git, no repo,
-   no HEAD, a merge/rebase in progress, or a failing commit → the mutation still
-   exits 0 and prints a warning naming the reason. (A non-zero exit would invite
+   no HEAD, a detached HEAD, a merge/rebase in progress, or a failing commit →
+   the mutation still exits 0 and prints a warning naming the reason. A detached
+   HEAD must NOT commit: the commit would be reachable from nothing and the
+   record would die at the next checkout. (A non-zero exit would invite
    an agent to re-run the mutation and double-record it.)
 6. **Worktree-local.** Run inside `.worktrees/<feature>`, the commit lands on that
    worktree's HEAD/branch; the primary checkout's tree and index are untouched.
@@ -155,5 +161,7 @@ every delivery that has to merge.
 | E14 | `resolve` with roadmap.json conflicted but unparseable on one side | refuse, exit non-zero, name the side |
 | E15 | Stamp taken, then a deferral commits, then `complete` | not stale (AC9) |
 | E16 | Stamp taken, then a source file is committed alongside roadmap state | stale, today's message |
-| E17 | Two mutations in the same second in the same checkout | each writes atomically and commits its own pathspec; the second sees the first's content |
+| E17 | Two mutations in the same second in the same checkout | serialized by an advisory lock outside the working tree, so the second sees the first's content; a lock timeout writes nothing and exits non-zero |
+| E19 | Mutation on a detached HEAD | no commit (it would be orphaned at the next checkout); warning names "detached HEAD"; the record stays in the tree |
+| E20 | `resolve` when one side EDITED a finding the other DELETED | refused by slug, markers and index untouched — presence alone must not discard an edit |
 | E18 | Nudge conditions met but roadmap.json unreadable | no nudge, no error (never break `complete`) |

@@ -23,5 +23,8 @@ func TestRsh_DisableAutoCommitSkipsCommitNotRegeneration(t *testing.T) {
 	if _, err := os.Stat(dir + "/ROADMAP.md"); err != nil {
 		t.Fatalf("ROADMAP.md must still be regenerated: %v", err)
 	}
-	containsAll(t, out, "left uncommitted")
+	// AC4's contract is "one line says the state was not committed". The line
+	// also states WHERE the record is, which it may only do after a verified
+	// read-back — see the F1 fix; asserting the claim, not the old phrasing.
+	containsAll(t, out, "not committed", "in your working tree")
 }

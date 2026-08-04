@@ -8,11 +8,12 @@ import (
 
 // RenderResolveSummary states the arithmetic of a resolved conflict. The
 // per-side counts are the point: a human can check that nothing was dropped
-// without re-reading the file (R5).
+// without re-reading the file (R5), which only works if they RECONCILE —
+// unchanged + ours + theirs is exactly what was kept.
 func RenderResolveSummary(m roadmap.Merged) string {
 	return StyleGreen.Render(IconDone) + " " + fmt.Sprintf(
-		"Resolved roadmap state — kept %d findings: %d from our side, %d from theirs.",
-		m.Kept, m.FromOurs, m.FromTheirs)
+		"Resolved roadmap state — kept %d findings: %d unchanged, %d from our side, %d from theirs.",
+		m.Kept, m.FromBase, m.FromOurs, m.FromTheirs)
 }
 
 // RenderResolveMarkdownOnly states the ROADMAP.md-only case: roadmap.json

@@ -18,6 +18,11 @@ type DeferOptions struct {
 // last phase) when absent. Every validation runs before any write; on any
 // failure roadmap.json is left untouched.
 func Defer(path string, opts DeferOptions) error {
+	release, lerr := lockRoadmapState(path)
+	if lerr != nil {
+		return lerr
+	}
+	defer release()
 	if err := validateSlug(opts.Slug); err != nil {
 		return err
 	}

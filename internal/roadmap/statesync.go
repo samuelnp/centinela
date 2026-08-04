@@ -41,6 +41,11 @@ type SyncReport struct {
 	Committed   bool
 	Warn        bool
 	Reason      string
+	// InWorkingTree is a VERIFIED read-back, not an assumption: true only when
+	// roadmap.json and ROADMAP.md on disk still agree after this sync. Without
+	// it the "left uncommitted" line would assert the record is in your tree
+	// even when a concurrent write had already replaced it.
+	InWorkingTree bool
 }
 
 // Sync is THE post-mutation choke point: it regenerates ROADMAP.md from the
@@ -62,6 +67,7 @@ func Sync(opts SyncOptions) SyncReport {
 		return rep
 	}
 	rep.Regenerated = changed
+	rep.InWorkingTree = StateInSync()
 	if !opts.Commit {
 		rep.Reason = "auto-commit is disabled"
 		return rep
