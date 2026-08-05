@@ -218,7 +218,6 @@
 
 ## Backlog
 
-- **rawio-reformat-diff-churn** — First defer/promote reformats untouched phases of roadmap.json, creating spurious git diff churn *(deferred 2026-06-12T16:29:13Z · deferred-findings-roadmap-capture/senior-engineer)*
 - **roadmap-import-graph-layer-mapping** — Map internal/roadmap as an import_graph layer so the gates->roadmap and ui->roadmap read-only edges are mechanically enforced, not just documented in PROJECT.md G2 *(deferred 2026-06-14T10:30:31Z · roadmap-doc-sync/gatekeeper)*
 - **brownfield-framework-fingerprinting** — Detect frameworks (Rails/Next/Django/etc.) via directory+dependency heuristics beyond manifest scripts in centinela analyze *(deferred 2026-06-17T21:17:33Z · deep-codebase-analysis/big-thinker)*
 - **codebase-metrics-enrichment** — Enrich analyze inventory with LOC, complexity, churn, and test-coverage inference *(deferred 2026-06-17T21:17:33Z · deep-codebase-analysis/big-thinker)*
