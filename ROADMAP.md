@@ -215,7 +215,6 @@
 - **durable-workflow-state** — Make .workflow/<feature>.json survive what actually happens to it: write-temp-then-rename so a killed or crashed process cannot truncate the file, and a schema version so an older binary cannot silently drop fields it does not know (modelRoutes today, anything added tomorrow) on a load-save round-trip
 - **version-lock-profile-contract** — Hotfix: guided-by-default added profileContract to the Workflow struct while durable-workflow-state was in flight; the version-lock golden field list must record it (additive, omitempty, back-compat-by-absence, so no SchemaVersion bump). Neither PR's own CI could see this — it only fails on the merged tree
 - **hook-context-panel-diet**
-- **deferred-paths-test-pins-fixed-slugs** — TestDeferredPaths_InRoadmapBacklog asserts three coverage-hardening deferrals are still in the Backlog as proof they were honestly deferred rather than faked; two of them (fault-inject-atomic-write-error-paths, unit-test-vuln-tool-external-seam) now have real tests, so the assertion pins stale entries and blocks their removal. Narrow the list to what is genuinely still deferred and remove the two fixed entries
 
 ## Backlog
 
