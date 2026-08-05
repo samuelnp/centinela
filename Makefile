@@ -1,4 +1,4 @@
-VERSION := 0.57.1
+VERSION := 0.57.2
 
 build:
 	go build -ldflags "-X main.Version=$(VERSION)" -o centinela ./cmd/centinela
