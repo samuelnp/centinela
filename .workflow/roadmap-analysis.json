@@ -69,6 +69,7 @@
     {"name":"evidence-schema-skeleton-legacy-handoff"},
     {"name":"durable-workflow-state"},
     {"name":"version-lock-profile-contract"},
-    {"name":"hook-context-panel-diet"}
+    {"name":"hook-context-panel-diet"},
+    {"name":"deferred-paths-test-pins-fixed-slugs"}
   ]
 }
