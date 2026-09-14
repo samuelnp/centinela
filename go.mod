@@ -1,6 +1,6 @@
 module github.com/samuelnp/centinela
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/BurntSushi/toml v1.6.0
@@ -9,7 +9,7 @@ require (
 	github.com/mattn/go-isatty v0.0.22
 	github.com/modelcontextprotocol/go-sdk v1.2.0
 	github.com/spf13/cobra v1.10.2
-	golang.org/x/sys v0.46.0
+	golang.org/x/sys v0.48.0
 )
 
 require (
